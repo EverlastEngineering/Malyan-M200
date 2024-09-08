@@ -1,20 +1,12 @@
 /*
 Name: MP Select Mini Web Javascript
-URL: https://github.com/nokemono42/MP-Select-Mini-Web
+
+Forked from https://github.com/nokemono42/MP-Select-Mini-Web
 */
 
 $(document).ready(function() {
 	printerStatus();
-
-	setTimeout(function() {
-		startup();
-	}, 2000);
-
-	setInterval(function() {
-		if (uploading == false) {
-			printerStatus();
-		}
-	}, 2000);
+	initWebSocket();
 
 	// $(".webcam .img-rounded").click(function() {
 	// 	window.sdFilenames.sort();
@@ -89,13 +81,117 @@ $(document).ready(function() {
 	$('#gCodeSend').click(function() {
 		gCode2Send = $('#gcode').val();
 		if (gCode2Send == '') { return; }
-
-		sendCmd(gCode2Send, '');
 		$('#gcode').val('');
+		sendCmd(gCode2Send, '');
+		if (gCode2Send != commandHistory[commandHistory.length-1]) {
+			commandHistory.push(gCode2Send);
+		}
+		clearAndReadyPrompt() 
 	});
+
+	function clearAndReadyPrompt() {
+		tempCommand=""
+		commandPointer=commandHistory.length;
+	}
+
+	$(document).on("input", "#gcode", function() {
+		$('#gcode').val($('#gcode').val().toUpperCase());
+	})
+
+	$("#gCodeInput").keydown(function(event) {
+		if (event.key=="ArrowUp") {
+			rollUpThroughHistory();
+			return false;
+		}
+		else if (event.key=="ArrowDown") {
+			rollDownThroughHistory();
+			return false;
+		}
+		else if (event.key=="Enter"){
+			$('#gCodeSend').click();
+			return false;
+		}
+		else if (event.key=="Escape"){
+			 $('#gcode').val(tempCommand);
+			clearAndReadyPrompt() 
+			return false;
+		}
+		console.log(event)
+	})		
+
+	var commandHistory=[]
+	var commandPointer=0;
+	var tempCommand=""
+	
+	function rollUpThroughHistory() {
+		if (commandPointer==0) {
+			return;
+		}
+		if (commandPointer == commandHistory.length && $('#gcode').val() != "") {
+			tempCommand = $('#gcode').val();
+		}
+		let suggestedGcode = commandHistory[commandPointer-1];
+		$('#gcode').val(suggestedGcode)		
+		commandPointer--;
+	}
+	
+	function rollDownThroughHistory() {
+		if (commandPointer == commandHistory.length) {
+			return;
+		}
+		if (commandPointer == commandHistory.length-1) {
+			$('#gcode').val(tempCommand);
+			tempCommand = ""
+		}
+		else {
+			let suggestedGcode = commandHistory[commandPointer+1];
+			$('#gcode').val(suggestedGcode);	
+		}
+		commandPointer++;
+	}
+
+	$("#quickpreheat").click(() => {
+		$("#wre").val("215");
+		$("#wrp").val("65");
+		$("#fanspeed").val(40);
+		clearTimeout(timers);
+		sendCmd('{C:T0215}{C:P0065}', 'Preheat to 215°C and 65°C', 'cmd');
+		sendCmd('M106 S102',' ; Set fan speed to 40%');
+		displayTemperatures(215,65)
+		clearTimeout(printerStatusTimer)
+		printerStatusTimer = setTimeout(printerStatus,2000);
+	})
+
+	$("#heatoff").click(() => {
+		if ($("#stat").text() == 'Printing') {
+			feedback('Cannot disable heat while printing.')
+			return;
+		}
+		$("#wre").val("");
+		$("#wrp").val("");
+		clearTimeout(timers);
+		sendCmd('{C:T0000}{C:P0000}', 'Both Heaters Off', 'cmd');
+		displayTemperatures(0,0)
+		clearTimeout(printerStatusTimer)
+		printerStatusTimer = setTimeout(printerStatus,2000);
+	})
 
 	$("#wre").change(function() {
 		delaySendTemp($("#wre").val(), 'extruder');
+		$("#wre").blur();
+	});
+
+	$('#wre').focus(function() {
+    var $this = $(this)
+        .one('mouseup.mouseupSelect', function() {
+            $this.select();
+            return false;
+        })
+        .one('mousedown', function() {
+            // compensate for untriggered 'mouseup' caused by focus via tab
+            $this.off('mouseup.mouseupSelect');
+        })
+        .select();
 	});
 
 	$("#sete").click(function() {
@@ -103,11 +199,25 @@ $(document).ready(function() {
 	});
 
 	$("#clre").click(function() {
-		sendCmd('{C:T0000}', 'Turn off extruder preheat', 'cmd');
+		delaySendTemp('0', 'extruder');
 	});
 
 	$("#wrp").change(function() {
 		delaySendTemp($("#wrp").val(), 'platform');
+		$("#wrp").blur();
+	});
+
+	$('#wrp').focus(function() {
+    var $this = $(this)
+        .one('mouseup.mouseupSelect', function() {
+            $this.select();
+            return false;
+        })
+        .one('mousedown', function() {
+            // compensate for untriggered 'mouseup' caused by focus via tab
+            $this.off('mouseup.mouseupSelect');
+        })
+        .select();
 	});
 
 	$("#setp").click(function() {
@@ -115,7 +225,7 @@ $(document).ready(function() {
 	});
 
 	$("#clrp").click(function() {
-		sendCmd('{C:P000}', 'Turn off platform preheat', 'cmd');
+		delaySendTemp('0', 'platform');
 	});
 
 	$("#fanspeed").slider({
@@ -126,8 +236,8 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#fanspeed").on('slide', function(slideEvt) {
-		delaySendSpeed(slideEvt.value);
+	$("#fanspeed").on('change', function(slideEvt) {
+		delaySendSpeed(slideEvt.value.newValue);
 	});
 
 	$("#clrfan").click(function() {
@@ -144,6 +254,7 @@ var setPositioning = false;
 var initSDCard = false;
 var sdListing = false;
 var connected = false;
+var connecting = false;
 var uploading = false;
 
 function pad(num, size) {
@@ -218,16 +329,26 @@ function sendCmd(code, comment, type) {
 	scrollConsole();
 }
 
+function startup() {
+	if ($("#stat").text() != 'Printing') {
+		sendCmd('M563 S5', 'Enable faster Wi-Fi file uploads');
+	}
+}
+
 function initWebSocket() {
 	url = window.location.hostname;
+	if (connecting) return;
 
 	try {
+		connecting = true;
 		ws = new WebSocket('ws://' + url + ':81');
 		feedback('Connecting...');
 		ws.onopen = function(a) {
 			//console.log(a);
 			feedback('Connection established.');
 			connected = true;
+			connecting = false;
+			startup();
 		};
 		ws.onmessage = function(a) {
 			//console.log(a);
@@ -236,6 +357,7 @@ function initWebSocket() {
 		ws.onclose = function() {
 			feedback('Disconnected');
 			connected = false;
+			// reconnect button?
 		}
 	} catch (a) {
 		//console.log(a);
@@ -268,7 +390,6 @@ Dropzone.options.mydz = {
 			done();
 			$(".print-actions button").addClass('btn-disable');
 			$(".movement button").addClass('btn-disable');
-			$("#gCodeSend").addClass('btn-disable');
 			$(".temperature button").addClass('btn-disable');
 			uploading = true;
 		} else {
@@ -295,7 +416,6 @@ Dropzone.options.mydz = {
 
 			$(".print-actions button").removeClass('btn-disable');
 			$(".movement button").removeClass('btn-disable');
-			$("#gCodeSend").removeClass('btn-disable');
 			$(".temperature button").removeClass('btn-disable');
 
 			//New filename of 21 characters + .gc
@@ -331,16 +451,26 @@ function cancel_p() {
 	sendCmd('{P:X}', 'Cancel print', 'cmd');
 }
 
+function queuePrinterStatus(delay) {
+	if (delay == null) delay = 2000;
+	clearTimeout(printerStatusTimer)
+	printerStatusTimer = setTimeout(printerStatus,delay);
+}
+
 function printerStatus() {
+	if (uploading) {
+		queuePrinterStatus();
+		return;
+	}
 	$.get("inquiry", function(data, status) {
 		//console.log(data);
-		//$("#gCodeLog").append('<p class="text-muted">' + data + '</p>');
-		//scrollConsole();
+		// $("#gCodeLog").append('<p class="text-muted">' + data + '</p>');
+		// scrollConsole();
 
 		$("#rde").text(data.match( /\d+/g )[0]);
 		$("#rdp").text(data.match( /\d+/g )[2]);
 
-		delaySyncTemperatures(data.match( /\d+/g )[1], data.match( /\d+/g )[3]);
+		displayTemperatures(data.match( /\d+/g )[1], data.match( /\d+/g )[3]);
 
 		var c = data.charAt(data.length - 1);
 
@@ -349,36 +479,37 @@ function printerStatus() {
 			$("#pgs").css('width', '0%');
 			$("#start_print").removeClass('btn-disable');
 			$(".movement button").removeClass('btn-disable');
-			$("#gCodeSend").removeClass('btn-disable');
 
-			if (connected == false) {
-				initWebSocket();
-			}
 		} else if (c == 'P') {
 			$("#stat").text('Printing');
 			$("#pgs").css('width', data.match(/\d+/g )[4] + '%');
 			$("#pgs").html(data.match(/\d+/g )[4] + '% Complete');
 			$("#start_print").addClass('btn-disable');
 			$(".movement button").addClass('btn-disable');
-			$("#gCodeSend").addClass('btn-disable');
 			setPositioning = false;
 		} else {
 			$("#stat").text('N/A');
 		}
+		queuePrinterStatus()
 	});
 }
 
+var printerStatusTimer;
+
 function delaySendTemp(value, device) {
 	clearTimeout(timers);
+	queuePrinterStatus();
 	timers = setTimeout(function() {
 		compValue = pad(value, 3);
 
 		if (device == 'extruder') {
 			sendCmd('{C:T0' + compValue + '}', 'Set extruder preheat to ' + value + '°C', 'cmd');
+			displayTemperatures(value,null);
 		}
 
 		if (device == 'platform') {
 			sendCmd('{C:P' + compValue + '}', 'Set platform preheat to ' + value + '°C', 'cmd');
+			displayTemperatures(null,value);
 		}
 	}, 250);
 }
@@ -391,12 +522,25 @@ function delaySendSpeed(value) {
 	}, 250);
 }
 
-function delaySyncTemperatures(extruder, platform) {
-	clearTimeout( timers );
-	timers = setTimeout(function() {
-		if (!$('#wre').is(":focus")) { $("#wre").val(extruder); }
-		if (!$('#wrp').is(":focus")) { $("#wrp").val(platform); }
-	}, 3000);
+function displayTemperatures(extruder, platform) {
+	if (!$('#wre').is(":focus")) $("#wre").val(extruder);
+	if (!$('#wrp').is(":focus")) $("#wrp").val(platform);
+	if (extruder != "0" && extruder != null) {
+			$("#extruder-title").addClass("btn-danger");
+			$("#extruder-title").addClass("disabled");
+		}
+		else if (extruder == "0"){
+			$("#extruder-title").removeClass("btn-danger");
+			$("#extruder-title").removeClass("disabled");
+		}
+		if (platform != "0" && platform != null) {
+			$("#platform-title").addClass("btn-danger");
+			$("#platform-title").addClass("disabled");
+		}
+		else if (platform == "0"){
+			$("#platform-title").removeClass("btn-danger");
+			$("#platform-title").removeClass("disabled");
+		}
 }
 
 function refreshSD() {

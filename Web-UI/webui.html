@@ -177,17 +177,22 @@
                 <div id="gCodeLog"></div>
             </div>
             <div id="gCodeInput" class="input-group">
-                <input type="text" class="form-control" name="gcode" id="gcode" placeholder="Send G-code to printer..." />
+                <input type="text" class="form-control" name="gcode" id="gcode" placeholder="Enter to send G-code to printer..." />
                 <span class="input-group-btn">
                     <button class="btn btn-primary" id="gCodeSend" title="Send G-code to Printer">Send</button>
                 </span>
             </div>
         </div>
         <div class="col-xs-12 col-md-4 temperature">
-            <h4 class="text-center">Temperature</h4>
+            <h4 class="text-center">Temperature 
+                <span>
+                    <button class="btn btn-warning btn-xs" style="margin-left: 20px" id="quickpreheat">Quick Preheat</button>
+                    <button class="btn btn-primary btn-xs" id="heatoff">Heat Off</button>
+                </span>
+            </h4>
             <div class="row">
                 <div class="col-xs-4 text-center">
-                    <h5>Extruder</h5>
+                    <h5 id="extruder-title" class="btn-xs disabled">Extruder</h5>
                     <h3 id="rde">N/A</h3>
                     <div class="input-group target">
                       <input type="text" class="form-control" id="wre" />
@@ -196,12 +201,12 @@
                     <button type="button" class="btn btn-default btn-sm" id="clre" title="Turn Off Extruder Preheat">OFF</button>
                 </div>
                 <div class="col-xs-4 text-center">
-                    <h5>Fan Speed</h5>
+                    <h5 class="btn-xs disabled">Fan Speed</h5>
                     <input id="fanspeed" type="hidden"/>
                     <button type="button" class="btn btn-default btn-sm" id="clrfan" title="Turn Off Fan Preheat">OFF</button>
                 </div>
                 <div class="col-xs-4 text-center">
-                    <h5>Platform</h5>
+                    <h5 id="platform-title" class="btn-xs disabled">Platform</h5>
                     <h3 id="rdp">N/A</h3>
                     <div class="input-group target">
                       <input type="text" class="form-control" id="wrp" />
@@ -214,7 +219,7 @@
     </div>
 </div>
     <footer class="container">
-        <span class="version">Alpha v0.9.8</span>
+        <span class="version">v1.0.0-rc1</span>
     </footer>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -222,19 +227,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/bootstrap-slider.min.js"></script>
     <!-- -->
-    <script type="text/javascript" src="https://rawgit.com/nokemono42/MP-Select-Mini-Web/master/source/swfobject.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/nokemono42/MP-Select-Mini-Web/master/source/web_socket.min.js"></script>
-    <script type="text/javascript">
-        function startup() {
-            if ($("#stat").text() != 'Printing') {
-                sendCmd('M563 S5', 'Enable faster Wi-Fi file uploads');
-            }
-        }
-    </script>
+    <script type="text/javascript" src="http://192.168.1.180:8000/source/web_socket.js"></script>
     <!-- -->
-    <script type="text/javascript" src="https://rawgit.com/nokemono42/MP-Select-Mini-Web/master/source/webui.min.js"></script>
-    <!-- --
-    <script type="text/javascript" src="source/webui.js"></script>
-    <!-- -->
+    <!-- <script type="text/javascript" src="https://rawgit.com/nokemono42/MP-Select-Mini-Web/master/source/webui.min.js"></script> -->
+    
+    <script type="text/javascript" src="http://192.168.1.180:8000/source/webui.js"></script>
+     
     </body>
 </html>
