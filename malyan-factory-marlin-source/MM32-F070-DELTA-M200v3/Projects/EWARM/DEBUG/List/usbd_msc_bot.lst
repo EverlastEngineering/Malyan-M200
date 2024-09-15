@@ -1,0 +1,444 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:24
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW49B5.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_msc_bot.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_bot.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_bot.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_msc_bot.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides all the BOT protocol core functions.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_msc_bot.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          uint16_t             MSC_BOT_DataLen;
+     36          uint8_t              MSC_BOT_State;
+     37          uint8_t              MSC_BOT_Status;
+     38          
+     39          uint8_t              MSC_BOT_Data[MSC_MEDIA_PACKET] ;
+     40          
+     41          MSC_BOT_CBW_TypeDef  MSC_BOT_cbw ;
+     42          
+     43          MSC_BOT_CSW_TypeDef  MSC_BOT_csw ;
+     44          
+     45          /* Private function prototypes -----------------------------------------------*/
+     46          static void MSC_BOT_CBW_Decode (USB_CORE_HANDLE  *pdev);
+     47          
+     48          static void MSC_BOT_SendData (USB_CORE_HANDLE  *pdev, 
+     49                                        uint8_t* pbuf, 
+     50                                        uint16_t len);
+     51          
+     52          static void MSC_BOT_Abort(USB_CORE_HANDLE  *pdev);
+     53          
+     54          /* Private functions ---------------------------------------------------------*/
+     55          /**
+     56            * @brief  MSC_BOT_Init
+     57            *         Initialize the BOT Process
+     58            * @param  pdev: device instance
+     59            * @retval None
+     60            */
+     61          void MSC_BOT_Init (USB_CORE_HANDLE  *pdev)
+     62          {
+     63            MSC_BOT_State = BOT_IDLE;
+     64            MSC_BOT_Status = BOT_STATE_NORMAL;
+     65            USBD_STORAGE_fops->Init(0);
+     66            
+     67            /* Prepare EP to Receive First BOT Cmd */
+     68            DCD_EP_PrepareRx (pdev,
+     69                              MSC_OUT_EP,
+     70                              (uint8_t *)&MSC_BOT_cbw,
+     71                              BOT_CBW_LENGTH);    
+     72          }
+     73          
+     74          /**
+     75            * @brief  MSC_BOT_Reset
+     76            *         Reset the BOT Machine
+     77            * @param  pdev: device instance
+     78            * @retval  None
+     79            */
+     80          void MSC_BOT_Reset (USB_CORE_HANDLE  *pdev)
+     81          {
+     82            MSC_BOT_State = BOT_IDLE;
+     83            MSC_BOT_Status = BOT_STATE_RECOVERY;
+     84            /* Prepare EP to Receive First BOT Cmd */
+     85            DCD_EP_PrepareRx (pdev,
+     86                              MSC_OUT_EP,
+     87                              (uint8_t *)&MSC_BOT_cbw,
+     88                              BOT_CBW_LENGTH);    
+     89          }
+     90          
+     91          /**
+     92            * @brief  MSC_BOT_DeInit
+     93            *         Uninitialize the BOT Machine
+     94            * @param  pdev: device instance
+     95            * @retval None
+     96            */
+     97          void MSC_BOT_DeInit (USB_CORE_HANDLE  *pdev)
+     98          {
+     99            MSC_BOT_State = BOT_IDLE;
+    100          }
+    101          
+    102          /**
+    103            * @brief  MSC_BOT_DataIn
+    104            *         Handle BOT IN data stage
+    105            * @param  pdev: device instance
+    106            * @param  epnum: endpoint index
+    107            * @retval None
+    108            */
+    109          void MSC_BOT_DataIn (USB_CORE_HANDLE  *pdev, 
+    110                               uint8_t epnum)
+    111          {
+    112          
+    113            switch (MSC_BOT_State)
+    114            {
+    115            case BOT_DATA_IN:
+    116              if(SCSI_ProcessCmd(pdev,
+    117                                  MSC_BOT_cbw.bLUN,
+    118                                  &MSC_BOT_cbw.CB[0]) < 0)
+    119              {
+    120                MSC_BOT_SendCSW (pdev, CSW_CMD_FAILED);
+    121              }
+    122              break;
+    123              
+    124            case BOT_SEND_DATA:
+    125            case BOT_LAST_DATA_IN:
+    126              MSC_BOT_SendCSW (pdev, CSW_CMD_PASSED);
+    127              
+    128              break;
+    129              
+    130            default:
+    131              break;
+    132            }
+    133          }
+    134          /**
+    135            * @brief  MSC_BOT_DataOut
+    136            *         Process MSC OUT data
+    137            * @param  pdev: device instance
+    138            * @param  epnum: endpoint index
+    139            * @retval None
+    140            */
+    141          void MSC_BOT_DataOut (USB_CORE_HANDLE  *pdev, 
+    142                                uint8_t epnum)
+    143          {
+    144            
+    145            switch (MSC_BOT_State)
+    146            {
+    147            case BOT_IDLE:
+    148              MSC_BOT_CBW_Decode(pdev);
+    149              break;
+    150              
+    151            case BOT_DATA_OUT:
+    152              
+    153              if(SCSI_ProcessCmd(pdev,
+    154                                  MSC_BOT_cbw.bLUN,
+    155                                  &MSC_BOT_cbw.CB[0]) < 0)
+    156              {
+    157                MSC_BOT_SendCSW (pdev, CSW_CMD_FAILED);
+    158              }
+    159          
+    160              break;
+    161              
+    162            default:
+    163              break;
+    164            }
+    165            
+    166          }
+    167          
+    168          /**
+    169            * @brief  MSC_BOT_CBW_Decode
+    170            *         Decode the CBW command and set the BOT state machine accordingly  
+    171            * @param  pdev: device instance
+    172            * @retval None
+    173            */
+    174          static void  MSC_BOT_CBW_Decode (USB_CORE_HANDLE  *pdev)
+    175          {
+    176          
+    177            MSC_BOT_csw.dTag = MSC_BOT_cbw.dTag;
+    178            MSC_BOT_csw.dDataResidue = MSC_BOT_cbw.dDataLength;
+    179            
+    180            if ((USBD_GetRxCount (pdev ,MSC_OUT_EP) != BOT_CBW_LENGTH) ||
+    181                (MSC_BOT_cbw.dSignature != BOT_CBW_SIGNATURE)||
+    182                  (MSC_BOT_cbw.bLUN > 1) || 
+    183                    (MSC_BOT_cbw.bCBLength < 1) || 
+    184                      (MSC_BOT_cbw.bCBLength > 16))
+    185            {
+    186              
+    187              SCSI_SenseCode(MSC_BOT_cbw.bLUN, 
+    188                             ILLEGAL_REQUEST, 
+    189                             INVALID_CDB);
+    190               MSC_BOT_Status = BOT_STATE_ERROR;   
+    191              MSC_BOT_Abort(pdev);
+    192           
+    193            }
+    194            else
+    195            {
+    196              if(SCSI_ProcessCmd(pdev,
+    197                                        MSC_BOT_cbw.bLUN,
+    198                                        &MSC_BOT_cbw.CB[0]) < 0)
+    199              {
+    200                MSC_BOT_Abort(pdev);
+    201              }
+    202              /*Burst xfer handled internally*/
+    203              else if ((MSC_BOT_State != BOT_DATA_IN) && 
+    204                       (MSC_BOT_State != BOT_DATA_OUT) &&
+    205                       (MSC_BOT_State != BOT_LAST_DATA_IN)) 
+    206              {
+    207                if (MSC_BOT_DataLen > 0)
+    208                {
+    209                  MSC_BOT_SendData(pdev,
+    210                                   MSC_BOT_Data, 
+    211                                   MSC_BOT_DataLen);
+    212                }
+    213                else if (MSC_BOT_DataLen == 0) 
+    214                {
+    215                  MSC_BOT_SendCSW (pdev,
+    216                                   CSW_CMD_PASSED);
+    217                }
+    218              }
+    219            }
+    220          }
+    221          
+    222          /**
+    223            * @brief  MSC_BOT_SendData
+    224            *         Send the requested data
+    225            * @param  pdev: device instance
+    226            * @param  buf: pointer to data buffer
+    227            * @param  len: Data Length
+    228            * @retval None
+    229            */
+    230          static void  MSC_BOT_SendData(USB_CORE_HANDLE  *pdev,
+    231                                        uint8_t* buf, 
+    232                                        uint16_t len)
+    233          {
+    234            
+    235            len = MIN (MSC_BOT_cbw.dDataLength, len);
+    236            MSC_BOT_csw.dDataResidue -= len;
+    237            MSC_BOT_csw.bStatus = CSW_CMD_PASSED;
+    238            MSC_BOT_State = BOT_SEND_DATA;
+    239            
+    240            DCD_EP_Tx (pdev, MSC_IN_EP, buf, len);  
+    241          }
+    242          
+    243          /**
+    244            * @brief  MSC_BOT_SendCSW
+    245            *         Send the Command Status Wrapper
+    246            * @param  pdev: device instance
+    247            * @param  status : CSW status
+    248            * @retval None
+    249            */
+    250          void  MSC_BOT_SendCSW (USB_CORE_HANDLE  *pdev,
+    251                                        uint8_t CSW_Status)
+    252          {
+    253            MSC_BOT_csw.dSignature = BOT_CSW_SIGNATURE;
+    254            MSC_BOT_csw.bStatus = CSW_Status;
+    255            MSC_BOT_State = BOT_IDLE;
+    256            
+    257            DCD_EP_Tx (pdev, 
+    258                       MSC_IN_EP, 
+    259                       (uint8_t *)&MSC_BOT_csw, 
+    260                       BOT_CSW_LENGTH);
+    261            
+    262            /* Prepare EP to Receive next Cmd */
+    263            DCD_EP_PrepareRx (pdev,
+    264                              MSC_OUT_EP,
+    265                              (uint8_t *)&MSC_BOT_cbw, 
+    266                              BOT_CBW_LENGTH);  
+    267            
+    268          }
+    269          
+    270          /**
+    271            * @brief  MSC_BOT_Abort
+    272            *         Abort the current transfer
+    273            * @param  pdev: device instance
+    274            * @retval status
+    275            */
+    276          
+    277          static void  MSC_BOT_Abort (USB_CORE_HANDLE  *pdev)
+    278          {
+    279          
+    280            if ((MSC_BOT_cbw.bmFlags == 0) && 
+    281                (MSC_BOT_cbw.dDataLength != 0) &&
+    282                (MSC_BOT_Status == BOT_STATE_NORMAL) )
+    283            {
+    284              DCD_EP_Stall(pdev, MSC_OUT_EP );
+    285            }
+    286            DCD_EP_Stall(pdev, MSC_IN_EP);
+    287            
+    288            if(MSC_BOT_Status == BOT_STATE_ERROR)
+    289            {
+    290              DCD_EP_PrepareRx (pdev,
+    291                                MSC_OUT_EP,
+    292                                (uint8_t *)&MSC_BOT_cbw, 
+    293                                BOT_CBW_LENGTH);    
+    294            }
+    295          }
+    296          
+    297          /**
+    298            * @brief  MSC_BOT_CplClrFeature
+    299            *         Complete the clear feature request
+    300            * @param  pdev: device instance
+    301            * @param  epnum: endpoint index
+    302            * @retval None
+    303            */
+    304          
+    305          void  MSC_BOT_CplClrFeature (USB_CORE_HANDLE  *pdev, uint8_t epnum)
+    306          {
+    307            if(MSC_BOT_Status == BOT_STATE_ERROR )/* Bad CBW Signature */
+    308            {
+    309              DCD_EP_Stall(pdev, MSC_IN_EP);
+    310              MSC_BOT_Status = BOT_STATE_NORMAL;    
+    311            }
+    312            else if(((epnum & 0x80) == 0x80) && ( MSC_BOT_Status != BOT_STATE_RECOVERY))
+    313            {
+    314              MSC_BOT_SendCSW (pdev, CSW_CMD_FAILED);
+    315            }
+    316            
+    317          }
+    318          
+    319          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   MSC_BOT_Abort
+        16   -> DCD_EP_PrepareRx
+        16   -> DCD_EP_Stall
+       8   MSC_BOT_CplClrFeature
+         8   -> DCD_EP_Stall
+         8   -> MSC_BOT_SendCSW
+       8   MSC_BOT_DataIn
+         8   -> MSC_BOT_SendCSW
+         8   -> SCSI_ProcessCmd
+      16   MSC_BOT_DataOut
+        16   -> DCD_EP_Tx
+        16   -> MSC_BOT_Abort
+        16   -> MSC_BOT_SendCSW
+        16   -> SCSI_ProcessCmd
+        16   -> SCSI_SenseCode
+        16   -> USBD_GetRxCount
+       0   MSC_BOT_DeInit
+       8   MSC_BOT_Init
+         8   -- Indirect call
+         8   -> DCD_EP_PrepareRx
+       8   MSC_BOT_Reset
+         8   -> DCD_EP_PrepareRx
+       8   MSC_BOT_SendCSW
+         8   -> DCD_EP_PrepareRx
+         8   -> DCD_EP_Tx
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable7
+       4  ??DataTable7_1
+       4  ??DataTable7_2
+       4  ??DataTable7_3
+       4  ??DataTable7_4
+      14  ?Subroutine0
+      62  MSC_BOT_Abort
+      38  MSC_BOT_CplClrFeature
+      52  MSC_BOT_DataIn
+     188  MSC_BOT_DataOut
+       8  MSC_BOT_DeInit
+      22  MSC_BOT_Init
+      24  MSC_BOT_Reset
+      26  MSC_BOT_SendCSW
+      32  MSC_BOT_cbw
+     532  MSC_BOT_csw
+          MSC_BOT_State
+          MSC_BOT_Status
+          MSC_BOT_DataLen
+          MSC_BOT_Data
+
+ 
+ 564 bytes in section .bss
+ 454 bytes in section .text
+ 
+ 454 bytes of CODE memory
+ 564 bytes of DATA memory
+
+Errors: none
+Warnings: none

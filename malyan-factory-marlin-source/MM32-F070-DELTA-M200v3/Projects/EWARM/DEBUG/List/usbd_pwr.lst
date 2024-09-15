@@ -1,0 +1,345 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:24
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_pwr.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4B11.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_pwr.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_pwr.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_pwr.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_pwr.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_pwr.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   This file provides functions for power management
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_pwr.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          struct
+     36          {
+     37            __IO RESUME_STATE eState;
+     38            __IO uint8_t bESOFcnt;
+     39          }
+     40          ResumeS;
+     41          
+     42           __IO uint32_t remotewakeupon=0;
+     43           
+     44          /* Private function prototypes -----------------------------------------------*/
+     45          /* Private functions ---------------------------------------------------------*/
+     46          
+     47          /**
+     48            * @brief  Sets suspend mode operating conditions
+     49            * @param  None
+     50            * @retval USB_SUCCESS
+     51            */
+     52          void Suspend(void)
+     53          {
+     54            uint16_t wCNTR;
+     55          
+     56            /*Store CNTR value */
+     57            wCNTR = _GetCNTR();   
+     58            /* Set FSUSP bit in USB_CNTR register*/
+     59            wCNTR |= CNTR_FSUSP;
+     60            _SetCNTR(wCNTR);
+     61            
+     62            /* force low-power mode in the macrocell */
+     63            wCNTR = _GetCNTR();
+     64            wCNTR |= CNTR_LPMODE;
+     65            _SetCNTR(wCNTR);
+     66            
+     67          #ifdef USB_DEVICE_LOW_PWR_MGMT_SUPPORT
+     68            
+     69            /* enter system in STOP mode, only when wakeup flag in not set */
+     70            if((_GetISTR()&ISTR_WKUP)==0)
+     71            { 
+     72              /*Enter STOP mode with SLEEPONEXIT*/
+     73              PWR_EnterSTOPMode(PWR_Regulator_LowPower, PWR_STOPEntry_SLEEPONEXIT);
+     74            }
+     75            else
+     76            {
+     77              /* Clear Wakeup flag */
+     78              _SetISTR(CLR_WKUP);
+     79              /* clear FSUSP to abort entry in suspend mode  */
+     80              wCNTR = _GetCNTR();
+     81              wCNTR&=~CNTR_FSUSP;
+     82              _SetCNTR(wCNTR);
+     83            }
+     84          #endif
+     85          }
+     86          
+     87          /**
+     88            * @brief  Handles wake-up restoring normal operations
+     89            * @param  None
+     90            * @retval USB_SUCCESS
+     91            */
+     92          void Resume_Init(void)
+     93          {
+     94            uint16_t wCNTR;
+     95            
+     96            /* ------------------ ONLY WITH BUS-POWERED DEVICES ---------------------- */
+     97            /* restart the clocks */
+     98            /* ...  */
+     99          
+    100            /* CNTR_LPMODE = 0 */
+    101            wCNTR = _GetCNTR();
+    102            wCNTR &= (~CNTR_LPMODE);
+    103            _SetCNTR(wCNTR);    
+    104          #ifdef USB_DEVICE_LOW_PWR_MGMT_SUPPORT   
+    105            /* restore full power */
+    106            /* ... on connected devices */
+    107            Leave_LowPowerMode();
+    108          #endif
+    109            /* reset FSUSP bit */
+    110            _SetCNTR(IMR_MSK);
+    111          
+    112          }
+    113          
+    114          
+    115          /**
+    116            * @brief  Provides the state machine handling resume operations and
+    117            *         timing sequence. The control is based on the Resume structure
+    118            *         variables and on the ESOF interrupt calling this subroutine
+    119            *         without changing machine state.
+    120            * @param  a state machine value (RESUME_STATE)
+    121            *         RESUME_ESOF doesn't change ResumeS.eState allowing
+    122            *         decrementing of the ESOF counter in different states.
+    123            * @retval Status
+    124            */
+    125          void Resume(RESUME_STATE eResumeSetVal)
+    126          {
+    127           uint16_t wCNTR;
+    128          
+    129            if (eResumeSetVal != RESUME_ESOF)
+    130              ResumeS.eState = eResumeSetVal;
+    131            switch (ResumeS.eState)
+    132            {
+    133              case RESUME_EXTERNAL:
+    134                
+    135          if (remotewakeupon ==0)
+    136                {
+    137                  Resume_Init();
+    138                  ResumeS.eState = RESUME_OFF;
+    139                }
+    140                else /* RESUME detected during the RemoteWAkeup signalling => keep RemoteWakeup handling*/
+    141                {
+    142                  ResumeS.eState = RESUME_ON;
+    143                }
+    144                break;
+    145              case RESUME_INTERNAL:
+    146                Resume_Init();
+    147                ResumeS.eState = RESUME_START;
+    148                remotewakeupon = 1;
+    149                break;
+    150              case RESUME_LATER:
+    151                ResumeS.bESOFcnt = 2;
+    152                ResumeS.eState = RESUME_WAIT;
+    153                break;
+    154              case RESUME_WAIT:
+    155                ResumeS.bESOFcnt--;
+    156                if (ResumeS.bESOFcnt == 0)
+    157                  ResumeS.eState = RESUME_START;
+    158                break;
+    159              case RESUME_START:
+    160                wCNTR = _GetCNTR();
+    161                wCNTR |= CNTR_RESUME;
+    162                _SetCNTR(wCNTR);
+    163                ResumeS.eState = RESUME_ON;
+    164                ResumeS.bESOFcnt = 10;
+    165                break;
+    166              case RESUME_ON:    
+    167                ResumeS.bESOFcnt--;
+    168                if (ResumeS.bESOFcnt == 0)
+    169                {
+    170                  wCNTR = _GetCNTR();
+    171                  wCNTR &= (~CNTR_RESUME);
+    172                  _SetCNTR(wCNTR);
+    173                  ResumeS.eState = RESUME_OFF;
+    174                  remotewakeupon = 0;
+    175                }
+    176                break;
+    177              case RESUME_OFF:
+    178              case RESUME_ESOF:
+    179              default:
+    180                ResumeS.eState = RESUME_OFF;
+    181                break;
+    182            }
+    183          }
+    184          
+    185          /**
+    186            * @brief  Restores system clocks and power while exiting suspend mode
+    187            * @param  None
+    188            * @retval None
+    189            */
+    190          void Leave_LowPowerMode(void)
+    191          {
+    192          #if defined USB_CLOCK_SOURCE_CRS
+    193            /* Enable HSI48 oscillator */
+    194            RCC_HSI48Cmd(ENABLE);
+    195            
+    196            /* Wait till HSI48RDYF is set */
+    197            while(RCC_GetFlagStatus(RCC_FLAG_HSI48RDY) == RESET)
+    198            {
+    199            }
+    200            /* Select HSI48 as system clock source */
+    201            RCC_SYSCLKConfig(RCC_SYSCLKSource_HSI48);
+    202            
+    203          #else
+    204          
+    205            /* After wake-up from STOP mode restore system clock (system clock = PLL clock
+    206            from HSE source )*/
+    207            /* Enable HSE */
+    208            RCC_HSEConfig(RCC_HSE_ON);
+    209            
+    210            /* Wait till HSE is ready */
+    211            /*while (RCC_GetFlagStatus(RCC_FLAG_HSERDY) == RESET)
+    212            {}*/
+    213            //if (RCC_WaitForHSEStartUp()==ERROR)
+    214            {
+    215                RCC_PREDIV1Config(RCC_PREDIV1_Div1);
+    216                RCC_PLLConfig(RCC_PLLSource_HSI_Div2,RCC_PLLMul_12);
+    217            }
+    218            
+    219            /* Enable PLL */
+    220            RCC_PLLCmd(ENABLE);
+    221            
+    222            /* Wait till PLL is ready */
+    223            while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+    224            {
+    225                IWDG_ReloadCounter();
+    226            }
+    227            
+    228            /* Select PLL as system clock source */
+    229            RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    230            
+    231            /* Wait till PLL is used as system clock source */
+    232            while (RCC_GetSYSCLKSource() != 0x08)
+    233            {
+    234                IWDG_ReloadCounter();
+    235            } 
+    236          #endif /* USB_CLOCK_SOURCE_CRS */
+    237            
+    238            /*Low Power Sleep on Exit Disabled*/
+    239            NVIC_SystemLPConfig(NVIC_LP_SLEEPONEXIT, DISABLE);
+    240          }
+    241          
+    242          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   Leave_LowPowerMode
+         8   -> IWDG_ReloadCounter
+         8   -> NVIC_SystemLPConfig
+         8   -> RCC_GetFlagStatus
+         8   -> RCC_GetSYSCLKSource
+         8   -> RCC_HSEConfig
+         8   -> RCC_PLLCmd
+         8   -> RCC_PLLConfig
+         8   -> RCC_PREDIV1Config
+         8   -> RCC_SYSCLKConfig
+      20   Resume
+       0   Resume_Init
+       0   Suspend
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable2_2
+       4  ??DataTable2_3
+      76  Leave_LowPowerMode
+     156  Resume
+       8  ResumeS
+          remotewakeupon
+      18  Resume_Init
+      24  Suspend
+
+ 
+   8 bytes in section .bss
+ 290 bytes in section .text
+ 
+ 290 bytes of CODE memory
+   8 bytes of DATA memory
+
+Errors: none
+Warnings: none

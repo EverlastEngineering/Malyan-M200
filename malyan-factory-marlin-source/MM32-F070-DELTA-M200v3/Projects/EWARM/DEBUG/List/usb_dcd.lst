@@ -1,0 +1,807 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW477A.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usb_dcd.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_dcd.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usb_dcd.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   Device interface layer used by the library to access the core.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usb_dcd.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          uint32_t wInterrupt_Mask=0;
+     36          
+     37          /* Private function prototypes -----------------------------------------------*/
+     38          /* Private functions ---------------------------------------------------------*/
+     39          
+     40          /**
+     41            * @brief Device Initialization
+     42            * @param  pdev: device instance
+     43            * @retval : None
+     44            */
+     45          void DCD_Init(USB_CORE_HANDLE *pdev)
+     46          {
+     47            /*Device is in Default State*/
+     48            pdev->dev.device_status = USB_DEFAULT;
+     49            pdev->dev.device_address = 0;
+     50            pdev->dev.DevRemoteWakeup = 0;
+     51            
+     52            pdev->dev.speed = USB_SPEED_FULL; /*kept for API compatibility reason*/
+     53            
+     54            /*CNTR_FRES = 1*/
+     55            SetCNTR(CNTR_FRES);
+     56            
+     57            /*CNTR_FRES = 0*/
+     58            SetCNTR(0);
+     59            
+     60            /*Clear pending interrupts*/
+     61            SetISTR(0);
+     62            
+     63            /*Set Btable Address*/
+     64            SetBTABLE(BTABLE_ADDRESS);
+     65            
+     66            /*set wInterrupt_Mask global variable*/
+     67            wInterrupt_Mask = CNTR_CTRM  | CNTR_WKUPM | CNTR_SUSPM | CNTR_ERRM  | CNTR_SOFM \
+     68              | CNTR_ESOFM | CNTR_RESETM;
+     69            
+     70          #ifdef LPM_ENABLED
+     71            /* enable L1REQ interrupt */
+     72            wInterrupt_Mask |= CNTR_L1REQM;
+     73            
+     74            /* Enable LPM support and enable ACK answer to LPM request*/
+     75            _SetLPMCSR(LPMCSR_LMPEN | LPMCSR_LPMACK);
+     76          #endif
+     77           
+     78            /*Set interrupt mask*/
+     79            SetCNTR(wInterrupt_Mask); 
+     80          }
+     81          
+     82          
+     83          /**
+     84            * @brief Stop device
+     85            * @param  pdev: device instance
+     86            * @retval : None
+     87            */
+     88          void DCD_StopDevice(USB_CORE_HANDLE *pdev)
+     89          {
+     90              /* disable all interrupts and force USB reset */
+     91            _SetCNTR(CNTR_FRES);
+     92            
+     93            /* clear interrupt status register */
+     94            _SetISTR(0);
+     95            
+     96            /* switch-off device */
+     97            _SetCNTR(CNTR_FRES + CNTR_PDWN);
+     98            
+     99            /*Device is in default state*/
+    100            pdev->dev.device_status  = USB_DEFAULT;
+    101            
+    102          }
+    103          
+    104          /**
+    105            * @brief Configure PMA for EP
+    106            * @param  pdev : Device instance
+    107            * @param  ep_addr: endpoint address
+    108            * @param  ep_Kind: endpoint Kind
+    109            *                @arg USB_SNG_BUF: Single Buffer used
+    110            *                @arg USB_DBL_BUF: Double Buffer used
+    111            * @param  pmaadress: EP address in The PMA: In case of single buffer endpoint
+    112            *                   this parameter is 16-bit value providing the address
+    113            *                   in PMA allocated to endpoint.
+    114            *                   In case of double buffer endpoint this parameter
+    115            *                   is a 32-bit value providing the endpoint buffer 0 address
+    116            *                   in the LSB part of 32-bit value and endpoint buffer 1 address
+    117            *                   in the MSB part of 32-bit value.
+    118            * @retval : status
+    119            */
+    120          
+    121          uint32_t DCD_PMA_Config(USB_CORE_HANDLE *pdev , 
+    122                                  uint16_t ep_addr,
+    123                                  uint16_t ep_kind,
+    124                                  uint32_t pmaadress)
+    125          
+    126          {
+    127            USB_EP *ep;
+    128            /* initialize ep structure*/
+    129            if ((ep_addr & 0x80) == 0x80)
+    130            {
+    131              ep = &pdev->dev.in_ep[ep_addr & 0x7F];
+    132            }
+    133            else
+    134            {
+    135              ep = &pdev->dev.out_ep[ep_addr & 0x7F];
+    136            }
+    137            
+    138            /* Here we check if the endpoint is single or double Buffer*/
+    139            if (ep_kind == USB_SNG_BUF)
+    140            {
+    141              /*Single Buffer*/
+    142              ep->doublebuffer = 0;
+    143              /*Configure te PMA*/
+    144              ep->pmaadress = (uint16_t)pmaadress;
+    145            }
+    146            else /*USB_DBL_BUF*/
+    147            {
+    148              /*Double Buffer Endpoint*/
+    149              ep->doublebuffer = 1;
+    150              /*Configure the PMA*/
+    151              ep->pmaaddr0 =  pmaadress & 0xFFFF;
+    152              ep->pmaaddr1 =  (pmaadress & 0xFFFF0000) >> 16;
+    153            }
+    154            
+    155            return USB_OK; 
+    156          }
+    157          
+    158          /**
+    159            * @brief Configure an EP
+    160            * @param  pdev : Device instance
+    161            * @param  ep_addr: endpoint address
+    162            * @param  ep_mps: endpoint max packet size
+    163            * @param  ep_type: endpoint Type
+    164            */
+    165          uint32_t DCD_EP_Open(USB_CORE_HANDLE *pdev , 
+    166                               uint16_t ep_addr,
+    167                               uint16_t ep_mps,
+    168                               uint8_t ep_type)
+    169          {
+    170            
+    171            USB_EP *ep;
+    172            
+    173            /* initialize ep structure*/
+    174            if ((ep_addr & 0x80) == 0x80)
+    175            {
+    176              ep = &pdev->dev.in_ep[ep_addr & 0x7F];
+    177              ep->is_in = 1;
+    178            }
+    179            else
+    180            {
+    181              ep = &pdev->dev.out_ep[ep_addr & 0x7F];
+    182              ep->is_in = 0;
+    183            }
+    184            
+    185            ep->maxpacket = ep_mps;
+    186            ep->type = ep_type;
+    187            ep->num   = ep_addr & 0x7F;
+    188            
+    189            if (ep->num == 0)
+    190            {
+    191              /* Initialize the control transfer variables*/ 
+    192              ep->ctl_data_len =0;
+    193              ep->rem_data_len = 0;
+    194              ep->total_data_len = 0;
+    195            }
+    196            
+    197            /* Initialize the transaction level variables */
+    198            ep->xfer_buff = 0;
+    199            ep->xfer_len = 0;
+    200            ep->xfer_count = 0;
+    201            ep->is_stall = 0;
+    202            
+    203            /* initialize HW */
+    204            switch (ep->type)
+    205            {
+    206            case USB_EP_CONTROL:
+    207              SetEPType(ep->num, EP_CONTROL);
+    208              break;
+    209            case USB_EP_BULK:
+    210              SetEPType(ep->num, EP_BULK);
+    211              break;
+    212            case USB_EP_INT:
+    213              SetEPType(ep->num, EP_INTERRUPT);
+    214              break;
+    215            case USB_EP_ISOC:
+    216              SetEPType(ep->num, EP_ISOCHRONOUS);
+    217              break;
+    218            } 
+    219            
+    220            if (ep->doublebuffer == 0) 
+    221            {
+    222              if (ep->is_in)
+    223              {
+    224                /*Set the endpoint Transmit buffer address */
+    225                SetEPTxAddr(ep->num, ep->pmaadress);
+    226                ClearDTOG_TX(ep->num);
+    227                /* Configure NAK status for the Endpoint*/
+    228                SetEPTxStatus(ep->num, EP_TX_NAK); 
+    229              }
+    230              else
+    231              {
+    232                /*Set the endpoint Receive buffer address */
+    233                SetEPRxAddr(ep->num, ep->pmaadress);
+    234                /*Set the endpoint Receive buffer counter*/
+    235                SetEPRxCount(ep->num, ep->maxpacket);
+    236                ClearDTOG_RX(ep->num);
+    237                /* Configure VALID status for the Endpoint*/
+    238                SetEPRxStatus(ep->num, EP_RX_VALID);
+    239              }
+    240            }
+    241            /*Double Buffer*/
+    242            else
+    243            {
+    244              /*Set the endpoint as double buffered*/
+    245              SetEPDoubleBuff(ep->num);
+    246              /*Set buffer address for double buffered mode*/
+    247              SetEPDblBuffAddr(ep->num,ep->pmaaddr0, ep->pmaaddr1);
+    248              
+    249              if (ep->is_in==0)
+    250              {
+    251                /* Clear the data toggle bits for the endpoint IN/OUT*/
+    252                ClearDTOG_RX(ep->num);
+    253                ClearDTOG_TX(ep->num);
+    254                
+    255                /* Reset value of the data toggle bits for the endpoint out*/
+    256                ToggleDTOG_TX(ep->num);
+    257                
+    258                SetEPRxStatus(ep->num, EP_RX_VALID);
+    259                SetEPTxStatus(ep->num, EP_TX_DIS);
+    260              }
+    261              else
+    262              {
+    263                /* Clear the data toggle bits for the endpoint IN/OUT*/
+    264                ClearDTOG_RX(ep->num);
+    265                ClearDTOG_TX(ep->num);
+    266                ToggleDTOG_RX(ep->num);
+    267                /* Configure DISABLE status for the Endpoint*/
+    268                SetEPTxStatus(ep->num, EP_TX_DIS);
+    269                SetEPRxStatus(ep->num, EP_RX_DIS);
+    270              }
+    271            } 
+    272            return USB_OK; 
+    273          }
+    274          /**
+    275            * @brief called when an EP is disabled
+    276            * @param  pdev: device instance
+    277            * @param  ep_addr: endpoint address
+    278            * @retval : status
+    279            */
+    280          uint32_t DCD_EP_Close(USB_CORE_HANDLE *pdev , uint8_t  ep_addr)
+    281          {
+    282            USB_EP *ep;
+    283            
+    284            if ((ep_addr&0x80) == 0x80)
+    285            {
+    286              ep = &pdev->dev.in_ep[ep_addr & 0x7F];
+    287            }
+    288            else
+    289            {
+    290              ep = &pdev->dev.out_ep[ep_addr & 0x7F];
+    291            }
+    292            
+    293            if (ep->doublebuffer == 0) 
+    294            {
+    295              if (ep->is_in)
+    296              {
+    297                ClearDTOG_TX(ep->num);
+    298                /* Configure DISABLE status for the Endpoint*/
+    299                SetEPTxStatus(ep->num, EP_TX_DIS); 
+    300              }
+    301              else
+    302              {
+    303                ClearDTOG_RX(ep->num);
+    304                /* Configure DISABLE status for the Endpoint*/
+    305                SetEPRxStatus(ep->num, EP_RX_DIS);
+    306              }
+    307            }
+    308            /*Double Buffer*/
+    309            else
+    310            { 
+    311              if (ep->is_in==0)
+    312              {
+    313                /* Clear the data toggle bits for the endpoint IN/OUT*/
+    314                ClearDTOG_RX(ep->num);
+    315                ClearDTOG_TX(ep->num);
+    316                
+    317                /* Reset value of the data toggle bits for the endpoint out*/
+    318                ToggleDTOG_TX(ep->num);
+    319                
+    320                SetEPRxStatus(ep->num, EP_RX_DIS);
+    321                SetEPTxStatus(ep->num, EP_TX_DIS);
+    322              }
+    323              else
+    324              {
+    325                /* Clear the data toggle bits for the endpoint IN/OUT*/
+    326                ClearDTOG_RX(ep->num);
+    327                ClearDTOG_TX(ep->num);
+    328                ToggleDTOG_RX(ep->num);
+    329                /* Configure DISABLE status for the Endpoint*/
+    330                SetEPTxStatus(ep->num, EP_TX_DIS);
+    331                SetEPRxStatus(ep->num, EP_RX_DIS);
+    332              }
+    333            } 
+    334            return USB_OK;
+    335          }
+    336          
+    337          
+    338          /**
+    339            * @brief DCD_EP_PrepareRx
+    340            * @param  pdev: device instance
+    341            * @param  ep_addr: endpoint address
+    342            * @param  pbuf: pointer to Rx buffer
+    343            * @param  buf_len: data length
+    344            * @retval : status
+    345            */
+    346          uint32_t DCD_EP_PrepareRx( USB_CORE_HANDLE *pdev,
+    347                                    uint8_t   ep_addr,
+    348                                    uint8_t *pbuf,                        
+    349                                    uint16_t  buf_len)
+    350          {
+    351            __IO uint32_t len = 0; 
+    352            USB_EP *ep;
+    353            
+    354            ep = &pdev->dev.out_ep[ep_addr & 0x7F];
+    355            
+    356            /*setup and start the Xfer */
+    357            ep->xfer_buff = pbuf;  
+    358            ep->xfer_len = buf_len;
+    359            ep->xfer_count = 0; 
+    360            
+    361            /*Multi packet transfer*/
+    362            if (ep->xfer_len > ep->maxpacket)
+    363            {
+    364              len=ep->maxpacket;
+    365              ep->xfer_len-=len; 
+    366            }
+    367            else
+    368            {
+    369              len=ep->xfer_len;
+    370              ep->xfer_len =0;
+    371            }
+    372            
+    373            /* configure and validate Rx endpoint */
+    374            if (ep->doublebuffer == 0) 
+    375            {
+    376              /*Set RX buffer count*/
+    377              SetEPRxCount(ep->num, len);
+    378            }
+    379            else
+    380            {
+    381              /*Set the Double buffer counter*/
+    382              SetEPDblBuffCount(ep->num, ep->is_in, len);
+    383            } 
+    384            
+    385            SetEPRxStatus(ep->num, EP_RX_VALID);
+    386            
+    387            return USB_OK;
+    388          }
+    389          
+    390          /**
+    391            * @brief Transmit data Buffer
+    392            * @param  pdev: device instance
+    393            * @param  ep_addr: endpoint address
+    394            * @param  pbuf: pointer to Tx buffer
+    395            * @param  buf_len: data length
+    396            * @retval : status
+    397            */
+    398          uint32_t  DCD_EP_Tx ( USB_CORE_HANDLE *pdev,
+    399                               uint8_t   ep_addr,
+    400                               uint8_t   *pbuf,
+    401                               uint32_t   buf_len)
+    402          {
+    403            __IO uint32_t len = 0; 
+    404            USB_EP *ep;
+    405            
+    406            ep = &pdev->dev.in_ep[ep_addr & 0x7F];
+    407            
+    408            /*setup and start the Xfer */
+    409            ep->num = ep_addr & 0x7F; 
+    410            ep->xfer_buff = pbuf;  
+    411            ep->xfer_len = buf_len;
+    412            ep->xfer_count = 0; 
+    413            
+    414            /*Multi packet transfer*/
+    415            if (ep->xfer_len > ep->maxpacket)
+    416            {
+    417              len=ep->maxpacket;
+    418              ep->xfer_len-=len; 
+    419            }
+    420            else
+    421            {
+    422              len=ep->xfer_len;
+    423              ep->xfer_len =0;
+    424            }
+    425            
+    426            /* configure and validate Tx endpoint */
+    427            if (ep->doublebuffer == 0) 
+    428            {
+    429              UserToPMABufferCopy(ep->xfer_buff, ep->pmaadress, len);
+    430              SetEPTxCount(ep->num, len);
+    431            }
+    432            else
+    433            {
+    434              uint16_t pmabuffer=0;
+    435              /*Set the Double buffer counter*/
+    436              SetEPDblBuffCount(ep->num, ep->is_in, len);
+    437              
+    438              /*Write the data to the USB endpoint*/
+    439              if (GetENDPOINT(ep->num)&EP_DTOG_TX)
+    440              {
+    441                pmabuffer = ep->pmaaddr1;
+    442              }
+    443              else
+    444              {
+    445                pmabuffer = ep->pmaaddr0;
+    446              }
+    447              UserToPMABufferCopy(ep->xfer_buff, pmabuffer, len);
+    448              FreeUserBuffer(ep->num, ep->is_in);
+    449            }
+    450            
+    451            SetEPTxStatus(ep->num, EP_TX_VALID);
+    452            
+    453            return USB_OK; 
+    454          }
+    455          
+    456          
+    457          /**
+    458            * @brief Stall an endpoint.
+    459            * @param  pdev: device instance
+    460            * @param  epnum: endpoint address
+    461            * @retval : status
+    462            */
+    463          uint32_t  DCD_EP_Stall (USB_CORE_HANDLE *pdev, uint8_t   epnum)
+    464          {
+    465            USB_EP *ep;
+    466            if ((0x80 & epnum) == 0x80)
+    467            {
+    468              ep = &pdev->dev.in_ep[epnum & 0x7F];    
+    469            }
+    470            else
+    471            {
+    472              ep = &pdev->dev.out_ep[epnum];
+    473            }
+    474            
+    475            if (ep->num ==0)
+    476            {
+    477              /* This macro sets STALL status for RX & TX*/ 
+    478              _SetEPRxTxStatus(ep->num,EP_RX_STALL,EP_TX_STALL); 
+    479              /*Endpoint is stalled */
+    480              ep->is_stall = 1;
+    481              return USB_OK;
+    482            }
+    483            if (ep->is_in)
+    484            {  
+    485              /* IN endpoint */
+    486              ep->is_stall = 1;
+    487              /* IN Endpoint stalled */
+    488             SetEPTxStatus(ep->num , EP_TX_STALL); 
+    489            }
+    490            else
+    491            { 
+    492              ep->is_stall = 1;
+    493              /* OUT Endpoint stalled */
+    494              SetEPRxStatus(ep->num , EP_RX_STALL);
+    495            }
+    496            
+    497            return USB_OK;
+    498          }
+    499          
+    500          
+    501          /**
+    502            * @brief Clear stall condition on endpoints.
+    503            * @param  pdev: device instance
+    504            * @param  epnum: endpoint address
+    505            * @retval : status
+    506            */
+    507          uint32_t  DCD_EP_ClrStall (USB_CORE_HANDLE *pdev, uint8_t epnum)
+    508          {
+    509            USB_EP *ep;
+    510            if ((0x80 & epnum) == 0x80)
+    511            {
+    512              ep = &pdev->dev.in_ep[epnum & 0x7F];    
+    513            }
+    514            else
+    515            {
+    516              ep = &pdev->dev.out_ep[epnum];
+    517            } 
+    518            
+    519            if (ep->is_in)
+    520            {
+    521              ClearDTOG_TX(ep->num);
+    522              SetEPTxStatus(ep->num, EP_TX_VALID);
+    523              ep->is_stall = 0;  
+    524            }
+    525            else
+    526            {
+    527              ClearDTOG_RX(ep->num);
+    528              SetEPRxStatus(ep->num, EP_RX_VALID);
+    529              ep->is_stall = 0;  
+    530            }
+    531            
+    532            return USB_OK;
+    533          }
+    534          
+    535          /**
+    536            * @brief This Function set USB device address
+    537            * @param  pdev: device instance
+    538            * @param  address: new device address
+    539            */
+    540          void  DCD_EP_SetAddress (USB_CORE_HANDLE *pdev, uint8_t address)
+    541          {
+    542            uint32_t i=0;
+    543            pdev->dev.device_address = address;
+    544            
+    545            /* set address in every used endpoint */
+    546            for (i = 0; i < EP_NUM; i++)
+    547            {
+    548              _SetEPAddress((uint8_t)i, (uint8_t)i);
+    549            } /* set device address and enable function */
+    550            _SetDADDR(address | DADDR_EF); 
+    551          }
+    552          
+    553          /**
+    554            * @brief Connect device (enable internal pull-up)
+    555            * @param  pdev: device instance
+    556            * @retval : None
+    557            */
+    558          void  DCD_DevConnect (USB_CORE_HANDLE *pdev)
+    559          {
+    560            /* Enabling DP Pull-Down bit to Connect internal pull-up on USB DP line */
+    561            *BCDR|=BCDR_DPPU;
+    562            /*Device is in default state*/
+    563            pdev->dev.device_status  = USB_DEFAULT;
+    564          }
+    565          
+    566          /**
+    567            * @brief Disconnect device (disable internal pull-up)
+    568            * @param  pdev: device instance
+    569            * @retval : None
+    570            */
+    571          void  DCD_DevDisconnect (USB_CORE_HANDLE *pdev)
+    572          {
+    573           
+    574            /* Disable DP Pull-Down bit*/
+    575            *BCDR&=~BCDR_DPPU;
+    576            
+    577            /*Device is in unconnected state*/
+    578            pdev->dev.device_status  = USB_UNCONNECTED;
+    579          }
+    580          
+    581          /**
+    582            * @brief returns the EP Status
+    583            * @param   pdev : Selected device
+    584            *         epnum : endpoint address
+    585            * @retval : EP status
+    586            */
+    587          
+    588          uint32_t DCD_GetEPStatus(USB_CORE_HANDLE *pdev ,uint8_t epnum)
+    589          {
+    590            uint16_t Status=0; 
+    591            
+    592            USB_EP *ep;
+    593            if ((0x80 & epnum) == 0x80)
+    594            {
+    595              ep = &pdev->dev.in_ep[epnum & 0x7F];    
+    596            }
+    597            else
+    598            {
+    599              ep = &pdev->dev.out_ep[epnum];
+    600            } 
+    601            
+    602            if (ep->is_in)
+    603            {
+    604              Status = GetEPTxStatus(ep->num);
+    605            }
+    606            else
+    607            {
+    608              Status = GetEPRxStatus(ep->num);
+    609            }
+    610            
+    611            return Status; 
+    612          }
+    613          
+    614          /**
+    615            * @brief Set the EP Status
+    616            * @param   pdev : Selected device
+    617            *         Status : new Status
+    618            *         epnum : EP address
+    619            * @retval : None
+    620            */
+    621          void DCD_SetEPStatus (USB_CORE_HANDLE *pdev , uint8_t epnum , uint32_t Status)
+    622          {
+    623            USB_EP *ep;
+    624            if ((0x80 & epnum) == 0x80)
+    625            {
+    626              ep = &pdev->dev.in_ep[epnum & 0x7F];    
+    627            }
+    628            else
+    629            {
+    630              ep = &pdev->dev.out_ep[epnum];
+    631            } 
+    632            
+    633            if (ep->is_in)
+    634            {
+    635              SetEPTxStatus(ep->num, (uint16_t)Status);
+    636            }
+    637            else
+    638            {
+    639              SetEPRxStatus(ep->num, (uint16_t)Status);
+    640            }
+    641              
+    642            if ((Status == EP_RX_STALL) || (Status == EP_TX_STALL))
+    643            {
+    644              ep->is_stall =1;
+    645            }
+    646          }
+    647          
+    648          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   DCD_DevConnect
+       0   DCD_DevDisconnect
+       8   DCD_EP_Close
+         8   -> ClearDTOG_RX
+         8   -> ClearDTOG_TX
+         8   -> SetEPRxStatus
+         8   -> SetEPTxStatus
+         8   -> ToggleDTOG_RX
+         8   -> ToggleDTOG_TX
+       8   DCD_EP_ClrStall
+         8   -> ClearDTOG_RX
+         8   -> ClearDTOG_TX
+         8   -> SetEPRxStatus
+         8   -> SetEPTxStatus
+      16   DCD_EP_Open
+        16   -> ClearDTOG_RX
+        16   -> ClearDTOG_TX
+        16   -> SetEPDblBuffAddr
+        16   -> SetEPDoubleBuff
+        16   -> SetEPRxAddr
+        16   -> SetEPRxCount
+        16   -> SetEPRxStatus
+        16   -> SetEPTxAddr
+        16   -> SetEPTxStatus
+        16   -> SetEPType
+        16   -> ToggleDTOG_RX
+        16   -> ToggleDTOG_TX
+      16   DCD_EP_PrepareRx
+        16   -> SetEPDblBuffCount
+        16   -> SetEPRxCount
+        16   -> SetEPRxStatus
+      12   DCD_EP_SetAddress
+       8   DCD_EP_Stall
+         8   -> SetEPRxStatus
+         8   -> SetEPTxStatus
+      24   DCD_EP_Tx
+        24   -> FreeUserBuffer
+        24   -> GetENDPOINT
+        24   -> SetEPDblBuffCount
+        24   -> SetEPTxCount
+        24   -> SetEPTxStatus
+        24   -> UserToPMABufferCopy
+       8   DCD_GetEPStatus
+         8   -> GetEPRxStatus
+         8   -> GetEPTxStatus
+       8   DCD_Init
+         8   -> SetBTABLE
+         8   -> SetCNTR
+         8   -> SetISTR
+      12   DCD_PMA_Config
+      16   DCD_SetEPStatus
+        16   -> SetEPRxStatus
+        16   -> SetEPTxStatus
+       0   DCD_StopDevice
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable5
+       4  ??DataTable5_1
+       4  ??DataTable5_2
+       4  ??DataTable5_3
+       4  ??DataTable5_4
+       4  ??DataTable5_5
+       4  ??DataTable5_6
+       4  ??DataTable5_7
+      16  DCD_DevConnect
+      16  DCD_DevDisconnect
+     126  DCD_EP_Close
+      72  DCD_EP_ClrStall
+     248  DCD_EP_Open
+      88  DCD_EP_PrepareRx
+      44  DCD_EP_SetAddress
+      86  DCD_EP_Stall
+     138  DCD_EP_Tx
+      50  DCD_GetEPStatus
+      52  DCD_Init
+      48  DCD_PMA_Config
+      72  DCD_SetEPStatus
+      18  DCD_StopDevice
+       4  wInterrupt_Mask
+
+ 
+     4 bytes in section .bss
+ 1'114 bytes in section .text
+ 
+ 1'114 bytes of CODE memory
+     4 bytes of DATA memory
+
+Errors: none
+Warnings: none

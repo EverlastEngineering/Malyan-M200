@@ -1,0 +1,712 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      18/Jul/2017  22:40:20 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt #
+#                    \SEGGER_RTT.c                                            #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt #
+#                    \SEGGER_RTT.c -D USE_STDPERIPH_DRIVER -D                 #
+#                    USE_STM32072B_EVAL -D STM32F072 -D PRINT_INFO -lcN       #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\ -o D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\DEBUG\Obj\ --debug --endian=little          #
+#                    --cpu=Cortex-M0 -e --fpu=None --dlib_config "C:\Program  #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\INC\c\DLib_Config_Normal.h" -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\E #
+#                    WARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\src\fs\ -I                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --use_c++_inline -I "C:\Program   #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\CMSIS\Include\" --relaxed_fp                     #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\SEGGER_RTT.lst                                 #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\SEGGER_RTT.o                                    #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt\SEGGER_RTT.c
+      1          /*********************************************************************
+      2          *              SEGGER MICROCONTROLLER GmbH & Co. KG                  *
+      3          *        Solutions for real time microcontroller applications        *
+      4          **********************************************************************
+      5          *                                                                    *
+      6          *        (c) 2014-2014 SEGGER Microcontroller GmbH & Co. KG          *
+      7          *                                                                    *
+      8          *       Internet: www.segger.com Support: support@segger.com         *
+      9          *                                                                    *
+     10          **********************************************************************
+     11          ----------------------------------------------------------------------
+     12          File    : SEGGER_RTT.c
+     13          Date    : 17 Dec 2014
+     14          Purpose : Implementation of SEGGER real-time terminal (RTT) which allows
+     15                    real-time terminal communication on targets which support
+     16                    debugger memory accesses while the CPU is running.
+     17          
+     18                    Type "int" is assumed to be 32-bits in size
+     19                    H->T    Host to target communication
+     20                    T->H    Target to host communication
+     21          
+     22                    RTT channel 0 is always present and reserved for Terminal usage.
+     23                    Name is fixed to "Terminal"
+     24          
+     25          ---------------------------END-OF-HEADER------------------------------
+     26          */
+     27          
+     28          #include "SEGGER_RTT_Conf.h"
+     29          #include "SEGGER_RTT.h"
+     30          
+     31          #include <string.h>                 // for memcpy
+     32          
+     33          /*********************************************************************
+     34          *
+     35          *       Defines, configurable
+     36          *
+     37          **********************************************************************
+     38          */
+     39          
+     40          #ifndef   BUFFER_SIZE_UP
+     41            #define BUFFER_SIZE_UP                                  (1024)  // Size of the buffer for terminal output of target, up to host
+     42          #endif
+     43          
+     44          #ifndef   BUFFER_SIZE_DOWN
+     45            #define BUFFER_SIZE_DOWN                                (16)    // Size of the buffer for terminal input to target from host (Usually keyboard input)
+     46          #endif
+     47          
+     48          #ifndef   SEGGER_RTT_MAX_NUM_UP_BUFFERS
+     49            #define SEGGER_RTT_MAX_NUM_UP_BUFFERS                   (1)     // Number of up-buffers (T->H) available on this target
+     50          #endif
+     51          
+     52          #ifndef   SEGGER_RTT_MAX_NUM_DOWN_BUFFERS
+     53            #define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS                 (1)     // Number of down-buffers (H->T) available on this target
+     54          #endif
+     55          
+     56          #ifndef   SEGGER_RTT_LOCK
+     57            #define SEGGER_RTT_LOCK()
+     58          #endif
+     59          
+     60          #ifndef   SEGGER_RTT_UNLOCK
+     61            #define SEGGER_RTT_UNLOCK()
+     62          #endif
+     63          
+     64          #ifndef   SEGGER_RTT_IN_RAM
+     65            #define SEGGER_RTT_IN_RAM                               (0)
+     66          #endif
+     67          
+     68          /*********************************************************************
+     69          *
+     70          *       Defines, fixed
+     71          *
+     72          **********************************************************************
+     73          */
+     74          
+     75          #define MIN(a, b)        (((a) < (b)) ? (a) : (b))
+     76          #define MAX(a, b)        (((a) > (b)) ? (a) : (b))
+     77          
+     78          #define MEMCPY(a, b, c)  memcpy((a),(b),(c))
+     79          
+     80          //
+     81          // For some environments, NULL may not be defined until certain headers are included
+     82          //
+     83          #ifndef NULL
+     84            #define NULL 0
+     85          #endif
+     86          
+     87          /*********************************************************************
+     88          *
+     89          *       Types
+     90          *
+     91          **********************************************************************
+     92          */
+     93          
+     94          //
+     95          // Description for a circular buffer (also called "ring buffer")
+     96          // which is used as up- (T->H) or down-buffer (H->T)
+     97          //
+     98          typedef struct {
+     99            const char* sName;                     // Optional name. Standard names so far are: "Terminal", "VCom"
+    100            char*  pBuffer;                        // Pointer to start of buffer
+    101            int    SizeOfBuffer;                   // Buffer size in bytes. Note that one byte is lost, as this implementation does not fill up the buffer in order to avoid the problem of being unable to distinguish between full and empty.
+    102            volatile int WrOff;                    // Position of next item to be written by either host (down-buffer) or target (up-buffer). Must be volatile since it may be modified by host (down-buffer)
+    103            volatile int RdOff;                    // Position of next item to be read by target (down-buffer) or host (up-buffer). Must be volatile since it may be modified by host (up-buffer)
+    104            int    Flags;                          // Contains configuration flags
+    105          } RING_BUFFER;
+    106          
+    107          //
+    108          // RTT control block which describes the number of buffers available
+    109          // as well as the configuration for each buffer
+    110          //
+    111          //
+    112          typedef struct {
+    113            char        acID[16];                                 // Initialized to "SEGGER RTT"
+    114            int         MaxNumUpBuffers;                          // Initialized to SEGGER_RTT_MAX_NUM_UP_BUFFERS (type. 2)
+    115            int         MaxNumDownBuffers;                        // Initialized to SEGGER_RTT_MAX_NUM_DOWN_BUFFERS (type. 2)
+    116            RING_BUFFER aUp[SEGGER_RTT_MAX_NUM_UP_BUFFERS];       // Up buffers, transferring information up from target via debug probe to host
+    117            RING_BUFFER aDown[SEGGER_RTT_MAX_NUM_DOWN_BUFFERS];   // Down buffers, transferring information down from host via debug probe to target
+    118          } SEGGER_RTT_CB;
+    119          
+    120          /*********************************************************************
+    121          *
+    122          *       Static data
+    123          *
+    124          **********************************************************************
+    125          */
+    126          //
+    127          // Allocate buffers for channel 0
+    128          //
+    129          static char _acUpBuffer  [BUFFER_SIZE_UP];
+    130          static char _acDownBuffer[BUFFER_SIZE_DOWN];
+    131          //
+    132          // Initialize SEGGER Real-time-Terminal control block (CB)
+    133          //
+    134          static SEGGER_RTT_CB _SEGGER_RTT = {
+    135          #if SEGGER_RTT_IN_RAM
+    136            "SEGGER RTTI",
+    137          #else
+    138            "SEGGER RTT",
+    139          #endif
+    140            SEGGER_RTT_MAX_NUM_UP_BUFFERS,
+    141            SEGGER_RTT_MAX_NUM_DOWN_BUFFERS,
+    142            {{ "Terminal", &_acUpBuffer[0],   sizeof(_acUpBuffer),   0, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP }},
+    143            {{ "Terminal", &_acDownBuffer[0], sizeof(_acDownBuffer), 0, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP }},
+    144          };
+    145          
+    146          static char _ActiveTerminal;
+    147          
+    148          /*********************************************************************
+    149          *
+    150          *       Static code
+    151          *
+    152          **********************************************************************
+    153          */
+    154          
+    155          /*********************************************************************
+    156          *
+    157          *       _strlen
+    158          *
+    159          *  Function description
+    160          *    ANSI compatible function to determine the length of a string
+    161          *
+    162          *  Return value
+    163          *    Length of string in bytes.
+    164          *
+    165          *  Parameters
+    166          *    s         Pointer to \0 terminated string.
+    167          *
+    168          *  Notes
+    169          *    (1) s needs to point to an \0 terminated string. Otherwise proper functionality of this function is not guaranteed.
+    170          */
+    171          static int _strlen(const char* s) {
+    172            int Len;
+    173          
+    174            Len = 0;
+    175            if (s == NULL) {
+    176              return 0;
+    177            }
+    178            do {
+    179              if (*s == 0) {
+    180                break;
+    181              }
+    182              Len++;
+    183              s++;
+    184            } while (1);
+    185            return Len;
+    186          }
+    187          
+    188          /*********************************************************************
+    189          *
+    190          *       _Init
+    191          *
+    192          *  Function description
+    193          *    In case SEGGER_RTT_IN_RAM is defined,
+    194          *    _Init() modifies the ID of the RTT CB to allow identifying the
+    195          *    RTT Control Block Structure in the data segment.
+    196          */
+    197          static void _Init(void) {
+    198          #if SEGGER_RTT_IN_RAM
+    199            if (_SEGGER_RTT.acID[10] == 'I') {
+    200              _SEGGER_RTT.acID[10] = '\0';
+    201            }
+    202          #endif
+    203          }
+    204          
+    205          /*********************************************************************
+    206          *
+    207          *       Public code
+    208          *
+    209          **********************************************************************
+    210          */
+    211          /*********************************************************************
+    212          *
+    213          *       SEGGER_RTT_Read
+    214          *
+    215          *  Function description
+    216          *    Reads characters from SEGGER real-time-terminal control block
+    217          *    which have been previously stored by the host.
+    218          *
+    219          *  Parameters
+    220          *    BufferIndex  Index of Down-buffer to be used. (e.g. 0 for "Terminal")
+    221          *    pBuffer      Pointer to buffer provided by target application, to copy characters from RTT-down-buffer to.
+    222          *    BufferSize   Size of the target application buffer
+    223          *
+    224          *  Return values
+    225          *    Number of bytes that have been read
+    226          */
+    227          int SEGGER_RTT_Read(unsigned BufferIndex, char* pBuffer, unsigned BufferSize) {
+    228            int NumBytesRem;
+    229            unsigned NumBytesRead;
+    230            int RdOff;
+    231            int WrOff;
+    232          
+    233            SEGGER_RTT_LOCK();
+    234            _Init();
+    235            RdOff = _SEGGER_RTT.aDown[BufferIndex].RdOff;
+    236            WrOff = _SEGGER_RTT.aDown[BufferIndex].WrOff;
+    237            NumBytesRead = 0;
+    238            //
+    239            // Read from current read position to wrap-around of buffer, first
+    240            //
+    241            if (RdOff > WrOff) {
+    242              NumBytesRem = _SEGGER_RTT.aDown[BufferIndex].SizeOfBuffer - RdOff;
+    243              NumBytesRem = MIN(NumBytesRem, (int)BufferSize);
+    244              MEMCPY(pBuffer, _SEGGER_RTT.aDown[BufferIndex].pBuffer + RdOff, NumBytesRem);
+    245              NumBytesRead += NumBytesRem;
+    246              pBuffer      += NumBytesRem;
+    247              BufferSize   -= NumBytesRem;
+    248              RdOff        += NumBytesRem;
+    249              //
+    250              // Handle wrap-around of buffer
+    251              //
+    252              if (RdOff == _SEGGER_RTT.aDown[BufferIndex].SizeOfBuffer) {
+    253                RdOff = 0;
+    254              }
+    255            }
+    256            //
+    257            // Read remaining items of buffer
+    258            //
+    259            NumBytesRem = WrOff - RdOff;
+    260            NumBytesRem = MIN(NumBytesRem, (int)BufferSize);
+    261            if (NumBytesRem > 0) {
+    262              MEMCPY(pBuffer, _SEGGER_RTT.aDown[BufferIndex].pBuffer + RdOff, NumBytesRem);
+    263              NumBytesRead += NumBytesRem;
+    264              pBuffer      += NumBytesRem;
+    265              BufferSize   -= NumBytesRem;
+    266              RdOff        += NumBytesRem;
+    267            }
+    268            if (NumBytesRead) {
+    269              _SEGGER_RTT.aDown[BufferIndex].RdOff = RdOff;
+    270            }
+    271            SEGGER_RTT_UNLOCK();
+    272            return NumBytesRead;
+    273          }
+    274          
+    275          /*********************************************************************
+    276          *
+    277          *       SEGGER_RTT_Write
+    278          *
+    279          *  Function description
+    280          *    Stores a specified number of characters in SEGGER RTT
+    281          *    control block which is then read by the host.
+    282          *
+    283          *  Parameters
+    284          *    BufferIndex  Index of "Up"-buffer to be used. (e.g. 0 for "Terminal")
+    285          *    pBuffer      Pointer to character array. Does not need to point to a \0 terminated string.
+    286          *    NumBytes     Number of bytes to be stored in the SEGGER RTT control block.
+    287          *
+    288          *  Return values
+    289          *    Number of bytes which have been stored in the "Up"-buffer.
+    290          *
+    291          *  Notes
+    292          *    (1) If there is not enough space in the "Up"-buffer, remaining characters of pBuffer are dropped.
+    293          */
+    294          int SEGGER_RTT_Write(unsigned BufferIndex, const char* pBuffer, unsigned NumBytes) {
+    295          #ifdef PRINT_INFO
+    296            int NumBytesToWrite;
+    297            unsigned NumBytesWritten;
+    298            int RdOff;
+    299            //
+    300            // Target is not allowed to perform other RTT operations while string still has not been stored completely.
+    301            // Otherwise we would probably end up with a mixed string in the buffer.
+    302            //
+    303            SEGGER_RTT_LOCK();
+    304            _Init();
+    305            //
+    306            // In case we are not in blocking mode,
+    307            // we need to calculate, how many bytes we can put into the buffer at all.
+    308            //
+    309            if ((_SEGGER_RTT.aUp[BufferIndex].Flags & SEGGER_RTT_MODE_MASK) != SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL) {
+    310              RdOff = _SEGGER_RTT.aUp[BufferIndex].RdOff;
+    311              NumBytesToWrite =  RdOff - _SEGGER_RTT.aUp[BufferIndex].WrOff - 1;
+    312              if (NumBytesToWrite < 0) {
+    313                NumBytesToWrite += _SEGGER_RTT.aUp[BufferIndex].SizeOfBuffer;
+    314              }
+    315              //
+    316              // If the complete data does not fit in the buffer, check if we have to skip it completely or trim the data
+    317              //
+    318              if ((int)NumBytes > NumBytesToWrite) {
+    319                if ((_SEGGER_RTT.aUp[BufferIndex].Flags & SEGGER_RTT_MODE_MASK) == SEGGER_RTT_MODE_NO_BLOCK_SKIP) {
+    320                  SEGGER_RTT_UNLOCK();
+    321                  return 0;
+    322                } else {
+    323                  NumBytes = NumBytesToWrite;
+    324                }
+    325              }
+    326            }
+    327            //
+    328            // Early out if nothing is to do
+    329            //
+    330            if (NumBytes == 0) {
+    331              SEGGER_RTT_UNLOCK();
+    332              return 0;
+    333            }
+    334            //
+    335            // Write data to buffer and handle wrap-around if necessary
+    336            //
+    337            NumBytesWritten = 0;
+    338            do {
+    339              RdOff = _SEGGER_RTT.aUp[BufferIndex].RdOff;                          // May be changed by host (debug probe) in the meantime
+    340              NumBytesToWrite = RdOff - _SEGGER_RTT.aUp[BufferIndex].WrOff - 1;
+    341              if (NumBytesToWrite < 0) {
+    342                NumBytesToWrite += _SEGGER_RTT.aUp[BufferIndex].SizeOfBuffer;
+    343              }
+    344              NumBytesToWrite = MIN(NumBytesToWrite, (_SEGGER_RTT.aUp[BufferIndex].SizeOfBuffer - _SEGGER_RTT.aUp[BufferIndex].WrOff));    // Number of bytes that can be written until buffer wrap-around
+    345              NumBytesToWrite = MIN(NumBytesToWrite, (int)NumBytes);
+    346              MEMCPY(_SEGGER_RTT.aUp[BufferIndex].pBuffer + _SEGGER_RTT.aUp[BufferIndex].WrOff, pBuffer, NumBytesToWrite);
+    347              NumBytesWritten     += NumBytesToWrite;
+    348              pBuffer             += NumBytesToWrite;
+    349              NumBytes            -= NumBytesToWrite;
+    350              _SEGGER_RTT.aUp[BufferIndex].WrOff += NumBytesToWrite;
+    351              if (_SEGGER_RTT.aUp[BufferIndex].WrOff == _SEGGER_RTT.aUp[BufferIndex].SizeOfBuffer) {
+    352                _SEGGER_RTT.aUp[BufferIndex].WrOff = 0;
+    353              }
+    354            } while (NumBytes);
+    355            SEGGER_RTT_UNLOCK();
+    356            return NumBytesWritten;
+    357          #else
+    358            return 0;
+    359          #endif
+    360          }
+    361          
+    362          /*********************************************************************
+    363          *
+    364          *       SEGGER_RTT_WriteString
+    365          *
+    366          *  Function description
+    367          *    Stores string in SEGGER RTT control block.
+    368          *    This data is read by the host.
+    369          *
+    370          *  Parameters
+    371          *    BufferIndex  Index of "Up"-buffer to be used. (e.g. 0 for "Terminal")
+    372          *    s            Pointer to string.
+    373          *
+    374          *  Return values
+    375          *    Number of bytes which have been stored in the "Up"-buffer.
+    376          *
+    377          *  Notes
+    378          *    (1) If there is not enough space in the "Up"-buffer, depending on configuration,
+    379          *        remaining characters may be dropped or RTT module waits until there is more space in the buffer.
+    380          *    (2) String passed to this function has to be \0 terminated
+    381          *    (3) \0 termination character is *not* stored in RTT buffer
+    382          */
+    383          int SEGGER_RTT_WriteString(unsigned BufferIndex, const char* s) {
+    384            int Len;
+    385          
+    386            Len = _strlen(s);
+    387            return SEGGER_RTT_Write(BufferIndex, s, Len);
+    388          }
+    389          
+    390          /*********************************************************************
+    391          *
+    392          *       SEGGER_RTT_GetKey
+    393          *
+    394          *  Function description
+    395          *    Reads one character from the SEGGER RTT buffer.
+    396          *    Host has previously stored data there.
+    397          *
+    398          *  Return values
+    399          *    <  0    No character available (buffer empty).
+    400          *    >= 0    Character which has been read. (Possible values: 0 - 255)
+    401          *
+    402          *  Notes
+    403          *    (1) This function is only specified for accesses to RTT buffer 0.
+    404          */
+    405          int SEGGER_RTT_GetKey(void) {
+    406            char c;
+    407            int r;
+    408          
+    409            r = SEGGER_RTT_Read(0, &c, 1);
+    410            if (r == 1) {
+    411              return (int)(unsigned char)c;
+    412            }
+    413            return -1;
+    414          }
+    415          
+    416          /*********************************************************************
+    417          *
+    418          *       SEGGER_RTT_WaitKey
+    419          *
+    420          *  Function description
+    421          *    Waits until at least one character is avaible in the SEGGER RTT buffer.
+    422          *    Once a character is available, it is read and this function returns.
+    423          *
+    424          *  Return values
+    425          *    >=0    Character which has been read.
+    426          *
+    427          *  Notes
+    428          *    (1) This function is only specified for accesses to RTT buffer 0
+    429          *    (2) This function is blocking if no character is present in RTT buffer
+    430          */
+    431          int SEGGER_RTT_WaitKey(void) {
+    432            int r;
+    433          
+    434            do {
+    435              r = SEGGER_RTT_GetKey();
+    436            } while (r < 0);
+    437            return r;
+    438          }
+    439          
+    440          /*********************************************************************
+    441          *
+    442          *       SEGGER_RTT_HasKey
+    443          *
+    444          *  Function description
+    445          *    Checks if at least one character for reading is available in the SEGGER RTT buffer.
+    446          *
+    447          *  Return values
+    448          *    0      No characters are available to read.
+    449          *    1      At least one character is available.
+    450          *
+    451          *  Notes
+    452          *    (1) This function is only specified for accesses to RTT buffer 0
+    453          */
+    454          int SEGGER_RTT_HasKey(void) {
+    455            int RdOff;
+    456          
+    457            _Init();
+    458            RdOff = _SEGGER_RTT.aDown[0].RdOff;
+    459            if (RdOff != _SEGGER_RTT.aDown[0].WrOff) {
+    460              return 1;
+    461            }
+    462            return 0;
+    463          }
+    464          
+    465          /*********************************************************************
+    466          *
+    467          *       SEGGER_RTT_ConfigUpBuffer
+    468          *
+    469          *  Function description
+    470          *    Run-time configuration of a specific up-buffer (T->H).
+    471          *    Buffer to be configured is specified by index.
+    472          *    This includes: Buffer address, size, name, flags, ...
+    473          *
+    474          *  Return value
+    475          *    >= 0  O.K.
+    476          *     < 0  Error
+    477          */
+    478          int SEGGER_RTT_ConfigUpBuffer(unsigned BufferIndex, const char* sName, char* pBuffer, int BufferSize, int Flags) {
+    479            _Init();
+    480            if (BufferIndex < (unsigned)_SEGGER_RTT.MaxNumUpBuffers) {
+    481              SEGGER_RTT_LOCK();
+    482              if (BufferIndex > 0) {
+    483                _SEGGER_RTT.aUp[BufferIndex].sName        = sName;
+    484                _SEGGER_RTT.aUp[BufferIndex].pBuffer      = pBuffer;
+    485                _SEGGER_RTT.aUp[BufferIndex].SizeOfBuffer = BufferSize;
+    486                _SEGGER_RTT.aUp[BufferIndex].RdOff        = 0;
+    487                _SEGGER_RTT.aUp[BufferIndex].WrOff        = 0;
+    488              }
+    489              _SEGGER_RTT.aUp[BufferIndex].Flags          = Flags;
+    490              SEGGER_RTT_UNLOCK();
+    491              return 0;
+    492            }
+    493            return -1;
+    494          }
+    495          
+    496          /*********************************************************************
+    497          *
+    498          *       SEGGER_RTT_ConfigDownBuffer
+    499          *
+    500          *  Function description
+    501          *    Run-time configuration of a specific down-buffer (H->T).
+    502          *    Buffer to be configured is specified by index.
+    503          *    This includes: Buffer address, size, name, flags, ...
+    504          *
+    505          *  Return value
+    506          *    >= 0  O.K.
+    507          *     < 0  Error
+    508          */
+    509          int SEGGER_RTT_ConfigDownBuffer(unsigned BufferIndex, const char* sName, char* pBuffer, int BufferSize, int Flags) {
+    510            _Init();
+    511            if (BufferIndex < (unsigned)_SEGGER_RTT.MaxNumDownBuffers) {
+    512              SEGGER_RTT_LOCK();
+    513              if (BufferIndex > 0) {
+    514                _SEGGER_RTT.aDown[BufferIndex].sName        = sName;
+    515                _SEGGER_RTT.aDown[BufferIndex].pBuffer      = pBuffer;
+    516                _SEGGER_RTT.aDown[BufferIndex].SizeOfBuffer = BufferSize;
+    517                _SEGGER_RTT.aDown[BufferIndex].RdOff        = 0;
+    518                _SEGGER_RTT.aDown[BufferIndex].WrOff        = 0;
+    519              }
+    520              _SEGGER_RTT.aDown[BufferIndex].Flags          = Flags;
+    521              SEGGER_RTT_UNLOCK();
+    522              return 0;
+    523            }
+    524            return -1;
+    525          }
+    526          
+    527          /*********************************************************************
+    528          *
+    529          *       SEGGER_RTT_Init
+    530          *
+    531          *  Function description
+    532          *    Initializes the RTT Control Block.
+    533          *    Should be used in RAM targets, at start of the application.
+    534          *
+    535          */
+    536          void SEGGER_RTT_Init (void) {
+    537            _Init();
+    538          }
+    539          
+    540          /*********************************************************************
+    541          *
+    542          *       SEGGER_RTT_SetTerminal
+    543          *
+    544          *  Function description
+    545          *    Sets the terminal to be used for output on channel 0.
+    546          *
+    547          */
+    548          void SEGGER_RTT_SetTerminal (char TerminalId) {
+    549            char ac[2];
+    550          
+    551            ac[0] = 0xFF;
+    552            if (TerminalId < 10) {
+    553              ac[1] = '0' + TerminalId;
+    554            } else if (TerminalId < 16) {
+    555              ac[1] = 'A' + (TerminalId - 0x0A);
+    556            } else {
+    557              return; // RTT only supports up to 16 virtual terminals.
+    558            }
+    559            _ActiveTerminal = TerminalId;
+    560            SEGGER_RTT_Write(0, ac, 2);
+    561          }
+    562          
+    563          /*********************************************************************
+    564          *
+    565          *       SEGGER_RTT_TerminalOut
+    566          *
+    567          *  Function description
+    568          *    Writes a string to the given terminal
+    569          *     without changing the terminal for channel 0.
+    570          *
+    571          */
+    572          int SEGGER_RTT_TerminalOut (char TerminalId, const char* s) {
+    573            char ac[2];
+    574            int  r;
+    575          
+    576            ac[0] = 0xFF;
+    577            if (TerminalId < 10) {
+    578              ac[1] = '0' + TerminalId;
+    579            } else if (TerminalId < 16) {
+    580              ac[1] = 'A' + (TerminalId - 0x0A);
+    581            } else {
+    582              return -1; // RTT only supports up to 16 virtual terminals.
+    583            }
+    584            SEGGER_RTT_Write(0, ac, 2);
+    585            r = SEGGER_RTT_WriteString(0, s);
+    586            if (TerminalId < 10) {
+    587              ac[1] = '0' + _ActiveTerminal;
+    588            } else if (TerminalId < 16) {
+    589              ac[1] = 'A' + (_ActiveTerminal - 0x0A);
+    590            }
+    591            SEGGER_RTT_Write(0, ac, 2);
+    592            return r;
+    593          }
+    594          
+    595          /*************************** End of file ****************************/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      12   SEGGER_RTT_ConfigDownBuffer
+      12   SEGGER_RTT_ConfigUpBuffer
+       8   SEGGER_RTT_GetKey
+         8   -> SEGGER_RTT_Read
+       0   SEGGER_RTT_HasKey
+       0   SEGGER_RTT_Init
+      32   SEGGER_RTT_Read
+        32   -> memcpy
+       8   SEGGER_RTT_SetTerminal
+         8   -> SEGGER_RTT_Write
+      24   SEGGER_RTT_TerminalOut
+        24   -> SEGGER_RTT_Write
+        24   -> SEGGER_RTT_WriteString
+       8   SEGGER_RTT_WaitKey
+         8   -> SEGGER_RTT_GetKey
+      24   SEGGER_RTT_Write
+        24   -> memcpy
+       8   SEGGER_RTT_WriteString
+         8   -> SEGGER_RTT_Write
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      12  ?<Constant "Terminal">
+       4  ??DataTable7
+       4  ??DataTable7_1
+      46  SEGGER_RTT_ConfigDownBuffer
+      46  SEGGER_RTT_ConfigUpBuffer
+      28  SEGGER_RTT_GetKey
+      18  SEGGER_RTT_HasKey
+       2  SEGGER_RTT_Init
+     112  SEGGER_RTT_Read
+      42  SEGGER_RTT_SetTerminal
+      90  SEGGER_RTT_TerminalOut
+      12  SEGGER_RTT_WaitKey
+     140  SEGGER_RTT_Write
+      28  SEGGER_RTT_WriteString
+       1  _ActiveTerminal
+     120  _SEGGER_RTT
+      16  _acDownBuffer
+    1024  _acUpBuffer
+
+ 
+ 1 041 bytes in section .bss
+   120 bytes in section .data
+    12 bytes in section .rodata
+   572 bytes in section .text
+ 
+   572 bytes of CODE  memory
+    12 bytes of CONST memory
+ 1 161 bytes of DATA  memory
+
+Errors: none
+Warnings: none

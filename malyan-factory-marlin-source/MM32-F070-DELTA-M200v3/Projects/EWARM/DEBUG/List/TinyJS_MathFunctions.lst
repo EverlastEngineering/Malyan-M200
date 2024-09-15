@@ -1,0 +1,756 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      01/May/2017  16:26:35 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\ #
+#                    TinyJS_MathFunctions.cpp                                 #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\ #
+#                    TinyJS_MathFunctions.cpp -D USE_STDPERIPH_DRIVER -D      #
+#                    USE_STM32072B_EVAL -D STM32F072 -lcN                     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\ -o D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\DEBUG\Obj\ --debug --endian=little          #
+#                    --cpu=Cortex-M0 -e --fpu=None --dlib_config "C:\Program  #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\INC\c\DLib_Config_Normal.h" -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\E #
+#                    WARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\src\fs\ -I                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --eec++ --no_static_destruction   #
+#                    -I "C:\Program Files (x86)\IAR Systems\Embedded          #
+#                    Workbench 6.5\arm\CMSIS\Include\" --relaxed_fp           #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\TinyJS_MathFunctions.lst                       #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\TinyJS_MathFunctions.o                          #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\TinyJS_MathFunctions.cpp
+      1          /*
+      2           * TinyJS
+      3           *
+      4           * A single-file Javascript-alike engine
+      5           *
+      6           * -  Math and Trigonometry functions
+      7           *
+      8           * Authored By O.Z.L.B. <ozlbinfo@gmail.com>
+      9           *
+     10           * Copyright (C) 2011 O.Z.L.B.
+     11           *
+     12           * Permission is hereby granted, free of charge, to any person obtaining a copy of
+     13           * this software and associated documentation files (the "Software"), to deal in
+     14           * the Software without restriction, including without limitation the rights to
+     15           * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+     16           * of the Software, and to permit persons to whom the Software is furnished to do
+     17           * so, subject to the following conditions:
+     18          
+     19           * The above copyright notice and this permission notice shall be included in all
+     20           * copies or substantial portions of the Software.
+     21          
+     22           * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     23           * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     24           * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     25           * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     26           * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     27           * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     28           * SOFTWARE.
+     29           */
+     30          
+     31          #include <math.h>
+     32          #include <cstdlib>
+     33          #include <sstream>
+     34          #include "TinyJS_MathFunctions.h"
+     35          
+     36          #define k_E                 exp(1.0)
+     37          #define k_PI                3.1415926535897932384626433832795
+     38          
+     39          #define F_ABS(a)            ((a)>=0 ? (a) : (-(a)))
+     40          #define F_MIN(a,b)          ((a)>(b) ? (b) : (a))
+     41          #define F_MAX(a,b)          ((a)>(b) ? (a) : (b))
+     42          #define F_SGN(a)            ((a)>0 ? 1 : ((a)<0 ? -1 : 0 ))
+     43          #define F_RNG(a,min,max)    ((a)<(min) ? min : ((a)>(max) ? max : a ))
+     44          #define F_ROUND(a)          ((a)>0 ? (int) ((a)+0.5) : (int) ((a)-0.5) )
+     45           
+     46          //CScriptVar shortcut macro
+     47          #define scIsInt(a)          ( c->getParameter(a)->isInt() )
+     48          #define scIsDouble(a)       ( c->getParameter(a)->isDouble() )  
+     49          #define scGetInt(a)         ( c->getParameter(a)->getInt() )
+     50          #define scGetDouble(a)      ( c->getParameter(a)->getDouble() )  
+     51          #define scReturnInt(a)      ( c->getReturnVar()->setInt(a) )
+     52          #define scReturnDouble(a)   ( c->getReturnVar()->setDouble(a) )  
+     53          
+     54          #ifdef _MSC_VER
+     55          namespace
+     56          {
+     57              double asinh( const double &value )
+     58              {
+     59                  double returned;
+     60          
+     61                  if(value>0)
+     62                  returned = log(value + sqrt(value * value + 1));
+     63                  else
+     64                  returned = -log(-value + sqrt(value * value + 1));
+     65          
+     66                  return(returned);
+     67              }
+     68          
+     69              double acosh( const double &value )
+     70              {
+     71                  double returned;
+     72          
+     73                  if(value>0)
+     74                  returned = log(value + sqrt(value * value - 1));
+     75                  else
+     76                  returned = -log(-value + sqrt(value * value - 1));
+     77          
+     78                  return(returned);
+     79              }
+     80          }
+     81          #endif
+     82          
+     83          //Math.abs(x) - returns absolute of given value
+     84          void scMathAbs(CScriptVar *c, void *userdata) {
+     85              if ( scIsInt("a") ) {
+     86                scReturnInt( F_ABS( scGetInt("a") ) );
+     87              } else if ( scIsDouble("a") ) {
+     88                scReturnDouble( F_ABS( scGetDouble("a") ) );
+     89              }
+     90          }
+     91          
+     92          //Math.round(a) - returns nearest round of given value
+     93          void scMathRound(CScriptVar *c, void *userdata) {
+     94              if ( scIsInt("a") ) {
+     95                scReturnInt( F_ROUND( scGetInt("a") ) );
+     96              } else if ( scIsDouble("a") ) {
+     97                scReturnDouble( F_ROUND( scGetDouble("a") ) );
+     98              }
+     99          }
+    100          
+    101          //Math.min(a,b) - returns minimum of two given values 
+    102          void scMathMin(CScriptVar *c, void *userdata) {
+    103              if ( (scIsInt("a")) && (scIsInt("b")) ) {
+    104                scReturnInt( F_MIN( scGetInt("a"), scGetInt("b") ) );
+    105              } else {
+    106                scReturnDouble( F_MIN( scGetDouble("a"), scGetDouble("b") ) );
+    107              }
+    108          }
+    109          
+    110          //Math.max(a,b) - returns maximum of two given values  
+    111          void scMathMax(CScriptVar *c, void *userdata) {
+    112              if ( (scIsInt("a")) && (scIsInt("b")) ) {
+    113                scReturnInt( F_MAX( scGetInt("a"), scGetInt("b") ) );
+    114              } else {
+    115                scReturnDouble( F_MAX( scGetDouble("a"), scGetDouble("b") ) );
+    116              }
+    117          }
+    118          
+    119          //Math.range(x,a,b) - returns value limited between two given values  
+    120          void scMathRange(CScriptVar *c, void *userdata) {
+    121              if ( (scIsInt("x")) ) {
+    122                scReturnInt( F_RNG( scGetInt("x"), scGetInt("a"), scGetInt("b") ) );
+    123              } else {
+    124                scReturnDouble( F_RNG( scGetDouble("x"), scGetDouble("a"), scGetDouble("b") ) );
+    125              }
+    126          }
+    127          
+    128          //Math.sign(a) - returns sign of given value (-1==negative,0=zero,1=positive)
+    129          void scMathSign(CScriptVar *c, void *userdata) {
+    130              if ( scIsInt("a") ) {
+    131                scReturnInt( F_SGN( scGetInt("a") ) );
+    132              } else if ( scIsDouble("a") ) {
+    133                scReturnDouble( F_SGN( scGetDouble("a") ) );
+    134              }
+    135          }
+    136          
+    137          //Math.PI() - returns PI value
+    138          void scMathPI(CScriptVar *c, void *userdata) {
+    139              scReturnDouble(k_PI);
+    140          }
+    141          
+    142          //Math.toDegrees(a) - returns degree value of a given angle in radians
+    143          void scMathToDegrees(CScriptVar *c, void *userdata) {
+    144              scReturnDouble( (180.0/k_PI)*( scGetDouble("a") ) );
+    145          }
+    146          
+    147          //Math.toRadians(a) - returns radians value of a given angle in degrees
+    148          void scMathToRadians(CScriptVar *c, void *userdata) {
+    149              scReturnDouble( (k_PI/180.0)*( scGetDouble("a") ) );
+    150          }
+    151          
+    152          //Math.sin(a) - returns trig. sine of given angle in radians
+    153          void scMathSin(CScriptVar *c, void *userdata) {
+    154              scReturnDouble( sin( scGetDouble("a") ) );
+    155          }
+    156          
+    157          //Math.asin(a) - returns trig. arcsine of given angle in radians
+    158          void scMathASin(CScriptVar *c, void *userdata) {
+    159              scReturnDouble( asin( scGetDouble("a") ) );
+    160          }
+    161          
+    162          //Math.cos(a) - returns trig. cosine of given angle in radians
+    163          void scMathCos(CScriptVar *c, void *userdata) {
+    164              scReturnDouble( cos( scGetDouble("a") ) );
+    165          }
+    166          
+    167          //Math.acos(a) - returns trig. arccosine of given angle in radians
+    168          void scMathACos(CScriptVar *c, void *userdata) {
+    169              scReturnDouble( acos( scGetDouble("a") ) );
+    170          }
+    171          
+    172          //Math.tan(a) - returns trig. tangent of given angle in radians
+    173          void scMathTan(CScriptVar *c, void *userdata) {
+    174              scReturnDouble( tan( scGetDouble("a") ) );
+    175          }
+    176          
+    177          //Math.atan(a) - returns trig. arctangent of given angle in radians
+    178          void scMathATan(CScriptVar *c, void *userdata) {
+    179              scReturnDouble( atan( scGetDouble("a") ) );
+    180          }
+    181          
+    182          //Math.sinh(a) - returns trig. hyperbolic sine of given angle in radians
+    183          void scMathSinh(CScriptVar *c, void *userdata) {
+    184              scReturnDouble( sinh( scGetDouble("a") ) );
+    185          }
+    186          
+    187          //Math.asinh(a) - returns trig. hyperbolic arcsine of given angle in radians
+    188          void scMathASinh(CScriptVar *c, void *userdata) {
+    189              scReturnDouble( asinh( scGetDouble("a") ) );
+    190          }
+    191          
+    192          //Math.cosh(a) - returns trig. hyperbolic cosine of given angle in radians
+    193          void scMathCosh(CScriptVar *c, void *userdata) {
+    194              scReturnDouble( cosh( scGetDouble("a") ) );
+    195          }
+    196          
+    197          //Math.acosh(a) - returns trig. hyperbolic arccosine of given angle in radians
+    198          void scMathACosh(CScriptVar *c, void *userdata) {
+    199              scReturnDouble( acosh( scGetDouble("a") ) );
+    200          }
+    201          
+    202          //Math.tanh(a) - returns trig. hyperbolic tangent of given angle in radians
+    203          void scMathTanh(CScriptVar *c, void *userdata) {
+    204              scReturnDouble( tanh( scGetDouble("a") ) );
+    205          }
+    206          
+    207          //Math.atan(a) - returns trig. hyperbolic arctangent of given angle in radians
+    208          void scMathATanh(CScriptVar *c, void *userdata) {
+    209              scReturnDouble( atan( scGetDouble("a") ) );
+    210          }
+    211          
+    212          //Math.E() - returns E Neplero value
+    213          void scMathE(CScriptVar *c, void *userdata) {
+    214              scReturnDouble(k_E);
+    215          }
+    216          
+    217          //Math.log(a) - returns natural logaritm (base E) of given value
+    218          void scMathLog(CScriptVar *c, void *userdata) {
+    219              scReturnDouble( log( scGetDouble("a") ) );
+    220          }
+    221          
+    222          //Math.log10(a) - returns logaritm(base 10) of given value
+    223          void scMathLog10(CScriptVar *c, void *userdata) {
+    224              scReturnDouble( log10( scGetDouble("a") ) );
+    225          }
+    226          
+    227          //Math.exp(a) - returns e raised to the power of a given number
+    228          void scMathExp(CScriptVar *c, void *userdata) {
+    229              scReturnDouble( exp( scGetDouble("a") ) );
+    230          }
+    231          
+    232          //Math.pow(a,b) - returns the result of a number raised to a power (a)^(b)
+    233          void scMathPow(CScriptVar *c, void *userdata) {
+    234              scReturnDouble( pow( scGetDouble("a"), scGetDouble("b") ) );
+    235          }
+    236          
+    237          //Math.sqr(a) - returns square of given value
+    238          void scMathSqr(CScriptVar *c, void *userdata) {
+    239              scReturnDouble( ( scGetDouble("a") * scGetDouble("a") ) );
+    240          }
+    241          
+    242          //Math.sqrt(a) - returns square root of given value
+    243          void scMathSqrt(CScriptVar *c, void *userdata) {
+    244              scReturnDouble( sqrtf( scGetDouble("a") ) );
+    245          }
+    246          
+    247          // ----------------------------------------------- Register Functions
+    248          void registerMathFunctions(CTinyJS *tinyJS) {
+    249               
+    250              // --- Math and Trigonometry functions ---
+    251              tinyJS->addNative("function Math.abs(a)", scMathAbs, 0);
+    252              tinyJS->addNative("function Math.round(a)", scMathRound, 0);
+    253              tinyJS->addNative("function Math.min(a,b)", scMathMin, 0);
+    254              tinyJS->addNative("function Math.max(a,b)", scMathMax, 0);
+    255              tinyJS->addNative("function Math.range(x,a,b)", scMathRange, 0);
+    256              tinyJS->addNative("function Math.sign(a)", scMathSign, 0);
+    257              
+    258              tinyJS->addNative("function Math.PI()", scMathPI, 0);
+    259              tinyJS->addNative("function Math.toDegrees(a)", scMathToDegrees, 0);
+    260              tinyJS->addNative("function Math.toRadians(a)", scMathToRadians, 0);
+    261              tinyJS->addNative("function Math.sin(a)", scMathSin, 0);
+    262              tinyJS->addNative("function Math.asin(a)", scMathASin, 0);
+    263              tinyJS->addNative("function Math.cos(a)", scMathCos, 0);
+    264              tinyJS->addNative("function Math.acos(a)", scMathACos, 0);
+    265              tinyJS->addNative("function Math.tan(a)", scMathTan, 0);
+    266              tinyJS->addNative("function Math.atan(a)", scMathATan, 0);
+    267              tinyJS->addNative("function Math.sinh(a)", scMathSinh, 0);
+    268              tinyJS->addNative("function Math.asinh(a)", scMathASinh, 0);
+    269              tinyJS->addNative("function Math.cosh(a)", scMathCosh, 0);
+    270              tinyJS->addNative("function Math.acosh(a)", scMathACosh, 0);
+    271              tinyJS->addNative("function Math.tanh(a)", scMathTanh, 0);
+    272              tinyJS->addNative("function Math.atanh(a)", scMathATanh, 0);
+    273                 
+    274              tinyJS->addNative("function Math.E()", scMathE, 0);
+    275              tinyJS->addNative("function Math.log(a)", scMathLog, 0);
+    276              tinyJS->addNative("function Math.log10(a)", scMathLog10, 0);
+    277              tinyJS->addNative("function Math.exp(a)", scMathExp, 0);
+    278              tinyJS->addNative("function Math.pow(a,b)", scMathPow, 0);
+    279              
+    280              tinyJS->addNative("function Math.sqr(a)", scMathSqr, 0);
+    281              tinyJS->addNative("function Math.sqrt(a)", scMathSqrt, 0);    
+    282            
+    283          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   CScriptVar::isDouble()
+       0   CScriptVar::isInt()
+     792   registerMathFunctions(CTinyJS *)
+       792   -> CTinyJS::addNative(string const &, JSCallback, void *)
+       792   -> string::string(char const *)
+       792   -> string::~string()
+      48   scMathACos(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> acos
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathACosh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> acosh
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathASin(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> asin
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathASinh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> asinh
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      16   scMathATan(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> atan
+        48   -> string::string(char const *)
+        48   -> string::~string()
+       0   scMathATanh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> atan
+        48   -> string::string(char const *)
+        48   -> string::~string()
+     248   scMathAbs(CScriptVar *, void *)
+       248   -> CScriptVar::getDouble()
+       248   -> CScriptVar::getInt()
+       248   -> CScriptVar::getParameter(string const &)
+       248   -> CScriptVar::getReturnVar()
+       248   -> CScriptVar::isDouble()
+       248   -> CScriptVar::isInt()
+       248   -> CScriptVar::setDouble(double)
+       248   -> CScriptVar::setInt(int)
+       248   -> __aeabi_cdrcmple
+       248   -> string::string(char const *)
+       248   -> string::~string()
+      48   scMathCos(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Sin
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathCosh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Cosh
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      16   scMathE(CScriptVar *, void *)
+        16   -> CScriptVar::getReturnVar()
+        16   -> CScriptVar::setDouble(double)
+        16   -> exp
+      48   scMathExp(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> exp
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathLog(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Log
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathLog10(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Log
+        48   -> string::string(char const *)
+        48   -> string::~string()
+     304   scMathMax(CScriptVar *, void *)
+       304   -> CScriptVar::getDouble()
+       304   -> CScriptVar::getInt()
+       304   -> CScriptVar::getParameter(string const &)
+       304   -> CScriptVar::getReturnVar()
+       304   -> CScriptVar::isInt()
+       304   -> CScriptVar::setDouble(double)
+       304   -> CScriptVar::setInt(int)
+       304   -> __aeabi_cdcmple
+       304   -> string::string(char const *)
+       304   -> string::~string()
+     304   scMathMin(CScriptVar *, void *)
+       304   -> CScriptVar::getDouble()
+       304   -> CScriptVar::getInt()
+       304   -> CScriptVar::getParameter(string const &)
+       304   -> CScriptVar::getReturnVar()
+       304   -> CScriptVar::isInt()
+       304   -> CScriptVar::setDouble(double)
+       304   -> CScriptVar::setInt(int)
+       304   -> __aeabi_cdcmple
+       304   -> string::string(char const *)
+       304   -> string::~string()
+       8   scMathPI(CScriptVar *, void *)
+         8   -> CScriptVar::getReturnVar()
+         8   -> CScriptVar::setDouble(double)
+      72   scMathPow(CScriptVar *, void *)
+        72   -> CScriptVar::getDouble()
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getReturnVar()
+        72   -> CScriptVar::setDouble(double)
+        72   -> pow
+        72   -> string::string(char const *)
+        72   -> string::~string()
+     448   scMathRange(CScriptVar *, void *)
+       448   -> CScriptVar::getDouble()
+       448   -> CScriptVar::getInt()
+       448   -> CScriptVar::getParameter(string const &)
+       448   -> CScriptVar::getReturnVar()
+       448   -> CScriptVar::isInt()
+       448   -> CScriptVar::setDouble(double)
+       448   -> CScriptVar::setInt(int)
+       448   -> __aeabi_cdcmple
+       448   -> string::string(char const *)
+       448   -> string::~string()
+     248   scMathRound(CScriptVar *, void *)
+       248   -> CScriptVar::getDouble()
+       248   -> CScriptVar::getInt()
+       248   -> CScriptVar::getParameter(string const &)
+       248   -> CScriptVar::getReturnVar()
+       248   -> CScriptVar::isDouble()
+       248   -> CScriptVar::isInt()
+       248   -> CScriptVar::setDouble(double)
+       248   -> CScriptVar::setInt(int)
+       248   -> __aeabi_cdrcmple
+       248   -> __aeabi_d2iz
+       248   -> __aeabi_dadd
+       248   -> __aeabi_i2d
+       248   -> string::string(char const *)
+       248   -> string::~string()
+     192   scMathSign(CScriptVar *, void *)
+       192   -> CScriptVar::getDouble()
+       192   -> CScriptVar::getInt()
+       192   -> CScriptVar::getParameter(string const &)
+       192   -> CScriptVar::getReturnVar()
+       192   -> CScriptVar::isDouble()
+       192   -> CScriptVar::isInt()
+       192   -> CScriptVar::setDouble(double)
+       192   -> CScriptVar::setInt(int)
+       192   -> __aeabi_cdcmple
+       192   -> __aeabi_cdrcmple
+       192   -> __aeabi_i2d
+       192   -> string::string(char const *)
+       192   -> string::~string()
+      48   scMathSin(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Sin
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathSinh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __iar_Sinh
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      88   scMathSqr(CScriptVar *, void *)
+        88   -> CScriptVar::getDouble()
+        88   -> CScriptVar::getParameter(string const &)
+        88   -> CScriptVar::getReturnVar()
+        88   -> CScriptVar::setDouble(double)
+        88   -> __aeabi_dmul
+        88   -> string::string(char const *)
+        88   -> string::~string()
+      40   scMathSqrt(CScriptVar *, void *)
+        40   -> CScriptVar::getDouble()
+        40   -> CScriptVar::getParameter(string const &)
+        40   -> CScriptVar::getReturnVar()
+        40   -> CScriptVar::setDouble(double)
+        40   -> __aeabi_d2f
+        40   -> __aeabi_f2d
+        40   -> sqrtf
+        40   -> string::string(char const *)
+        40   -> string::~string()
+      48   scMathTan(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> string::string(char const *)
+        48   -> string::~string()
+        48   -> tan
+      48   scMathTanh(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> string::string(char const *)
+        48   -> string::~string()
+        48   -> tanh
+      48   scMathToDegrees(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __aeabi_dmul
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      48   scMathToRadians(CScriptVar *, void *)
+        48   -> CScriptVar::getDouble()
+        48   -> CScriptVar::getParameter(string const &)
+        48   -> CScriptVar::getReturnVar()
+        48   -> CScriptVar::setDouble(double)
+        48   -> __aeabi_dmul
+        48   -> string::string(char const *)
+        48   -> string::~string()
+      16   string::string(char const *)
+        16   -> string::_Tidy(bool, size_t)
+        16   -> string::assign(char const *, size_t)
+        16   -> strlen
+       8   string::~string()
+         8   -> string::_Tidy(bool, size_t)
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ?<Constant "a">
+       2  ?<Constant "b">
+      20  ?<Constant "function Math.E()">
+      20  ?<Constant "function Math.PI()">
+      24  ?<Constant "function Math.abs(a)">
+      24  ?<Constant "function Math.acos(a)">
+      24  ?<Constant "function Math.acosh(a)">
+      24  ?<Constant "function Math.asin(a)">
+      24  ?<Constant "function Math.asinh(a)">
+      24  ?<Constant "function Math.atan(a)">
+      24  ?<Constant "function Math.atanh(a)">
+      24  ?<Constant "function Math.cos(a)">
+      24  ?<Constant "function Math.cosh(a)">
+      24  ?<Constant "function Math.exp(a)">
+      24  ?<Constant "function Math.log(a)">
+      24  ?<Constant "function Math.log10(a)">
+      24  ?<Constant "function Math.max(a,b)">
+      24  ?<Constant "function Math.min(a,b)">
+      24  ?<Constant "function Math.pow(a,b)">
+      28  ?<Constant "function Math.range(x...">
+      24  ?<Constant "function Math.round(a)">
+      24  ?<Constant "function Math.sign(a)">
+      24  ?<Constant "function Math.sin(a)">
+      24  ?<Constant "function Math.sinh(a)">
+      24  ?<Constant "function Math.sqr(a)">
+      24  ?<Constant "function Math.sqrt(a)">
+      24  ?<Constant "function Math.tan(a)">
+      24  ?<Constant "function Math.tanh(a)">
+      28  ?<Constant "function Math.toDegre...">
+      28  ?<Constant "function Math.toRadia...">
+       2  ?<Constant "x">
+       4  ??DataTable32
+       4  ??DataTable33
+       4  ??DataTable33_1
+       4  ??DataTable33_2
+       4  ??DataTable33_3
+       4  ??DataTable34
+       4  ??DataTable34_1
+       4  ??DataTable37
+       4  ??DataTable48
+       4  ??DataTable53
+       8  ??DataTable53_1
+       8  ??DataTable53_2
+       8  ??DataTable54
+       4  ??DataTable55
+       4  ??DataTable55_1
+       4  ??DataTable55_2
+       4  ??DataTable56
+       4  ??DataTable56_1
+       4  ??DataTable56_10
+       4  ??DataTable56_11
+       4  ??DataTable56_12
+       4  ??DataTable56_13
+       4  ??DataTable56_14
+       4  ??DataTable56_15
+       4  ??DataTable56_16
+       4  ??DataTable56_17
+       4  ??DataTable56_18
+       4  ??DataTable56_19
+       4  ??DataTable56_2
+       4  ??DataTable56_20
+       4  ??DataTable56_21
+       4  ??DataTable56_22
+       4  ??DataTable56_23
+       4  ??DataTable56_24
+       4  ??DataTable56_25
+       4  ??DataTable56_26
+       4  ??DataTable56_27
+       4  ??DataTable56_28
+       4  ??DataTable56_29
+       4  ??DataTable56_3
+       4  ??DataTable56_30
+       4  ??DataTable56_31
+       4  ??DataTable56_32
+       4  ??DataTable56_33
+       4  ??DataTable56_34
+       4  ??DataTable56_35
+       4  ??DataTable56_36
+       4  ??DataTable56_37
+       4  ??DataTable56_38
+       4  ??DataTable56_39
+       4  ??DataTable56_4
+       4  ??DataTable56_40
+       4  ??DataTable56_41
+       4  ??DataTable56_42
+       4  ??DataTable56_43
+       4  ??DataTable56_44
+       4  ??DataTable56_45
+       4  ??DataTable56_46
+       4  ??DataTable56_47
+       4  ??DataTable56_48
+       4  ??DataTable56_49
+       4  ??DataTable56_5
+       4  ??DataTable56_50
+       4  ??DataTable56_51
+       4  ??DataTable56_52
+       4  ??DataTable56_53
+       4  ??DataTable56_54
+       4  ??DataTable56_55
+       4  ??DataTable56_6
+       4  ??DataTable56_7
+       4  ??DataTable56_8
+       4  ??DataTable56_9
+      14  ??Subroutine2_0
+      14  ??Subroutine3_0
+       8  ?Subroutine0
+      28  ?Subroutine1
+       8  CScriptVar::isDouble()
+       8  CScriptVar::isInt()
+     742  registerMathFunctions(CTinyJS *)
+      32  scMathACos(CScriptVar *, void *)
+      32  scMathACosh(CScriptVar *, void *)
+      32  scMathASin(CScriptVar *, void *)
+      32  scMathASinh(CScriptVar *, void *)
+       4  scMathATan(CScriptVar *, void *)
+       2  scMathATanh(CScriptVar *, void *)
+     304  scMathAbs(CScriptVar *, void *)
+      34  scMathCos(CScriptVar *, void *)
+      36  scMathCosh(CScriptVar *, void *)
+      32  scMathE(CScriptVar *, void *)
+      32  scMathExp(CScriptVar *, void *)
+      34  scMathLog(CScriptVar *, void *)
+      34  scMathLog10(CScriptVar *, void *)
+     322  scMathMax(CScriptVar *, void *)
+     324  scMathMin(CScriptVar *, void *)
+      16  scMathPI(CScriptVar *, void *)
+      92  scMathPow(CScriptVar *, void *)
+     482  scMathRange(CScriptVar *, void *)
+     342  scMathRound(CScriptVar *, void *)
+     280  scMathSign(CScriptVar *, void *)
+      34  scMathSin(CScriptVar *, void *)
+      36  scMathSinh(CScriptVar *, void *)
+     100  scMathSqr(CScriptVar *, void *)
+      70  scMathSqrt(CScriptVar *, void *)
+      32  scMathTan(CScriptVar *, void *)
+      32  scMathTanh(CScriptVar *, void *)
+      58  scMathToDegrees(CScriptVar *, void *)
+      58  scMathToRadians(CScriptVar *, void *)
+      42  string::string(char const *)
+      16  string::~string()
+       1  -- Other
+
+ 
+   683 bytes in section .rodata
+ 4 098 bytes in section .text
+ 
+ 4 024 bytes of CODE  memory (+ 74 bytes shared)
+   682 bytes of CONST memory (+  1 byte  shared)
+
+Errors: none
+Warnings: 1

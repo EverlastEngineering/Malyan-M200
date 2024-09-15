@@ -1,0 +1,906 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:53
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\cardreader.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW87E.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\cardreader.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\cardreader.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\cardreader.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\cardreader.cpp
+      1          #include "Marlin.h"
+      2          #include "cardreader.h"
+      3          #include "stepper.h"
+      4          #include "temperature.h"
+      5          #include "language.h"
+      6          
+      7          #if ENABLED(SDSUPPORT)
+      8          
+      9          char abspath[64];
+     10          extern "C" void MSD0_SPI_Configuration();
+     11          extern "C" void MSD0_Init();
+     12          bool sdprinting;
+     13          
+     14          CardReader::CardReader() {
+     15          
+     16              sdprinting = false;
+     17              cardOK = false;
+     18              saving = false;
+     19              logging = false;
+     20          
+     21              for (uint16_t i=0;i<64;i++)
+     22                  abspath[i]=0;
+     23          
+     24              for (uint16_t i=0;i<=_MAX_LFN;i++)
+     25                  fileinfo.fname[i]=0;
+     26          
+     27              //initsd();
+     28              //LcdListFile();
+     29          }
+     30          
+     31          void CardReader::ls()  {
+     32            uint16_t i;
+     33            uint8_t retry_cnt=0;
+     34            FRESULT ret;
+     35          
+     36          /*
+     37          #if _USE_LFN
+     38          	fileinfo.lfname = lfn;
+     39          	fileinfo.lfsize = sizeof lfn;
+     40          #endif*/
+     41          
+     42            //initsd();
+     43          retry:
+     44            if (retry_cnt++>2) return;
+     45            if (abspath[0]==0) ret=f_opendir(&dp,"\\");
+     46            else ret=f_opendir(&dp,abspath);
+     47            if (ret!=FR_OK)
+     48            {
+     49                abspath[0]=0;
+     50                ret=f_opendir(&dp,"\\");
+     51                if (ret!=FR_OK)
+     52                {
+     53                  //SERIAL_PROTOCOLLN("Open dir error.");
+     54                  return;
+     55                }
+     56            }
+     57          
+     58            for (i=0;i<100;i++)
+     59            {
+     60                ret=f_readdir(&dp,&fileinfo);
+     61                if (fileinfo.fname[0]==0 || ret!=FR_OK)
+     62                {
+     63                  if (i==0) goto retry;
+     64                  return;
+     65                }
+     66                if (fileinfo.fattrib & AM_SYS) continue;
+     67                else if (fileinfo.fattrib & AM_HID) continue;
+     68                /*if (strstr(fileinfo.fname, ".G")!=NULL)
+     69                  SERIAL_PROTOCOLLN(fileinfo.fname);
+     70                else if (strstr(fileinfo.fname, ".g")!=NULL)*/
+     71                  SERIAL_PROTOCOLLN(fileinfo.fname);
+     72            }
+     73          }
+     74          /*
+     75          void CardReader::swd_ls()  {
+     76            uint16_t i;
+     77            FRESULT ret;
+     78          
+     79          #if _USE_LFN
+     80          	fileinfo.lfname = lfn;
+     81          	fileinfo.lfsize = sizeof lfn;
+     82          #endif
+     83          
+     84            //initsd();
+     85          
+     86            ret=f_opendir(&dp,path);
+     87            if (ret!=FR_OK)
+     88            {
+     89                path[0]=0;
+     90                ret=f_opendir(&dp,"\\");
+     91                if (ret!=FR_OK) return;
+     92            }
+     93          
+     94            printf("LS\n");
+     95            for (i=0;i<100;i++)
+     96            {
+     97                ret=f_readdir(&dp,&fileinfo);
+     98                if (fileinfo.fname[0]==0 || ret!=FR_OK) return;
+     99                if (fileinfo.fattrib & AM_SYS) continue;
+    100                else if (fileinfo.fattrib & AM_HID) continue;
+    101                if (strstr(fileinfo.fname, ".G")!=NULL)
+    102                  printf("%s\n",fileinfo.fname);
+    103            }
+    104            printf("END\n");
+    105          }*/
+    106          
+    107          #if ENABLED(LONG_FILENAME_HOST_SUPPORT)
+    108          
+    109            /**
+    110             * Get a long pretty path based on a DOS 8.3 path
+    111             */
+    112            void CardReader::printLongPath(char *path) {
+    113              FRESULT fr;
+    114              FILINFO fno;
+    115          /*
+    116          #if _USE_LFN
+    117              fno.lfname = longFilename;
+    118          #endif
+    119          
+    120              longFilename[0]=0;*/
+    121              fr = f_stat(path, &fno);
+    122              if (fr==FR_OK)
+    123              {
+    124                  //if (fno.fattrib & AM_DIR)
+    125                  //strcpy(longFilename,fno.lfname);
+    126                  SERIAL_ECHOPGM("Full Path: "); SERIAL_ECHOLN(fno.fname);
+    127              }
+    128              else SERIAL_PROTOCOL("???");
+    129          
+    130              SERIAL_EOL;
+    131              /*
+    132              lsAction = LS_GetFilename;
+    133          
+    134              int i, pathLen = strlen(path);
+    135          
+    136              // SERIAL_ECHOPGM("Full Path: "); SERIAL_ECHOLN(path);
+    137          
+    138              // Zero out slashes to make segments
+    139              for (i = 0; i < pathLen; i++) if (path[i] == '/') path[i] = '\0';
+    140          
+    141              SdFile diveDir = root; // start from the root for segment 1
+    142              for (i = 0; i < pathLen;) {
+    143          
+    144                if (path[i] == '\0') i++; // move past a single nul
+    145          
+    146                char *segment = &path[i]; // The segment after most slashes
+    147          
+    148                // If a segment is empty (extra-slash) then exit
+    149                if (!*segment) break;
+    150          
+    151                // Go to the next segment
+    152                while (path[++i]) { }
+    153          
+    154                // SERIAL_ECHOPGM("Looking for segment: "); SERIAL_ECHOLN(segment);
+    155          
+    156                // Find the item, setting the long filename
+    157                diveDir.rewind();
+    158                lsDive("", diveDir, segment);
+    159          
+    160                // Print /LongNamePart to serial output
+    161                SERIAL_PROTOCOLCHAR('/');
+    162                SERIAL_PROTOCOL(longFilename[0] ? longFilename : "???");
+    163          
+    164                // If the filename was printed then that's it
+    165                if (!filenameIsDir) break;
+    166          
+    167                // SERIAL_ECHOPGM("Opening dir: "); SERIAL_ECHOLN(segment);
+    168          
+    169                // Open the sub-item as the new dive parent
+    170                SdFile dir;
+    171                if (!dir.open(diveDir, segment, O_READ)) {
+    172                  SERIAL_EOL;
+    173                  SERIAL_ECHO_START;
+    174                  SERIAL_ECHOPGM(MSG_SD_CANT_OPEN_SUBDIR);
+    175                  SERIAL_ECHO(segment);
+    176                  break;
+    177                }
+    178          
+    179                diveDir.close();
+    180                diveDir = dir;
+    181          
+    182              } // while i<pathLen
+    183          
+    184              SERIAL_EOL;*/
+    185            }
+    186          
+    187          #endif // LONG_FILENAME_HOST_SUPPORT
+    188          
+    189          extern "C" DSTATUS disk_initialize (BYTE);
+    190          void CardReader::initsd() {
+    191            int ret;
+    192            int cnt=0;
+    193            extern char slow_card;
+    194          
+    195            slow_card=0;
+    196            cardOK = false;
+    197          /*  ret=disk_initialize(0);
+    198            if (ret!=RES_OK) ret=disk_initialize(0);
+    199            if (ret!=RES_OK) ret=disk_initialize(0);
+    200          
+    201            if (ret==RES_OK) {
+    202              ret=f_mount(&fs, "",1);
+    203          
+    204              ret=f_opendir(&dp,"\\");
+    205              if (ret!=FR_OK) return;
+    206          
+    207              cardOK = true;
+    208              //SERIAL_ECHO_START;
+    209              //SERIAL_ECHOLNPGM(MSG_SD_CARD_OK);
+    210            }
+    211            else {
+    212              //SERIAL_ERROR_START;
+    213              //SERIAL_ERRORLNPGM(MSG_SD_INIT_FAIL);
+    214            }*/
+    215          
+    216          retry:
+    217            if (cnt>2) slow_card=1;
+    218            if (cnt>5) return;
+    219            cnt++;
+    220          
+    221            IWDG_ReloadCounter();
+    222            MSD0_SPI_Configuration();
+    223          
+    224            /*ret=disk_initialize(0);
+    225            if (ret==RES_OK)*/
+    226            ret=f_mount(&fs, "",1);
+    227            if (ret==RES_OK) ret=f_opendir(&dp,"\\");
+    228            if (ret!=FR_OK) goto retry;
+    229          
+    230            cardOK = true;
+    231          }
+    232          
+    233          void CardReader::release() {
+    234            sdprinting = false;
+    235            cardOK = false;
+    236          }
+    237          
+    238          void CardReader::startFileprint() {
+    239            extern bool relative_mode;
+    240            relative_mode=false;
+    241            if (cardOK)
+    242              sdprinting = true;
+    243          
+    244          }
+    245          
+    246          void CardReader::pauseSDPrint() {
+    247            if (sdprinting) sdprinting = false;
+    248          }
+    249          
+    250          void CardReader::openLogFile(char* name) {
+    251            logging = true;
+    252            openFile(name, false);
+    253          }
+    254          
+    255          void CardReader::getAbsFilename(char *t) {
+    256            uint8_t cnt = 0;
+    257            *t = '/'; t++; cnt++;
+    258            for (uint8_t i = 0; i < workDirDepth; i++) {
+    259              //workDirParents[i].getFilename(t); //SDBaseFile.getfilename!
+    260              f_getcwd(t,MAXPATHNAMELENGTH);
+    261              while (*t && cnt < MAXPATHNAMELENGTH) { t++; cnt++; } //crawl counter forward.
+    262            }
+    263            if (cnt < MAXPATHNAMELENGTH - FILENAME_LENGTH)
+    264              for (uint8_t i=0;fileinfo.fname[i]!=0;i++)
+    265              {
+    266                  *t++=fileinfo.fname[i];
+    267              }
+    268              //file.getFilename(t);
+    269            //else
+    270              //t[0] = 0;
+    271            *t = 0;
+    272          }
+    273          
+    274          bool CardReader::openFile(char* name, bool read, bool replace_current/*=true*/) {
+    275            if (!cardOK) return false;
+    276          
+    277            if (file.obj.fs != 0) { //replacing current file by new file, or subfile call
+    278              if (!replace_current) {
+    279                if (file_subcall_ctr > SD_PROCEDURE_DEPTH - 1) {
+    280                  SERIAL_ERROR_START;
+    281                  SERIAL_ERRORPGM("trying to call sub-gcode files with too many levels. MAX level is:");
+    282                  SERIAL_ERRORLN(SD_PROCEDURE_DEPTH);
+    283                  kill(PSTR(MSG_KILLED));
+    284                  return;
+    285                }
+    286          
+    287                SERIAL_ECHO_START;
+    288                SERIAL_ECHOPGM("SUBROUTINE CALL target:\"");
+    289                SERIAL_ECHO(name);
+    290                SERIAL_ECHOPGM("\" parent:\"");
+    291          
+    292                //store current filename and position
+    293                getAbsFilename(filenames[file_subcall_ctr]);
+    294          
+    295                SERIAL_ECHO(filenames[file_subcall_ctr]);
+    296                SERIAL_ECHOPGM("\" pos");
+    297                SERIAL_ECHOLN(sdpos);
+    298                filespos[file_subcall_ctr] = sdpos;
+    299                file_subcall_ctr++;
+    300               }
+    301               else {
+    302                SERIAL_ECHO_START;
+    303                SERIAL_ECHOPGM("Now doing file: ");
+    304                SERIAL_ECHOLN(name);
+    305               }
+    306               //file.close();
+    307               f_close(&file);
+    308            }
+    309            else { //opening fresh file
+    310              file_subcall_ctr = 0; //resetting procedure depth in case user cancels print while in procedure
+    311              SERIAL_ECHO_START;
+    312              SERIAL_ECHOPGM("Now fresh file: ");
+    313              SERIAL_ECHOLN(name);
+    314            }
+    315            sdprinting = false;
+    316          
+    317            if (read) {
+    318              FRESULT ret;
+    319              //if (file.open(curDir, fname, O_READ)) {
+    320              ret=f_open(&file,name,FA_READ);
+    321              if (ret!=FR_OK) ret=f_open(&file,name,FA_READ);
+    322              if (ret==FR_OK) {
+    323                filesize = file.obj.objsize;
+    324          
+    325                if (filesize>0)
+    326                {
+    327                    SERIAL_PROTOCOLPGM(MSG_SD_FILE_OPENED);
+    328                    SERIAL_PROTOCOL(name);
+    329                    SERIAL_PROTOCOLPGM(MSG_SD_SIZE);
+    330                    SERIAL_PROTOCOLLN(filesize);
+    331                    sdpos = 0;
+    332          
+    333                    SERIAL_PROTOCOLLNPGM(MSG_SD_FILE_SELECTED);
+    334                    //getfilename(0, name);
+    335                    //lcd_setstatus(fileinfo.lfname[0] ? fileinfo.lfname : name);
+    336                    return true;
+    337                }
+    338              }
+    339              //else
+    340              {
+    341                SERIAL_PROTOCOLPGM(MSG_SD_OPEN_FILE_FAIL);
+    342                SERIAL_PROTOCOL(name);
+    343                SERIAL_PROTOCOLPGM(".\n");
+    344                return false;
+    345              }
+    346            }
+    347            else { //write
+    348              //if (!file.open(curDir, fname, O_CREAT | O_APPEND | O_WRITE | O_TRUNC)) {
+    349              if (f_open(&file, name, FA_CREATE_ALWAYS | FA_WRITE) != FR_OK) {
+    350                f_stat(name, &fileinfo);
+    351                SERIAL_PROTOCOLPGM(MSG_SD_OPEN_FILE_FAIL);
+    352                SERIAL_PROTOCOL(name);
+    353                SERIAL_PROTOCOLPGM(".\n");
+    354                return false;
+    355              }
+    356              else {
+    357                saving = true;
+    358                SERIAL_PROTOCOLPGM(MSG_SD_WRITE_TO_FILE);
+    359                SERIAL_PROTOCOLLN(name);
+    360                //lcd_setstatus(name);
+    361              }
+    362            }
+    363            return true;
+    364          }
+    365          
+    366          void CardReader::removeFile(char* name) {
+    367            f_unlink(name);
+    368            return;
+    369          }
+    370          
+    371          void CardReader::getStatus() {
+    372            if (cardOK) {
+    373              SERIAL_PROTOCOLPGM(MSG_SD_PRINTING_BYTE);
+    374              SERIAL_PROTOCOL(sdpos);
+    375              SERIAL_PROTOCOLCHAR('/');
+    376              SERIAL_PROTOCOLLN(filesize);
+    377            }
+    378            else {
+    379              SERIAL_PROTOCOLLNPGM(MSG_SD_NOT_PRINTING);
+    380            }
+    381          }
+    382          
+    383          void CardReader::write_command(char *buf) {
+    384            unsigned int written;
+    385            char* begin = buf;
+    386            char* npos = 0;
+    387            char* end = buf + strlen(buf) - 1;
+    388          
+    389            //file.writeError = false;
+    390            if ((npos = strchr(buf, 'N')) != NULL) {
+    391              begin = strchr(npos, ' ') + 1;
+    392              end = strchr(npos, '*') - 1;
+    393            }
+    394            end[1] = '\r';
+    395            end[2] = '\n';
+    396            end[3] = '\0';
+    397            f_write(&file, begin, (end-begin)+2, &written);
+    398            /*file.write(begin);
+    399            if (file.writeError) {
+    400              SERIAL_ERROR_START;
+    401              SERIAL_ERRORLNPGM(MSG_SD_ERR_WRITE_TO_FILE);
+    402            }*/
+    403          }
+    404          
+    405          void CardReader::checkautostart(bool force) {
+    406          }
+    407          
+    408          void CardReader::closefile(bool store_location) {
+    409            f_close(&file);
+    410            saving = logging = false;
+    411          
+    412            if (store_location) {
+    413              //future: store printer state, filename and position for continuing a stopped print
+    414              // so one can unplug the printer and continue printing the next day.
+    415            }
+    416          }
+    417          
+    418          /**
+    419           * Get the name of a file in the current directory by index
+    420           */
+    421          //const char UP_DUR[]="..";
+    422          void CardReader::getfilename(uint16_t nr, const char * const match/*=NULL*/) {
+    423            uint16_t i;
+    424            FRESULT ret;
+    425            //FILINFO fileinfo;
+    426          
+    427            //fn=NULL;
+    428            //initsd();
+    429            uint8_t retry=0;
+    430          r:
+    431            ret=f_opendir(&dp,abspath);
+    432            if (ret!=FR_OK)
+    433            {
+    434                if (retry++<5) goto r;
+    435                return;
+    436            }
+    437          
+    438            cardOK = true;
+    439          
+    440            //fileinfo.lfname=longFilename;
+    441          
+    442            for (i=0;i<=nr;)
+    443            {
+    444                ret=f_readdir(&dp,&fileinfo);
+    445          
+    446                if (ret!=FR_OK || fileinfo.fname[0]==0)
+    447                {
+    448                    filenameIsDir=true;
+    449                    //strcpy(filename, "..");
+    450                    //fn=(char*)UP_DUR;
+    451                    strcpy(fileinfo.fname, "..");
+    452                    return;
+    453                }
+    454                if (fileinfo.fattrib & AM_SYS) continue;
+    455                else if (fileinfo.fattrib & AM_HID) continue;
+    456                i++;
+    457            }
+    458            if (fileinfo.fattrib & AM_DIR) filenameIsDir=true;
+    459            else filenameIsDir=false;
+    460            //strcpy(filename, fileinfo.fname);
+    461            //fn=fileinfo.fname;
+    462            return;
+    463          }
+    464          
+    465          uint16_t CardReader::getnrfilenames()
+    466          {
+    467            uint16_t i;
+    468            uint16_t count;
+    469            FRESULT ret;
+    470          
+    471            /*
+    472          #if _USE_LFN
+    473          	fileinfo.lfname = lfn;
+    474          	fileinfo.lfsize = sizeof lfn;
+    475          #endif
+    476          */
+    477          
+    478            count=0;
+    479            initsd();
+    480          
+    481            ret=f_opendir(&dp,abspath);
+    482            if (ret!=FR_OK)
+    483            {
+    484                abspath[0]=0;
+    485                ret=f_opendir(&dp,"\\");
+    486                if (ret!=FR_OK) return;
+    487            }
+    488          
+    489            do {
+    490                ret=f_readdir(&dp,&fileinfo);
+    491                //SERIAL_PROTOCOLLN(fileinfo.fname);
+    492                if (fileinfo.fattrib & AM_SYS) continue;
+    493                else if (fileinfo.fattrib & AM_HID) continue;
+    494                else count++;
+    495            } while (ret==FR_OK && fileinfo.fname[0]!=0);
+    496            return count;
+    497          }
+    498          
+    499          uint16_t CardReader::LcdListFile()
+    500          {
+    501            uint16_t count;
+    502            uint8_t retry_cnt=0;
+    503            uint16_t i;
+    504            FRESULT ret;
+    505            extern void wifi_writeString_safe(char message[]);
+    506          
+    507            /*
+    508          #if _USE_LFN
+    509          	fileinfo.lfname = lfn;
+    510          	fileinfo.lfsize = sizeof lfn;
+    511          #endif
+    512          */
+    513            initsd();
+    514            count=0;
+    515          retry:
+    516            if (retry_cnt++>2) return 0;
+    517            ret=f_opendir(&dp,abspath);
+    518            if (ret!=FR_OK)
+    519            {
+    520                abspath[0]=0;
+    521                ret=f_opendir(&dp,"\\");
+    522                if (ret!=FR_OK) return;
+    523            }
+    524          
+    525            do {
+    526                ret=f_readdir(&dp,&fileinfo);
+    527                //SERIAL_PROTOCOLLN(fileinfo.fname);
+    528          
+    529                if (ret!=FR_OK || fileinfo.fname[0]==0) continue;
+    530                if (fileinfo.fattrib & AM_SYS) continue;
+    531                else if (fileinfo.fattrib & AM_HID) continue;
+    532                if (fileinfo.fattrib & AM_DIR) wifi_writeString_safe((char *)"{DIR:");
+    533                else wifi_writeString_safe((char *)"{FILE:");
+    534                wifi_writeString_safe(fileinfo.fname);
+    535                wifi_writeString_safe("}");
+    536                count++;
+    537            } while (ret==FR_OK && fileinfo.fname[0]!=0);
+    538          
+    539            if (abspath[0]!=0 && abspath[1]!=0)
+    540            {
+    541                count++;
+    542                wifi_writeString_safe((char *)"{DIR:..}");
+    543            }
+    544            
+    545            if (count==0) goto retry;
+    546            return count;
+    547          }
+    548          
+    549          bool CardReader::findautoprint()
+    550          {
+    551            uint16_t count;
+    552            uint16_t i;
+    553            FRESULT ret;
+    554          
+    555            initsd();
+    556            count=0;
+    557            ret=f_opendir(&dp,abspath);
+    558            if (ret!=FR_OK)
+    559            {
+    560                abspath[0]=0;
+    561                ret=f_opendir(&dp,"\\");
+    562                if (ret!=FR_OK) return false;
+    563            }
+    564          
+    565            do {
+    566                ret=f_readdir(&dp,&fileinfo);
+    567          
+    568                if (ret!=FR_OK || fileinfo.fname[0]==0) continue;
+    569                if (fileinfo.fattrib & AM_SYS) continue;
+    570                else if (fileinfo.fattrib & AM_HID) continue;
+    571                if (!(fileinfo.fattrib & AM_DIR))
+    572                {
+    573                    if (//NULL!=strstr(fileinfo.fname,"auto") &&
+    574                        fileinfo.fname[0] == 'a' &&
+    575                        fileinfo.fname[1] == 'u' &&
+    576                        fileinfo.fname[2] == 't' &&
+    577                        fileinfo.fname[3] == 'o' &&
+    578                        NULL!=strstr(fileinfo.fname,".g"))
+    579                          return true;
+    580                }
+    581                count++;
+    582            } while (ret==FR_OK && fileinfo.fname[0]!=0);
+    583          
+    584            return false;
+    585          }
+    586          
+    587          void CardReader::chdir(const char * relpath) {
+    588              f_chdir(relpath);
+    589              f_getcwd(abspath,64);
+    590          }
+    591          
+    592          void CardReader::updir() {
+    593              f_chdir("..");
+    594              f_getcwd(abspath,64);
+    595          }
+    596          
+    597          void CardReader::printingHasFinished() {
+    598            st_synchronize();
+    599            if (file_subcall_ctr > 0) { // Heading up to a parent file that called current as a procedure.
+    600              f_close(&file);
+    601              file_subcall_ctr--;
+    602              openFile(filenames[file_subcall_ctr], true, true);
+    603              setIndex(filespos[file_subcall_ctr]);
+    604              startFileprint();
+    605            }
+    606            else {
+    607              f_close(&file);
+    608          
+    609              if (SD_FINISHED_STEPPERRELEASE) {
+    610                enqueuecommands_P(PSTR(SD_FINISHED_RELEASECOMMAND));
+    611              }
+    612          
+    613              while (block_buffer_tail!=block_buffer_head)
+    614              {
+    615                  //IWDG_ReloadCounter();
+    616                  idle();
+    617              }
+    618          
+    619              autotempShutdown();
+    620              //finishAndDisableSteppers();
+    621              extern void EndBuild();
+    622              EndBuild();
+    623              sdprinting = false;
+    624            }
+    625          }
+    626          
+    627          #endif //SDSUPPORT
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   CardReader::CardReader()
+        16   -> __aeabi_memclr4
+      24   CardReader::LcdListFile()
+        24   -> CardReader::initsd()
+        24   -> f_opendir
+        24   -> f_readdir
+        24   -> wifi_writeString_safe(char *)
+       8   CardReader::chdir(char const *)
+         8   -> f_chdir
+         8   -> f_getcwd
+       0   CardReader::checkautostart(bool)
+       8   CardReader::closefile(bool)
+         8   -> f_close
+      16   CardReader::findautoprint()
+        16   -> CardReader::initsd()
+        16   -> __iar_Strstr
+        16   -> f_opendir
+        16   -> f_readdir
+      24   CardReader::getAbsFilename(char *)
+        24   -> f_getcwd
+      24   CardReader::getStatus()
+        24   -> CDC_Send_DATA
+        24   -> MarlinSerial::print(unsigned int, int)
+        24   -> MarlinSerial::write(uint8_t *, uint8_t)
+        24   -> USART_GetFlagStatus
+        24   -> USART_SendData
+        24   -> serialprintPGM(char const *)
+      24   CardReader::getfilename(uint16_t, char const *)
+        24   -> __aeabi_memcpy
+        24   -> f_opendir
+        24   -> f_readdir
+      24   CardReader::getnrfilenames()
+        24   -> CardReader::initsd()
+        24   -> f_opendir
+        24   -> f_readdir
+      24   CardReader::initsd()
+        24   -> IWDG_ReloadCounter
+        24   -> MSD0_SPI_Configuration
+        24   -> f_mount
+        24   -> f_opendir
+      24   CardReader::ls()
+        24   -> MarlinSerial::print(char const *)
+        24   -> MarlinSerial::write(uint8_t *, uint8_t)
+        24   -> f_opendir
+        24   -> f_readdir
+      24   CardReader::openFile(char *, bool, bool)
+        24   -> CardReader::getAbsFilename(char *)
+        24   -> MarlinSerial::print(char const *)
+        24   -> MarlinSerial::print(int, int)
+        24   -> MarlinSerial::print(unsigned int, int)
+        24   -> MarlinSerial::write(uint8_t *, uint8_t)
+        24   -> f_close
+        24   -> f_open
+        24   -> f_stat
+        24   -> kill(char const *)
+        24   -> serialprintPGM(char const *)
+       8   CardReader::openLogFile(char *)
+         8   -> CardReader::openFile(char *, bool, bool)
+       0   CardReader::pauseSDPrint()
+     304   CardReader::printLongPath(char *)
+       304   -> MarlinSerial::print(char const *)
+       304   -> MarlinSerial::write(uint8_t *, uint8_t)
+       304   -> f_stat
+       304   -> serialprintPGM(char const *)
+      24   CardReader::printingHasFinished()
+        24   -> CardReader::openFile(char *, bool, bool)
+        24   -> CardReader::startFileprint()
+        24   -> EndBuild()
+        24   -> __aeabi_i2f
+        24   -> enqueuecommands_P(char const *)
+        24   -> f_close
+        24   -> f_lseek
+        24   -> idle()
+        24   -> st_synchronize()
+        24   -> start_watching_heater(int)
+        24 __aeabi_cfcmple
+       0   CardReader::release()
+       8   CardReader::removeFile(char *)
+         8   -> f_unlink
+       0   CardReader::startFileprint()
+       8   CardReader::subobject CardReader()
+         8   -> CardReader::CardReader()
+       8   CardReader::updir()
+         8   -> f_chdir
+         8   -> f_getcwd
+      24   CardReader::write_command(char *)
+        24   -> __iar_Strchr
+        24   -> f_write
+        24   -> strlen
+       8   MarlinSerial::print(char const *)
+         8   -> MarlinSerial::write(char const *)
+      16   MarlinSerial::write(char const *)
+        16   -> CDC_Send_DATA_str
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+      24   MarlinSerial::write(uint8_t *, uint8_t)
+        24   -> CDC_Send_DATA
+        24   -> USART_GetFlagStatus
+        24   -> USART_SendData
+       8   serialprintPGM(char const *)
+         8   -> MarlinSerial::write(char const *)
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable34
+       4  ??DataTable34_1
+       4  ??DataTable34_2
+       4  ??DataTable34_3
+       4  ??DataTable34_4
+       4  ??DataTable34_5
+       4  ??DataTable34_6
+       4  ??DataTable35
+       4  ??DataTable35_1
+       4  ??DataTable35_2
+       4  ??DataTable35_3
+       4  ??DataTable35_4
+       4  ??DataTable35_5
+       4  ??DataTable36
+       4  ??DataTable36_1
+       4  ??DataTable36_2
+       4  ??DataTable36_3
+       4  ??DataTable37
+       4  ??DataTable37_1
+       4  ??DataTable38
+       4  ??DataTable39
+       4  ??DataTable39_1
+       4  ??DataTable39_2
+       4  ??DataTable40
+       4  ??DataTable41
+       4  ??DataTable42
+       4  ??DataTable42_1
+       4  ??DataTable42_10
+       4  ??DataTable42_11
+       4  ??DataTable42_12
+       4  ??DataTable42_2
+       4  ??DataTable42_3
+       4  ??DataTable42_4
+       4  ??DataTable42_5
+       4  ??DataTable42_6
+       4  ??DataTable42_7
+       4  ??DataTable42_8
+       4  ??DataTable42_9
+      14  ?Subroutine0
+      68  ?_0
+       1  ?_1
+      16  ?_10
+       8  ?_11
+      16  ?_12
+      20  ?_13
+       4  ?_14
+      20  ?_15
+      20  ?_16
+      16  ?_17
+      12  ?_18
+      12  ?_19
+       2  ?_2
+       4  ?_20
+       4  ?_21
+       8  ?_22
+       8  ?_23
+       2  ?_24
+      12  ?_25
+       4  ?_26
+       2  ?_3
+      12  ?_4
+      28  ?_5
+      12  ?_6
+       8  ?_7
+      20  ?_8
+      20  ?_9
+      46  CardReader::CardReader()
+     158  CardReader::LcdListFile()
+       6  CardReader::chdir(char const *)
+       2  CardReader::checkautostart(bool)
+      22  CardReader::closefile(bool)
+     124  CardReader::findautoprint()
+      90  CardReader::getAbsFilename(char *)
+     118  CardReader::getStatus()
+     116  CardReader::getfilename(uint16_t, char const *)
+      90  CardReader::getnrfilenames()
+      76  CardReader::initsd()
+     132  CardReader::ls()
+     504  CardReader::openFile(char *, bool, bool)
+      16  CardReader::openLogFile(char *)
+      14  CardReader::pauseSDPrint()
+      70  CardReader::printLongPath(char *)
+     182  CardReader::printingHasFinished()
+      10  CardReader::release()
+      10  CardReader::removeFile(char *)
+      20  CardReader::startFileprint()
+       8  CardReader::subobject CardReader()
+       4  CardReader::updir()
+      80  CardReader::write_command(char *)
+       8  MarlinSerial::print(char const *)
+      60  MarlinSerial::write(char const *)
+      72  MarlinSerial::write(uint8_t *, uint8_t)
+      64  abspath
+       1  sdprinting
+      16  serialprintPGM(char const *)
+
+ 
+    65 bytes in section .bss
+    91 bytes in section .rodata
+ 2'488 bytes in section .text
+ 
+ 2'332 bytes of CODE  memory (+ 156 bytes shared)
+    91 bytes of CONST memory
+    65 bytes of DATA  memory
+
+Errors: none
+Warnings: 16

@@ -1,0 +1,270 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      01/May/2017  22:05:03 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Libraries\STM32_ #
+#                    USB_Device_Library\Class\msc\src\usbd_storage_template.c #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Libraries\STM32_ #
+#                    USB_Device_Library\Class\msc\src\usbd_storage_template.c #
+#                     -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D        #
+#                    STM32F072 -lcN D:\Projects\3DPrint\SRC\MM32-F070-DELTA\P #
+#                    rojects\EWARM\DEBUG\List\ -o                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\ --debug --endian=little --cpu=Cortex-M0 -e     #
+#                    --fpu=None --dlib_config "C:\Program Files (x86)\IAR     #
+#                    Systems\Embedded Workbench 6.5\arm\INC\c\DLib_Config_Nor #
+#                    mal.h" -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projec #
+#                    ts\EWARM\..\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F #
+#                    070-DELTA\Projects\EWARM\..\src\fs\ -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --use_c++_inline -I "C:\Program   #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\CMSIS\Include\" --relaxed_fp                     #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\usbd_storage_template.lst                      #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\usbd_storage_template.o                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_storage_template.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_storage_template.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   Memory management layer
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_msc_mem.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          #define STORAGE_LUN_NBR                  1   
+     34          /* Private macro -------------------------------------------------------------*/
+     35          /* Private variables ---------------------------------------------------------*/
+     36          /* USB Mass storage Standard Inquiry Data */
+     37          const int8_t STORAGE_Inquirydata[] = {//36
+     38            
+     39            /* LUN 0 */
+     40            0x00,		
+     41            0x80,		
+     42            0x02,		
+     43            0x02,
+     44            (USBD_STD_INQUIRY_LENGTH - 5),
+     45            0x00,
+     46            0x00,	
+     47            0x00,
+     48            'M', 'a', 'l', 'y', 'a', 'n', ' ', ' ', /* Manufacturer : 8 bytes */
+     49            '3', 'D', 'P', 'r', 'i', 'n', 't', 'e', /* Product      : 16 Bytes */
+     50            'r', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+     51            '1', '.', '0' ,'1',                     /* Version      : 4 Bytes */
+     52          }; 
+     53          
+     54          /* Private function prototypes -----------------------------------------------*/
+     55          int8_t STORAGE_Init (uint8_t lun);
+     56          
+     57          int8_t STORAGE_GetCapacity (uint8_t lun, 
+     58                                     uint32_t *block_num, 
+     59                                     uint32_t *block_size);
+     60          
+     61          int8_t  STORAGE_IsReady (uint8_t lun);
+     62          
+     63          int8_t  STORAGE_IsWriteProtected (uint8_t lun);
+     64          
+     65          int8_t STORAGE_Read (uint8_t lun, 
+     66                                  uint8_t *buf, 
+     67                                  uint32_t blk_addr,
+     68                                  uint16_t blk_len);
+     69          
+     70          int8_t STORAGE_Write (uint8_t lun, 
+     71                                  uint8_t *buf, 
+     72                                  uint32_t blk_addr,
+     73                                  uint16_t blk_len);
+     74          
+     75          int8_t STORAGE_GetMaxLun (void);
+     76          
+     77          /* Private functions ---------------------------------------------------------*/
+     78          /**
+     79            * @brief  Initialize the storage medium
+     80            * @param  lun : logical unit number
+     81            * @retval Status
+     82            */
+     83          int8_t STORAGE_Init (uint8_t lun)
+     84          {
+     85            return (0);
+     86          }
+     87          
+     88          /**
+     89            * @brief  return medium capacity and block size
+     90            * @param  lun : logical unit number
+     91            * @param  block_num :  number of physical block
+     92            * @param  block_size : size of a physical block
+     93            * @retval Status
+     94            */
+     95          int8_t STORAGE_GetCapacity (uint8_t lun, uint32_t *block_num, uint32_t *block_size)
+     96          {
+     97            return (0);
+     98          }
+     99          
+    100          /**
+    101            * @brief  check whether the medium is ready
+    102            * @param  lun : logical unit number
+    103            * @retval Status
+    104            */
+    105          int8_t  STORAGE_IsReady (uint8_t lun)
+    106          {
+    107            return (0);
+    108          }
+    109          
+    110          /**
+    111            * @brief  check whether the medium is write-protected
+    112            * @param  lun : logical unit number
+    113            * @retval Status
+    114            */
+    115          int8_t  STORAGE_IsWriteProtected (uint8_t lun)
+    116          {
+    117            return  0;
+    118          }
+    119          
+    120          /**
+    121            * @brief  Read data from the medium
+    122            * @param  lun : logical unit number
+    123            * @param  buf : Pointer to the buffer to save data
+    124            * @param  blk_addr :  address of 1st block to be read
+    125            * @param  blk_len : nmber of blocks to be read
+    126            * @retval Status
+    127            */
+    128          int8_t STORAGE_Read (uint8_t lun, 
+    129                           uint8_t *buf, 
+    130                           uint32_t blk_addr,                       
+    131                           uint16_t blk_len)
+    132          {
+    133            return 0;
+    134          }
+    135          /**
+    136            * @brief  Write data to the medium
+    137            * @param  lun : logical unit number
+    138            * @param  buf : Pointer to the buffer to write from
+    139            * @param  blk_addr :  address of 1st block to be written
+    140            * @param  blk_len : nmber of blocks to be read
+    141            * @retval Status
+    142            */
+    143          int8_t STORAGE_Write (uint8_t lun, 
+    144                            uint8_t *buf, 
+    145                            uint32_t blk_addr,
+    146                            uint16_t blk_len)
+    147          {
+    148            return (0);
+    149          }
+    150          /**
+    151            * @brief  Return number of supported logical unit
+    152            * @param  None
+    153            * @retval number of logical unit
+    154            */
+    155          int8_t STORAGE_GetMaxLun (void)
+    156          {
+    157            return (STORAGE_LUN_NBR - 1);
+    158          }
+    159          
+    160          const USBD_STORAGE_cb_TypeDef USBD_MICRO_SDIO_fops =
+    161          {
+    162            STORAGE_Init,
+    163            STORAGE_GetCapacity,
+    164            STORAGE_IsReady,
+    165            STORAGE_IsWriteProtected,
+    166            STORAGE_Read,
+    167            STORAGE_Write,
+    168            STORAGE_GetMaxLun,
+    169            (char *)STORAGE_Inquirydata,
+    170          };
+    171          
+    172          USBD_STORAGE_cb_TypeDef  *USBD_STORAGE_fops = (USBD_STORAGE_cb_TypeDef*)&USBD_MICRO_SDIO_fops;
+    173          
+    174          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   STORAGE_GetCapacity
+       0   STORAGE_GetMaxLun
+       0   STORAGE_Init
+       0   STORAGE_IsReady
+       0   STORAGE_IsWriteProtected
+       0   STORAGE_Read
+       0   STORAGE_Write
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  STORAGE_GetCapacity
+       4  STORAGE_GetMaxLun
+       4  STORAGE_Init
+      36  STORAGE_Inquirydata
+       4  STORAGE_IsReady
+       4  STORAGE_IsWriteProtected
+       4  STORAGE_Read
+       4  STORAGE_Write
+      32  USBD_MICRO_SDIO_fops
+       4  USBD_STORAGE_fops
+
+ 
+  4 bytes in section .data
+ 68 bytes in section .rodata
+ 28 bytes in section .text
+ 
+ 28 bytes of CODE  memory
+ 68 bytes of CONST memory
+  4 bytes of DATA  memory
+
+Errors: none
+Warnings: 1

@@ -1,0 +1,594 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:21
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crs.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4188.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crs.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32f0xx_crs.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_crs.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crs.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f0xx_crs.c
+      4            * @author  MCD Application Team
+      5            * @version V1.3.0
+      6            * @date    16-January-2014
+      7            * @brief   This file provides firmware functions to manage the following 
+      8            *          functionalities of CRS peripheral applicable only on STM32F042 and 
+      9            *          STM32F072 devices:
+     10            *            + Configuration of the CRS peripheral
+     11            *            + Interrupts and flags management
+     12            *              
+     13            *
+     14            *  @verbatim
+     15           ===============================================================================
+     16                               ##### How to use this driver #####
+     17           ===============================================================================
+     18              [..]
+     19              
+     20                   (+) Enable CRS AHB clock using RCC_APB1eriphClockCmd(RCC_APB1Periph_CRS, ENABLE)
+     21                       function
+     22          
+     23                
+     24               @endverbatim
+     25            *  
+     26            ******************************************************************************
+     27            * @attention
+     28            *
+     29            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     30            *
+     31            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     32            * You may not use this file except in compliance with the License.
+     33            * You may obtain a copy of the License at:
+     34            *
+     35            *        http://www.st.com/software_license_agreement_liberty_v2
+     36            *
+     37            * Unless required by applicable law or agreed to in writing, software 
+     38            * distributed under the License is distributed on an "AS IS" BASIS, 
+     39            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     40            * See the License for the specific language governing permissions and
+     41            * limitations under the License.
+     42            *
+     43            ******************************************************************************
+     44            */
+     45          
+     46          /* Includes ------------------------------------------------------------------*/
+     47          #include "stm32f0xx_crs.h"
+     48          #include "stm32f0xx_rcc.h"
+     49          
+     50          /** @addtogroup STM32F0xx_StdPeriph_Driver
+     51            * @{
+     52            */
+     53          
+     54          /** @defgroup CRS 
+     55            * @brief CRS driver modules
+     56            * @{
+     57            */
+     58          
+     59          /* Private typedef -----------------------------------------------------------*/
+     60          /* Private define ------------------------------------------------------------*/
+     61          /* CRS Flag Mask */
+     62          #define FLAG_MASK                 ((uint32_t)0x700)
+     63          
+     64          /* Private macro -------------------------------------------------------------*/
+     65          /* Private variables ---------------------------------------------------------*/
+     66          /* Private function prototypes -----------------------------------------------*/
+     67          /* Private functions ---------------------------------------------------------*/
+     68          
+     69          /** @defgroup CRS_Private_Functions
+     70            * @{
+     71            */
+     72          
+     73          /** @defgroup CRS_Group1 Configuration of the CRS functions
+     74           *  @brief   Configuration of the CRS  functions 
+     75           *
+     76          @verbatim
+     77           ===============================================================================
+     78                               ##### CRS configuration functions #####
+     79           ===============================================================================
+     80          
+     81          @endverbatim
+     82            * @{
+     83            */
+     84          
+     85          /**
+     86            * @brief  Deinitializes CRS peripheral registers to their default reset values.
+     87            * @param  None
+     88            * @retval None
+     89            */
+     90          void CRS_DeInit(void)
+     91          {
+     92            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CRS, ENABLE);
+     93            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CRS, DISABLE);
+     94          }
+     95          
+     96          /**
+     97            * @brief  Adjusts the Internal High Speed 48 oscillator (HSI 48) calibration value.
+     98            * @note   The calibration is used to compensate for the variations in voltage
+     99            *         and temperature that influence the frequency of the internal HSI48 RC.
+    100            * @note   This function can be called only when the AUTOTRIMEN bit is reset.
+    101            * @param  CRS_HSI48CalibrationValue: 
+    102            * @retval None
+    103            */
+    104          void CRS_AdjustHSI48CalibrationValue(uint8_t CRS_HSI48CalibrationValue)
+    105          {
+    106            /* Clear TRIM[5:0] bits */
+    107            CRS->CR &= ~CRS_CR_TRIM;
+    108            
+    109            /* Set the TRIM[5:0] bits according to CRS_HSI48CalibrationValue value */
+    110            CRS->CR |= (uint32_t)((uint32_t)CRS_HSI48CalibrationValue << 8);
+    111          
+    112          }
+    113          
+    114          /**
+    115            * @brief  Enables or disables the oscillator clock for frequency error counter.
+    116            * @note   when the CEN bit is set the CRS_CFGR register becomes write-protected.
+    117            * @param  NewState: new state of the frequency error counter.
+    118            *          This parameter can be: ENABLE or DISABLE.
+    119            * @retval None
+    120            */
+    121          void CRS_FrequencyErrorCounterCmd(FunctionalState NewState)
+    122          {
+    123            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    124          
+    125            if (NewState != DISABLE)
+    126            {
+    127               CRS->CR |= CRS_CR_CEN;
+    128            }
+    129            else
+    130            {
+    131              CRS->CR &= ~CRS_CR_CEN;
+    132            }
+    133          }
+    134          
+    135          /**
+    136            * @brief  Enables or disables the automatic hardware adjustement of TRIM bits.
+    137            * @note   When the AUTOTRIMEN bit is set the CRS_CFGR register becomes write-protected.
+    138            * @param  NewState: new state of the automatic trimming.
+    139            *          This parameter can be: ENABLE or DISABLE.
+    140            * @retval None
+    141            */
+    142          void CRS_AutomaticCalibrationCmd(FunctionalState NewState)
+    143          {
+    144            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    145          
+    146            if (NewState != DISABLE)
+    147            {
+    148              CRS->CR |= CRS_CR_AUTOTRIMEN;
+    149            }
+    150          else
+    151            {
+    152              CRS->CR &= ~CRS_CR_AUTOTRIMEN;
+    153            }
+    154          }
+    155          
+    156          /**
+    157            * @brief  Generate the software synchronization event
+    158            * @param  None
+    159            * @retval None
+    160            */
+    161          void CRS_SoftwareSynchronizationGenerate(void)
+    162          {
+    163            CRS->CR |= CRS_CR_SWSYNC;
+    164          }
+    165          
+    166          /**
+    167            * @brief  Adjusts the Internal High Speed 48 oscillator (HSI 48) calibration value.
+    168            * @note   The calibration is used to compensate for the variations in voltage
+    169            *         and temperature that influence the frequency of the internal HSI48 RC.
+    170            * @note   This function can be called only when the CEN bit is reset.
+    171            * @param  CRS_ReloadValue: specifies the HSI calibration trimming value.
+    172            *          This parameter must be a number between 0 and .
+    173            * @retval None
+    174            */
+    175          void CRS_FrequencyErrorCounterReload(uint32_t CRS_ReloadValue)
+    176          {
+    177           
+    178            /* Clear RELOAD[15:0] bits */
+    179            CRS->CFGR &= ~CRS_CFGR_RELOAD;
+    180            
+    181            /* Set the RELOAD[15:0] bits according to CRS_ReloadValue value */
+    182            CRS->CFGR |= (uint32_t)CRS_ReloadValue;
+    183          
+    184          }
+    185          
+    186          /**
+    187            * @brief  
+    188            * @note   This function can be called only when the CEN bit is reset.
+    189            * @param  CRS_ErrorLimitValue: specifies the HSI calibration trimming value.
+    190            *          This parameter must be a number between 0 and .
+    191            * @retval None
+    192            */
+    193          void CRS_FrequencyErrorLimitConfig(uint8_t CRS_ErrorLimitValue)
+    194          {
+    195            /* Clear FELIM[7:0] bits */
+    196            CRS->CFGR &= ~CRS_CFGR_FELIM;
+    197            
+    198            /* Set the FELIM[7:0] bits according to CRS_ErrorLimitValue value */
+    199            CRS->CFGR |= (uint32_t)CRS_ErrorLimitValue;
+    200          }
+    201          
+    202          /**
+    203            * @brief  
+    204            * @note   This function can be called only when the CEN bit is reset.
+    205            * @param  CRS_Prescaler: specifies the HSI calibration trimming value.
+    206            *          This parameter can be one of the following values:
+    207            *            @arg CRS_SYNC_Div1:   
+    208            *            @arg CRS_SYNC_Div2:   
+    209            *            @arg CRS_SYNC_Div4:   
+    210            *            @arg CRS_SYNC_Div8:   
+    211            *            @arg CRS_SYNC_Div16:  
+    212            *            @arg CRS_SYNC_Div32:  
+    213            *            @arg CRS_SYNC_Div64: 
+    214            *            @arg CRS_SYNC_Div128: 
+    215            * @retval None
+    216            */
+    217          void CRS_SynchronizationPrescalerConfig(uint32_t CRS_Prescaler)
+    218          {
+    219            /* Check the parameters */
+    220            assert_param(IS_CRS_SYNC_DIV(CRS_Prescaler));
+    221            
+    222            /* Clear SYNCDIV[2:0] bits */
+    223            CRS->CFGR &= ~CRS_CFGR_SYNCDIV;
+    224            
+    225            /* Set the CRS_CFGR_SYNCDIV[2:0] bits according to CRS_Prescaler value */
+    226            CRS->CFGR |= CRS_Prescaler;
+    227          }
+    228          
+    229          /**
+    230            * @brief  
+    231            * @note   This function can be called only when the CEN bit is reset.
+    232            * @param  CRS_Source: .
+    233            *          This parameter can be one of the following values:
+    234            *            @arg CRS_SYNCSource_GPIO:   
+    235            *            @arg CRS_SYNCSource_LSE:   
+    236            *            @arg CRS_SYNCSource_USB:   
+    237            * @retval None
+    238            */
+    239          void CRS_SynchronizationSourceConfig(uint32_t CRS_Source)
+    240          {
+    241            /* Check the parameters */
+    242            assert_param(IS_CRS_SYNC_SOURCE(CRS_Source));
+    243            
+    244            /* Clear SYNCSRC[1:0] bits */
+    245            CRS->CFGR &= ~CRS_CFGR_SYNCSRC;
+    246            
+    247            /* Set the SYNCSRC[1:0] bits according to CRS_Source value */
+    248            CRS->CFGR |= CRS_Source;
+    249          }
+    250          
+    251          /**
+    252            * @brief  
+    253            * @note   This function can be called only when the CEN bit is reset.
+    254            * @param  CRS_Polarity: .
+    255            *          This parameter can be one of the following values:
+    256            *            @arg CRS_SYNCPolarity_Rising:   
+    257            *            @arg CRS_SYNCPolarity_Falling:   
+    258            * @retval None
+    259            */
+    260          void CRS_SynchronizationPolarityConfig(uint32_t CRS_Polarity)
+    261          {
+    262            /* Check the parameters */
+    263            assert_param(IS_CRS_SYNC_POLARITY(CRS_Polarity));
+    264            
+    265            /* Clear SYNCSPOL bit */
+    266            CRS->CFGR &= ~CRS_CFGR_SYNCPOL;
+    267            
+    268            /* Set the SYNCSPOL bits according to CRS_Polarity value */
+    269            CRS->CFGR |= CRS_Polarity;
+    270          }
+    271          
+    272          /**
+    273            * @brief  Returns the Relaod value.
+    274            * @param  None
+    275            * @retval The reload value 
+    276            */
+    277          uint32_t CRS_GetReloadValue(void)
+    278          {
+    279            return ((uint32_t)(CRS->CFGR & CRS_CFGR_RELOAD));
+    280          }
+    281          
+    282          /**
+    283            * @brief  Returns the HSI48 Calibration value.
+    284            * @param  None
+    285            * @retval The reload value 
+    286            */
+    287          uint32_t CRS_GetHSI48CalibrationValue(void)
+    288          {
+    289            return (((uint32_t)(CRS->CR & CRS_CR_TRIM)) >> 8);
+    290          }
+    291          
+    292          /**
+    293            * @brief  Returns the frequency error capture.
+    294            * @param  None
+    295            * @retval The frequency error capture value 
+    296            */
+    297          uint32_t CRS_GetFrequencyErrorValue(void)
+    298          {
+    299            return ((uint32_t)(CRS->ISR & CRS_ISR_FECAP));
+    300          }
+    301          
+    302          /**
+    303            * @brief  Returns the frequency error direction.
+    304            * @param  None
+    305            * @retval The frequency error direction. The returned value can be one 
+    306            *         of the following values:
+    307            *           - 0x00: Up counting
+    308            *           - 0x8000: Down counting   
+    309            */
+    310          uint32_t CRS_GetFrequencyErrorDirection(void)
+    311          {
+    312            return ((uint32_t)(CRS->ISR & CRS_ISR_FEDIR));
+    313          }
+    314          
+    315          /** @defgroup CRS_Group2 Interrupts and flags management functions
+    316           *  @brief   Interrupts and flags management functions 
+    317           *
+    318          @verbatim
+    319           ===============================================================================
+    320                       ##### Interrupts and flags management functions #####
+    321           ===============================================================================
+    322          @endverbatim
+    323            * @{
+    324            */
+    325          /**
+    326            * @brief  Enables or disables the specified CRS interrupts.
+    327            * @param  CRS_IT: specifies the RCC interrupt sources to be enabled or disabled.
+    328            *          This parameter can be any combination of the following values:
+    329            *              @arg CRS_IT_SYNCOK: 
+    330            *              @arg CRS_IT_SYNCWARN: 
+    331            *              @arg CRS_IT_ERR: 
+    332            *              @arg CRS_IT_ESYNC: 
+    333            * @param  NewState: new state of the specified CRS interrupts.
+    334            *          This parameter can be: ENABLE or DISABLE.
+    335            * @retval None
+    336            */
+    337          void CRS_ITConfig(uint32_t CRS_IT, FunctionalState NewState)
+    338          {
+    339            /* Check the parameters */
+    340            assert_param(IS_CRS_IT(CRS_IT));
+    341            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    342            
+    343            if (NewState != DISABLE)
+    344            {
+    345              CRS->CR |= CRS_IT;
+    346            }
+    347            else
+    348            {
+    349              CRS->CR &= ~CRS_IT;
+    350            }
+    351          }
+    352          
+    353          /**
+    354            * @brief  Checks whether the specified CRS flag is set or not.
+    355            * @param  CRS_FLAG: specifies the flag to check.
+    356            *          This parameter can be one of the following values:
+    357            *              @arg CRS_FLAG_SYNCOK: 
+    358            *              @arg CRS_FLAG_SYNCWARN: 
+    359            *              @arg CRS_FLAG_ERR: 
+    360            *              @arg CRS_FLAG_ESYNC:   
+    361            *              @arg CRS_FLAG_TRIMOVF: 
+    362            *              @arg CRS_FLAG_SYNCERR: 
+    363            *              @arg CRS_FLAG_SYNCMISS: 
+    364            * @retval The new state of CRS_FLAG (SET or RESET).
+    365            */
+    366          FlagStatus CRS_GetFlagStatus(uint32_t CRS_FLAG)
+    367          {
+    368            /* Check the parameters */
+    369            assert_param(IS_CRS_FLAG(CRS_FLAG));
+    370          
+    371            return ((FlagStatus)(CRS->ISR & CRS_FLAG));
+    372          }
+    373          
+    374          /**
+    375            * @brief  Clears the CRS specified FLAG.
+    376            * @param  CRS_FLAG: specifies the flag to check.
+    377            *          This parameter can be one of the following values:
+    378            *              @arg CRS_FLAG_SYNCOK: 
+    379            *              @arg CRS_FLAG_SYNCWARN: 
+    380            *              @arg CRS_FLAG_ERR: 
+    381            *              @arg CRS_FLAG_ESYNC:   
+    382            *              @arg CRS_FLAG_TRIMOVF: 
+    383            *              @arg CRS_FLAG_SYNCERR: 
+    384            *              @arg CRS_FLAG_SYNCMISS: 
+    385            * @retval None
+    386            */
+    387          void CRS_ClearFlag(uint32_t CRS_FLAG)
+    388          {
+    389            /* Check the parameters */
+    390            assert_param(IS_CRS_FLAG(CRS_FLAG));
+    391            
+    392            if ((CRS_FLAG & FLAG_MASK)!= 0)
+    393            {
+    394              CRS->ICR |= CRS_ICR_ERRC;  
+    395            }
+    396            else
+    397            {
+    398              CRS->ICR |= CRS_FLAG;
+    399            }
+    400          }
+    401          
+    402          /**
+    403            * @brief  Checks whether the specified CRS IT pending bit is set or not.
+    404            * @param  CRS_IT: specifies the IT pending bit to check.
+    405            *          This parameter can be one of the following values:
+    406            *              @arg CRS_IT_SYNCOK: 
+    407            *              @arg CRS_IT_SYNCWARN: 
+    408            *              @arg CRS_IT_ERR: 
+    409            *              @arg CRS_IT_ESYNC:   
+    410            *              @arg CRS_IT_TRIMOVF: 
+    411            *              @arg CRS_IT_SYNCERR: 
+    412            *              @arg CRS_IT_SYNCMISS: 
+    413            * @retval The new state of CRS_IT (SET or RESET).
+    414            */
+    415          ITStatus CRS_GetITStatus(uint32_t CRS_IT)
+    416          {
+    417            /* Check the parameters */
+    418            assert_param(IS_CRS_GET_IT(CRS_IT));
+    419          
+    420            return ((ITStatus)(CRS->ISR & CRS_IT));
+    421          }
+    422          
+    423          /**
+    424            * @brief  Clears the CRS specified IT pending bi.
+    425            * @param  CRS_FLAG: specifies the IT pending bi to clear.
+    426            *          This parameter can be one of the following values:
+    427            *              @arg CRS_IT_SYNCOK: 
+    428            *              @arg CRS_IT_SYNCWARN: 
+    429            *              @arg CRS_IT_ERR: 
+    430            *              @arg CRS_IT_ESYNC:   
+    431            *              @arg CRS_IT_TRIMOVF: 
+    432            *              @arg CRS_IT_SYNCERR: 
+    433            *              @arg CRS_IT_SYNCMISS: 
+    434            * @retval None
+    435            */
+    436          void CRS_ClearITPendingBit(uint32_t CRS_IT)
+    437          {
+    438            /* Check the parameters */
+    439            assert_param(IS_CRS_CLEAR_IT(CRS_IT));
+    440            
+    441            if ((CRS_IT & FLAG_MASK)!= 0)
+    442            {
+    443              CRS->ICR |= CRS_ICR_ERRC;  
+    444            }
+    445            else
+    446            {
+    447              CRS->ICR |= CRS_IT;
+    448            }
+    449          }
+    450          /**
+    451            * @}
+    452            */
+    453            
+    454          /**
+    455            * @}
+    456            */
+    457          
+    458          /**
+    459            * @}
+    460            */
+    461          
+    462          /**
+    463            * @}
+    464            */
+    465          
+    466          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   CRS_AdjustHSI48CalibrationValue
+       0   CRS_AutomaticCalibrationCmd
+       0   CRS_ClearFlag
+       0   CRS_ClearITPendingBit
+       8   CRS_DeInit
+         8   -> RCC_APB1PeriphResetCmd
+       0   CRS_FrequencyErrorCounterCmd
+       0   CRS_FrequencyErrorCounterReload
+       0   CRS_FrequencyErrorLimitConfig
+       0   CRS_GetFlagStatus
+       0   CRS_GetFrequencyErrorDirection
+       0   CRS_GetFrequencyErrorValue
+       0   CRS_GetHSI48CalibrationValue
+       0   CRS_GetITStatus
+       0   CRS_GetReloadValue
+       0   CRS_ITConfig
+       0   CRS_SoftwareSynchronizationGenerate
+       0   CRS_SynchronizationPolarityConfig
+       0   CRS_SynchronizationPrescalerConfig
+       0   CRS_SynchronizationSourceConfig
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable17
+       4  ??DataTable17_1
+       4  ??DataTable17_2
+       4  ??DataTable17_3
+       4  ??DataTable17_4
+       4  ??DataTable17_5
+       4  ??DataTable17_6
+       4  ??DataTable17_7
+      12  ?Subroutine0
+      10  ?Subroutine1
+      10  ?Subroutine2
+      16  CRS_AdjustHSI48CalibrationValue
+      20  CRS_AutomaticCalibrationCmd
+      14  CRS_ClearFlag
+      14  CRS_ClearITPendingBit
+      24  CRS_DeInit
+      20  CRS_FrequencyErrorCounterCmd
+      12  CRS_FrequencyErrorCounterReload
+       8  CRS_FrequencyErrorLimitConfig
+       2  CRS_GetFlagStatus
+      12  CRS_GetFrequencyErrorDirection
+      10  CRS_GetFrequencyErrorValue
+      10  CRS_GetHSI48CalibrationValue
+       2  CRS_GetITStatus
+       8  CRS_GetReloadValue
+      20  CRS_ITConfig
+      12  CRS_SoftwareSynchronizationGenerate
+      12  CRS_SynchronizationPolarityConfig
+       6  CRS_SynchronizationPrescalerConfig
+       8  CRS_SynchronizationSourceConfig
+
+ 
+ 294 bytes in section .text
+ 
+ 294 bytes of CODE memory
+
+Errors: none
+Warnings: none

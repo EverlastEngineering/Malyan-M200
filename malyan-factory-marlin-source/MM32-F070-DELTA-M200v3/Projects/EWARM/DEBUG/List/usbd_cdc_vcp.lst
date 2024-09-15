@@ -1,0 +1,420 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_cdc_vcp.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW484A.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_cdc_vcp.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_cdc_vcp.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_cdc_vcp.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_cdc_vcp.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_cdc_vcp.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   Generic media access Layer.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_cdc_vcp.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          LINE_CODING linecoding =
+     36            {
+     37              100, /* baud rate*/
+     38              0x00,   /* stop bits-1*/
+     39              0x00,   /* parity - none*/
+     40              0x08    /* nb. of bits 8*/
+     41            };
+     42          
+     43          uint8_t com_opened;
+     44          
+     45          USART_InitTypeDef USART_InitStructure;
+     46          
+     47          /* These are external variables imported from CDC core to be used for IN 
+     48             transfer management. */
+     49          extern uint8_t  APP_Rx_Buffer []; /* Write CDC received data in this buffer.
+     50                                               These data will be sent over USB IN endpoint
+     51                                               in the CDC core functions. */
+     52          extern uint32_t APP_Rx_ptr_in,APP_Rx_ptr_out;    /* Increment this pointer or roll it back to
+     53                                               start address when writing received data
+     54                                               in the buffer APP_Rx_Buffer. */
+     55          
+     56          /* Private function prototypes -----------------------------------------------*/
+     57          static uint16_t VCP_Init     (void);
+     58          static uint16_t VCP_DeInit   (void);
+     59          static uint16_t VCP_Ctrl     (uint32_t Cmd, uint8_t* Buf, uint32_t Len);
+     60          static uint16_t VCP_DataTx   (uint8_t* Buf, uint32_t Len);
+     61          static uint16_t VCP_DataRx   (uint8_t* Buf, uint32_t Len);
+     62          
+     63          static uint16_t VCP_COMConfig(uint8_t Conf);
+     64          
+     65          CDC_IF_Prop_TypeDef VCP_fops = 
+     66          {
+     67            VCP_Init,
+     68            VCP_DeInit,
+     69            VCP_Ctrl,
+     70            VCP_DataTx,
+     71            VCP_DataRx
+     72          };
+     73          
+     74          /* Private functions ---------------------------------------------------------*/
+     75          /**
+     76            * @brief  VCP_Init
+     77            *         Initializes the Media on the STM32
+     78            * @param  None
+     79            * @retval Result of the operation (USBD_OK in all cases)
+     80            */
+     81          static uint16_t VCP_Init(void)
+     82          {
+     83            
+     84            return USBD_OK;
+     85          }
+     86          
+     87          /**
+     88            * @brief  VCP_DeInit
+     89            *         DeInitializes the Media on the STM32
+     90            * @param  None
+     91            * @retval Result of the opeartion (USBD_OK in all cases)
+     92            */
+     93          static uint16_t VCP_DeInit(void)
+     94          {
+     95          
+     96            return USBD_OK;
+     97          }
+     98          
+     99          
+    100          /**
+    101            * @brief  VCP_Ctrl
+    102            *         Manage the CDC class requests
+    103            * @param  Cmd: Command code            
+    104            * @param  Buf: Buffer containing command data (request parameters)
+    105            * @param  Len: Number of data to be sent (in bytes)
+    106            * @retval Result of the operation (USBD_OK in all cases)
+    107            */
+    108          static uint16_t VCP_Ctrl (uint32_t Cmd, uint8_t* Buf, uint32_t Len)
+    109          { 
+    110            switch (Cmd)
+    111            {
+    112            case SEND_ENCAPSULATED_COMMAND:
+    113              /* Not  needed for this driver */
+    114              break;
+    115          
+    116            case GET_ENCAPSULATED_RESPONSE:
+    117              /* Not  needed for this driver */
+    118              break;
+    119          
+    120            case SET_COMM_FEATURE:
+    121              /* Not  needed for this driver */
+    122              break;
+    123          
+    124            case GET_COMM_FEATURE:
+    125              /* Not  needed for this driver */
+    126              break;
+    127          
+    128            case CLEAR_COMM_FEATURE:
+    129              /* Not  needed for this driver */
+    130              break;
+    131          
+    132            case SET_LINE_CODING:
+    133              linecoding.bitrate = (uint32_t)(Buf[0] | (Buf[1] << 8) | (Buf[2] << 16) | (Buf[3] << 24));
+    134              linecoding.format = Buf[4];
+    135              linecoding.paritytype = Buf[5];
+    136              linecoding.datatype = Buf[6];
+    137              /* Set the new configuration */
+    138              VCP_COMConfig(OTHER_CONFIG);
+    139              break;
+    140          
+    141            case GET_LINE_CODING:
+    142              Buf[0] = (uint8_t)(linecoding.bitrate);
+    143              Buf[1] = (uint8_t)(linecoding.bitrate >> 8);
+    144              Buf[2] = (uint8_t)(linecoding.bitrate >> 16);
+    145              Buf[3] = (uint8_t)(linecoding.bitrate >> 24);
+    146              Buf[4] = linecoding.format;
+    147              Buf[5] = linecoding.paritytype;
+    148              Buf[6] = linecoding.datatype;
+    149              
+    150              //if (com_opened==1) linecoding.bitrate=100;
+    151              break;
+    152          
+    153            case SET_CONTROL_LINE_STATE:
+    154              if (Buf[0]&1)
+    155              {
+    156                  com_opened=1;
+    157                  
+    158              }
+    159              else
+    160              {
+    161                  com_opened=0;
+    162              }
+    163              /*if (linecoding.bitrate!=100)
+    164              {
+    165                  com_opened=1;
+    166                  linecoding.bitrate=100;
+    167              }
+    168              else com_opened=0;*/
+    169              /* Not  needed for this driver */
+    170              break;
+    171          
+    172            case SEND_BREAK:
+    173              /* Not  needed for this driver */
+    174              break;    
+    175              
+    176            default:
+    177              break;
+    178            }
+    179          
+    180            return USBD_OK;
+    181          }
+    182          
+    183          /**
+    184            * @brief  VCP_DataTx
+    185            *         CDC received data to be send over USB IN endpoint are managed in 
+    186            *         this function.
+    187            * @param  Buf: Buffer of data to be sent
+    188            * @param  Len: Number of data to be sent (in bytes)
+    189            * @retval Result of the operation: USBD_OK if all operations are OK else VCP_FAIL
+    190            */
+    191          static uint16_t VCP_DataTx (uint8_t* Buf, uint32_t Len)
+    192          {
+    193            /*if (linecoding.datatype == 7)
+    194            {
+    195              APP_Rx_Buffer[APP_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1) & 0x7F;
+    196            }
+    197            else if (linecoding.datatype == 8)
+    198            {
+    199              APP_Rx_Buffer[APP_Rx_ptr_in] = USART_ReceiveData(EVAL_COM1);
+    200            }*/
+    201            
+    202            APP_Rx_ptr_in++;
+    203            
+    204            /* To avoid buffer overflow */
+    205            if(APP_Rx_ptr_in == APP_RX_DATA_SIZE)
+    206            {
+    207              APP_Rx_ptr_in = 0;
+    208            }  
+    209            
+    210            return USBD_OK;
+    211          }
+    212          
+    213          uint8_t bDeviceState=0;
+    214          #define CONFIGURED      5
+    215          extern USB_CORE_HANDLE  USB_Device_dev;
+    216          
+    217          #define MAX_TXLINE_LEN  32
+    218          uint8_t line_buff[MAX_TXLINE_LEN];
+    219          uint8_t line_buff_pos=0;
+    220          
+    221          void CDC_Send_DATA(uint8_t *ptrBuffer, uint8_t Send_length)
+    222          {
+    223              //extern unsigned long systick_count;
+    224              //unsigned long timeout=systick_count+1000;
+    225              //if (bDeviceState!=CONFIGURED) return;
+    226              if (com_opened==0) return;
+    227              for (uint8_t i=0;i<Send_length;i++)
+    228              {
+    229                  line_buff[line_buff_pos] = ptrBuffer[i];
+    230                  line_buff_pos++;
+    231                  if (ptrBuffer[i]=='\n' || line_buff_pos>=MAX_TXLINE_LEN)
+    232                  {
+    233                      while ((GetEPTxStatus(ENDP1) != EP_TX_NAK)) {IWDG_ReloadCounter();}//if (t++>100000) {com_opened=0;return;}}
+    234                      DCD_EP_Tx (&USB_Device_dev, CDC_IN_EP, (uint8_t*)line_buff, line_buff_pos);
+    235                      line_buff_pos=0;
+    236                  }
+    237              }
+    238          }
+    239          
+    240          void CDC_Send_DATA_str(uint8_t *ptrBuffer)
+    241          {
+    242              //extern unsigned long systick_count;
+    243              //unsigned long timeout=systick_count+1000;
+    244              //if (bDeviceState!=CONFIGURED) return;
+    245              if (com_opened==0) return;
+    246              for (uint32_t i=0;i<128;i++)
+    247              {
+    248                  if (ptrBuffer[i]==0) return;
+    249                  
+    250                  line_buff[line_buff_pos] = ptrBuffer[i];
+    251                  line_buff_pos++;
+    252                  if (ptrBuffer[i]=='\n' || line_buff_pos>=MAX_TXLINE_LEN)
+    253                  {
+    254                      while ((GetEPTxStatus(ENDP1) != EP_TX_NAK)) {IWDG_ReloadCounter();}//if (t++>100000) {com_opened=0;return;}}
+    255                      DCD_EP_Tx (&USB_Device_dev, CDC_IN_EP, (uint8_t*)line_buff, line_buff_pos);
+    256                      line_buff_pos=0;
+    257                  }
+    258              }
+    259          }
+    260          
+    261          /**
+    262            * @brief  VCP_DataRx
+    263            *         Data received over USB OUT endpoint are sent over CDC interface 
+    264            *         through this function.
+    265            * @note   This function will block any OUT packet reception on USB endpoint 
+    266            *         untill exiting this function. If you exit this function before transfer
+    267            *         is complete on CDC interface (ie. using DMA controller) it will result 
+    268            *         in receiving more data while previous ones are still not sent.
+    269            *                 
+    270            * @param  Buf: Buffer of data to be received
+    271            * @param  Len: Number of data received (in bytes)
+    272            * @retval Result of the operation: USBD_OK if all operations are OK else VCP_FAIL
+    273            */
+    274          static uint16_t VCP_DataRx (uint8_t* Buf, uint32_t Len)
+    275          {
+    276            uint32_t i;
+    277            
+    278            for (i = 0; i < Len; i++)
+    279            {
+    280              store_char_usb(Buf[i]);
+    281              //USART_SendData(EVAL_COM1, *(Buf + i) );
+    282              //while(USART_GetFlagStatus(EVAL_COM1, USART_FLAG_TXE) == RESET); 
+    283            } 
+    284           
+    285            return USBD_OK;
+    286          }
+    287          
+    288          /**
+    289            * @brief  VCP_COMConfig
+    290            *         Configure the COM Port with default values or values received from host.
+    291            * @param  Conf: can be DEFAULT_CONFIG to set the default configuration or OTHER_CONFIG
+    292            *         to set a configuration received from the host.
+    293            * @retval None.
+    294            */
+    295          static uint16_t VCP_COMConfig(uint8_t Conf)
+    296          {
+    297            if (Conf == DEFAULT_CONFIG)  
+    298            {
+    299            }
+    300            extern bool sdprinting;
+    301            if (sdprinting==false) store_char_usb('\n');
+    302            return USBD_OK;
+    303          }
+    304          
+    305          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      32   CDC_Send_DATA
+        32   -> DCD_EP_Tx
+        32   -> GetEPTxStatus
+        32   -> IWDG_ReloadCounter
+      24   CDC_Send_DATA_str
+        24   -> DCD_EP_Tx
+        24   -> GetEPTxStatus
+        24   -> IWDG_ReloadCounter
+       8   VCP_Ctrl
+         8   -> store_char_usb
+      16   VCP_DataRx
+        16   -> store_char_usb
+       0   VCP_DataTx
+       0   VCP_DeInit
+       0   VCP_Init
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+       4  ??DataTable4_3
+       4  ??DataTable4_4
+      92  CDC_Send_DATA
+      86  CDC_Send_DATA_str
+      24  USART_InitStructure
+     116  VCP_Ctrl
+      26  VCP_DataRx
+      22  VCP_DataTx
+       4  VCP_DeInit
+       4  VCP_Init
+      20  VCP_fops
+       1  bDeviceState
+      32  line_buff
+      10  linecoding
+          com_opened
+          line_buff_pos
+
+ 
+  57 bytes in section .bss
+  30 bytes in section .data
+ 370 bytes in section .text
+ 
+ 370 bytes of CODE memory
+  87 bytes of DATA memory
+
+Errors: none
+Warnings: 2

@@ -1,0 +1,540 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      18/Jul/2017  22:40:20 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt #
+#                    \SEGGER_RTT_printf.c                                     #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt #
+#                    \SEGGER_RTT_printf.c -D USE_STDPERIPH_DRIVER -D          #
+#                    USE_STM32072B_EVAL -D STM32F072 -D PRINT_INFO -lcN       #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\ -o D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\DEBUG\Obj\ --debug --endian=little          #
+#                    --cpu=Cortex-M0 -e --fpu=None --dlib_config "C:\Program  #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\INC\c\DLib_Config_Normal.h" -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\E #
+#                    WARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\src\fs\ -I                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --use_c++_inline -I "C:\Program   #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\CMSIS\Include\" --relaxed_fp                     #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\SEGGER_RTT_printf.lst                          #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\SEGGER_RTT_printf.o                             #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\rtt\SEGGER_RTT_printf.c
+      1          /*********************************************************************
+      2          *              SEGGER MICROCONTROLLER GmbH & Co. KG                  *
+      3          *        Solutions for real time microcontroller applications        *
+      4          **********************************************************************
+      5          *                                                                    *
+      6          *        (c) 2014-2014 SEGGER Microcontroller GmbH & Co. KG          *
+      7          *                                                                    *
+      8          *       Internet: www.segger.com Support: support@segger.com         *
+      9          *                                                                    *
+     10          **********************************************************************
+     11          ----------------------------------------------------------------------
+     12          File    : SEGGER_RTT_printf.c
+     13          Date    : 17 Dec 2014
+     14          Purpose : Replacement for printf to write formatted data via RTT
+     15          ---------------------------END-OF-HEADER------------------------------
+     16          */
+     17          #include "SEGGER_RTT.h"
+     18          #include "SEGGER_RTT_Conf.h"
+     19          
+     20          /*********************************************************************
+     21          *
+     22          *       Defines, configurable
+     23          *
+     24          **********************************************************************
+     25          */
+     26          
+     27          #ifndef SEGGER_RTT_PRINTF_BUFFER_SIZE
+     28            #define SEGGER_RTT_PRINTF_BUFFER_SIZE (64)
+     29          #endif
+     30          
+     31          #include <stdlib.h>
+     32          #include <stdarg.h>
+     33          
+     34          
+     35          #define FORMAT_FLAG_LEFT_JUSTIFY   (1 << 0)
+     36          #define FORMAT_FLAG_PAD_ZERO       (1 << 1)
+     37          #define FORMAT_FLAG_PRINT_SIGN     (1 << 2)
+     38          #define FORMAT_FLAG_ALTERNATE      (1 << 3)
+     39          
+     40          /*********************************************************************
+     41          *
+     42          *       Types
+     43          *
+     44          **********************************************************************
+     45          */
+     46          
+     47          typedef struct {
+     48            char* pBuffer;
+     49            int   BufferSize;
+     50            int   Cnt;
+     51          
+     52            int   ReturnValue;
+     53          
+     54            unsigned RTTBufferIndex;
+     55          } SEGGER_RTT_PRINTF_DESC;
+     56          
+     57          /*********************************************************************
+     58          *
+     59          *       Function prototypes
+     60          *
+     61          **********************************************************************
+     62          */
+     63          int SEGGER_RTT_vprintf(unsigned BufferIndex, const char * sFormat, va_list * pParamList);
+     64          
+     65          /*********************************************************************
+     66          *
+     67          *       Static code
+     68          *
+     69          **********************************************************************
+     70          */
+     71          /*********************************************************************
+     72          *
+     73          *       _StoreChar
+     74          */
+     75          static void _StoreChar(SEGGER_RTT_PRINTF_DESC * p, char c) {
+     76            int Cnt;
+     77          
+     78            Cnt = p->Cnt;
+     79            if ((Cnt + 1) <= p->BufferSize) {
+     80              *(p->pBuffer + Cnt) = c;
+     81              p->Cnt = Cnt + 1;
+     82              p->ReturnValue++;
+     83            }
+     84            //
+     85            // Write part of string, when the buffer is full
+     86            //
+     87            if (p->Cnt == p->BufferSize) {
+     88              if (SEGGER_RTT_Write(p->RTTBufferIndex, p->pBuffer, p->Cnt) != p->Cnt) {
+     89                p->ReturnValue = -1;
+     90              } else {
+     91                p->Cnt = 0;
+     92              }
+     93            }
+     94          }
+     95          
+     96          /*********************************************************************
+     97          *
+     98          *       _PrintUnsigned
+     99          */
+    100          static void _PrintUnsigned(SEGGER_RTT_PRINTF_DESC * pBufferDesc, unsigned v, unsigned Base, int NumDigits, unsigned FieldWidth, unsigned FormatFlags) {
+    101            static const char _aV2C[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+    102            unsigned Div;
+    103            unsigned Digit = 1;
+    104            unsigned Number;
+    105            unsigned Width;
+    106            char c;
+    107          
+    108            Number = v;
+    109          
+    110            //
+    111            // Get actual field width
+    112            //
+    113            Width = 1;
+    114            while (Number >= Base) {
+    115              Number = (Number / Base);
+    116              Width++;
+    117            }
+    118            if ((unsigned)NumDigits > Width) {
+    119              Width = NumDigits;
+    120            }
+    121            //
+    122            // Print leading chars if necessary
+    123            //
+    124            if ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) == 0) {
+    125              if (FieldWidth != 0) {
+    126                if (((FormatFlags & FORMAT_FLAG_PAD_ZERO) == FORMAT_FLAG_PAD_ZERO) && (NumDigits == 0)) {
+    127                  c = '0';
+    128                } else {
+    129                  c = ' ';
+    130                }
+    131                while ((FieldWidth != 0) && (Width < FieldWidth--)) {
+    132                  _StoreChar(pBufferDesc, c);
+    133                  if (pBufferDesc->ReturnValue < 0) {
+    134                    return;
+    135                  }
+    136                }
+    137              }
+    138            }
+    139            //
+    140            // Count how many digits are required by precision
+    141            //
+    142            while (((v / Digit) >= Base) | (NumDigits-- > 1)) {
+    143              Digit *= Base;
+    144            }
+    145            //
+    146            // Output digits
+    147            //
+    148            do {
+    149              Div = v / Digit;
+    150              v -= Div * Digit;
+    151              _StoreChar(pBufferDesc, _aV2C[Div]);
+    152              if (pBufferDesc->ReturnValue < 0) {
+    153                break;
+    154              }
+    155              Digit /= Base;
+    156            } while (Digit);
+    157            //
+    158            // Print trailing spaces if necessary
+    159            //
+    160            if ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) == FORMAT_FLAG_LEFT_JUSTIFY) {
+    161              if (FieldWidth != 0) {
+    162                while ((FieldWidth != 0) && (Width < FieldWidth--)) {
+    163                  _StoreChar(pBufferDesc, ' ');
+    164                  if (pBufferDesc->ReturnValue < 0) {
+    165                    return;
+    166                  }
+    167                }
+    168              }
+    169            }
+    170          }
+    171          
+    172          /*********************************************************************
+    173          *
+    174          *       _PrintInt
+    175          */
+    176          static void _PrintInt(SEGGER_RTT_PRINTF_DESC * pBufferDesc, int v, unsigned Base, unsigned NumDigits, unsigned FieldWidth, unsigned FormatFlags) {
+    177            unsigned Width;
+    178            unsigned Number;
+    179          
+    180            Number = (v < 0) ? -v : v;
+    181          
+    182            //
+    183            // Get actual field width
+    184            //
+    185            Width = 1;
+    186            while (Number >= Base) {
+    187              Number = (Number / Base);
+    188              Width++;
+    189            }
+    190            if (NumDigits > Width) {
+    191              Width = NumDigits;
+    192            }
+    193            if ((FieldWidth > 0) && ((v < 0) || ((FormatFlags & FORMAT_FLAG_PRINT_SIGN) == FORMAT_FLAG_PRINT_SIGN))) {
+    194              FieldWidth--;
+    195            }
+    196          
+    197            //
+    198            // Print leading spaces if necessary
+    199            //
+    200            if ((((FormatFlags & FORMAT_FLAG_PAD_ZERO) == 0) || (NumDigits != 0)) && ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) == 0)) {
+    201              if (FieldWidth != 0) {
+    202                while ((FieldWidth != 0) && (Width < FieldWidth--)) {
+    203                  _StoreChar(pBufferDesc, ' ');
+    204                  if (pBufferDesc->ReturnValue < 0) {
+    205                    return;
+    206                  }
+    207                }
+    208              }
+    209            }
+    210            //
+    211            // Print sign if necessary
+    212            //
+    213            if (v < 0) {
+    214              v = -v;
+    215              _StoreChar(pBufferDesc, '-');
+    216              if (pBufferDesc->ReturnValue < 0) {
+    217                return;
+    218              }
+    219            } else if ((FormatFlags & FORMAT_FLAG_PRINT_SIGN) == FORMAT_FLAG_PRINT_SIGN) {
+    220              _StoreChar(pBufferDesc, '+');
+    221              if (pBufferDesc->ReturnValue < 0) {
+    222                return;
+    223              }
+    224            }
+    225            //
+    226            // Print leading zeros if necessary
+    227            //
+    228            if (((FormatFlags & FORMAT_FLAG_PAD_ZERO) == FORMAT_FLAG_PAD_ZERO) && ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) == 0) && (NumDigits == 0)) {
+    229              if (FieldWidth != 0) {
+    230                while ((FieldWidth != 0) && (Width < FieldWidth--)) {
+    231                  _StoreChar(pBufferDesc, '0');
+    232                  if (pBufferDesc->ReturnValue < 0) {
+    233                    return;
+    234                  }
+    235                }
+    236              }
+    237            }
+    238          
+    239            //
+    240            // Print number without sign
+    241            //
+    242            _PrintUnsigned(pBufferDesc, v, Base, NumDigits, FieldWidth, FormatFlags);
+    243          }
+    244          
+    245          /*********************************************************************
+    246          *
+    247          *       Public code
+    248          *
+    249          **********************************************************************
+    250          */
+    251          /*********************************************************************
+    252          *
+    253          *       SEGGER_RTT_vprintf
+    254          *
+    255          *  Function description
+    256          *    Stores a formatted string in SEGGER RTT control block.
+    257          *    This data is read by the host.
+    258          *
+    259          *  Parameters
+    260          *    BufferIndex  Index of "Up"-buffer to be used. (e.g. 0 for "Terminal")
+    261          *    sFormat      Pointer to format string
+    262          *    pParamList   Pointer to the list of arguments for the format string
+    263          *
+    264          *  Return values
+    265          *    >= 0:  Number of bytes which have been stored in the "Up"-buffer.
+    266          *     < 0:  Error
+    267          */
+    268          int SEGGER_RTT_vprintf(unsigned BufferIndex, const char * sFormat, va_list * pParamList) {
+    269            char c;
+    270            SEGGER_RTT_PRINTF_DESC BufferDesc;
+    271            int v;
+    272            unsigned NumDigits;
+    273            unsigned FormatFlags;
+    274            unsigned FieldWidth;
+    275            char acBuffer[SEGGER_RTT_PRINTF_BUFFER_SIZE];
+    276          
+    277            BufferDesc.pBuffer        = acBuffer;
+    278            BufferDesc.BufferSize     = SEGGER_RTT_PRINTF_BUFFER_SIZE;
+    279            BufferDesc.Cnt            = 0;
+    280            BufferDesc.RTTBufferIndex = BufferIndex;
+    281            BufferDesc.ReturnValue    = 0;
+    282          
+    283            do {
+    284              c = *sFormat++;
+    285              if (c == 0) {
+    286                break;
+    287              }
+    288              if (c == '%') {
+    289                //
+    290                // Filter out flags
+    291                //
+    292                FormatFlags = 0;
+    293                do {
+    294                  c = *sFormat;
+    295                  switch (c) {
+    296                  case '-': FormatFlags |= FORMAT_FLAG_LEFT_JUSTIFY; sFormat++; break;
+    297                  case '0': FormatFlags |= FORMAT_FLAG_PAD_ZERO;     sFormat++; break;
+    298                  case '+': FormatFlags |= FORMAT_FLAG_PRINT_SIGN;   sFormat++; break;
+    299                  case '#': FormatFlags |= FORMAT_FLAG_ALTERNATE;    sFormat++; break;
+    300                  default:  goto FilterFieldWidth;                   break;
+    301                  }
+    302                } while (1);
+    303                //
+    304                // filter out field with
+    305                //
+    306          FilterFieldWidth:
+    307                FieldWidth = 0;
+    308                do {
+    309                  c = *sFormat;
+    310                  if (c < '0' || c > '9') {
+    311                    break;
+    312                  }
+    313                  sFormat++;
+    314                  FieldWidth = FieldWidth * 10 + (c - '0');
+    315                } while (1);
+    316          
+    317                //
+    318                // Filter out precision (number of digits to display)
+    319                //
+    320                NumDigits = 0;
+    321                c = *sFormat;
+    322                if (c == '.') {
+    323                  sFormat++;
+    324                  do {
+    325                    c = *sFormat;
+    326                    if (c < '0' || c > '9') {
+    327                      break;
+    328                    }
+    329                    sFormat++;
+    330                    NumDigits = NumDigits * 10 + (c - '0');
+    331                  } while (1);
+    332                }
+    333                //
+    334                // Filter out length modifier
+    335                //
+    336                c = *sFormat;
+    337                do {
+    338                  if (c == 'l' || c == 'h') {
+    339                    c = *sFormat++;
+    340                    continue;
+    341                  }
+    342                  break;
+    343                } while (1);
+    344                //
+    345                // Handle specifiers
+    346                //
+    347                switch (c) {
+    348                case 'c': {
+    349                  char c0;
+    350                  v = va_arg(*pParamList, int);
+    351                  c0 = (char)v;
+    352                  _StoreChar(&BufferDesc, c0);
+    353                  break;
+    354                }
+    355                case 'd':
+    356                  v = va_arg(*pParamList, int);
+    357                  _PrintInt(&BufferDesc, v, 10, NumDigits, FieldWidth, FormatFlags);
+    358                  break;
+    359                case 'u':
+    360                  v = va_arg(*pParamList, int);
+    361                  _PrintUnsigned(&BufferDesc, v, 10, NumDigits, FieldWidth, FormatFlags);
+    362                  break;
+    363                case 'x':
+    364                case 'X':
+    365                  v = va_arg(*pParamList, int);
+    366                  _PrintUnsigned(&BufferDesc, v, 16, NumDigits, FieldWidth, FormatFlags);
+    367                  break;
+    368                case 's':
+    369                  {
+    370                    const char * s = va_arg(*pParamList, const char *);
+    371                    do {
+    372                      c = *s++;
+    373                      if (c == 0) {
+    374                        break;
+    375                      }
+    376                     _StoreChar(&BufferDesc, c);
+    377                    } while (BufferDesc.ReturnValue >= 0);
+    378                  }
+    379                  break;
+    380                case 'p':
+    381                  v = va_arg(*pParamList, int);
+    382                  _PrintUnsigned(&BufferDesc, v, 16, 8, 8, 0);
+    383                  break;
+    384                case '%':
+    385                  _StoreChar(&BufferDesc, '%');
+    386                  break;
+    387                }
+    388                sFormat++;
+    389              } else {
+    390                _StoreChar(&BufferDesc, c);
+    391              }
+    392            } while (BufferDesc.ReturnValue >= 0);
+    393          
+    394            if (BufferDesc.ReturnValue > 0) {
+    395              //
+    396              // Write remaining data, if any
+    397              //
+    398              if (BufferDesc.Cnt != 0) {
+    399                SEGGER_RTT_Write(BufferIndex, acBuffer, BufferDesc.Cnt);
+    400              }
+    401              BufferDesc.ReturnValue += BufferDesc.Cnt;
+    402            }
+    403            return BufferDesc.ReturnValue;
+    404          }
+    405          
+    406          /*********************************************************************
+    407          *
+    408          *       SEGGER_RTT_printf
+    409          *
+    410          *  Function description
+    411          *    Stores a formatted string in SEGGER RTT control block.
+    412          *    This data is read by the host.
+    413          *
+    414          *  Parameters
+    415          *    BufferIndex  Index of "Up"-buffer to be used. (e.g. 0 for "Terminal")
+    416          *    sFormat      Pointer to format string, followed by the arguments for conversion
+    417          *
+    418          *  Return values
+    419          *    >= 0:  Number of bytes which have been stored in the "Up"-buffer.
+    420          *     < 0:  Error
+    421          *
+    422          *  Notes
+    423          *    (1) Conversion specifications have following syntax:
+    424          *          %[flags][FieldWidth][.Precision]ConversionSpecifier
+    425          *    (2) Supported flags:
+    426          *          -: Left justify within the field width
+    427          *          +: Always print sign extension for signed conversions
+    428          *          0: Pad with 0 instead of spaces. Ignored when using '-'-flag or precision
+    429          *        Supported conversion specifiers:
+    430          *          c: Print the argument as one char
+    431          *          d: Print the argument as a signed integer
+    432          *          u: Print the argument as an unsigned integer
+    433          *          x: Print the argument as an hexadecimal integer
+    434          *          s: Print the string pointed to by the argument
+    435          *          p: Print the argument as an 8-digit hexadecimal integer. (Argument shall be a pointer to void.)
+    436          */
+    437          int SEGGER_RTT_printf(unsigned BufferIndex, const char * sFormat, ...) {
+    438            va_list ParamList;
+    439          
+    440            va_start(ParamList, sFormat);
+    441            return SEGGER_RTT_vprintf(BufferIndex, sFormat, &ParamList);
+    442          }
+    443          /*************************** End of file ****************************/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   SEGGER_RTT_printf
+        16   -> SEGGER_RTT_vprintf
+     120   SEGGER_RTT_vprintf
+       120   -> SEGGER_RTT_Write
+       120   -> _PrintInt
+       120   -> _PrintUnsigned
+       120   -> _StoreChar
+      40   _PrintInt
+        40   -> _PrintUnsigned
+        40   -> _StoreChar
+        40   -> __aeabi_uidiv
+      40   _PrintUnsigned
+        40   -> _StoreChar
+        40   -> __aeabi_uidiv
+       8   _StoreChar
+         8   -> SEGGER_RTT_Write
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      20  SEGGER_RTT_printf
+     378  SEGGER_RTT_vprintf
+     228  _PrintInt
+     236  _PrintUnsigned
+      62  _StoreChar
+      16  _aV2C
+
+ 
+ 940 bytes in section .text
+ 
+ 940 bytes of CODE memory
+
+Errors: none
+Warnings: none

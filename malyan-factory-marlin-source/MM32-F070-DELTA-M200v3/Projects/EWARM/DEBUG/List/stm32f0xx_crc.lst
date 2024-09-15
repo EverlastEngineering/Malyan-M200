@@ -1,0 +1,474 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:21
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crc.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4168.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crc.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32f0xx_crc.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_crc.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_crc.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f0xx_crc.c
+      4            * @author  MCD Application Team
+      5            * @version V1.3.0
+      6            * @date    16-January-2014
+      7            * @brief   This file provides firmware functions to manage the following 
+      8            *          functionalities of CRC computation unit peripheral:
+      9            *            + Configuration of the CRC computation unit
+     10            *            + CRC computation of one/many 32-bit data
+     11            *            + CRC Independent register (IDR) access
+     12            *
+     13            *  @verbatim
+     14           ===============================================================================
+     15                               ##### How to use this driver #####
+     16           ===============================================================================
+     17              [..]
+     18              
+     19                   (+) Enable CRC AHB clock using RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC, ENABLE)
+     20                       function
+     21                   (+) If required, select the reverse operation on input data 
+     22                       using CRC_ReverseInputDataSelect()  
+     23                   (+) If required, enable the reverse operation on output data
+     24                       using CRC_ReverseOutputDataCmd(Enable)
+     25                   (+) use CRC_CalcCRC() function to compute the CRC of a 32-bit data
+     26                       or use CRC_CalcBlockCRC() function to compute the CRC if a 32-bit 
+     27                       data buffer
+     28                      (@) To compute the CRC of a new data use CRC_ResetDR() to reset
+     29                           the CRC computation unit before starting the computation
+     30                           otherwise you can get wrong CRC values.
+     31                
+     32               @endverbatim
+     33            *  
+     34            ******************************************************************************
+     35            * @attention
+     36            *
+     37            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     38            *
+     39            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     40            * You may not use this file except in compliance with the License.
+     41            * You may obtain a copy of the License at:
+     42            *
+     43            *        http://www.st.com/software_license_agreement_liberty_v2
+     44            *
+     45            * Unless required by applicable law or agreed to in writing, software 
+     46            * distributed under the License is distributed on an "AS IS" BASIS, 
+     47            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     48            * See the License for the specific language governing permissions and
+     49            * limitations under the License.
+     50            *
+     51            ******************************************************************************
+     52            */
+     53          
+     54          /* Includes ------------------------------------------------------------------*/
+     55          #include "stm32f0xx_crc.h"
+     56          
+     57          /** @addtogroup STM32F0xx_StdPeriph_Driver
+     58            * @{
+     59            */
+     60          
+     61          /** @defgroup CRC 
+     62            * @brief CRC driver modules
+     63            * @{
+     64            */
+     65          
+     66          /* Private typedef -----------------------------------------------------------*/
+     67          /* Private define ------------------------------------------------------------*/
+     68          /* Private macro -------------------------------------------------------------*/
+     69          /* Private variables ---------------------------------------------------------*/
+     70          /* Private function prototypes -----------------------------------------------*/
+     71          /* Private functions ---------------------------------------------------------*/
+     72          
+     73          /** @defgroup CRC_Private_Functions
+     74            * @{
+     75            */
+     76          
+     77          /** @defgroup CRC_Group1 Configuration of the CRC computation unit functions
+     78           *  @brief   Configuration of the CRC computation unit functions 
+     79           *
+     80          @verbatim
+     81           ===============================================================================
+     82                               ##### CRC configuration functions #####
+     83           ===============================================================================
+     84          
+     85          @endverbatim
+     86            * @{
+     87            */
+     88          
+     89          /**
+     90            * @brief  Deinitializes CRC peripheral registers to their default reset values.
+     91            * @param  None
+     92            * @retval None
+     93            */
+     94          void CRC_DeInit(void)
+     95          {
+     96            /* Set DR register to reset value */
+     97            CRC->DR = 0xFFFFFFFF;
+     98            
+     99            /* Set the POL register to the reset value: 0x04C11DB7 */
+    100            CRC->POL = 0x04C11DB7;
+    101            
+    102            /* Reset IDR register */
+    103            CRC->IDR = 0x00;
+    104            
+    105            /* Set INIT register to reset value */
+    106            CRC->INIT = 0xFFFFFFFF;
+    107            
+    108            /* Reset the CRC calculation unit */
+    109            CRC->CR = CRC_CR_RESET;
+    110          }
+    111          
+    112          /**
+    113            * @brief  Resets the CRC calculation unit and sets INIT register content in DR register.
+    114            * @param  None
+    115            * @retval None
+    116            */
+    117          void CRC_ResetDR(void)
+    118          {
+    119            /* Reset CRC generator */
+    120            CRC->CR |= CRC_CR_RESET;
+    121          }
+    122          
+    123          /**
+    124            * @brief  Selects the polynomial size. This function is only applicable for 
+    125            *         STM32F072 devices.
+    126            * @param  CRC_PolSize: Specifies the polynomial size.
+    127            *         This parameter can be:
+    128            *          @arg CRC_PolSize_7: 7-bit polynomial for CRC calculation
+    129            *          @arg CRC_PolSize_8: 8-bit polynomial for CRC calculation
+    130            *          @arg CRC_PolSize_16: 16-bit polynomial for CRC calculation
+    131            *          @arg CRC_PolSize_32: 32-bit polynomial for CRC calculation
+    132            * @retval None
+    133            */
+    134          void CRC_PolynomialSizeSelect(uint32_t CRC_PolSize)
+    135          {
+    136            uint32_t tmpcr = 0;
+    137          
+    138            /* Check the parameter */
+    139            assert_param(IS_CRC_POL_SIZE(CRC_PolSize));
+    140          
+    141            /* Get CR register value */
+    142            tmpcr = CRC->CR;
+    143          
+    144            /* Reset POL_SIZE bits */
+    145            tmpcr &= (uint32_t)~((uint32_t)CRC_CR_POLSIZE);
+    146            /* Set the polynomial size */
+    147            tmpcr |= (uint32_t)CRC_PolSize;
+    148          
+    149            /* Write to CR register */
+    150            CRC->CR = (uint32_t)tmpcr;
+    151          }
+    152          
+    153          /**
+    154            * @brief  Selects the reverse operation to be performed on input data.
+    155            * @param  CRC_ReverseInputData: Specifies the reverse operation on input data.
+    156            *          This parameter can be:
+    157            *            @arg CRC_ReverseInputData_No: No reverse operation is performed
+    158            *            @arg CRC_ReverseInputData_8bits: reverse operation performed on 8 bits
+    159            *            @arg CRC_ReverseInputData_16bits: reverse operation performed on 16 bits
+    160            *            @arg CRC_ReverseInputData_32bits: reverse operation performed on 32 bits
+    161            * @retval None
+    162            */
+    163          void CRC_ReverseInputDataSelect(uint32_t CRC_ReverseInputData)
+    164          {
+    165            uint32_t tmpcr = 0;
+    166          
+    167            /* Check the parameter */
+    168            assert_param(IS_CRC_REVERSE_INPUT_DATA(CRC_ReverseInputData));
+    169          
+    170            /* Get CR register value */
+    171            tmpcr = CRC->CR;
+    172          
+    173            /* Reset REV_IN bits */
+    174            tmpcr &= (uint32_t)~((uint32_t)CRC_CR_REV_IN);
+    175            /* Set the reverse operation */
+    176            tmpcr |= (uint32_t)CRC_ReverseInputData;
+    177          
+    178            /* Write to CR register */
+    179            CRC->CR = (uint32_t)tmpcr;
+    180          }
+    181          
+    182          /**
+    183            * @brief  Enables or disable the reverse operation on output data.
+    184            *         The reverse operation on output data is performed on 32-bit.
+    185            * @param  NewState: new state of the reverse operation on output data.
+    186            *          This parameter can be: ENABLE or DISABLE.
+    187            * @retval None
+    188            */
+    189          void CRC_ReverseOutputDataCmd(FunctionalState NewState)
+    190          {
+    191            /* Check the parameters */
+    192            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    193          
+    194            if (NewState != DISABLE)
+    195            {
+    196              /* Enable reverse operation on output data */
+    197              CRC->CR |= CRC_CR_REV_OUT;
+    198            }
+    199            else
+    200            {
+    201              /* Disable reverse operation on output data */
+    202              CRC->CR &= (uint32_t)~((uint32_t)CRC_CR_REV_OUT);
+    203            }
+    204          }
+    205          
+    206          /**
+    207            * @brief  Initializes the INIT register.
+    208            * @note   After resetting CRC calculation unit, CRC_InitValue is stored in DR register
+    209            * @param  CRC_InitValue: Programmable initial CRC value
+    210            * @retval None
+    211            */
+    212          void CRC_SetInitRegister(uint32_t CRC_InitValue)
+    213          {
+    214            CRC->INIT = CRC_InitValue;
+    215          }
+    216          
+    217          /**
+    218            * @brief  Initializes the polynomail coefficients. This function is only 
+    219            *         applicable for STM32F072 devices.
+    220            * @param  CRC_Pol: Polynomial to be used for CRC calculation.
+    221            * @retval None
+    222            */
+    223          void CRC_SetPolynomial(uint32_t CRC_Pol)
+    224          {
+    225            CRC->POL = CRC_Pol;
+    226          }
+    227          
+    228          /**
+    229            * @}
+    230            */
+    231          
+    232          /** @defgroup CRC_Group2 CRC computation of one/many 32-bit data functions
+    233           *  @brief   CRC computation of one/many 32-bit data functions
+    234           *
+    235          @verbatim
+    236           ===============================================================================
+    237                               ##### CRC computation functions #####
+    238           ===============================================================================
+    239          
+    240          @endverbatim
+    241            * @{
+    242            */
+    243          
+    244          /**
+    245            * @brief  Computes the 32-bit CRC of a given data word(32-bit).
+    246            * @param  CRC_Data: data word(32-bit) to compute its CRC
+    247            * @retval 32-bit CRC
+    248            */
+    249          uint32_t CRC_CalcCRC(uint32_t CRC_Data)
+    250          {
+    251            CRC->DR = CRC_Data;
+    252            
+    253            return (CRC->DR);
+    254          }
+    255          
+    256          /**
+    257            * @brief  Computes the 16-bit CRC of a given 16-bit data. This function is only 
+    258            *         applicable for STM32F072 devices.
+    259            * @param  CRC_Data: data half-word(16-bit) to compute its CRC
+    260            * @retval 16-bit CRC
+    261            */
+    262          uint32_t CRC_CalcCRC16bits(uint16_t CRC_Data)
+    263          {
+    264            *(uint16_t*)(CRC_BASE) = (uint16_t) CRC_Data;
+    265            
+    266            return (CRC->DR);
+    267          }
+    268          
+    269          /**
+    270            * @brief  Computes the 8-bit CRC of a given 8-bit data. This function is only 
+    271            *         applicable for STM32F072 devices.
+    272            * @param  CRC_Data: 8-bit data to compute its CRC
+    273            * @retval 8-bit CRC
+    274            */
+    275          uint32_t CRC_CalcCRC8bits(uint8_t CRC_Data)
+    276          {
+    277            *(uint8_t*)(CRC_BASE) = (uint8_t) CRC_Data;
+    278          
+    279            return (CRC->DR);
+    280          }
+    281          
+    282          /**
+    283            * @brief  Computes the 32-bit CRC of a given buffer of data word(32-bit).
+    284            * @param  pBuffer: pointer to the buffer containing the data to be computed
+    285            * @param  BufferLength: length of the buffer to be computed
+    286            * @retval 32-bit CRC
+    287            */
+    288          uint32_t CRC_CalcBlockCRC(uint32_t pBuffer[], uint32_t BufferLength)
+    289          {
+    290            uint32_t index = 0;
+    291            
+    292            for(index = 0; index < BufferLength; index++)
+    293            {
+    294              CRC->DR = pBuffer[index];
+    295            }
+    296            return (CRC->DR);
+    297          }
+    298          
+    299          /**
+    300            * @brief  Returns the current CRC value.
+    301            * @param  None
+    302            * @retval 32-bit CRC
+    303            */
+    304          uint32_t CRC_GetCRC(void)
+    305          {
+    306            return (CRC->DR);
+    307          }
+    308          
+    309          /**
+    310            * @}
+    311            */
+    312          
+    313          /** @defgroup CRC_Group3 CRC Independent Register (IDR) access functions
+    314           *  @brief   CRC Independent Register (IDR) access (write/read) functions
+    315           *
+    316          @verbatim
+    317           ===============================================================================
+    318                     ##### CRC Independent Register (IDR) access functions #####
+    319           ===============================================================================
+    320          
+    321          @endverbatim
+    322            * @{
+    323            */
+    324          
+    325          /**
+    326            * @brief  Stores an 8-bit data in the Independent Data(ID) register.
+    327            * @param  CRC_IDValue: 8-bit value to be stored in the ID register 					
+    328            * @retval None
+    329            */
+    330          void CRC_SetIDRegister(uint8_t CRC_IDValue)
+    331          {
+    332            CRC->IDR = CRC_IDValue;
+    333          }
+    334          
+    335          /**
+    336            * @brief  Returns the 8-bit data stored in the Independent Data(ID) register
+    337            * @param  None
+    338            * @retval 8-bit value of the ID register 
+    339            */
+    340          uint8_t CRC_GetIDRegister(void)
+    341          {
+    342            return (CRC->IDR);
+    343          }
+    344          
+    345          /**
+    346            * @}
+    347            */
+    348          
+    349          /**
+    350            * @}
+    351            */
+    352          
+    353          /**
+    354            * @}
+    355            */
+    356          
+    357          /**
+    358            * @}
+    359            */
+    360          
+    361          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   CRC_CalcBlockCRC
+       0   CRC_CalcCRC
+       0   CRC_CalcCRC16bits
+       0   CRC_CalcCRC8bits
+       0   CRC_DeInit
+       0   CRC_GetCRC
+       0   CRC_GetIDRegister
+       0   CRC_PolynomialSizeSelect
+       0   CRC_ResetDR
+       0   CRC_ReverseInputDataSelect
+       0   CRC_ReverseOutputDataCmd
+       0   CRC_SetIDRegister
+       0   CRC_SetInitRegister
+       0   CRC_SetPolynomial
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable13
+       4  ??DataTable13_1
+       4  ??DataTable13_2
+       4  ??DataTable13_3
+       4  ??DataTable13_4
+       4  ??DataTable13_5
+       8  ?Subroutine0
+      24  CRC_CalcBlockCRC
+       8  CRC_CalcCRC
+       8  CRC_CalcCRC16bits
+       8  CRC_CalcCRC8bits
+      24  CRC_DeInit
+       6  CRC_GetCRC
+       6  CRC_GetIDRegister
+       8  CRC_PolynomialSizeSelect
+      12  CRC_ResetDR
+       6  CRC_ReverseInputDataSelect
+      24  CRC_ReverseOutputDataCmd
+       6  CRC_SetIDRegister
+       6  CRC_SetInitRegister
+       6  CRC_SetPolynomial
+
+ 
+ 184 bytes in section .text
+ 
+ 184 bytes of CODE memory
+
+Errors: none
+Warnings: none

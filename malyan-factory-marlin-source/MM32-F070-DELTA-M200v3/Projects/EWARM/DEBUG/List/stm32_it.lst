@@ -1,0 +1,245 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:21
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\stm32_it.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW3FBD.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\stm32_it.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32_it.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32_it.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\stm32_it.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32_it.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   Main Interrupt Service Routines.
+      8            *          This file provides template for all exceptions handler and peripherals
+      9            *          interrupt service routine.
+     10            ******************************************************************************
+     11            * @attention
+     12            *
+     13            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     14            *
+     15            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     16            * You may not use this file except in compliance with the License.
+     17            * You may obtain a copy of the License at:
+     18            *
+     19            *        http://www.st.com/software_license_agreement_liberty_v2
+     20            *
+     21            * Unless required by applicable law or agreed to in writing, software 
+     22            * distributed under the License is distributed on an "AS IS" BASIS, 
+     23            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     24            * See the License for the specific language governing permissions and
+     25            * limitations under the License.
+     26            *
+     27            ******************************************************************************
+     28            */
+     29          
+     30          
+     31          /* Includes ------------------------------------------------------------------*/
+     32          #include "stm32_it.h"
+     33          
+     34          /* Private typedef -----------------------------------------------------------*/
+     35          /* Private define ------------------------------------------------------------*/
+     36          /* Private macro -------------------------------------------------------------*/
+     37          /* Private variables ---------------------------------------------------------*/
+     38          /* Private function prototypes -----------------------------------------------*/
+     39          /* Private functions ---------------------------------------------------------*/
+     40          
+     41          /******************************************************************************/
+     42          /*            Cortex-M0 Processor Exceptions Handlers                         */
+     43          /******************************************************************************/
+     44          
+     45          /**
+     46            * @brief  This function handles NMI exception.
+     47            * @param  None
+     48            * @retval None
+     49            */
+     50          void NMI_Handler(void)
+     51          {
+     52          }
+     53          
+     54          /**
+     55            * @brief  This function handles Hard Fault exception.
+     56            * @param  None
+     57            * @retval None
+     58            */
+     59          void HardFault_Handler(void)
+     60          {
+     61            /* Go to infinite loop when Hard Fault exception occurs */
+     62            while (1)
+     63            {
+     64            }
+     65          }
+     66          
+     67          /**
+     68            * @brief  This function handles SVCall exception.
+     69            * @param  None
+     70            * @retval None
+     71            */
+     72          void SVC_Handler(void)
+     73          {
+     74          }
+     75          
+     76          /**
+     77            * @brief  This function handles PendSVC exception.
+     78            * @param  None
+     79            * @retval None
+     80            */
+     81          void PendSV_Handler(void)
+     82          {
+     83          }
+     84          
+     85          /**
+     86            * @brief  This function handles SysTick Handler.
+     87            * @param  None
+     88            * @retval None
+     89            */
+     90          /*void SysTick_Handler(void)
+     91          {
+     92             
+     93          } */
+     94          
+     95          /**
+     96            * @brief  This function handles USB FS Handler.
+     97            * @param  None
+     98            * @retval None
+     99            */
+    100          void USB_IRQHandler(void)
+    101          {
+    102            USB_Istr();
+    103          }
+    104          
+    105          /**
+    106            * @brief  This function handles EXTI14_15_IRQ Handler.
+    107            * @param  None
+    108            * @retval None
+    109            */
+    110          void EXTI4_15_IRQHandler(void)
+    111          {
+    112            /*
+    113            if (EXTI_GetITStatus(TAMPER_BUTTON_EXTI_LINE) != RESET)
+    114            {
+    115              if((PrevXferDone)  && (USB_Device_dev.dev.device_status==USB_CONFIGURED))
+    116              {
+    117                Send_Buffer[0] = 0x06; 
+    118                
+    119                if (STM_EVAL_PBGetState(BUTTON_TAMPER) == Bit_RESET)
+    120                {
+    121                  Send_Buffer[1] = 0x01;
+    122                }
+    123                else
+    124                {
+    125                  Send_Buffer[1] = 0x00;
+    126                }
+    127          
+    128                USBD_HID_SendReport (&USB_Device_dev, Send_Buffer, 2);  
+    129                PrevXferDone = 0;
+    130              }
+    131              
+    132              EXTI_ClearITPendingBit(TAMPER_BUTTON_EXTI_LINE);
+    133            }*/
+    134          }
+    135          
+    136          /******************************************************************************/
+    137          /*                 STM32F0xx Peripherals Interrupt Handlers                   */
+    138          /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
+    139          /*  available peripheral interrupt handler's name please refer to the startup */
+    140          /*  file (startup_stm32f072.s).                                            */
+    141          /******************************************************************************/
+    142          
+    143          /**
+    144            * @brief  This function handles PPP interrupt request.
+    145            * @param  None
+    146            * @retval None
+    147            */
+    148          /*void PPP_IRQHandler(void)
+    149          {
+    150          }*/
+    151          
+    152          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+    153          
+    154          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   EXTI4_15_IRQHandler
+       0   HardFault_Handler
+       0   NMI_Handler
+       0   PendSV_Handler
+       0   SVC_Handler
+       8   USB_IRQHandler
+         8   -> USB_Istr
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  EXTI4_15_IRQHandler
+       2  HardFault_Handler
+       2  NMI_Handler
+       2  PendSV_Handler
+       2  SVC_Handler
+       8  USB_IRQHandler
+
+ 
+ 18 bytes in section .text
+ 
+ 18 bytes of CODE memory
+
+Errors: none
+Warnings: none

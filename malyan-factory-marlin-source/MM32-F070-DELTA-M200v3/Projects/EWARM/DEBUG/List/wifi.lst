@@ -1,0 +1,1595 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:55
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\wifi.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EWDE7.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\wifi.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\wifi.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\wifi.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\wifi.cpp
+      1          #include "temperature.h"
+      2          #include "Marlin.h"
+      3          #include "cardreader.h"
+      4          #include "port.h"
+      5          
+      6          #if ENABLED(MESH_BED_LEVELING)
+      7            #include "mesh_bed_leveling.h"
+      8          #endif
+      9          
+     10          #include <ctype.h>
+     11          #include <stdlib.h>
+     12          
+     13          unsigned char wifi_buff_obj[8];
+     14          unsigned char wifi_buff_value[32];
+     15          unsigned char wifi_buff_ptr,wifi_buff_state;
+     16          
+     17          char wifi_ssid[32];
+     18          char wifi_password[32];
+     19          uint8_t wifi_ip[4];
+     20          uint8_t wifi_mask[4];
+     21          uint8_t wifi_gw[4];
+     22          char wifi_mac[20];
+     23          char wifi_status;
+     24          bool wifi_download=false;
+     25          
+     26          extern "C" void DisableUSB();
+     27          extern "C" void store_char(unsigned char c);
+     28          
+     29          inline void wifi_put(char c)
+     30          {
+     31             while(USART_GetFlagStatus(WIFI_UART, USART_FLAG_TXE) == RESET){}
+     32             USART_SendData(WIFI_UART,c+0x80);
+     33          }
+     34          
+     35          void wifi_writeString(char message[]) {
+     36              char* letter = message;
+     37              while (*letter != 0) {
+     38                  wifi_put(*letter);
+     39                  letter++;
+     40              }
+     41          }
+     42          
+     43          void wifi_writeString_safe(char message[]) {
+     44              uint8_t len;
+     45              char* letter = message;
+     46              len=0;
+     47              while (*letter != 0) {
+     48                  char c=*letter;
+     49                  if (c<0x80) wifi_put(c);
+     50                  else wifi_put('?');
+     51                  letter++;
+     52                  if (len++>24) return;
+     53              }
+     54          }
+     55          
+     56          void wifi_writeInt(uint16_t value, uint8_t digits) {
+     57              uint32_t currentDigit, nextDigit, uvalue;
+     58          
+     59              switch (digits) {
+     60                  case 1:  currentDigit = 10;	     break;
+     61                  case 2:  currentDigit = 100;     break;
+     62                  case 3:  currentDigit = 1000;    break;
+     63                  case 4:  currentDigit = 10000;   break;
+     64                  case 5:  currentDigit = 100000;  break;
+     65                  case 6:  currentDigit = 1000000;  break;
+     66                  default: return;
+     67              }
+     68          
+     69              uvalue = (uint32_t)value;
+     70              for (uint8_t i = 0; i < digits; i++) {
+     71                  nextDigit = currentDigit / 10;
+     72                  wifi_put((uvalue % currentDigit) / nextDigit + '0');
+     73                  currentDigit = nextDigit;
+     74              }
+     75          }
+     76          
+     77          void wifi_writeInt32(uint32_t value, uint8_t digits) {
+     78              uint32_t currentDigit, nextDigit, uvalue;
+     79          
+     80              switch (digits) {
+     81                  case 1:  currentDigit = 10;      break;
+     82                  case 2:  currentDigit = 100;     break;
+     83                  case 3:  currentDigit = 1000;    break;
+     84                  case 4:  currentDigit = 10000;   break;
+     85                  case 5:  currentDigit = 100000;  break;
+     86                  case 6:  currentDigit = 1000000;  break;
+     87                  case 7:  currentDigit = 10000000;  break;
+     88                  default: return;
+     89              }
+     90          
+     91              uvalue = (uint32_t)value;
+     92              for (uint8_t i = 0; i < digits; i++) {
+     93                  nextDigit = currentDigit / 10;
+     94                  wifi_put((uvalue % currentDigit) / nextDigit + '0');
+     95                  currentDigit = nextDigit;
+     96              }
+     97          }
+     98          
+     99          volatile unsigned char download_state;
+    100          #define WIFI_USART_RX_BUF_SIZE 256
+    101          extern char Uart_RX_WIFI[WIFI_USART_RX_BUF_SIZE];
+    102          extern volatile int16_t wifi_w_buff_ptr;
+    103          volatile int16_t wifi_r_buff_ptr=0;
+    104          
+    105          /*unsigned char wifi_buff_cmd[20];
+    106          unsigned char wifi_buff_ptr;*/
+    107          static uint8_t last_endstop_stat=0;
+    108          
+    109          extern void WIFI_enable(unsigned char e);
+    110          extern const char VERSION[];
+    111          
+    112          void wifi_init() {
+    113          
+    114              extern void serial_init(int);
+    115              extern void delayMicroseconds(unsigned int us);
+    116          
+    117              //serial_init(WIFI_UART,512000);
+    118              WIFI_enable(1);
+    119          
+    120              wifi_buff_ptr=0;
+    121              wifi_buff_state=0;
+    122          
+    123              /*wifi_writeString((char *)"{SYS:STARTED}");
+    124              wifi_writeString((char *)"{VER:");
+    125              wifi_put(VERSION[0]);
+    126              wifi_put(VERSION[2]);
+    127              wifi_writeString((char *)"}");*/
+    128              download_state=0;
+    129              wifi_ssid[0]=0;
+    130              wifi_password[0]=0;
+    131              wifi_ip[0]=0;wifi_ip[1]=0;wifi_ip[2]=0;wifi_ip[3]=0;
+    132              wifi_mask[0]=0;wifi_mask[1]=0;wifi_mask[2]=0;wifi_mask[3]=0;
+    133              wifi_gw[0]=0;wifi_gw[1]=0;wifi_gw[2]=0;wifi_gw[3]=0;
+    134              wifi_mac[0]=0;
+    135              wifi_status=0;
+    136              wifi_download=false;
+    137          
+    138              strcpy(wifi_ssid,"DEFAULTSSID");
+    139              strcpy(wifi_password,"DEFAULTPASS");
+    140          }
+    141          
+    142          /*uint8_t countFiles(bool update)
+    143          {
+    144          	uint16_t nr;
+    145          	nr = card.getnrfilenames();
+    146          	if (nr>200) nr=200;
+    147          	return nr;
+    148          }*/
+    149          
+    150          void StartBuild()
+    151          {
+    152              wifi_writeString((char *)"{SYS:BUILD}");
+    153              if (model==1) GPIO_SetBits(GPIOB,GPIO_Pin_3);
+    154          }
+    155          
+    156          void EndBuild()
+    157          {
+    158              //void blink(uint8_t t);
+    159              //wifi_writeString((char *)"{SYS:ENDOFBUILD}");
+    160              wifi_writeString((char *)"{TQ:100}");
+    161              //blink(3);
+    162              if (model==1) GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    163          }
+    164          
+    165          /*
+    166          void wifi_PrintingStatus()
+    167          {
+    168              int16_t t;
+    169              int32_t t32;
+    170          
+    171              wifi_writeString((char *)"{T0:");
+    172              t=degHotend(0);
+    173              if (t>999) t=999;
+    174              wifi_writeInt(t,3);
+    175              wifi_put('/');
+    176              t=degTargetHotend(0);
+    177              wifi_writeInt(t,3);
+    178              wifi_put('}');
+    179          
+    180              wifi_writeString((char *)"{TP:");
+    181              t=degBed();
+    182              if (t>999) t=999;
+    183              wifi_writeInt(t,3);
+    184              wifi_put('/');
+    185              t=degTargetBed();
+    186              wifi_writeInt(t,3);
+    187              wifi_put('}');
+    188          
+    189              wifi_writeString((char *)"{TQ:");
+    190              t=card.percentDone();
+    191              wifi_writeInt(t,3);
+    192          
+    193          	if (card.sdprinting) wifi_put('P');
+    194          	else wifi_put('C');
+    195              wifi_put('}');
+    196          }*/
+    197          
+    198          //extern "C" void USB_Cable_Config (FunctionalState NewState);
+    199          typedef enum _RESULT
+    200          {
+    201            USB_SUCCESS = 0,    /* Process successfully */
+    202            USB_ERROR,
+    203            USB_UNSUPPORT,
+    204            USB_NOT_READY       /* The process has not been finished, endpoint will be
+    205                                   NAK to further request */
+    206          } RESULT;
+    207          extern "C" RESULT PowerOn(void);
+    208          extern "C" RESULT PowerOff(void);
+    209          
+    210          void cancel_print()
+    211          {
+    212              extern bool cancel_heatup;
+    213              extern bool relative_mode;
+    214              bool usb_state;
+    215          
+    216              //DisableUSB();
+    217              //cli();
+    218              IWDG_ReloadCounter();
+    219          
+    220              usb_state=(bDeviceState == CONFIGURED);
+    221              if (usb_state)
+    222              {
+    223                  //if (model!=4) GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    224                  //else GPIO_ResetBits(GPIOA, GPIO_Pin_13);
+    225                  PowerOff();
+    226              }
+    227              wifi_writeString((char *)"{SYS:CANCELING}");
+    228          
+    229              quickStop();
+    230          
+    231              extern bool sdprint_cancel;
+    232              sdprint_cancel=true;
+    233              
+    234              extern unsigned int cleaning_buffer_counter;
+    235              while (cleaning_buffer_counter>0) IWDG_ReloadCounter();
+    236              enable_z();
+    237              relative_mode=true;
+    238              if (axis_known_position[2]!=0)
+    239              {
+    240                  extern float current_position[NUM_AXIS],destination[NUM_AXIS];
+    241                  extern float feedrate;
+    242          
+    243                  if (model==6)
+    244                  {
+    245                      /*if (destination[0]<100) destination[0] = current_position[0] + 10;
+    246                      if (destination[1]<100) destination[1] = current_position[1] + 10;
+    247                      if (destination[2]<100) destination[2] = current_position[2] + 10;
+    248                      feedrate = 4000;
+    249                      
+    250                      prepare_move();
+    251                      while (block_buffer_tail!=block_buffer_head) idle();*/
+    252                      
+    253                      //extern void home();
+    254                      //home();
+    255                      //quickStop();
+    256                      //return;
+    257                  }
+    258                  else if (model==2)
+    259                  {
+    260                      //if (destination[1]<80) destination[1]=80;
+    261                      if (destination[2]<80) destination[2] = current_position[2] + 10;
+    262                      feedrate = 3000;
+    263                      
+    264                      prepare_move();
+    265                      while (block_buffer_tail!=block_buffer_head) idle();
+    266                  }
+    267                  else
+    268                  {
+    269                      if (destination[1]<100) destination[1]=100;
+    270                      if (destination[2]<100) destination[2] = current_position[2] + 10;
+    271                      feedrate = 4000;
+    272                      
+    273                      prepare_move();
+    274                      while (block_buffer_tail!=block_buffer_head) idle();
+    275                  }
+    276              }
+    277              
+    278              quickStop();
+    279          
+    280              wifi_writeString((char *)"{SYS:STARTED}");
+    281          
+    282              /*
+    283              relative_mode=false;
+    284              disable_all_steppers();
+    285              card.closefile(false);*/
+    286              
+    287              /*delay(1000);
+    288              packet_sent=1;
+    289              if (model!=4) GPIO_SetBits(GPIOB,GPIO_Pin_3);
+    290              else GPIO_SetBits(GPIOA, GPIO_Pin_13);*/
+    291              if (usb_state)
+    292              {
+    293                  delay(1000);
+    294                  PowerOn();
+    295                  //packet_sent=1;
+    296              }
+    297              relative_mode=false;
+    298          }
+    299          uint32_t bDeviceState_last=2;
+    300          void PrintingStatus()
+    301          {
+    302              extern bool buffered_printing();
+    303          
+    304              int16_t t;
+    305              int32_t t32;
+    306          
+    307              wifi_writeString((char *)"{T0:");
+    308              t=degHotend(0);
+    309              if (t>999) t=999;
+    310              wifi_writeInt(t,3);
+    311              wifi_put('/');
+    312              t=degTargetHotend(0);
+    313              wifi_writeInt(t,3);
+    314              wifi_put('}');
+    315          
+    316              wifi_writeString((char *)"{T1:");
+    317              t=degHotend(1);
+    318              if (t>999) t=999;
+    319              wifi_writeInt(t,3);
+    320              wifi_put('/');
+    321              t=degTargetHotend(1);
+    322              wifi_writeInt(t,3);
+    323              wifi_put('}');
+    324          
+    325              wifi_writeString((char *)"{TP:");
+    326              t=degBed();
+    327              if (t>999) t=999;
+    328              wifi_writeInt(t,3);
+    329              wifi_put('/');
+    330              t=degTargetBed();
+    331              wifi_writeInt(t,3);
+    332              wifi_put('}');
+    333          
+    334              wifi_writeString((char *)"{TQ:");
+    335          
+    336              if (sdprinting)
+    337              {
+    338                  t=card.percentDone();
+    339                  if (t>99) t=99;
+    340              }
+    341              else {
+    342                  extern bool homing;
+    343                  t=0;
+    344                  if (axis_known_position[X_AXIS] == false &&
+    345                      axis_known_position[Y_AXIS] == false &&
+    346                      axis_known_position[Z_AXIS] == false &&
+    347                      degTargetHotend(0)==0 && degTargetBed()==0 &&
+    348                      homing==false)
+    349                    t=100;
+    350              }
+    351              wifi_writeInt(t,3);
+    352          
+    353              if (sdprinting || buffered_printing()) wifi_put('P');
+    354              else wifi_put('C');
+    355              wifi_put('}');
+    356          
+    357              wifi_writeString((char *)"{TT:");
+    358              if(print_job_start_ms != 0) t32 = millis()/60000 - print_job_start_ms/60000;
+    359          	else t32=0;
+    360              wifi_writeInt32(t32,6);
+    361              wifi_put('}');
+    362          
+    363              /*
+    364              wifi_writeString((char *)"{TR:");
+    365              //t32=command::estimatedTimeLeftInSeconds();
+    366          	t32=0;
+    367              wifi_writeInt32(t32,6);
+    368              wifi_put('}');
+    369          
+    370              wifi_writeString((char *)"{TF:");
+    371              //t32=command::filamentUsed();
+    372          	t32=0;
+    373              wifi_writeInt32(t32,6);
+    374              wifi_put('}');*/
+    375          }
+    376          
+    377          void wifi_process()
+    378          {
+    379              switch (wifi_buff_obj[0]) {
+    380                  case 'M':
+    381                      uint16_t t;
+    382                      float f;
+    383                      t=atoi((const char*)wifi_buff_value);
+    384                      if (t>=999)
+    385                      {
+    386                          f=(-zprobe_zoffset*100);
+    387                          t=f;
+    388                          wifi_writeString((char *)"{M:");
+    389                          wifi_writeInt(t,3);
+    390                          wifi_put('}');
+    391                      }
+    392                      else
+    393                      {
+    394                          f=t;
+    395                          f=-f*0.01;
+    396          #if ENABLED(MESH_BED_LEVELING)
+    397                          if (Z_PROBE_OFFSET_RANGE_MIN <= f && f <= Z_PROBE_OFFSET_RANGE_MAX) {
+    398                            zprobe_zoffset = f;
+    399                            float diff = zprobe_zoffset - mbl.z_values[0][0];
+    400                            mbl.z_values[0][0] += diff;
+    401                            mbl.z_values[0][1] += diff;
+    402                            mbl.z_values[1][0] += diff;
+    403                            mbl.z_values[1][1] += diff;
+    404                            extern void Config_StoreSettings();
+    405                            Config_StoreSettings();
+    406                          }
+    407          #endif
+    408                      }
+    409                      break;
+    410                  case 'C':
+    411                      if (wifi_buff_value[0]=='P')
+    412                      {
+    413                          uint16_t t;
+    414          
+    415                          t=atoi((const char*)wifi_buff_value+1);
+    416          
+    417                          if (t<0 || t>150) return;
+    418                          setTargetBed(t);
+    419                      }
+    420                      else if (wifi_buff_value[0]=='T')
+    421                      {
+    422                          int16_t t;
+    423          
+    424                          t=atoi((const char*)wifi_buff_value+2);
+    425                          if (t<0 || t>280) return;
+    426          
+    427                          if (wifi_buff_value[1] == '0')
+    428                          {
+    429                              setTargetHotend(t,0);
+    430                          }
+    431                          else
+    432                          {
+    433                              setTargetHotend(t,1);
+    434                          }
+    435                      }
+    436                      else if (wifi_buff_value[0]=='S')
+    437                      {
+    438                          int16_t t;
+    439                          uint8_t i;
+    440          
+    441                          t=atoi((const char*)wifi_buff_value+1);
+    442          
+    443                          if (t<1) t=1;
+    444                          else if (t>50) t=50;
+    445          
+    446                          feedrate_multiplier=t*10;
+    447                      }
+    448                      break;
+    449          
+    450                  case 'B':
+    451                      PrintingStatus();
+    452                      break;
+    453          
+    454                  case 'W':
+    455                      wifi_writeString((char *)"{WS:");
+    456                      wifi_writeString(wifi_ssid);
+    457                      wifi_writeString((char *)"}{WP:");
+    458                      wifi_writeString(wifi_password);
+    459                      wifi_put('}');
+    460                      break;
+    461          
+    462                  case 'e':
+    463                      wifi_writeString((char *)"{e:e}");
+    464                      break;
+    465          
+    466                  case 'R':
+    467                      if (wifi_buff_obj[1]=='I')
+    468                      {
+    469                          char i,b;
+    470                          TIM_SetCompare2(TIM2,200);
+    471                          b=0;
+    472                          wifi_ip[0]=0;wifi_ip[1]=0;wifi_ip[2]=0;wifi_ip[3]=0;
+    473                          for (i=0;i<16;i++)
+    474                          {
+    475                              if (wifi_buff_value[i]==0) break;
+    476                              else if (wifi_buff_value[i]=='.')
+    477                              {
+    478                                  b++;
+    479                                  if (b>3) break;
+    480                              }
+    481                              else wifi_ip[b]=wifi_ip[b]*10 + (wifi_buff_value[i]-'0');
+    482                          }
+    483                      }
+    484                      else if (wifi_buff_obj[1]=='C')
+    485                      {
+    486                          if (wifi_buff_value[0]=='C') wifi_status=1;
+    487                          else wifi_status=0;
+    488                      }
+    489                      else if (wifi_buff_obj[1]=='M')
+    490                      {
+    491                          //printf("%s\n",wifi_buff_value);
+    492                          strcpy(wifi_mac, (char const *)wifi_buff_value);
+    493                      }
+    494                      break;
+    495          
+    496          //LCD
+    497                  case 'V':
+    498                      extern bool unlocked;
+    499                      wifi_writeString((char *)"{VER:");
+    500                      //wifi_writeString((char *)VERSION);
+    501                      if (unlocked==false)
+    502                      {
+    503                          wifi_put('0');
+    504                          wifi_put('0');
+    505                      }
+    506                      else
+    507                      {
+    508                          wifi_put(VERSION[0]);
+    509                          wifi_put(VERSION[2]);
+    510                      }
+    511                      wifi_writeString((char *)"}");
+    512                      return;
+    513          
+    514                  case 'S':
+    515                      if (wifi_buff_value[0]=='S')
+    516                      {
+    517                          last_endstop_stat=0;
+    518                      }
+    519                      if (wifi_buff_value[0]=='3')
+    520                      {
+    521                          enqueuecommands_P(PSTR("M563 S3"));
+    522                      }
+    523                      else if (wifi_buff_value[0]=='4')
+    524                      {
+    525                          store_char('\r');
+    526                          enqueuecommands_P(PSTR("M563 S4"));
+    527                      }
+    528                      else if (wifi_buff_value[0]=='C')
+    529                      {
+    530                          MYSERIAL.flush();
+    531                          store_char('\r');
+    532                      }
+    533                      else if (wifi_buff_value[0]=='U')
+    534                      {
+    535                          if (bDeviceState == CONFIGURED) wifi_writeString((char *)"{R:UC}");
+    536                          else wifi_writeString((char *)"{R:UD}");
+    537                          bDeviceState_last=bDeviceState;
+    538                      }
+    539                      else if (wifi_buff_value[0]=='E') wifi_writeString((char *)"{SYS:echo}");
+    540                      else if (wifi_buff_value[0]=='L')
+    541                      {
+    542                          uint8_t i;
+    543                          uint8_t itemCount;
+    544          
+    545                          delay(200);
+    546                          itemCount = card.LcdListFile();
+    547                          if (itemCount==0) itemCount = card.LcdListFile();
+    548                          else delay(200);
+    549                          wifi_writeString((char *)"{SYS:OK}");
+    550                      }
+    551                      else if (wifi_buff_value[0]=='I')
+    552                      {
+    553                          int16_t t;
+    554          
+    555          				wifi_writeString((char *)"{T0:");
+    556          				t=degHotend(0);
+    557          				if (t>999) t=999;
+    558          				wifi_writeInt(t,3);
+    559          				wifi_put('/');
+    560          				t=degTargetHotend(0);
+    561          				wifi_writeInt(t,3);
+    562          				wifi_put('}');
+    563          
+    564          				wifi_writeString((char *)"{T1:");
+    565          				t=degHotend(1);
+    566          				if (t>999) t=999;
+    567          				wifi_writeInt(t,3);
+    568          				wifi_put('/');
+    569          				t=degTargetHotend(1);
+    570          				wifi_writeInt(t,3);
+    571          				wifi_put('}');
+    572          
+    573          				wifi_writeString((char *)"{TP:");
+    574          				t=degBed();
+    575          				if (t>999) t=999;
+    576          				wifi_writeInt(t,3);
+    577          				wifi_put('/');
+    578          				t=degTargetBed();
+    579          				wifi_writeInt(t,3);
+    580          				wifi_put('}');
+    581                      }
+    582                      else if (wifi_buff_value[0]=='F')
+    583                      {
+    584                          /*if (buff_value[1]=='X')
+    585                          {
+    586                              eeprom::setEepromInt64(eeprom_offsets::FILAMENT_TRIP, eeprom::getEepromInt64(eeprom_offsets::FILAMENT_LIFETIME, 0));
+    587                              eeprom::setEepromInt64(eeprom_offsets::FILAMENT_TRIP + sizeof(int64_t), eeprom::getEepromInt64(eeprom_offsets::FILAMENT_LIFETIME + sizeof(int64_t), 0));
+    588                          }*/
+    589          
+    590                          wifi_writeString((char *)"{TU:");
+    591          
+    592                          uint16_t total_hours;
+    593                          uint8_t total_minutes;
+    594                          //eeprom::getBuildTime(&total_hours, &total_minutes);
+    595          				total_hours=0;
+    596          				total_minutes=0;
+    597                          wifi_writeInt(total_hours,5);
+    598                          wifi_put('.');
+    599                          wifi_writeInt(total_minutes,2);
+    600                          wifi_put('/');
+    601          
+    602                          uint8_t build_hours;
+    603                          uint8_t build_minutes;
+    604                          //host::getPrintTime(build_hours, build_minutes);
+    605          				build_hours=0;
+    606          				build_minutes=0;
+    607                          wifi_writeInt(build_hours,3);
+    608                          wifi_put('.');
+    609                          wifi_writeInt(build_minutes,2);
+    610                          wifi_put('/');
+    611          
+    612                          uint32_t filamentUsedA,filamentUsedB,filamentUsed;
+    613                          char str[11];
+    614          				filamentUsed=0;
+    615                          wifi_writeString((char *)"0");
+    616                          wifi_put('/');
+    617          				filamentUsed=0;
+    618                          wifi_writeString((char *)"0");
+    619                          wifi_put('}');
+    620                      }
+    621                      else if (wifi_buff_value[0]=='R' &&
+    622                          wifi_buff_value[1]=='E' &&
+    623                          wifi_buff_value[2]=='S' &&
+    624                          wifi_buff_value[3]=='E' &&
+    625                          wifi_buff_value[4]=='T')
+    626                      {
+    627                          //Motherboard::getBoard().reset(true);
+    628                      }
+    629                      break;
+    630          
+    631                  case 'P':
+    632                      uint8_t i;
+    633                      extern uint8_t m600_resume;
+    634                      if (wifi_buff_value[0]=='H')
+    635                      {
+    636                          
+    637                      	enqueuecommands_P(PSTR("G28"));
+    638                          enqueuecommands_P(PSTR("M18"));
+    639                          enqueuecommands_P(PSTR("M400"));
+    640                      }
+    641                      else if (wifi_buff_value[0]=='I')
+    642                      {
+    643                      	//enqueuecommands_P(PSTR("G28"));
+    644                          enqueuecommands_P(PSTR("G29 S1"));
+    645                          enqueuecommands_P(PSTR("M500"));
+    646                          enqueuecommands_P(PSTR("M400"));
+    647                      }
+    648                      else if (wifi_buff_value[0]=='C')
+    649                      {
+    650                          //host::startOnboardBuild(utility::TOOLHEAD_CALIBRATE);
+    651                      }
+    652                      else if (wifi_buff_value[0]=='M')
+    653                      {
+    654                          enqueuecommands_P(PSTR("M565"));
+    655                      }
+    656                      else if (wifi_buff_value[0]=='X')
+    657                      {
+    658                          m600_resume=1;
+    659                          cancel_print();
+    660                          return;
+    661                          {
+    662                            SCB->AIRCR = 0x05FA0004;
+    663                            for(;;);
+    664                          }
+    665                          wifi_writeString((char *)"{SYS:STARTED}");
+    666                          //sei();
+    667                      }
+    668                      else if (wifi_buff_value[0]=='P')
+    669                      {
+    670                          wifi_writeString((char *)"{SYS:PAUSE}");
+    671                          //card.pauseSDPrint();
+    672                          enqueuecommands_P(PSTR("M600"));
+    673                      }
+    674                      else if (wifi_buff_value[0]=='R')
+    675                      {
+    676                          wifi_writeString((char *)"{SYS:RESUME}");
+    677                          m600_resume=1;
+    678                          wifi_writeString((char *)"{SYS:RESUMED}");
+    679                      }
+    680                      else if (wifi_buff_value[0]=='Z')
+    681                      {
+    682                          /*i=(buff_value[1]-'0')*100 + (buff_value[2]-'0')*10 + (buff_value[3]-'0');
+    683                          float pauseAtZPos = i;
+    684                          command::pauseAtZPos(stepperAxisMMToSteps(pauseAtZPos, Z_AXIS));*/
+    685                      }
+    686                      else
+    687                      {
+    688                          i=(wifi_buff_value[0]-'0')*100 + (wifi_buff_value[1]-'0')*10 + (wifi_buff_value[2]-'0');
+    689                          card.getfilename(i);
+    690                          if (card.filenameIsDir)
+    691                          {
+    692                              wifi_writeString((char *)"{SYS:DIR}");
+    693                              card.chdir(card.fileinfo.fname);
+    694                          }
+    695                          else
+    696                          {
+    697                              char cmd[30];
+    698                              char* c;
+    699          
+    700                              wifi_writeString((char *)"{PRINTFILE:");
+    701                              /*if (card.longFilename[0]!=0) wifi_writeString(card.longFilename);
+    702                              else */wifi_writeString(card.fileinfo.fname);
+    703                              wifi_put('}');
+    704          
+    705                              if (0==strcmp(card.fileinfo.fname,"firmware.bin"))
+    706                              {
+    707                                  wifi_writeString((char *)"{E:UPDATING.}");
+    708                                  enqueuecommands_P(PSTR("M560"));
+    709                                  return;
+    710                              }
+    711                              StartBuild();
+    712                              MYSERIAL.flush();
+    713                              store_char('\r');
+    714          
+    715                              int16_t path_len = strlen(abspath);
+    716                              int16_t fn_len = strlen(card.fileinfo.fname);
+    717          
+    718                              if (path_len+fn_len<_MAX_LFN && abspath[0]!=0)
+    719                              {
+    720                                  for (int16_t i=fn_len;i>=0;i--)
+    721                                      card.fileinfo.fname[i+path_len+1]=card.fileinfo.fname[i];
+    722          
+    723                                  for (i=0;i<path_len;i++)
+    724                                      card.fileinfo.fname[i]=abspath[i];
+    725          
+    726                                  card.fileinfo.fname[path_len]='/';
+    727                              }
+    728          
+    729                              card.openFile(card.fileinfo.fname, true);
+    730                              card.startFileprint();
+    731                              print_job_start_ms = millis();
+    732                              /*
+    733                              enqueuecommands_P(PSTR("M21"));
+    734                              sprintf(cmd, PSTR("M23 %s"), card.fileinfo.fname);
+    735                              for(c = &cmd[4]; *c; c++)
+    736                              *c = tolower(*c);
+    737                              enqueuecommand(cmd);
+    738                              enqueuecommands_P(PSTR("M24"));*/
+    739                          }
+    740                      }
+    741                      break;
+    742          
+    743                  case 'J':
+    744                      switch (wifi_buff_value[0])
+    745                      {
+    746                          case 'E':
+    747                              extern bool relative_mode;
+    748                              extern unsigned int cleaning_buffer_counter;
+    749                              //enqueuecommands_P(PSTR("M18"));
+    750                              quickStop();
+    751                              while (cleaning_buffer_counter>0) IWDG_ReloadCounter();
+    752                              relative_mode=false;
+    753                              disable_all_steppers();
+    754          
+    755                              break;
+    756          
+    757                          case 'X':
+    758                          case 'Y':
+    759                          case 'Z':
+    760                              extern void update_endstops_ext();
+    761                              update_endstops_ext();
+    762          
+    763                              if (wifi_buff_value[0]=='X' && wifi_buff_value[1]=='-')
+    764                              {
+    765                                  if (READ(X_STOP_PIN) != X_MIN_ENDSTOP_INVERTING) return;
+    766                              }
+    767                              else if (wifi_buff_value[0]=='Y' && wifi_buff_value[1]=='-')
+    768                              {
+    769                                  if (READ(Y_STOP_PIN) != Y_MIN_ENDSTOP_INVERTING) return;
+    770                              }
+    771                              else if (wifi_buff_value[0]=='Z' && wifi_buff_value[1]=='-')
+    772                              {
+    773                                  if (READ(Z_MIN_PIN) != Z_MIN_ENDSTOP_INVERTING) return;
+    774                              }
+    775          
+    776                              enable_all_steppers();
+    777                              //enqueuecommands_P(PSTR("G91"));
+    778                              //enqueuecommands_P(PSTR("M120"));
+    779                              extern bool relative_mode;
+    780                              relative_mode=true;
+    781          
+    782                              extern float current_position[NUM_AXIS],destination[NUM_AXIS];
+    783                              extern float feedrate;
+    784          
+    785                              for (int i = 0; i < NUM_AXIS; i++) {
+    786                                if (wifi_buff_value[0]=='X'+i)
+    787                                {
+    788                                  if (wifi_buff_value[1]=='+') destination[i] = current_position[i] + 120;
+    789                                  else destination[i] = current_position[i] -120;
+    790                                }
+    791                                else
+    792                                  destination[i] = current_position[i];
+    793                              }
+    794                              feedrate = 1000;
+    795                              prepare_move();
+    796                            break;
+    797                          case 'A':
+    798                          case 'B':
+    799                              char cmd[16];
+    800                              extern bool relative_mode;
+    801                              relative_mode=true;
+    802          
+    803                              if (wifi_buff_value[0]=='A') enqueuecommand("T0");
+    804                              else enqueuecommand("T1");
+    805          
+    806                              strcpy(cmd,"G1 F1000 ");
+    807                              cmd[9]=wifi_buff_value[0];   //X
+    808                              cmd[10]=wifi_buff_value[1];   //+
+    809                              if (cmd[9]=='A')
+    810                              {
+    811                                  cmd[9]='E';
+    812                              }
+    813                              else if (cmd[9]=='B')
+    814                              {
+    815                                  cmd[9]='E';
+    816                              }
+    817                              cmd[11]=wifi_buff_value[2];   //1
+    818                              cmd[12]=wifi_buff_value[3];  //0
+    819                              cmd[13]=wifi_buff_value[4];  //0
+    820                              cmd[14]=0;
+    821                              enqueuecommand(cmd);
+    822          
+    823                              break;
+    824                      }
+    825                      break;
+    826          //
+    827          
+    828                  case 'U':
+    829                      int total_wr,total_rcv;
+    830                      int length;
+    831                      FIL fp;
+    832                      FRESULT result;
+    833          
+    834                      //Disable heaters
+    835                      disable_all_heaters();
+    836          
+    837                      result=f_open(&fp,"cache.gc",FA_WRITE | FA_CREATE_ALWAYS);
+    838                      if (result!=FR_OK)
+    839                      {
+    840                          card.initsd();
+    841                          //card.ls();
+    842                          result=f_open(&fp,"cache.gc",FA_WRITE | FA_CREATE_ALWAYS);
+    843                          //printf("Open: %x\n",result);
+    844                      }
+    845          
+    846                      if (result==FR_OK)
+    847                      {
+    848                          char i;
+    849                          char c;
+    850          
+    851                          volatile unsigned int wifi_timeout=0;
+    852                          #define WIFI_TIMEOUT    100000
+    853                          #define USART_RX_BUF_SIZE 256
+    854                          extern uint8_t Uart_Rx[];
+    855                          extern uint16_t buff_ptr;
+    856          
+    857                          char rx_state=0;
+    858                          char chksum=0;
+    859                          //char rx_buff[256];
+    860                          //extern uint8_t Uart_RX_LCD[];
+    861                          uint16_t rx_len=0;
+    862                          uint32_t wr_len=0;
+    863          
+    864                          //printf("Download started\n");
+    865                          wifi_download=true;
+    866                          wifi_writeString((char *)"{U:OK}");
+    867                          wifi_r_buff_ptr=0;
+    868                          wifi_w_buff_ptr=0;
+    869          
+    870                          //file_len=0;
+    871                          uint8_t f_ptr=0;
+    872                          while (1)
+    873                          {
+    874                              IWDG_ReloadCounter();
+    875                              /*if (wifi_timeout++>WIFI_TIMEOUT)
+    876                              {
+    877                                rx_state=0;
+    878                                chksum=0;
+    879                                rx_len=0;
+    880                                wifi_put('T');
+    881                                wifi_timeout=0;
+    882                              }*/
+    883          
+    884                              while (wifi_r_buff_ptr!=wifi_w_buff_ptr)
+    885                              {
+    886                                  c=Uart_RX_WIFI[wifi_r_buff_ptr++];
+    887                                  chksum^=c;
+    888                                  if (wifi_r_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_r_buff_ptr=0;
+    889          
+    890                                  if (rx_state==1)
+    891                                  {
+    892                                      rx_state=0;
+    893                                      if (chksum==0)
+    894                                      {
+    895                                        IWDG_ReloadCounter();
+    896                                        wifi_put('A');
+    897                                        //f_write(&fp,Uart_RX_LCD,rx_len,&wr_len);
+    898                                        //file_len+=rx_len;
+    899          
+    900                                        if ((f_ptr+rx_len)>=WIFI_USART_RX_BUF_SIZE)
+    901                                        {
+    902                                          f_write(&fp,Uart_RX_WIFI+f_ptr,WIFI_USART_RX_BUF_SIZE-f_ptr,&wr_len);
+    903                                          f_write(&fp,Uart_RX_WIFI,f_ptr+rx_len-WIFI_USART_RX_BUF_SIZE,&wr_len);
+    904                                        }
+    905                                        else
+    906                                        {
+    907                                          f_write(&fp,Uart_RX_WIFI+f_ptr,rx_len,&wr_len);
+    908                                        }
+    909          
+    910                                      }
+    911                                      else wifi_put('E');
+    912                                      rx_len=0;
+    913                                      chksum=0;
+    914                                      f_ptr=wifi_r_buff_ptr;
+    915                                  }
+    916                                  else if (c==0xA5) rx_state=1;
+    917                                  else if (c==0xAA && rx_len<=2)
+    918                                  {
+    919                                      extern bool start_after_download;
+    920                                      wifi_r_buff_ptr=0;
+    921                                      wifi_w_buff_ptr=0;
+    922                                      f_close(&fp);
+    923                                      wifi_download=false;
+    924                                      wifi_writeString((char *)"{SYS:STARTED}");
+    925                                      if (start_after_download)
+    926                                      {
+    927                                          StartBuild();
+    928                                          MYSERIAL.flush();
+    929                                          store_char('\r');
+    930                                          enqueuecommands_P(PSTR("M23 cache.gc"));
+    931                                          enqueuecommands_P(PSTR("M24"));
+    932                                          start_after_download=false;
+    933                                      }
+    934                                      return;
+    935                                  }
+    936                                  else
+    937                                  {
+    938                                    rx_len++;
+    939                                    //Uart_RX_LCD[rx_len++]=c;
+    940                                  }
+    941                                  wifi_timeout=0;
+    942                              }
+    943                          }
+    944          
+    945                      }
+    946                      else
+    947                      {
+    948                          wifi_writeString((char *)"{U:ERR}");
+    949                      }
+    950          
+    951                      break;
+    952                  default:
+    953                      break;
+    954              }
+    955          }
+    956          
+    957          uint8_t started=0;
+    958          void wifi_update() {
+    959              uint8_t c;
+    960              extern uint8_t bDeviceState;
+    961              extern char btn_status;
+    962              extern uint8_t m600_resume;
+    963          
+    964              if (model==2 || model==6)
+    965              {
+    966                  if (btn_status & 2)
+    967                  {
+    968                      //if (bDeviceState != CONFIGURED)
+    969                      {
+    970                          if (!sdprinting)
+    971                          {
+    972                              if (started==1)
+    973                              {
+    974                                  sdprinting = true;
+    975                                  m600_resume=1;
+    976          
+    977                                  //TIM_SetCompare4(TIM2,200);
+    978                                  //GPIO_ResetBits(GPIOA,GPIO_Pin_14);
+    979                                  LED_WORKING_ON;
+    980                              }
+    981                              else
+    982                              {
+    983                                  bool ret = card.findautoprint();
+    984                                  if (ret==false) ret = card.findautoprint();
+    985                                  if (ret)
+    986                                  {
+    987                                      ret=card.openFile(card.fileinfo.fname, true);
+    988                                      if (ret==false)
+    989                                      {
+    990                                          ret = card.findautoprint();
+    991                                          if (ret) ret=card.openFile(card.fileinfo.fname, true);
+    992                                      }
+    993                                  }
+    994          
+    995                                  if (ret)
+    996                                  {
+    997                                      /*if (card.openFile(card.fileinfo.fname, true)==false)
+    998                                      {
+    999                                          ret = card.findautoprint();
+   1000                                          if (ret==false) ret = card.findautoprint();
+   1001                                      }*/
+   1002          
+   1003                                      store_char('\r');
+   1004                                      card.startFileprint();
+   1005                                      started=1;
+   1006          
+   1007                                      //TIM_SetCompare4(TIM2,200);
+   1008                                      //GPIO_ResetBits(GPIOA,GPIO_Pin_14);
+   1009                                      
+   1010                                      LED_WORKING_ON;
+   1011                                      delay(500);
+   1012                                      LED_WORKING_OFF;
+   1013                                      delay(500);
+   1014          
+   1015                                      LED_WORKING_ON;
+   1016                                      delay(500);
+   1017                                      LED_WORKING_OFF;
+   1018                                      delay(500);
+   1019                                      LED_WORKING_ON;
+   1020                                  }
+   1021                                  else
+   1022                                  {
+   1023                                      //blink(5);
+   1024                                  }
+   1025                              }
+   1026                          }
+   1027                          else
+   1028                          {
+   1029                              sdprinting = false;
+   1030                              enqueuecommands_P(PSTR("M600"));
+   1031                              //TIM_SetCompare4(TIM2,0);
+   1032                              //GPIO_SetBits(GPIOA,GPIO_Pin_14);
+   1033                              LED_WORKING_OFF;
+   1034                          }
+   1035                      }
+   1036                      delay(100);
+   1037                      btn_status=0;
+   1038          
+   1039                      /*if (sdprinting) TIM_SetCompare4(TIM2,200);
+   1040                      else TIM_SetCompare4(TIM2,0);*/
+   1041                  }
+   1042          
+   1043                  if (btn_status & 4)
+   1044                  {
+   1045                      if (sdprinting)
+   1046                      {
+   1047                          m600_resume=1;
+   1048                          //TIM_SetCompare4(TIM2,0);
+   1049                          //GPIO_SetBits(GPIOA,GPIO_Pin_14);
+   1050                          LED_WORKING_OFF;
+   1051                          cancel_print();
+   1052                          started=0;
+   1053                          delay(1000);
+   1054                      }
+   1055                      else
+   1056                      {
+   1057                          wifi_writeString((char *)"{WC:0}");
+   1058                          /*TIM_SetCompare4(TIM2,200);
+   1059                          GPIO_ResetBits(GPIOA,GPIO_Pin_14);
+   1060                          delay(500);
+   1061                          TIM_SetCompare4(TIM2,0);
+   1062                          GPIO_SetBits(GPIOA,GPIO_Pin_14);
+   1063                          delay(500);
+   1064          
+   1065                          TIM_SetCompare4(TIM2,200);
+   1066                          GPIO_ResetBits(GPIOA,GPIO_Pin_14);
+   1067                          delay(500);
+   1068                          TIM_SetCompare4(TIM2,0);
+   1069                          GPIO_SetBits(GPIOA,GPIO_Pin_14);
+   1070                          delay(500);
+   1071          
+   1072                          TIM_SetCompare4(TIM2,200);
+   1073                          GPIO_ResetBits(GPIOA,GPIO_Pin_14);
+   1074                          delay(500);
+   1075                          TIM_SetCompare4(TIM2,0);
+   1076                          GPIO_SetBits(GPIOA,GPIO_Pin_14);*/
+   1077                          LED_LINK_ON;
+   1078                          delay(500);
+   1079                          LED_LINK_OFF;
+   1080                          delay(500);
+   1081          
+   1082                          LED_LINK_ON;
+   1083                          delay(500);
+   1084                          LED_LINK_OFF;
+   1085                          delay(500);
+   1086          
+   1087                          LED_LINK_ON;
+   1088                          delay(500);
+   1089                          LED_LINK_OFF;
+   1090                          //delay(500);
+   1091                      }
+   1092                      btn_status=0;
+   1093                  }
+   1094              }
+   1095              /*if (btn_status & 2) TIM_SetCompare4(TIM2,0);
+   1096              else TIM_SetCompare4(TIM2,200);*/
+   1097          /*
+   1098              if (bDeviceState_last!=bDeviceState)
+   1099              {
+   1100                if (bDeviceState == CONFIGURED)
+   1101                {
+   1102                    wifi_writeString((char *)"{R:UC}");
+   1103                }
+   1104                else
+   1105                {
+   1106                    wifi_writeString((char *)"{R:UD}");
+   1107                    com_opened=0;
+   1108                }
+   1109                bDeviceState_last=bDeviceState;
+   1110              }
+   1111          */
+   1112              if (bDeviceState_last!=com_opened)
+   1113              {
+   1114                  if (com_opened == 1)
+   1115                  {
+   1116                      wifi_writeString((char *)"{R:UC}");
+   1117                  }
+   1118                  else
+   1119                  {
+   1120                      wifi_writeString((char *)"{R:UD}");
+   1121                  }
+   1122                  bDeviceState_last=com_opened;
+   1123              }
+   1124              
+   1125              uint8_t endstop_stat=0;
+   1126              if (READ(X_STOP_PIN) == 0) endstop_stat|=1;
+   1127              if (READ(Y_STOP_PIN) == 0) endstop_stat|=2;
+   1128              if (READ(Z_MIN_PIN) == 0) endstop_stat|=4;
+   1129              
+   1130              if (endstop_stat != last_endstop_stat)
+   1131              {
+   1132                  wifi_writeString((char *)"{TS:");
+   1133                  if (endstop_stat&1) wifi_put('X');
+   1134                  else wifi_put('x');
+   1135                  if (endstop_stat&2) wifi_put('Y');
+   1136                  else wifi_put('y');
+   1137                  if (Z_MIN_ENDSTOP_INVERTING)
+   1138                  {
+   1139                      if (endstop_stat&4) wifi_put('Z');
+   1140                      else wifi_put('z');
+   1141                  }
+   1142                  else
+   1143                  {
+   1144                      if (endstop_stat&4) wifi_put('z');
+   1145                      else wifi_put('Z');
+   1146                  }
+   1147                  last_endstop_stat=endstop_stat;
+   1148                  wifi_put('}');
+   1149              }
+   1150              
+   1151              while (wifi_r_buff_ptr!=wifi_w_buff_ptr)
+   1152              {
+   1153                  c=Uart_RX_WIFI[wifi_r_buff_ptr++];
+   1154                  if (wifi_r_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_r_buff_ptr=0;
+   1155                  //putchar(c);
+   1156                  switch (c)
+   1157          		{
+   1158          			case '{': if (wifi_buff_state==0)
+   1159                                {
+   1160                                    wifi_buff_state=1;
+   1161                                    wifi_buff_ptr=0;
+   1162                                }
+   1163                                else wifi_buff_state=0;
+   1164                                break;
+   1165          
+   1166          			case ':': if (wifi_buff_state==1)
+   1167                                {
+   1168                                    wifi_buff_obj[wifi_buff_ptr++]=0;
+   1169                                    wifi_buff_state=2;
+   1170                                    wifi_buff_ptr=0;
+   1171                                }
+   1172                                else wifi_buff_state=0;
+   1173                                break;
+   1174          
+   1175          			case ',': if (wifi_buff_state==2)
+   1176                                {
+   1177                                    wifi_buff_value[wifi_buff_ptr++]=0;
+   1178                                    wifi_process();
+   1179                                    wifi_buff_state=1;
+   1180                                    wifi_buff_ptr=0;
+   1181                                    wifi_buff_obj[0]=0;
+   1182                                }
+   1183                                else if (wifi_buff_state==1)
+   1184                                {
+   1185                                    //wifi_put('?');
+   1186                                    wifi_buff_state=0;
+   1187                                    wifi_buff_ptr=0;
+   1188                                }
+   1189                                else wifi_buff_state=0;
+   1190                                break;
+   1191          
+   1192                      case '}': if (wifi_buff_state==2)
+   1193                                {
+   1194                                    wifi_buff_value[wifi_buff_ptr++]=0;
+   1195                                    wifi_process();
+   1196                                    wifi_buff_state=0;
+   1197                                    wifi_buff_ptr=0;
+   1198                                    wifi_buff_obj[0]=0;
+   1199                                }
+   1200                                else if (wifi_buff_state==1)
+   1201                                {
+   1202                                    //wifi_put('?');
+   1203                                    wifi_buff_state=0;
+   1204                                    wifi_buff_ptr=0;
+   1205                                }
+   1206                                else wifi_buff_state=0;
+   1207                                break;
+   1208          
+   1209                      case '\r':
+   1210                      case '\n':wifi_buff_state=0;
+   1211                                wifi_buff_ptr=0;
+   1212                                break;
+   1213          
+   1214          
+   1215                      default:  if (c>=0x21 && c<=0x7E)
+   1216                                {
+   1217                                    if (wifi_buff_state==1)
+   1218                                    {
+   1219                                        if (wifi_buff_ptr>6)
+   1220                                        {
+   1221                                            wifi_buff_state=0;
+   1222                                            wifi_buff_ptr=0;
+   1223                                        }
+   1224                                        else wifi_buff_obj[wifi_buff_ptr++]=c;
+   1225                                    }
+   1226                                    else if (wifi_buff_state==2)
+   1227                                    {
+   1228                                        if (wifi_buff_ptr>30)
+   1229                                        {
+   1230                                            wifi_buff_state=0;
+   1231                                            wifi_buff_ptr=0;
+   1232                                        }
+   1233                                        else wifi_buff_value[wifi_buff_ptr++]=c;
+   1234                                    }
+   1235                                }
+   1236                                else
+   1237                                {
+   1238                                    //wifi_put('?');
+   1239                                    wifi_buff_state=0;
+   1240                                    wifi_buff_ptr=0;
+   1241                                }
+   1242          		}
+   1243              }
+   1244          
+   1245          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   EndBuild()
+         8   -> GPIO_ResetBits
+         8   -> wifi_writeString(char *)
+      24   PrintingStatus()
+        24   -> __aeabi_f2iz
+        24   -> __aeabi_i2f
+        24   -> buffered_printing()
+        24   -> millis()
+        24   -> wifi_put(char)
+        24   -> wifi_writeInt(uint16_t, uint8_t)
+        24   -> wifi_writeInt32(uint32_t, uint8_t)
+        24   -> wifi_writeString(char *)
+        24 __aeabi_uidiv
+       8   StartBuild()
+         8   -> GPIO_SetBits
+         8   -> wifi_writeString(char *)
+      24   cancel_print()
+        24   -> IWDG_ReloadCounter
+        24   -> PowerOff
+        24   -> PowerOn
+        24   -> __aeabi_fadd
+        24   -> delay(unsigned long)
+        24   -> enable_z()
+        24   -> idle()
+        24   -> prepare_move()
+        24   -> quickStop()
+        24   -> wifi_writeString(char *)
+        24 __aeabi_cfcmple
+       8   setTargetHotend(float const &, uint8_t)
+         8   -> __aeabi_f2iz
+         8   -> start_watching_heater(int)
+      16   wifi_init()
+        16   -> WIFI_enable(unsigned char)
+     616   wifi_process()
+       616   -> CardReader::LcdListFile()
+       616   -> CardReader::chdir(char const *)
+       616   -> CardReader::getfilename(uint16_t, char const *)
+       616   -> CardReader::initsd()
+       616   -> CardReader::openFile(char *, bool, bool)
+       616   -> CardReader::startFileprint()
+       616   -> GPIO_ReadInputDataBit_filtered
+       616   -> IWDG_ReloadCounter
+       616   -> MarlinSerial::flush()
+       616   -> PrintingStatus()
+       616   -> StartBuild()
+       616   -> TIM_SetCompare2
+       616   -> __aeabi_f2iz
+       616   -> __aeabi_fadd
+       616   -> __aeabi_fmul
+       616   -> __aeabi_i2f
+       616   -> __aeabi_memcpy4
+       616   -> __aeabi_ui2f
+       616   -> atoi
+       616   -> cancel_print()
+       616   -> delay(unsigned long)
+       616   -> disable_all_heaters()
+       616   -> disable_all_steppers()
+       616   -> enable_all_steppers()
+       616   -> enqueuecommand(char const *)
+       616   -> enqueuecommands_P(char const *)
+       616   -> f_close
+       616   -> f_open
+       616   -> f_write
+       616   -> millis()
+       616   -> prepare_move()
+       616   -> quickStop()
+       616   -> setTargetHotend(float const &, uint8_t)
+       616   -> store_char
+       616   -> strcmp
+       616   -> strcpy
+       616   -> strlen
+       616   -> update_endstops_ext()
+       616   -> wifi_put(char)
+       616   -> wifi_writeInt(uint16_t, uint8_t)
+       616   -> wifi_writeString(char *)
+      16   wifi_put(char)
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+      24   wifi_update()
+        24   -> CardReader::findautoprint()
+        24   -> CardReader::openFile(char *, bool, bool)
+        24   -> CardReader::startFileprint()
+        24   -> GPIO_ReadInputDataBit_filtered
+        24   -> GPIO_ResetBits
+        24   -> GPIO_SetBits
+        24   -> cancel_print()
+        24   -> delay(unsigned long)
+        24   -> enqueuecommands_P(char const *)
+        24   -> store_char
+        24   -> wifi_process()
+        24   -> wifi_put(char)
+        24   -> wifi_writeString(char *)
+      24   wifi_writeInt(uint16_t, uint8_t)
+        24   -> wifi_put(char)
+        24 __aeabi_uidiv
+        24 __aeabi_uidivmod
+      24   wifi_writeInt32(uint32_t, uint8_t)
+        24   -> wifi_put(char)
+        24 __aeabi_uidiv
+        24 __aeabi_uidivmod
+       8   wifi_writeString(char *)
+         8   -> wifi_put(char)
+      16   wifi_writeString_safe(char *)
+        16   -> wifi_put(char)
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable56
+       4  ??DataTable56_1
+       4  ??DataTable56_10
+       4  ??DataTable56_11
+       4  ??DataTable56_2
+       4  ??DataTable56_3
+       4  ??DataTable56_4
+       4  ??DataTable56_5
+       4  ??DataTable56_6
+       4  ??DataTable56_7
+       4  ??DataTable56_8
+       4  ??DataTable56_9
+       4  ??DataTable57
+       4  ??DataTable57_1
+       4  ??DataTable57_10
+       4  ??DataTable57_11
+       4  ??DataTable57_12
+       4  ??DataTable57_13
+       4  ??DataTable57_14
+       4  ??DataTable57_15
+       4  ??DataTable57_16
+       4  ??DataTable57_17
+       4  ??DataTable57_18
+       4  ??DataTable57_19
+       4  ??DataTable57_2
+       4  ??DataTable57_20
+       4  ??DataTable57_21
+       4  ??DataTable57_22
+       4  ??DataTable57_23
+       4  ??DataTable57_24
+       4  ??DataTable57_25
+       4  ??DataTable57_26
+       4  ??DataTable57_3
+       4  ??DataTable57_4
+       4  ??DataTable57_5
+       4  ??DataTable57_6
+       4  ??DataTable57_7
+       4  ??DataTable57_8
+       4  ??DataTable57_9
+       4  ??DataTable58
+       4  ??DataTable58_1
+       4  ??DataTable58_10
+       4  ??DataTable58_11
+       4  ??DataTable58_12
+       4  ??DataTable58_13
+       4  ??DataTable58_14
+       4  ??DataTable58_15
+       4  ??DataTable58_16
+       4  ??DataTable58_17
+       4  ??DataTable58_18
+       4  ??DataTable58_19
+       4  ??DataTable58_2
+       4  ??DataTable58_20
+       4  ??DataTable58_21
+       4  ??DataTable58_22
+       4  ??DataTable58_23
+       4  ??DataTable58_24
+       4  ??DataTable58_25
+       4  ??DataTable58_26
+       4  ??DataTable58_3
+       4  ??DataTable58_4
+       4  ??DataTable58_5
+       4  ??DataTable58_6
+       4  ??DataTable58_7
+       4  ??DataTable58_8
+       4  ??DataTable58_9
+       4  ??DataTable59
+       4  ??DataTable59_1
+       4  ??DataTable59_10
+       4  ??DataTable59_11
+       4  ??DataTable59_12
+       4  ??DataTable59_13
+       4  ??DataTable59_14
+       4  ??DataTable59_15
+       4  ??DataTable59_2
+       4  ??DataTable59_3
+       4  ??DataTable59_4
+       4  ??DataTable59_5
+       4  ??DataTable59_6
+       4  ??DataTable59_7
+       4  ??DataTable59_8
+       4  ??DataTable59_9
+      12  ?_0
+      12  ?_1
+       8  ?_10
+       4  ?_11
+       8  ?_12
+       8  ?_13
+       8  ?_14
+       8  ?_15
+       2  ?_16
+       8  ?_17
+       8  ?_18
+       8  ?_19
+      12  ?_2
+       8  ?_20
+      12  ?_21
+      12  ?_22
+       8  ?_23
+       2  ?_24
+       4  ?_25
+       4  ?_26
+       8  ?_27
+       8  ?_28
+       8  ?_29
+      12  ?_3
+       8  ?_30
+      12  ?_31
+       8  ?_32
+      16  ?_33
+      16  ?_34
+      12  ?_35
+      12  ?_36
+      16  ?_37
+      16  ?_38
+       8  ?_39
+      16  ?_4
+       4  ?_40
+       4  ?_41
+      12  ?_42
+      12  ?_43
+       8  ?_44
+      16  ?_45
+       4  ?_46
+       8  ?_47
+       8  ?_48
+       8  ?_49
+      16  ?_5
+       8  ?_6
+       8  ?_7
+       8  ?_8
+       8  ?_9
+      28  EndBuild()
+     384  PrintingStatus()
+      28  StartBuild()
+     226  cancel_print()
+      28  setTargetHotend(float const &, uint8_t)
+      32  wifi_buff_value
+      52  wifi_init()
+      56  wifi_ip
+          wifi_mask
+          wifi_gw
+          wifi_buff_obj
+          wifi_buff_ptr
+          wifi_buff_state
+          wifi_status
+          wifi_download
+          download_state
+          last_endstop_stat
+          started
+          wifi_mac
+          wifi_r_buff_ptr
+          bDeviceState_last
+      32  wifi_password
+    1948  wifi_process()
+      36  wifi_put(char)
+      32  wifi_ssid
+     956  wifi_update()
+     106  wifi_writeInt(uint16_t, uint8_t)
+     112  wifi_writeInt32(uint32_t, uint8_t)
+      20  wifi_writeString(char *)
+      36  wifi_writeString_safe(char *)
+
+ 
+    96 bytes in section .bss
+    56 bytes in section .data
+   344 bytes in section .rodata
+ 4'408 bytes in section .text
+ 
+ 4'344 bytes of CODE  memory (+ 64 bytes shared)
+   344 bytes of CONST memory
+   152 bytes of DATA  memory
+
+Errors: none
+Warnings: 44

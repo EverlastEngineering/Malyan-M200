@@ -1,0 +1,457 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\src\usbd_cdc_msc_wrapper.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4839.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\src\usbd_cdc_msc_wrapper.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_cdc_msc_wrapper.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_cdc_msc_wrapper.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\src\usbd_cdc_msc_wrapper.c
+      1          /*      
+      2            *    ===================================================================      
+      3            *                          composite CDC-MSC
+      4            *    =================================================================== */     
+      5          
+      6          /* Includes ------------------------------------------------------------------*/
+      7          #include "usbd_cdc_msc_wrapper.h"
+      8          #include "usbd_cdc_core.h"
+      9          #include "usbd_msc_core.h"
+     10          #include "usbd_desc.h"
+     11          #include "usbd_req.h"
+     12          
+     13          /* Private typedef -----------------------------------------------------------*/
+     14          /* Private define ------------------------------------------------------------*/
+     15          /* Private macro -------------------------------------------------------------*/
+     16          /* Private variables ---------------------------------------------------------*/
+     17          static uint8_t  USBD_CDC_MSC_Init         (void *pdev , uint8_t cfgidx);
+     18          static uint8_t  USBD_CDC_MSC_DeInit       (void *pdev , uint8_t cfgidx);
+     19          
+     20          /* Control Endpoints*/
+     21          static uint8_t  USBD_CDC_MSC_Setup        (void *pdev , USB_SETUP_REQ  *req);  
+     22          static uint8_t  USBD_CDC_MSC_EP0_RxReady  (void *pdev);  
+     23          
+     24          /* Class Specific Endpoints*/
+     25          static uint8_t  USBD_CDC_MSC_DataIn       (void *pdev , uint8_t epnum);   
+     26          static uint8_t  USBD_CDC_MSC_DataOut      (void *pdev , uint8_t epnum); 
+     27          
+     28          static uint8_t  USBD_CDC_MSC_SOF          (void *pdev); 
+     29          static uint8_t*  USBD_CDC_MSC_GetConfigDescriptor( uint8_t speed , uint16_t *length); 
+     30          
+     31          USBD_Class_cb_TypeDef  USBD_CDC_MSC_cb = 
+     32          {
+     33            USBD_CDC_MSC_Init,
+     34            USBD_CDC_MSC_DeInit,
+     35            USBD_CDC_MSC_Setup,
+     36            NULL, 
+     37            USBD_CDC_MSC_EP0_RxReady, 
+     38            USBD_CDC_MSC_DataIn, 
+     39            USBD_CDC_MSC_DataOut,
+     40            USBD_CDC_MSC_SOF,   
+     41            USBD_CDC_MSC_GetConfigDescriptor, 
+     42          };
+     43          
+     44          /* USB MSC_HID device Configuration Descriptor */
+     45          const uint8_t USBD_CDC_MSC_CfgDesc[USB_CDC_MSC_CONFIG_DESC_SIZ] =
+     46          {  
+     47            0x09, /* bLength: Configuration Descriptor size */
+     48            USB_CONFIGURATION_DESCRIPTOR_TYPE, /* bDescriptorType: Configuration */
+     49            USB_CDC_MSC_CONFIG_DESC_SIZ,
+     50            /* wTotalLength: Bytes returned */
+     51            0x00,
+     52            2,         /*bNumInterfaces: 2 interfaces (1 for MSC, 1 for HID)*/
+     53            0x01,         /*bConfigurationValue: Configuration value*/
+     54            0,         /*iConfiguration: Index of string descriptor describing the configuration*/
+     55            0xC0,         /*bmAttributes: bus powered and Support Remote Wake-up */
+     56            0x32,         /*MaxPower 100 mA: this current is used for detecting Vbus*/
+     57            
+     58            /******************** Descriptor of Mass Storage interface ********************/
+     59            0x09,   // bLength: Interface Descriptor size
+     60            0x04,   // bDescriptorType:
+     61            0x00,   // bInterfaceNumber: Number of Interface
+     62            0x00,   // bAlternateSetting: Alternate setting
+     63            0x02,   // bNumEndpoints*/
+     64            0x08,   // bInterfaceClass: MASS STORAGE Class
+     65            0x06,   // bInterfaceSubClass : SCSI transparent*/
+     66            0x50,   // nInterfaceProtocol
+     67            4,      // iInterface:
+     68            
+     69            /********************  Mass Storage Endpoints ********************/
+     70            0x07,   /*Endpoint descriptor length = 7*/
+     71            0x05,   /*Endpoint descriptor type */
+     72            MSC_IN_EP,   /*Endpoint address (IN, address 2) */
+     73            0x02,   /*Bulk endpoint type */
+     74            LOBYTE(MSC_MAX_PACKET),
+     75            HIBYTE(MSC_MAX_PACKET),
+     76            0x00,   /*Polling interval in milliseconds */
+     77            
+     78            0x07,   /*Endpoint descriptor length = 7 */
+     79            0x05,   /*Endpoint descriptor type */
+     80            MSC_OUT_EP,   /*Endpoint address (OUT, address 2) */
+     81            0x02,   /*Bulk endpoint type */
+     82            LOBYTE(MSC_MAX_PACKET),
+     83            HIBYTE(MSC_MAX_PACKET),
+     84            0x00,     /*Polling interval in milliseconds*/
+     85            
+     86            /*************************** CDC interfaces *******************************/
+     87             /*Interface Descriptor */
+     88            0x09,   /* bLength: Interface Descriptor size */
+     89            USB_INTERFACE_DESCRIPTOR_TYPE,  /* bDescriptorType: Interface */
+     90            /* Interface descriptor type */
+     91            1,   /* bInterfaceNumber: Number of Interface */
+     92            0x00,   /* bAlternateSetting: Alternate setting */
+     93            3,   /* bNumEndpoints: One endpoints used */
+     94            0x02,   /* bInterfaceClass: Communication Interface Class */
+     95            0x02,   /* bInterfaceSubClass: Abstract Control Model */
+     96            0x01,   /* bInterfaceProtocol: Common AT commands */
+     97            0,   /* iInterface: */
+     98            
+     99            /*Header Functional Descriptor*/
+    100            0x05,   /* bLength: Endpoint Descriptor size */
+    101            0x24,   /* bDescriptorType: CS_INTERFACE */
+    102            0x00,   /* bDescriptorSubtype: Header Func Desc */
+    103            0x10,   /* bcdCDC: spec release number */
+    104            0x01,
+    105            
+    106            /*Call Management Functional Descriptor*/
+    107            0x05,   /* bFunctionLength */
+    108            0x24,   /* bDescriptorType: CS_INTERFACE */
+    109            0x01,   /* bDescriptorSubtype: Call Management Func Desc */
+    110            0x00,   /* bmCapabilities: D0+D1 */
+    111            1,   /* bDataInterface: 2 */
+    112            
+    113            /*ACM Functional Descriptor*/
+    114            0x04,   /* bFunctionLength */
+    115            0x24,   /* bDescriptorType: CS_INTERFACE */
+    116            0x02,   /* bDescriptorSubtype: Abstract Control Management desc */
+    117            0x02,   /* bmCapabilities */
+    118            
+    119            /*Union Functional Descriptor*/
+    120            0x05,   /* bFunctionLength */
+    121            0x24,   /* bDescriptorType: CS_INTERFACE */
+    122            0x06,   /* bDescriptorSubtype: Union func desc */
+    123            0,   /* bMasterInterface: Communication class interface */
+    124            1,   /* bSlaveInterface0: Data Class Interface */
+    125            
+    126            /*Endpoint 2 Descriptor*/
+    127            0x07,                           /* bLength: Endpoint Descriptor size */
+    128            USB_ENDPOINT_DESCRIPTOR_TYPE,   /* bDescriptorType: Endpoint */
+    129            CDC_CMD_EP,                     /* bEndpointAddress */
+    130            0x03,                           /* bmAttributes: Interrupt */
+    131            LOBYTE(CDC_CMD_PACKET_SZE),     /* wMaxPacketSize: */
+    132            HIBYTE(CDC_CMD_PACKET_SZE),
+    133            0xFF,                           /* bInterval: */
+    134            
+    135            /*Endpoint OUT Descriptor*/
+    136            0x07,   /* bLength: Endpoint Descriptor size */
+    137            USB_ENDPOINT_DESCRIPTOR_TYPE,      /* bDescriptorType: Endpoint */
+    138            CDC_OUT_EP,                        /* bEndpointAddress */
+    139            0x02,                              /* bmAttributes: Bulk */
+    140            0x40,                              /* wMaxPacketSize: */
+    141            0x00,
+    142            0,                              /* bInterval: ignore for Bulk transfer */
+    143            
+    144            /*Endpoint IN Descriptor*/
+    145            0x07,   /* bLength: Endpoint Descriptor size */
+    146            USB_ENDPOINT_DESCRIPTOR_TYPE,     /* bDescriptorType: Endpoint */
+    147            CDC_IN_EP,                        /* bEndpointAddress */
+    148            0x02,                             /* bmAttributes: Bulk */
+    149            0x40,                             /* wMaxPacketSize: */
+    150            0x00,
+    151            0,                              /* bInterval */ 
+    152          }; /* USBD_HID_MSC_CfgDesc */
+    153          
+    154          /* Private function prototypes -----------------------------------------------*/
+    155          /*********************************************
+    156             MSC Device library callbacks
+    157          *********************************************/
+    158          extern uint8_t  USBD_MSC_Init (void  *pdev, uint8_t cfgidx);
+    159          extern uint8_t  USBD_MSC_DeInit (void  *pdev, uint8_t cfgidx);
+    160          extern uint8_t  USBD_MSC_Setup (void  *pdev, USB_SETUP_REQ *req);
+    161          extern uint8_t  USBD_MSC_DataIn (void  *pdev, uint8_t epnum);
+    162          extern uint8_t  USBD_MSC_DataOut (void  *pdev,  uint8_t epnum);
+    163          extern uint8_t  *USBD_MSC_GetCfgDesc (uint8_t speed, uint16_t *length);
+    164          extern uint8_t  USBD_MSC_CfgDesc[USB_MSC_CONFIG_DESC_SIZ];
+    165          
+    166          /*********************************************
+    167             CDC Device library callbacks
+    168          *********************************************/
+    169          extern uint8_t  usbd_cdc_Init        (void  *pdev, uint8_t cfgidx);
+    170          extern uint8_t  usbd_cdc_DeInit      (void  *pdev, uint8_t cfgidx);
+    171          extern uint8_t  usbd_cdc_Setup       (void  *pdev, USB_SETUP_REQ *req);
+    172          extern uint8_t  usbd_cdc_EP0_RxReady  (void *pdev);
+    173          extern uint8_t  usbd_cdc_DataIn      (void *pdev, uint8_t epnum);
+    174          extern uint8_t  usbd_cdc_DataOut     (void *pdev, uint8_t epnum);
+    175          extern uint8_t  usbd_cdc_SOF         (void *pdev);
+    176          
+    177          /* Private functions ---------------------------------------------------------*/
+    178          
+    179          /**
+    180            * @brief  USBD_CDC_MSC_Init
+    181            *         Initialize the HID & MSC interfaces
+    182            * @param  pdev: device instance
+    183            * @param  cfgidx: Configuration index
+    184            * @retval status
+    185            */
+    186          static uint8_t  USBD_CDC_MSC_Init (void  *pdev, 
+    187                                         uint8_t cfgidx)
+    188          {
+    189            /* CDC initialization */
+    190            usbd_cdc_Init (pdev,cfgidx);
+    191            
+    192            /* MSC initialization */
+    193            USBD_MSC_Init (pdev,cfgidx);
+    194            
+    195            return USBD_OK;
+    196          
+    197          }
+    198          
+    199          /**
+    200            * @brief  USBD_HID_Init
+    201            *         DeInitialize the HID/CDC interfaces
+    202            * @param  pdev: device instance
+    203            * @param  cfgidx: Configuration index
+    204            * @retval status
+    205            */
+    206          static uint8_t  USBD_CDC_MSC_DeInit (void  *pdev, 
+    207                                           uint8_t cfgidx)
+    208          {
+    209            /* CDC De-initialization */
+    210            usbd_cdc_DeInit (pdev,cfgidx);
+    211            
+    212            /* CDC De-initialization */
+    213            USBD_MSC_DeInit (pdev,cfgidx);
+    214            
+    215            return USBD_OK;
+    216          }
+    217          
+    218          /**
+    219            * @brief  USBD_HID_Setup
+    220            *         Handle the HID specific requests
+    221            * @param  pdev: instance
+    222            * @param  req: usb requests
+    223            * @retval status
+    224            */
+    225          static uint8_t  USBD_CDC_MSC_Setup (void  *pdev, 
+    226                                              USB_SETUP_REQ *req)
+    227          {
+    228            switch (req->bmRequest & USB_REQ_RECIPIENT_MASK)
+    229            {
+    230            case USB_REQ_RECIPIENT_INTERFACE:
+    231              if (req->wIndex == USBD_MSC_INTERFACE)
+    232              {
+    233                return (USBD_MSC_Setup(pdev, req));
+    234              }
+    235              else
+    236              {
+    237                return (usbd_cdc_Setup(pdev, req));
+    238              }
+    239            case USB_REQ_RECIPIENT_ENDPOINT:
+    240              switch(req->wIndex)
+    241               {
+    242          
+    243                   case CDC_IN_EP:
+    244                   case CDC_OUT_EP:
+    245                   case CDC_CMD_EP:
+    246                       return (usbd_cdc_Setup(pdev, req));
+    247          
+    248                   /*case MSC_EPIN_ADDR:
+    249                   case MSC_EPOUT_ADDR:
+    250                       return (USBD_MSC_Setup(pdev, req));*/
+    251          
+    252                   default:
+    253                      return (USBD_MSC_Setup(pdev, req));
+    254                      break;
+    255               }
+    256          /*
+    257              if ((req->wIndex == HID_IN_EP) || (req->wIndex == HID_OUT_EP))
+    258              {
+    259                return (USBD_HID_Setup (pdev, req));   
+    260              }
+    261              else
+    262              {
+    263                return (USBD_MSC_Setup(pdev, req));
+    264              }*/
+    265            }   
+    266            return USBD_OK;
+    267          }
+    268          
+    269          /**
+    270            * @brief  USBD_CDC_MSC_GetCfgDesc 
+    271            *         return configuration descriptor
+    272            * @param  speed : current device speed
+    273            * @param  length : pointer data length
+    274            * @retval pointer to descriptor buffer
+    275            */
+    276          uint8_t  *USBD_CDC_MSC_GetConfigDescriptor (uint8_t speed, uint16_t *length)
+    277          {
+    278            *length = sizeof (USBD_CDC_MSC_CfgDesc);
+    279            return (uint8_t*)USBD_CDC_MSC_CfgDesc;
+    280          }
+    281          
+    282          /**
+    283            * @brief  USBD_CDC_MSC_DataIn
+    284            *         handle data IN Stage
+    285            * @param  pdev: device instance
+    286            * @param  epnum: endpoint index
+    287            * @retval status
+    288            */
+    289          static uint8_t  USBD_CDC_MSC_DataIn (void  *pdev, 
+    290                                        uint8_t epnum)
+    291          {
+    292            /*DataIN can be for MSC or HID */
+    293            
+    294            if (epnum == (MSC_IN_EP&~0x80) )
+    295            {
+    296              return (USBD_MSC_DataIn(pdev, epnum));
+    297            }
+    298            else
+    299            {
+    300             return (usbd_cdc_DataIn(pdev, epnum));
+    301            }
+    302          }
+    303          
+    304          /**
+    305            * @brief  USBD_CDC_MSC_DataOut
+    306            *         handle data OUT Stage
+    307            * @param  pdev: device instance
+    308            * @param  epnum: endpoint index
+    309            * @retval status
+    310            */
+    311          static uint8_t  USBD_CDC_MSC_DataOut(void *pdev , uint8_t epnum)
+    312          {
+    313            /*DataOut can be for MSC or HID */
+    314            
+    315            if (epnum == (MSC_OUT_EP&~0x80) )
+    316            {
+    317              return (USBD_MSC_DataOut(pdev, epnum));
+    318            }
+    319            else
+    320            {
+    321              return (usbd_cdc_DataOut(pdev, epnum));
+    322            } 
+    323          }
+    324          
+    325          uint8_t  USBD_CDC_MSC_SOF (void *pdev)
+    326          {
+    327            /*SOF processing needed for CDC */
+    328            return (usbd_cdc_SOF(pdev));
+    329          }
+    330          
+    331          /**
+    332            * @brief  USBD_CDC_MSC_EP0_RxReady
+    333            *         handle RxReady processing
+    334            * @param  pdev: device instance
+    335            * @param  epnum: endpoint index
+    336            * @retval status
+    337            */
+    338          uint8_t  USBD_CDC_MSC_EP0_RxReady  (void *pdev)
+    339          {
+    340            (usbd_cdc_EP0_RxReady(pdev));
+    341            return USBD_OK;
+    342          }
+    343          
+    344          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   USBD_CDC_MSC_DataIn
+         8   -> USBD_MSC_DataIn
+         8   -> usbd_cdc_DataIn
+       8   USBD_CDC_MSC_DataOut
+         8   -> USBD_MSC_DataOut
+         8   -> usbd_cdc_DataOut
+      16   USBD_CDC_MSC_DeInit
+        16   -> USBD_MSC_DeInit
+        16   -> usbd_cdc_DeInit
+       8   USBD_CDC_MSC_EP0_RxReady
+         8   -> usbd_cdc_EP0_RxReady
+       0   USBD_CDC_MSC_GetConfigDescriptor
+      16   USBD_CDC_MSC_Init
+        16   -> USBD_MSC_Init
+        16   -> usbd_cdc_Init
+       8   USBD_CDC_MSC_SOF
+         8   -> usbd_cdc_SOF
+       8   USBD_CDC_MSC_Setup
+         8   -> USBD_MSC_Setup
+         8   -> usbd_cdc_Setup
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+      84  USBD_CDC_MSC_CfgDesc
+      18  USBD_CDC_MSC_DataIn
+      18  USBD_CDC_MSC_DataOut
+      22  USBD_CDC_MSC_DeInit
+      10  USBD_CDC_MSC_EP0_RxReady
+       8  USBD_CDC_MSC_GetConfigDescriptor
+      22  USBD_CDC_MSC_Init
+       8  USBD_CDC_MSC_SOF
+      56  USBD_CDC_MSC_Setup
+      36  USBD_CDC_MSC_cb
+
+ 
+  36 bytes in section .data
+  84 bytes in section .rodata
+ 166 bytes in section .text
+ 
+ 166 bytes of CODE  memory
+  84 bytes of CONST memory
+  36 bytes of DATA  memory
+
+Errors: none
+Warnings: none

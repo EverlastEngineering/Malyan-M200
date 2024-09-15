@@ -1,0 +1,421 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW49D5.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_msc_core.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_core.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Class\msc\src\usbd_msc_core.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_msc_core.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides all the MSC core functions.
+      8            *
+      9            * @verbatim
+     10            *      
+     11            *          ===================================================================      
+     12            *                                MSC Class  Description
+     13            *          =================================================================== 
+     14            *           This module manages the MSC class V1.0 following the "Universal 
+     15            *           Serial Bus Mass Storage Class (MSC) Bulk-Only Transport (BOT) Version 1.0
+     16            *           Sep. 31, 1999".
+     17            *           This driver implements the following aspects of the specification:
+     18            *             - Bulk-Only Transport protocol
+     19            *             - Subclass : SCSI transparent command set (ref. SCSI Primary Commands - 3 (SPC-3))
+     20            *      
+     21            *  @endverbatim
+     22            *
+     23            ******************************************************************************
+     24            * @attention
+     25            *
+     26            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     27            *
+     28            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     29            * You may not use this file except in compliance with the License.
+     30            * You may obtain a copy of the License at:
+     31            *
+     32            *        http://www.st.com/software_license_agreement_liberty_v2
+     33            *
+     34            * Unless required by applicable law or agreed to in writing, software 
+     35            * distributed under the License is distributed on an "AS IS" BASIS, 
+     36            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     37            * See the License for the specific language governing permissions and
+     38            * limitations under the License.
+     39            *
+     40            ******************************************************************************
+     41            */ 
+     42          
+     43          /* Includes ------------------------------------------------------------------*/
+     44          #include "usbd_msc_core.h"
+     45          
+     46          /* Private typedef -----------------------------------------------------------*/
+     47          /* Private define ------------------------------------------------------------*/
+     48          /* Private macro -------------------------------------------------------------*/
+     49          /* Private variables ---------------------------------------------------------*/
+     50          /* Private function prototypes -----------------------------------------------*/
+     51          uint8_t  USBD_MSC_Init (void  *pdev, 
+     52                                      uint8_t cfgidx);
+     53          
+     54          uint8_t  USBD_MSC_DeInit (void  *pdev, 
+     55                                        uint8_t cfgidx);
+     56          
+     57          uint8_t  USBD_MSC_Setup (void  *pdev, 
+     58                                       USB_SETUP_REQ *req);
+     59          
+     60          uint8_t  USBD_MSC_DataIn (void  *pdev, 
+     61                                        uint8_t epnum);
+     62          
+     63          
+     64          uint8_t  USBD_MSC_DataOut (void  *pdev, 
+     65                                         uint8_t epnum);
+     66          
+     67          uint8_t  *USBD_MSC_GetCfgDesc (uint8_t speed, 
+     68                                                uint16_t *length);
+     69          
+     70          USBD_Class_cb_TypeDef  USBD_MSC_cb = 
+     71          {
+     72            USBD_MSC_Init,
+     73            USBD_MSC_DeInit,
+     74            USBD_MSC_Setup,
+     75            NULL, /*EP0_TxSent*/  
+     76            NULL, /*EP0_RxReady*/
+     77            USBD_MSC_DataIn,
+     78            USBD_MSC_DataOut,
+     79            NULL, /*SOF */      
+     80            USBD_MSC_GetCfgDesc,
+     81          };
+     82          
+     83          /* USB Mass storage device Configuration Descriptor */
+     84          /*   All Descriptors (Configuration, Interface, Endpoint, Class, Vendor */
+     85          const uint8_t USBD_MSC_CfgDesc[USB_MSC_CONFIG_DESC_SIZ] =
+     86          { 
+     87            0x09,   /* bLength: Configuration Descriptor size */
+     88            USB_DESC_TYPE_CONFIGURATION,   /* bDescriptorType: Configuration */
+     89            USB_MSC_CONFIG_DESC_SIZ,
+     90            
+     91            0x00,
+     92            0x01,   /* bNumInterfaces: 1 interface */
+     93            0x01,   /* bConfigurationValue: */
+     94            0x04,   /* iConfiguration: */
+     95            0xC0,   /* bmAttributes: */
+     96            0x32,   /* MaxPower 100 mA */
+     97            
+     98            /********************  Mass Storage interface ********************/
+     99            0x09,   /* bLength: Interface Descriptor size */
+    100            0x04,   /* bDescriptorType: */
+    101            0x00,   /* bInterfaceNumber: Number of Interface */
+    102            0x00,   /* bAlternateSetting: Alternate setting */
+    103            0x02,   /* bNumEndpoints*/
+    104            0x08,   /* bInterfaceClass: MSC Class */
+    105            0x06,   /* bInterfaceSubClass : SCSI transparent*/
+    106            0x50,   /* nInterfaceProtocol */
+    107            0x05,          /* iInterface: */
+    108            /********************  Mass Storage Endpoints ********************/
+    109            0x07,   /*Endpoint descriptor length = 7*/
+    110            0x05,   /*Endpoint descriptor type */
+    111            MSC_IN_EP,   /*Endpoint address (IN, address 1) */
+    112            0x02,   /*Bulk endpoint type */
+    113            LOBYTE(MSC_MAX_PACKET),
+    114            HIBYTE(MSC_MAX_PACKET),
+    115            0x00,   /*Polling interval in milliseconds */ 
+    116            0x07,   /*Endpoint descriptor length = 7 */
+    117            0x05,   /*Endpoint descriptor type */
+    118            MSC_OUT_EP,   /*Endpoint address (OUT, address 1) */
+    119            0x02,   /*Bulk endpoint type */
+    120            LOBYTE(MSC_MAX_PACKET),
+    121            HIBYTE(MSC_MAX_PACKET),
+    122            0x00     /*Polling interval in milliseconds*/
+    123          };
+    124          static uint8_t  USBD_MSC_MaxLun = 0;
+    125          
+    126          static uint8_t  USBD_MSC_AltSet = 0;
+    127          
+    128          /* Private function ----------------------------------------------------------*/
+    129          /**
+    130            * @brief  USBD_MSC_Init
+    131            *         Initialize  the mass storage configuration
+    132            * @param  pdev: device instance
+    133            * @param  cfgidx: configuration index
+    134            * @retval status
+    135            */
+    136          uint8_t  USBD_MSC_Init (void  *pdev, 
+    137                                      uint8_t cfgidx)
+    138          { 
+    139            DCD_PMA_Config(pdev , MSC_IN_EP,USB_SNG_BUF,MSC_IN_TX_ADDRESS);
+    140            DCD_PMA_Config(pdev , MSC_OUT_EP,USB_SNG_BUF,MSC_OUT_RX_ADDRESS);
+    141           
+    142            /* Open EP IN */
+    143            DCD_EP_Open(pdev,
+    144                        MSC_IN_EP,
+    145                        MSC_EPIN_SIZE,
+    146                        USB_EP_BULK);
+    147            
+    148            /* Open EP OUT */
+    149            DCD_EP_Open(pdev,
+    150                        MSC_OUT_EP,
+    151                        MSC_EPOUT_SIZE,
+    152                        USB_EP_BULK);
+    153           
+    154            /* Init the BOT  layer */
+    155            MSC_BOT_Init(pdev); 
+    156            
+    157            return USBD_OK;
+    158          }
+    159          
+    160          /**
+    161            * @brief  USBD_MSC_DeInit
+    162            *         DeInitilaize  the mass storage configuration
+    163            * @param  pdev: device instance
+    164            * @param  cfgidx: configuration index
+    165            * @retval status
+    166            */
+    167          uint8_t  USBD_MSC_DeInit (void  *pdev, 
+    168                                        uint8_t cfgidx)
+    169          {
+    170            /* Close MSC EPs */
+    171            DCD_EP_Close (pdev , MSC_IN_EP);
+    172            DCD_EP_Close (pdev , MSC_OUT_EP);
+    173            
+    174            /* Un Init the BOT layer */
+    175            MSC_BOT_DeInit(pdev);   
+    176            return USBD_OK;
+    177          }
+    178          /**
+    179            * @brief  USBD_MSC_Setup
+    180            *         Handle the MSC specific requests
+    181            * @param  pdev: device instance
+    182            * @param  req: USB request
+    183            * @retval status
+    184            */
+    185          uint8_t  USBD_MSC_Setup (void  *pdev, USB_SETUP_REQ *req)
+    186          {
+    187            
+    188            switch (req->bmRequest & USB_REQ_TYPE_MASK)
+    189            {
+    190          
+    191            /* Class request */
+    192            case USB_REQ_TYPE_CLASS :
+    193              switch (req->bRequest)
+    194              {
+    195              case BOT_GET_MAX_LUN :
+    196          
+    197                if((req->wValue  == 0) && 
+    198                   (req->wLength == 1) &&
+    199                   ((req->bmRequest & 0x80) == 0x80))
+    200                {
+    201                  USBD_MSC_MaxLun = USBD_STORAGE_fops->GetMaxLun();
+    202                  if(USBD_MSC_MaxLun > 0)
+    203                  {
+    204                     USBD_CtlSendData (pdev,
+    205                                       &USBD_MSC_MaxLun,
+    206                                        1);
+    207                  }
+    208                  else
+    209                  {
+    210                    USBD_CtlError(pdev , req);
+    211                    return USBD_FAIL; 
+    212                  }
+    213                }
+    214                else
+    215                {
+    216                   USBD_CtlError(pdev , req);
+    217                   return USBD_FAIL; 
+    218                }
+    219                break;
+    220                
+    221              case BOT_RESET :
+    222                if((req->wValue  == 0) && 
+    223                   (req->wLength == 0) &&
+    224                  ((req->bmRequest & 0x80) != 0x80))
+    225                {      
+    226                   MSC_BOT_Reset(pdev);
+    227                }
+    228                else
+    229                {
+    230                   USBD_CtlError(pdev , req);
+    231                   return USBD_FAIL; 
+    232                }
+    233                break;
+    234          
+    235              default:
+    236                 USBD_CtlError(pdev , req);
+    237                 return USBD_FAIL; 
+    238              }
+    239              break;
+    240            /* Interface & Endpoint request */
+    241            case USB_REQ_TYPE_STANDARD:
+    242              switch (req->bRequest)
+    243              {
+    244              case USB_REQ_GET_INTERFACE :
+    245                USBD_CtlSendData (pdev,
+    246                                  &USBD_MSC_AltSet,
+    247                                  1);
+    248                break;
+    249                
+    250              case USB_REQ_SET_INTERFACE :
+    251                USBD_MSC_AltSet = (uint8_t)(req->wValue);
+    252                break;
+    253              
+    254              case USB_REQ_CLEAR_FEATURE:  
+    255                 
+    256                /* Handle BOT error */
+    257                MSC_BOT_CplClrFeature(pdev, (uint8_t)req->wIndex);
+    258                break;
+    259                
+    260              }  
+    261              break;
+    262             
+    263            default:
+    264              break;
+    265            }
+    266            return USBD_OK;
+    267          }
+    268          
+    269          /**
+    270            * @brief  USBD_MSC_DataIn
+    271            *         handle data IN Stage
+    272            * @param  pdev: device instance
+    273            * @param  epnum: endpoint index
+    274            * @retval status
+    275            */
+    276          uint8_t  USBD_MSC_DataIn (void  *pdev, 
+    277                                        uint8_t epnum)
+    278          {
+    279            MSC_BOT_DataIn(pdev , epnum);
+    280            return USBD_OK;
+    281          }
+    282          
+    283          /**
+    284            * @brief  USBD_MSC_DataOut
+    285            *         handle data OUT Stage
+    286            * @param  pdev: device instance
+    287            * @param  epnum: endpoint index
+    288            * @retval status
+    289            */
+    290          uint8_t  USBD_MSC_DataOut (void  *pdev, 
+    291                                         uint8_t epnum)
+    292          {
+    293            MSC_BOT_DataOut(pdev , epnum);
+    294            return USBD_OK;
+    295          }
+    296          
+    297          /**
+    298            * @brief  USBD_MSC_GetCfgDesc 
+    299            *         return configuration descriptor
+    300            * @param  speed : current device speed
+    301            * @param  length : pointer data length
+    302            * @retval pointer to descriptor buffer
+    303            */
+    304          uint8_t  *USBD_MSC_GetCfgDesc (uint8_t speed, uint16_t *length)
+    305          {
+    306            *length = sizeof (USBD_MSC_CfgDesc);
+    307            return (uint8_t *)USBD_MSC_CfgDesc;
+    308          }
+    309          
+    310          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   USBD_MSC_DataIn
+         8   -> MSC_BOT_DataIn
+       8   USBD_MSC_DataOut
+         8   -> MSC_BOT_DataOut
+       8   USBD_MSC_DeInit
+         8   -> DCD_EP_Close
+         8   -> MSC_BOT_DeInit
+       0   USBD_MSC_GetCfgDesc
+       8   USBD_MSC_Init
+         8   -> DCD_EP_Open
+         8   -> DCD_PMA_Config
+         8   -> MSC_BOT_Init
+      16   USBD_MSC_Setup
+        16   -- Indirect call
+        16   -> MSC_BOT_CplClrFeature
+        16   -> MSC_BOT_Reset
+        16   -> USBD_CtlError
+        16   -> USBD_CtlSendData
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+      32  USBD_MSC_CfgDesc
+      10  USBD_MSC_DataIn
+      10  USBD_MSC_DataOut
+      28  USBD_MSC_DeInit
+       8  USBD_MSC_GetCfgDesc
+      60  USBD_MSC_Init
+       2  USBD_MSC_MaxLun
+          USBD_MSC_AltSet
+     156  USBD_MSC_Setup
+      36  USBD_MSC_cb
+
+ 
+   2 bytes in section .bss
+  36 bytes in section .data
+ 312 bytes in section .text
+ 
+ 312 bytes of CODE memory
+  38 bytes of DATA memory
+
+Errors: none
+Warnings: none

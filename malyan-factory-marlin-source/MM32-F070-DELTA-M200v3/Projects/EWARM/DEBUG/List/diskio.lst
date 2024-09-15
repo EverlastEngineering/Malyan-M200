@@ -1,0 +1,378 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:20
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\diskio.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW3982.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\diskio.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\diskio.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\diskio.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\diskio.c
+      1          /****************************************Copyright (c)****************************************************
+      2          **
+      3          **                                 http://www.powermcu.com
+      4          **
+      5          **--------------File Info---------------------------------------------------------------------------------
+      6          ** File name:               diskio.c
+      7          ** Descriptions:            The FATFS Diskio
+      8          **
+      9          **--------------------------------------------------------------------------------------------------------
+     10          ** Created by:              AVRman
+     11          ** Created date:            2010-11-4
+     12          ** Version:                 v1.0
+     13          ** Descriptions:            The original version
+     14          **
+     15          **--------------------------------------------------------------------------------------------------------
+     16          ** Modified by:
+     17          ** Modified date:
+     18          ** Version:
+     19          ** Descriptions:
+     20          **
+     21          *********************************************************************************************************/
+     22          
+     23          /* Includes ------------------------------------------------------------------*/
+     24          #include "diskio.h"
+     25          #include "ffconf.h"
+     26          #include "SPI_MSD0_Driver.h"
+     27          #include <stdio.h>
+     28          
+     29          /* Private variables ---------------------------------------------------------*/
+     30          extern MSD_CARDINFO SD0_CardInfo;
+     31          
+     32          
+     33          DSTATUS disk_initialize (
+     34          	BYTE drv				/* Physical drive nmuber (0..) */
+     35          )
+     36          {
+     37          	int Status;
+     38                  
+     39          	switch (drv)
+     40          	{
+     41          		case 0 :
+     42          			Status = MSD0_Init();
+     43          			if(Status==0){
+     44          				return RES_OK;
+     45          			}else{
+     46          				return STA_NOINIT;
+     47          			}
+     48          		case 1 :
+     49          			return RES_OK;
+     50          		case 2 :
+     51          			return RES_OK;
+     52          		case 3 :
+     53          			return RES_OK;
+     54          		default:
+     55          			return STA_NOINIT;
+     56          	}
+     57          }
+     58          
+     59          
+     60          
+     61          
+     62          DSTATUS disk_status (
+     63          	BYTE drv		/* Physical drive nmuber (0..) */
+     64          )
+     65          {
+     66          	switch (drv)
+     67          	{
+     68          		case 0 :
+     69          			return RES_OK;
+     70          		case 1 :
+     71          			return RES_OK;
+     72          		case 2 :
+     73          			return RES_OK;
+     74          		default:
+     75          			return STA_NOINIT;
+     76          	}
+     77          }
+     78          
+     79          
+     80          
+     81          /*-----------------------------------------------------------------------*/
+     82          /* Read Sector(s)                                                        */
+     83          
+     84          DRESULT disk_read (
+     85          	BYTE drv,		/* Physical drive nmuber (0..) */
+     86          	BYTE *buff,		/* Data buffer to store read data */
+     87          	DWORD sector,	/* Sector address (LBA) */
+     88          	UINT count		/* Number of sectors to read (1..255) */
+     89          )
+     90          {
+     91          	int Status;
+     92          	if( !count )
+     93          	{
+     94          		return RES_PARERR;  /* count不能等于0，否则返回参数错误 */
+     95          	}
+     96          	switch (drv)
+     97          	{
+     98          		case 0:
+     99          		    if(count==1)            /* 1个sector的读操作 */
+    100          		    {
+    101          				Status =  MSD0_ReadSingleBlock( sector ,buff );
+    102          				if(Status == 0){
+    103          					return RES_OK;
+    104          				}else{
+    105          					return RES_ERROR;
+    106          				}
+    107          		    }
+    108          		    else                    /* 多个sector的读操作 */
+    109          		    {
+    110          				Status = MSD0_ReadMultiBlock( sector , buff ,count);
+    111          				if(Status == 0){
+    112          					return RES_OK;
+    113          				}else{
+    114          					return RES_ERROR;
+    115          				}
+    116          		    }
+    117          		case 1:
+    118          		    if(count==1)            /* 1个sector的读操作 */
+    119          		    {
+    120          				return RES_OK;
+    121          		    }
+    122          		    else                    /* 多个sector的读操作 */
+    123          		    {
+    124          				return RES_OK;
+    125          		    }
+    126          
+    127          		default:
+    128          			return RES_ERROR;
+    129          	}
+    130          }
+    131          
+    132          
+    133          
+    134          /*-----------------------------------------------------------------------*/
+    135          /* Write Sector(s)                                                       */
+    136          
+    137          #if _READONLY == 0
+    138          DRESULT disk_write (
+    139          	BYTE drv,			/* Physical drive nmuber (0..) */
+    140          	const BYTE *buff,	        /* Data to be written */
+    141          	DWORD sector,		/* Sector address (LBA) */
+    142          	UINT count			/* Number of sectors to write (1..255) */
+    143          )
+    144          {
+    145          	int Status;
+    146          	if( !count )
+    147          	{
+    148          		return RES_PARERR;  /* count不能等于0，否则返回参数错误 */
+    149          	}
+    150          	switch (drv)
+    151          	{
+    152          		case 0:
+    153          		    if(count==1)            /* 1个sector的写操作 */
+    154          		    {
+    155          				Status = MSD0_WriteSingleBlock( sector , (uint8_t *)(&buff[0]) );
+    156          				if(Status == 0){
+    157          					return RES_OK;
+    158          				}else{
+    159          					return RES_ERROR;
+    160          				}
+    161          		    }
+    162          		    else                    /* 多个sector的写操作 */
+    163          		    {
+    164          				Status = MSD0_WriteMultiBlock( sector , (uint8_t *)(&buff[0]) , count );
+    165          				if(Status == 0){
+    166          					return RES_OK;
+    167          				}else{
+    168          					return RES_ERROR;
+    169          				}
+    170          		    }
+    171          		case 1:
+    172          		    if(count==1)            /* 1个sector的写操作 */
+    173          		    {
+    174          				return RES_OK;
+    175          		    }
+    176          		    else                    /* 多个sector的写操作 */
+    177          		    {
+    178          				return RES_OK;
+    179          		    }
+    180          
+    181          		default:return RES_ERROR;
+    182          	}
+    183          }
+    184          #endif /* _READONLY */
+    185          
+    186          
+    187          
+    188          /*-----------------------------------------------------------------------*/
+    189          /* Miscellaneous Functions                                               */
+    190          
+    191          DRESULT disk_ioctl (
+    192          	BYTE drv,		/* Physical drive nmuber (0..) */
+    193          	BYTE ctrl,		/* Control code */
+    194          	void *buff		/* Buffer to send/receive control data */
+    195          )
+    196          {
+    197          	if (drv==0)
+    198          	{
+    199          		MSD0_GetCardInfo(&SD0_CardInfo);
+    200          		switch (ctrl)
+    201          		{
+    202          			case CTRL_SYNC :
+    203          				return RES_OK;
+    204          		  	case GET_SECTOR_COUNT :
+    205          				*(DWORD*)buff = SD0_CardInfo.Capacity/SD0_CardInfo.BlockSize;
+    206          		    	return RES_OK;
+    207          		  	case GET_BLOCK_SIZE :
+    208          				*(WORD*)buff = SD0_CardInfo.BlockSize;
+    209          		    	return RES_OK;
+    210          		  	case CTRL_POWER :
+    211          				break;
+    212          		  	case CTRL_LOCK :
+    213          				break;
+    214          		  	case CTRL_EJECT :
+    215          				break;
+    216          	      	/* MMC/SDC command */
+    217          		  	case MMC_GET_TYPE :
+    218          				break;
+    219          		  	case MMC_GET_CSD :
+    220          				break;
+    221          		  	case MMC_GET_CID :
+    222          				break;
+    223          			case MMC_GET_OCR :
+    224          				break;
+    225          			case MMC_GET_SDSTAT :
+    226          				break;
+    227          		}
+    228              }else if(drv==1){
+    229          		switch (ctrl)
+    230          		{
+    231          			case CTRL_SYNC :
+    232          				return RES_OK;
+    233          		  	case GET_SECTOR_COUNT :
+    234          		    	return RES_OK;
+    235          		  	case GET_SECTOR_SIZE :
+    236          				return RES_OK;
+    237          		  	case GET_BLOCK_SIZE :
+    238          		    	return RES_OK;
+    239          		  	case CTRL_POWER :
+    240          				break;
+    241          		  	case CTRL_LOCK :
+    242          				break;
+    243          		  	case CTRL_EJECT :
+    244          				break;
+    245          	      	/* MMC/SDC command */
+    246          		  	case MMC_GET_TYPE :
+    247          				break;
+    248          		  	case MMC_GET_CSD :
+    249          				break;
+    250          		  	case MMC_GET_CID :
+    251          				break;
+    252          		  	case MMC_GET_OCR :
+    253          				break;
+    254          		  	case MMC_GET_SDSTAT :
+    255          				break;
+    256          		}
+    257          	}
+    258          	else{
+    259          		return RES_PARERR;
+    260          	}
+    261          	return RES_PARERR;
+    262          }
+    263          
+    264          /* 得到文件Calendar格式的建立日期,是DWORD get_fattime (void) 逆变换 */
+    265          /*-----------------------------------------------------------------------*/
+    266          /* User defined function to give a current time to fatfs module          */
+    267          /* 31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31) */
+    268          /* 15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */
+    269          DWORD get_fattime (void)
+    270          {
+    271          
+    272              return 0;
+    273          }
+    274          
+    275          
+    276          
+    277          /*********************************************************************************************************
+    278                END FILE
+    279          *********************************************************************************************************/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   disk_initialize
+         8   -> MSD0_Init
+      16   disk_ioctl
+        16   -> MSD0_GetCardInfo
+        16 __aeabi_uidiv
+       8   disk_read
+         8   -> MSD0_ReadMultiBlock
+         8   -> MSD0_ReadSingleBlock
+       0   disk_status
+       8   disk_write
+         8   -> MSD0_WriteMultiBlock
+         8   -> MSD0_WriteSingleBlock
+       0   get_fattime
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+      10  ?Subroutine0
+      40  disk_initialize
+      66  disk_ioctl
+      48  disk_read
+      12  disk_status
+      48  disk_write
+       4  get_fattime
+
+ 
+ 232 bytes in section .text
+ 
+ 232 bytes of CODE memory
+
+Errors: none
+Warnings: none

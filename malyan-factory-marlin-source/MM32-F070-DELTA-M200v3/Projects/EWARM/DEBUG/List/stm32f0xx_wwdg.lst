@@ -1,0 +1,402 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:22
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_wwdg.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4572.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_wwdg.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32f0xx_wwdg.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_wwdg.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_wwdg.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f0xx_wwdg.c
+      4            * @author  MCD Application Team
+      5            * @version V1.3.0
+      6            * @date    16-January-2014
+      7            * @brief   This file provides firmware functions to manage the following 
+      8            *          functionalities of the Window watchdog (WWDG) peripheral:
+      9            *           + Prescaler, Refresh window and Counter configuration
+     10            *           + WWDG activation
+     11            *           + Interrupts and flags management
+     12            *             
+     13            *  @verbatim
+     14            *    
+     15            ============================================================================== 
+     16                                     ##### WWDG features ##### 
+     17            ============================================================================== 
+     18              [..] Once enabled the WWDG generates a system reset on expiry of a programmed
+     19                  time period, unless the program refreshes the counter (downcounter) 
+     20                  before to reach 0x3F value (i.e. a reset is generated when the counter
+     21                  value rolls over from 0x40 to 0x3F). 
+     22              [..] An MCU reset is also generated if the counter value is refreshed
+     23                   before the counter has reached the refresh window value. This 
+     24                   implies that the counter must be refreshed in a limited window.
+     25          
+     26              [..] Once enabled the WWDG cannot be disabled except by a system reset.
+     27          
+     28              [..] WWDGRST flag in RCC_CSR register can be used to inform when a WWDG
+     29                   reset occurs.
+     30          
+     31              [..] The WWDG counter input clock is derived from the APB clock divided 
+     32                   by a programmable prescaler.
+     33          
+     34              [..] WWDG counter clock = PCLK1 / Prescaler.
+     35              [..] WWDG timeout = (WWDG counter clock) * (counter value).
+     36          
+     37              [..] Min-max timeout value @32MHz (PCLK1): ~85us / ~43ms.
+     38          
+     39                                 ##### How to use this driver ##### 
+     40            ==============================================================================
+     41              [..]
+     42                  (#) Enable WWDG clock using RCC_APB1PeriphClockCmd(RCC_APB1Periph_WWDG, ENABLE) 
+     43                      function.
+     44                        
+     45                  (#) Configure the WWDG prescaler using WWDG_SetPrescaler() function.
+     46                                       
+     47                  (#) Configure the WWDG refresh window using WWDG_SetWindowValue() function.
+     48                        
+     49                  (#) Set the WWDG counter value and start it using WWDG_Enable() function.
+     50                      When the WWDG is enabled the counter value should be configured to 
+     51                      a value greater than 0x40 to prevent generating an immediate reset.
+     52                        
+     53                  (#) Optionally you can enable the Early wakeup interrupt which is 
+     54                      generated when the counter reach 0x40.
+     55                      Once enabled this interrupt cannot be disabled except by a system reset.
+     56                             
+     57                  (#) Then the application program must refresh the WWDG counter at regular
+     58                      intervals during normal operation to prevent an MCU reset, using
+     59                      WWDG_SetCounter() function. This operation must occur only when
+     60                      the counter value is lower than the refresh window value, 
+     61                      programmed using WWDG_SetWindowValue().
+     62            
+     63            *  @endverbatim
+     64            *
+     65            ******************************************************************************
+     66            * @attention
+     67            *
+     68            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     69            *
+     70            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     71            * You may not use this file except in compliance with the License.
+     72            * You may obtain a copy of the License at:
+     73            *
+     74            *        http://www.st.com/software_license_agreement_liberty_v2
+     75            *
+     76            * Unless required by applicable law or agreed to in writing, software 
+     77            * distributed under the License is distributed on an "AS IS" BASIS, 
+     78            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     79            * See the License for the specific language governing permissions and
+     80            * limitations under the License.
+     81            *
+     82            ******************************************************************************
+     83            */
+     84          
+     85          /* Includes ------------------------------------------------------------------*/
+     86          #include "stm32f0xx_wwdg.h"
+     87          #include "stm32f0xx_rcc.h"
+     88          
+     89          /** @addtogroup STM32F0xx_StdPeriph_Driver
+     90            * @{
+     91            */
+     92          
+     93          /** @defgroup WWDG 
+     94            * @brief WWDG driver modules
+     95            * @{
+     96            */
+     97          
+     98          /* Private typedef -----------------------------------------------------------*/
+     99          /* Private define ------------------------------------------------------------*/
+    100          /* --------------------- WWDG registers bit mask ---------------------------- */
+    101          /* CFR register bit mask */
+    102          #define CFR_WDGTB_MASK    ((uint32_t)0xFFFFFE7F)
+    103          #define CFR_W_MASK        ((uint32_t)0xFFFFFF80)
+    104          #define BIT_MASK          ((uint8_t)0x7F)
+    105          
+    106          /* Private macro -------------------------------------------------------------*/
+    107          /* Private variables ---------------------------------------------------------*/
+    108          /* Private function prototypes -----------------------------------------------*/
+    109          /* Private functions ---------------------------------------------------------*/
+    110          
+    111          /** @defgroup WWDG_Private_Functions
+    112            * @{
+    113            */
+    114          
+    115          /** @defgroup WWDG_Group1 Prescaler, Refresh window and Counter configuration functions
+    116           *  @brief   Prescaler, Refresh window and Counter configuration functions 
+    117           *
+    118          @verbatim   
+    119            ==============================================================================
+    120              ##### Prescaler, Refresh window and Counter configuration functions #####
+    121            ==============================================================================  
+    122          
+    123          @endverbatim
+    124            * @{
+    125            */
+    126          
+    127          /**
+    128            * @brief  Deinitializes the WWDG peripheral registers to their default reset values.
+    129            * @param  None
+    130            * @retval None
+    131            */
+    132          void WWDG_DeInit(void)
+    133          {
+    134            RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, ENABLE);
+    135            RCC_APB1PeriphResetCmd(RCC_APB1Periph_WWDG, DISABLE);
+    136          }
+    137          
+    138          /**
+    139            * @brief  Sets the WWDG Prescaler.
+    140            * @param  WWDG_Prescaler: specifies the WWDG Prescaler.
+    141            *          This parameter can be one of the following values:
+    142            *            @arg WWDG_Prescaler_1: WWDG counter clock = (PCLK1/4096)/1
+    143            *            @arg WWDG_Prescaler_2: WWDG counter clock = (PCLK1/4096)/2
+    144            *            @arg WWDG_Prescaler_4: WWDG counter clock = (PCLK1/4096)/4
+    145            *            @arg WWDG_Prescaler_8: WWDG counter clock = (PCLK1/4096)/8
+    146            * @retval None
+    147            */
+    148          void WWDG_SetPrescaler(uint32_t WWDG_Prescaler)
+    149          {
+    150            uint32_t tmpreg = 0;
+    151            /* Check the parameters */
+    152            assert_param(IS_WWDG_PRESCALER(WWDG_Prescaler));
+    153            /* Clear WDGTB[1:0] bits */
+    154            tmpreg = WWDG->CFR & CFR_WDGTB_MASK;
+    155            /* Set WDGTB[1:0] bits according to WWDG_Prescaler value */
+    156            tmpreg |= WWDG_Prescaler;
+    157            /* Store the new value */
+    158            WWDG->CFR = tmpreg;
+    159          }
+    160          
+    161          /**
+    162            * @brief  Sets the WWDG window value.
+    163            * @param  WindowValue: specifies the window value to be compared to the downcounter.
+    164            *          This parameter value must be lower than 0x80.
+    165            * @retval None
+    166            */
+    167          void WWDG_SetWindowValue(uint8_t WindowValue)
+    168          {
+    169            __IO uint32_t tmpreg = 0;
+    170          
+    171            /* Check the parameters */
+    172            assert_param(IS_WWDG_WINDOW_VALUE(WindowValue));
+    173            /* Clear W[6:0] bits */
+    174          
+    175            tmpreg = WWDG->CFR & CFR_W_MASK;
+    176          
+    177            /* Set W[6:0] bits according to WindowValue value */
+    178            tmpreg |= WindowValue & (uint32_t) BIT_MASK;
+    179          
+    180            /* Store the new value */
+    181            WWDG->CFR = tmpreg;
+    182          }
+    183          
+    184          /**
+    185            * @brief  Enables the WWDG Early Wakeup interrupt(EWI).
+    186            * @note   Once enabled this interrupt cannot be disabled except by a system reset. 
+    187            * @param  None
+    188            * @retval None
+    189            */
+    190          void WWDG_EnableIT(void)
+    191          {
+    192            WWDG->CFR |= WWDG_CFR_EWI;
+    193          }
+    194          
+    195          /**
+    196            * @brief  Sets the WWDG counter value.
+    197            * @param  Counter: specifies the watchdog counter value.
+    198            *          This parameter must be a number between 0x40 and 0x7F (to prevent 
+    199            *          generating an immediate reset).
+    200            * @retval None
+    201            */
+    202          void WWDG_SetCounter(uint8_t Counter)
+    203          {
+    204            /* Check the parameters */
+    205            assert_param(IS_WWDG_COUNTER(Counter));
+    206            /* Write to T[6:0] bits to configure the counter value, no need to do
+    207               a read-modify-write; writing a 0 to WDGA bit does nothing */
+    208            WWDG->CR = Counter & BIT_MASK;
+    209          }
+    210          
+    211          /**
+    212            * @}
+    213            */
+    214          
+    215          /** @defgroup WWDG_Group2 WWDG activation functions
+    216           *  @brief   WWDG activation functions 
+    217           *
+    218          @verbatim   
+    219            ==============================================================================
+    220                               ##### WWDG activation function #####
+    221            ==============================================================================  
+    222          
+    223          @endverbatim
+    224            * @{
+    225            */
+    226          
+    227          /**
+    228            * @brief  Enables WWDG and load the counter value.                  
+    229            * @param  Counter: specifies the watchdog counter value.
+    230            *          This parameter must be a number between 0x40 and 0x7F (to prevent 
+    231            *          generating an immediate reset).
+    232            * @retval None
+    233            */
+    234          void WWDG_Enable(uint8_t Counter)
+    235          {
+    236            /* Check the parameters */
+    237            assert_param(IS_WWDG_COUNTER(Counter));
+    238            WWDG->CR = WWDG_CR_WDGA | Counter;
+    239          }
+    240          
+    241          /**
+    242            * @}
+    243            */
+    244          
+    245          /** @defgroup WWDG_Group3 Interrupts and flags management functions
+    246           *  @brief   Interrupts and flags management functions 
+    247           *
+    248          @verbatim   
+    249            ==============================================================================
+    250                          ##### Interrupts and flags management functions #####
+    251            ==============================================================================  
+    252          
+    253          @endverbatim
+    254            * @{
+    255            */
+    256          
+    257          /**
+    258            * @brief  Checks whether the Early Wakeup interrupt flag is set or not.
+    259            * @param  None
+    260            * @retval The new state of the Early Wakeup interrupt flag (SET or RESET).
+    261            */
+    262          FlagStatus WWDG_GetFlagStatus(void)
+    263          {
+    264            FlagStatus bitstatus = RESET;
+    265              
+    266            if ((WWDG->SR) != (uint32_t)RESET)
+    267            {
+    268              bitstatus = SET;
+    269            }
+    270            else
+    271            {
+    272              bitstatus = RESET;
+    273            }
+    274            return bitstatus;
+    275          }
+    276          
+    277          /**
+    278            * @brief  Clears Early Wakeup interrupt flag.
+    279            * @param  None
+    280            * @retval None
+    281            */
+    282          void WWDG_ClearFlag(void)
+    283          {
+    284            WWDG->SR = (uint32_t)RESET;
+    285          }
+    286          
+    287          /**
+    288            * @}
+    289            */
+    290          
+    291          /**
+    292            * @}
+    293            */
+    294          
+    295          /**
+    296            * @}
+    297            */
+    298          
+    299          /**
+    300            * @}
+    301            */
+    302          
+    303          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   WWDG_ClearFlag
+       8   WWDG_DeInit
+         8   -> RCC_APB1PeriphResetCmd
+       0   WWDG_Enable
+       0   WWDG_EnableIT
+       0   WWDG_GetFlagStatus
+       0   WWDG_SetCounter
+       0   WWDG_SetPrescaler
+       4   WWDG_SetWindowValue
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable7
+       4  ??DataTable7_1
+       4  ??DataTable7_2
+       4  ??DataTable7_3
+       8  WWDG_ClearFlag
+      24  WWDG_DeInit
+      10  WWDG_Enable
+      12  WWDG_EnableIT
+      14  WWDG_GetFlagStatus
+      10  WWDG_SetCounter
+      14  WWDG_SetPrescaler
+      34  WWDG_SetWindowValue
+
+ 
+ 142 bytes in section .text
+ 
+ 142 bytes of CODE memory
+
+Errors: none
+Warnings: none

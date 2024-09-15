@@ -1,0 +1,512 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:53
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\MarlinSerial.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW86A.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\MarlinSerial.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\MarlinSerial.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\MarlinSerial.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\MarlinSerial.cpp
+      1          /*
+      2            HardwareSerial.cpp - Hardware serial library for Wiring
+      3            Copyright (c) 2006 Nicholas Zambetti.  All right reserved.
+      4          
+      5            This library is free software; you can redistribute it and/or
+      6            modify it under the terms of the GNU Lesser General Public
+      7            License as published by the Free Software Foundation; either
+      8            version 2.1 of the License, or (at your option) any later version.
+      9          
+     10            This library is distributed in the hope that it will be useful,
+     11            but WITHOUT ANY WARRANTY; without even the implied warranty of
+     12            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     13            Lesser General Public License for more details.
+     14          
+     15            You should have received a copy of the GNU Lesser General Public
+     16            License along with this library; if not, write to the Free Software
+     17            Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+     18          
+     19            Modified 23 November 2006 by David A. Mellis
+     20            Modified 28 September 2010 by Mark Sproul
+     21          */
+     22          
+     23          #include "Marlin.h"
+     24          #include "MarlinSerial.h"
+     25          
+     26          #ifndef USBCON
+     27          // this next line disables the entire HardwareSerial.cpp,
+     28          // this is so I can support Attiny series and any other chip without a UART
+     29          #if 1//yongzong//defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(UBRR2H) || defined(UBRR3H)
+     30          
+     31          #if UART_PRESENT(SERIAL_PORT)
+     32            ring_buffer rx_buffer  =  { { 0 }, 0, 0 };
+     33          #endif
+     34          
+     35          extern "C" void store_char(unsigned char c) {
+     36            extern bool sdprinting;
+     37            if (sdprinting==false ||
+     38                    c=='\r' || c=='\n' || 
+     39                    c==';' || c==' ' || c=='*' || c=='/' ||
+     40                    (c>='0' && c<='9') ||
+     41                    (c>='a' && c<='z') ||
+     42                    (c>='A' && c<='Z') ||
+     43                    (c>='+' && c<='.'))
+     44            {
+     45                //putchar(c);
+     46                //if (c<0x20 || c>0x7E) return;
+     47                int i = (unsigned int)(rx_buffer.head + 1) % RX_BUFFER_SIZE;
+     48          
+     49                // if we should be storing the received character into the location
+     50                // just before the tail (meaning that the head would advance to the
+     51                // current location of the tail), we're about to overflow the buffer
+     52                // and so we don't write the character or advance the head.
+     53                if (i != rx_buffer.tail) {
+     54                  rx_buffer.buffer[rx_buffer.head] = c;
+     55                  rx_buffer.head = i;
+     56                }
+     57            }
+     58            //putchar(c);
+     59          }
+     60          
+     61          extern "C" void store_char_usb(unsigned char c) {
+     62            //putchar(c);
+     63            //if (c<0x20 || c>0x7E) return;
+     64            int i = (unsigned int)(rx_buffer.head + 1) % RX_BUFFER_SIZE;
+     65          
+     66            // if we should be storing the received character into the location
+     67            // just before the tail (meaning that the head would advance to the
+     68            // current location of the tail), we're about to overflow the buffer
+     69            // and so we don't write the character or advance the head.
+     70            if (i != rx_buffer.tail) {
+     71              rx_buffer.buffer[rx_buffer.head] = c;
+     72              rx_buffer.head = i;
+     73            }
+     74            //putchar(c);
+     75          }
+     76          
+     77          //yongzong Moved to platform.cpp
+     78          /*
+     79          //#elif defined(SIG_USART_RECV)
+     80          #if defined(M_USARTx_RX_vect)
+     81            // fixed by Mark Sproul this is on the 644/644p
+     82            //SIGNAL(SIG_USART_RECV)
+     83            //yongzong
+     84            SIGNAL(M_USARTx_RX_vect) {
+     85              unsigned char c  =  M_UDRx;
+     86              store_char(c);
+     87            }
+     88          #endif
+     89          */
+     90          
+     91          // Constructors ////////////////////////////////////////////////////////////////
+     92          extern void serial_init(int);
+     93          
+     94          MarlinSerial::MarlinSerial() {}
+     95          
+     96          // Public Methods //////////////////////////////////////////////////////////////
+     97          
+     98          void MarlinSerial::begin(long baud) {
+     99            uint16_t baud_setting;
+    100            bool useU2X = true;
+    101          
+    102            #if F_CPU == 16000000UL && SERIAL_PORT == 0
+    103              // hard-coded exception for compatibility with the bootloader shipped
+    104              // with the Duemilanove and previous boards and the firmware on the 8U2
+    105              // on the Uno and Mega 2560.
+    106              if (baud == 57600) {
+    107                useU2X = false;
+    108              }
+    109            #endif
+    110          
+    111            //serial_init(WIFI_UART,512000);//yongzong
+    112          }
+    113          
+    114          void MarlinSerial::end() {
+    115            /*cbi(M_UCSRxB, M_RXENx);
+    116            cbi(M_UCSRxB, M_TXENx);
+    117            cbi(M_UCSRxB, M_RXCIEx);*/
+    118          }
+    119          
+    120          /*
+    121          int MarlinSerial::peek(void) {
+    122            if (rx_buffer.head == rx_buffer.tail) {
+    123              return -1;
+    124            }
+    125            else {
+    126              return rx_buffer.buffer[rx_buffer.tail];
+    127            }
+    128          }*/
+    129          
+    130          int MarlinSerial::read(void) {
+    131            // if the head isn't ahead of the tail, we don't have any characters
+    132            if (rx_buffer.head == rx_buffer.tail) {
+    133              return -1;
+    134            }
+    135            else {
+    136              unsigned char c = rx_buffer.buffer[rx_buffer.tail];
+    137              rx_buffer.tail = (unsigned int)(rx_buffer.tail + 1) % RX_BUFFER_SIZE;
+    138              return c;
+    139            }
+    140          }
+    141          
+    142          void MarlinSerial::flush() {
+    143            // don't reverse this or there may be problems if the RX interrupt
+    144            // occurs after reading the value of rx_buffer_head but before writing
+    145            // the value to rx_buffer_tail; the previous value of rx_buffer_head
+    146            // may be written to rx_buffer_tail, making it appear as if the buffer
+    147            // don't reverse this or there may be problems if the RX interrupt
+    148            // occurs after reading the value of rx_buffer_head but before writing
+    149            // the value to rx_buffer_tail; the previous value of rx_buffer_head
+    150            // may be written to rx_buffer_tail, making it appear as if the buffer
+    151            // were full, not empty.
+    152            rx_buffer.head = rx_buffer.tail;
+    153          }
+    154          
+    155          
+    156          /// imports from print.h
+    157          
+    158          
+    159          void MarlinSerial::print(char c, int base) {
+    160            print((long) c, base);
+    161          }
+    162          
+    163          void MarlinSerial::print(unsigned char b, int base) {
+    164            print((unsigned long) b, base);
+    165          }
+    166          
+    167          void MarlinSerial::print(int n, int base) {
+    168            print((long) n, base);
+    169          }
+    170          
+    171          void MarlinSerial::print(unsigned int n, int base) {
+    172            print((unsigned long) n, base);
+    173          }
+    174          
+    175          void MarlinSerial::print(long n, int base) {
+    176            if (base == 0) {
+    177              write(n);
+    178            }
+    179            else if (base == 10) {
+    180              if (n < 0) {
+    181                print('-');
+    182                n = -n;
+    183              }
+    184              printNumber(n, 10);
+    185            }
+    186            else {
+    187              printNumber(n, base);
+    188            }
+    189          }
+    190          
+    191          void MarlinSerial::print(unsigned long n, int base) {
+    192            if (base == 0) write(n);
+    193            else printNumber(n, base);
+    194          }
+    195          
+    196          void MarlinSerial::print(double n, int digits) {
+    197            printFloat(n, digits);
+    198          }
+    199          
+    200          void MarlinSerial::println(void) {
+    201            //print('\r');
+    202            //print('\n');
+    203            write((uint8_t *)"\r\n",2);
+    204          }
+    205          
+    206          /*void MarlinSerial::println(const String& s) {
+    207            print(s);
+    208            println();
+    209          }*/
+    210          
+    211          void MarlinSerial::println(const char c[]) {
+    212            print(c);
+    213            println();
+    214          }
+    215          
+    216          void MarlinSerial::println(char c, int base) {
+    217            print(c, base);
+    218            println();
+    219          }
+    220          
+    221          void MarlinSerial::println(unsigned char b, int base) {
+    222            print(b, base);
+    223            println();
+    224          }
+    225          
+    226          void MarlinSerial::println(int n, int base) {
+    227            print(n, base);
+    228            println();
+    229          }
+    230          
+    231          void MarlinSerial::println(unsigned int n, int base) {
+    232            print(n, base);
+    233            println();
+    234          }
+    235          
+    236          void MarlinSerial::println(long n, int base) {
+    237            print(n, base);
+    238            println();
+    239          }
+    240          
+    241          void MarlinSerial::println(unsigned long n, int base) {
+    242            print(n, base);
+    243            println();
+    244          }
+    245          
+    246          void MarlinSerial::println(double n, int digits) {
+    247            print(n, digits);
+    248            println();
+    249          }
+    250          
+    251          // Private Methods /////////////////////////////////////////////////////////////
+    252          
+    253          void MarlinSerial::printNumber(unsigned long n, uint8_t base) {
+    254            unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars.
+    255            unsigned long i = 0;
+    256          
+    257            if (n == 0) {
+    258              print('0');
+    259              return;
+    260            }
+    261          
+    262            while (n > 0) {
+    263              buf[i++] = n % base;
+    264              n /= base;
+    265            }
+    266          
+    267            for (; i > 0; i--)
+    268              print((char)(buf[i - 1] < 10 ?
+    269                           '0' + buf[i - 1] :
+    270                           'A' + buf[i - 1] - 10));
+    271          }
+    272          
+    273          void MarlinSerial::printFloat(double number, uint8_t digits) {
+    274            // Handle negative numbers
+    275            if (number < 0.0) {
+    276              print('-');
+    277              number = -number;
+    278            }
+    279          
+    280            // Round correctly so that print(1.999, 2) prints as "2.00"
+    281            double rounding = 0.5;
+    282            for (uint8_t i = 0; i < digits; ++i)
+    283              rounding /= 10.0;
+    284          
+    285            number += rounding;
+    286          
+    287            // Extract the integer part of the number and print it
+    288            unsigned long int_part = (unsigned long)number;
+    289            double remainder = number - (double)int_part;
+    290            print(int_part);
+    291          
+    292            // Print the decimal point, but only if there are digits beyond
+    293            if (digits > 0) print('.');
+    294          
+    295            // Extract digits from the remainder one at a time
+    296            while (digits-- > 0) {
+    297              remainder *= 10.0;
+    298              int toPrint = int(remainder);
+    299              print(toPrint);
+    300              remainder -= toPrint;
+    301            }
+    302          }
+    303          // Preinstantiate Objects //////////////////////////////////////////////////////
+    304          
+    305          
+    306          MarlinSerial customizedSerial;
+    307          
+    308          #endif // whole file
+    309          #endif // !USBCON
+    310          
+    311          // For AT90USB targets use the UART for BT interfacing
+    312          #if defined(USBCON) && ENABLED(BLUETOOTH)
+    313            HardwareSerial bluetoothSerial;
+    314          #endif
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   MarlinSerial::MarlinSerial()
+       0   MarlinSerial::begin(long)
+       0   MarlinSerial::end()
+       0   MarlinSerial::flush()
+       8   MarlinSerial::print(char, int)
+         8   -> MarlinSerial::print(long, int)
+       8   MarlinSerial::print(double, int)
+         8   -> MarlinSerial::printFloat(double, uint8_t)
+       8   MarlinSerial::print(int, int)
+         8   -> MarlinSerial::print(long, int)
+      16   MarlinSerial::print(long, int)
+        16   -> MarlinSerial::print(char, int)
+        16   -> MarlinSerial::printNumber(unsigned long, uint8_t)
+        16   -> MarlinSerial::write(uint8_t)
+       8   MarlinSerial::print(unsigned char, int)
+         8   -> MarlinSerial::print(unsigned long, int)
+       8   MarlinSerial::print(unsigned int, int)
+         8   -> MarlinSerial::print(unsigned long, int)
+       8   MarlinSerial::print(unsigned long, int)
+         8   -> MarlinSerial::printNumber(unsigned long, uint8_t)
+         8   -> MarlinSerial::write(uint8_t)
+      24   MarlinSerial::printFloat(double, uint8_t)
+        24   -> MarlinSerial::print(char, int)
+        24   -> MarlinSerial::print(int, int)
+        24   -> MarlinSerial::print(unsigned long, int)
+        24   -> __aeabi_d2iz
+        24   -> __aeabi_d2uiz
+        24   -> __aeabi_dadd
+        24   -> __aeabi_ddiv
+        24   -> __aeabi_dmul
+        24   -> __aeabi_dsub
+        24   -> __aeabi_i2d
+        24   -> __aeabi_ui2d
+        24 __aeabi_cdcmple
+      64   MarlinSerial::printNumber(unsigned long, uint8_t)
+        64   -> MarlinSerial::print(char, int)
+        64 __aeabi_uidiv
+        64 __aeabi_uidivmod
+      16   MarlinSerial::println()
+        16   -> CDC_Send_DATA
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+      16   MarlinSerial::println(char const *)
+        16   -> CDC_Send_DATA_str
+        16   -> MarlinSerial::println()
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+       8   MarlinSerial::println(char, int)
+         8   -> MarlinSerial::print(char, int)
+         8   -> MarlinSerial::println()
+      16   MarlinSerial::println(double, int)
+        16   -> MarlinSerial::print(double, int)
+        16   -> MarlinSerial::println()
+       8   MarlinSerial::println(int, int)
+         8   -> MarlinSerial::print(int, int)
+         8   -> MarlinSerial::println()
+       8   MarlinSerial::println(long, int)
+         8   -> MarlinSerial::print(long, int)
+         8   -> MarlinSerial::println()
+       8   MarlinSerial::println(unsigned char, int)
+         8   -> MarlinSerial::print(unsigned char, int)
+         8   -> MarlinSerial::println()
+       8   MarlinSerial::println(unsigned int, int)
+         8   -> MarlinSerial::print(unsigned long, int)
+         8   -> MarlinSerial::println()
+       8   MarlinSerial::println(unsigned long, int)
+         8   -> MarlinSerial::print(unsigned long, int)
+         8   -> MarlinSerial::println()
+       0   MarlinSerial::read()
+       0   MarlinSerial::subobject MarlinSerial()
+      16   MarlinSerial::write(uint8_t)
+        16   -> CDC_Send_DATA
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+      12   store_char
+      12   store_char_usb
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable7
+       4  ??DataTable8
+       4  ??DataTable8_1
+       4  ??DataTable8_2
+       4  ??DataTable8_3
+       4  ??DataTable8_4
+       4  ??DataTable8_5
+       4  ??DataTable8_6
+       8  ?Subroutine0
+       4  ?_0
+       2  MarlinSerial::MarlinSerial()
+       2  MarlinSerial::begin(long)
+       2  MarlinSerial::end()
+       8  MarlinSerial::flush()
+       8  MarlinSerial::print(char, int)
+      14  MarlinSerial::print(double, int)
+       8  MarlinSerial::print(int, int)
+      54  MarlinSerial::print(long, int)
+       8  MarlinSerial::print(unsigned char, int)
+       8  MarlinSerial::print(unsigned int, int)
+      22  MarlinSerial::print(unsigned long, int)
+     184  MarlinSerial::printFloat(double, uint8_t)
+      94  MarlinSerial::printNumber(unsigned long, uint8_t)
+      54  MarlinSerial::println()
+      60  MarlinSerial::println(char const *)
+      10  MarlinSerial::println(char, int)
+      22  MarlinSerial::println(double, int)
+      10  MarlinSerial::println(int, int)
+      10  MarlinSerial::println(long, int)
+       8  MarlinSerial::println(unsigned char, int)
+      10  MarlinSerial::println(unsigned int, int)
+      10  MarlinSerial::println(unsigned long, int)
+      32  MarlinSerial::read()
+       2  MarlinSerial::subobject MarlinSerial()
+      56  MarlinSerial::write(uint8_t)
+       1  customizedSerial
+     264  rx_buffer
+      92  store_char
+      28  store_char_usb
+
+ 
+ 265 bytes in section .bss
+   4 bytes in section .rodata
+ 858 bytes in section .text
+ 
+ 802 bytes of CODE  memory (+ 56 bytes shared)
+   4 bytes of CONST memory
+ 265 bytes of DATA  memory
+
+Errors: none
+Warnings: 7

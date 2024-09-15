@@ -1,0 +1,7 @@
+ff.pbi: \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\ff.c \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/ff.h \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/integer.h \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/ffconf.h \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/diskio.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\arm\inc\c\stdarg.h

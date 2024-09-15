@@ -1,0 +1,528 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_core.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4935.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_core.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_core.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_core.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_core.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_core.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides all the USBD core functions.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_core.h"
+     30          #include "usbd_req.h"
+     31          #include "usbd_ioreq.h"
+     32          
+     33          /* Private typedef -----------------------------------------------------------*/
+     34          /* Private define ------------------------------------------------------------*/
+     35          /* Private macro -------------------------------------------------------------*/
+     36          /* Private variables ---------------------------------------------------------*/
+     37          extern uint32_t ADDRESS;
+     38          
+     39          /* Private function prototypes -----------------------------------------------*/
+     40          static uint8_t USBD_SetupStage(USB_CORE_HANDLE *pdev);
+     41          static uint8_t USBD_DataOutStage(USB_CORE_HANDLE *pdev , uint8_t epnum);
+     42          static uint8_t USBD_DataInStage(USB_CORE_HANDLE *pdev , uint8_t epnum);
+     43          static uint8_t USBD_SOF(USB_CORE_HANDLE  *pdev);
+     44          static uint8_t USBD_Reset(USB_CORE_HANDLE  *pdev);
+     45          static uint8_t USBD_Suspend(USB_CORE_HANDLE  *pdev);
+     46          static uint8_t USBD_Resume(USB_CORE_HANDLE  *pdev);
+     47          
+     48          USBD_DCD_INT_cb_TypeDef USBD_DCD_INT_cb = 
+     49          {
+     50            USBD_DataOutStage,
+     51            USBD_DataInStage,
+     52            USBD_SetupStage,
+     53            USBD_SOF,
+     54            USBD_Reset,
+     55            USBD_Suspend,
+     56            USBD_Resume,   
+     57            
+     58          };
+     59          
+     60          USBD_DCD_INT_cb_TypeDef  *USBD_DCD_INT_fops = &USBD_DCD_INT_cb;
+     61          
+     62          /* Private functions ---------------------------------------------------------*/
+     63          /**
+     64            * @brief  USBD_Init
+     65            *         Initializes the device stack and load the class driver
+     66            * @param  pdev: device instance
+     67            * @param  class_cb: Class callback structure address
+     68            * @param  usr_cb: User callback structure address
+     69            * @retval None
+     70            */
+     71          void USBD_Init(USB_CORE_HANDLE *pdev,
+     72                         USBD_DEVICE *pDevice,                  
+     73                         USBD_Class_cb_TypeDef *class_cb, 
+     74                         USBD_Usr_cb_TypeDef *usr_cb)
+     75          {
+     76            /* Hardware Init */
+     77            USB_BSP_Init(pdev);  
+     78            
+     79            USBD_DeInit(pdev);
+     80            
+     81            /*Register class and user callbacks */
+     82            pdev->dev.class_cb = class_cb;
+     83            pdev->dev.usr_cb = usr_cb;  
+     84            pdev->dev.usr_device = pDevice;    
+     85            
+     86            /* Update the serial number string descriptor with the data from the unique ID*/
+     87            Get_SerialNum();
+     88            
+     89            /* set USB DEVICE core params */
+     90            DCD_Init(pdev);
+     91            
+     92            /* Upon Init call usr callback */
+     93            pdev->dev.usr_cb->Init();
+     94            
+     95            /* Enable Interrupts */
+     96            USB_BSP_EnableInterrupt(pdev);
+     97            
+     98            /* Enable the pull-up */
+     99          #ifdef INTERNAL_PULLUP
+    100            DCD_DevConnect(pdev);
+    101          #else
+    102           USB_BSP_DevConnect(pdev);
+    103          #endif
+    104          }
+    105          
+    106          /**
+    107            * @brief  USBD_DeInit 
+    108            *         Re-Initialize th device library
+    109            * @param  pdev: device instance
+    110            * @retval status: status
+    111            */
+    112          USBD_Status USBD_DeInit(USB_CORE_HANDLE *pdev)
+    113          {
+    114            /* Software Init */
+    115            
+    116            return USBD_OK;
+    117          }
+    118          
+    119          /**
+    120            * @brief  USBD_SetupStage 
+    121            *         Handle the setup stage
+    122            * @param  pdev: device instance
+    123            * @retval status
+    124            */
+    125          static uint8_t USBD_SetupStage(USB_CORE_HANDLE *pdev)
+    126          {
+    127            USB_SETUP_REQ req;
+    128            
+    129            USBD_ParseSetupRequest(pdev , &req);
+    130            
+    131            /*switch ((req.bmRequest & 0x60) >> 5)
+    132            {
+    133          
+    134          	  case 0x00:
+    135          		  switch (req.bmRequest & 0x1F) 
+    136          		  {
+    137          			  case USB_REQ_RECIPIENT_DEVICE:   
+    138          			    USBD_StdDevReq (pdev, &req);
+    139          			    break;
+    140          			    
+    141          			  case USB_REQ_RECIPIENT_INTERFACE:     
+    142          			    USBD_StdItfReq(pdev, &req);
+    143          			    break;
+    144          			    
+    145          			  case USB_REQ_RECIPIENT_ENDPOINT:        
+    146          			    USBD_StdEPReq(pdev, &req);   
+    147          			    break;
+    148          			    
+    149          			  default:           
+    150          			    DCD_EP_Stall(pdev , req.bmRequest & 0x80);
+    151          			    break;
+    152          		  }
+    153          	  break;
+    154          	  case 0x02:
+    155          		  USBD_VendDevReq(pdev, &req);
+    156          	  break;
+    157            }  */
+    158            
+    159            if (((req.bmRequest & 0x60) >> 5)==2) return USBD_VendDevReq(pdev, &req);
+    160            switch (req.bmRequest & 0x1F) 
+    161            {
+    162            case USB_REQ_RECIPIENT_DEVICE:   
+    163              USBD_StdDevReq (pdev, &req);
+    164              break;
+    165              
+    166            case USB_REQ_RECIPIENT_INTERFACE:     
+    167              USBD_StdItfReq(pdev, &req);
+    168              break;
+    169              
+    170            case USB_REQ_RECIPIENT_ENDPOINT:        
+    171              USBD_StdEPReq(pdev, &req);   
+    172              break;
+    173              
+    174            default:           
+    175              DCD_EP_Stall(pdev , req.bmRequest & 0x80);
+    176              break;
+    177            }
+    178            return USBD_OK;
+    179          }
+    180          
+    181          /**
+    182            * @brief  USBD_DataOutStage 
+    183            *         Handle data out stage
+    184            * @param  pdev: device instance
+    185            * @param  epnum: endpoint index
+    186            * @retval status
+    187            */
+    188          static uint8_t USBD_DataOutStage(USB_CORE_HANDLE *pdev , uint8_t epnum)
+    189          {
+    190            USB_EP *ep;
+    191            
+    192            if(epnum == 0) 
+    193            {
+    194              ep = &pdev->dev.out_ep[0];
+    195              if ( pdev->dev.device_state == USB_EP0_DATA_OUT)
+    196              {
+    197                if(ep->rem_data_len > ep->maxpacket)
+    198                {
+    199                  ep->rem_data_len -=  ep->maxpacket;
+    200                          
+    201                  USBD_CtlContinueRx (pdev, 
+    202                                      ep->xfer_buff,
+    203                                      MIN(ep->rem_data_len ,ep->maxpacket));
+    204                }
+    205                else
+    206                {
+    207                  if((pdev->dev.class_cb->EP0_RxReady != NULL)&&
+    208                     (pdev->dev.device_status == USB_CONFIGURED))
+    209                  {
+    210                    pdev->dev.class_cb->EP0_RxReady(pdev); 
+    211                  }
+    212                  USBD_CtlSendStatus(pdev);
+    213                }
+    214              }
+    215            }
+    216            else if((pdev->dev.class_cb->DataOut != NULL)&&
+    217                    (pdev->dev.device_status == USB_CONFIGURED))
+    218            {
+    219              pdev->dev.class_cb->DataOut(pdev, epnum); 
+    220            }  
+    221            return USBD_OK;
+    222          }
+    223          
+    224          /**
+    225            * @brief  USBD_DataInStage 
+    226            *         Handle data in stage
+    227            * @param  pdev: device instance
+    228            * @param  epnum: endpoint index
+    229            * @retval status
+    230            */
+    231          static uint8_t USBD_DataInStage(USB_CORE_HANDLE *pdev , uint8_t epnum)
+    232          {
+    233            USB_EP *ep;
+    234            
+    235            if(epnum == 0) 
+    236            {
+    237              ep = &pdev->dev.in_ep[0];
+    238              if ( pdev->dev.device_state == USB_EP0_DATA_IN)
+    239              {
+    240                if(ep->rem_data_len > ep->maxpacket)
+    241                {
+    242                  ep->rem_data_len -=  ep->maxpacket;
+    243                  USBD_CtlContinueSendData (pdev, 
+    244                                            ep->xfer_buff, 
+    245                                            ep->rem_data_len);
+    246                }
+    247                else
+    248                { /* last packet is MPS multiple, so send ZLP packet */
+    249                  if((ep->total_data_len % ep->maxpacket == 0) &&
+    250                     (ep->total_data_len >= ep->maxpacket) &&
+    251                       (ep->total_data_len < ep->ctl_data_len ))
+    252                  {
+    253                    
+    254                    USBD_CtlContinueSendData(pdev , NULL, 0);
+    255                    ep->ctl_data_len = 0;
+    256                  }
+    257                  else
+    258                  {
+    259                    if((pdev->dev.class_cb->EP0_TxSent != NULL)&&
+    260                       (pdev->dev.device_status == USB_CONFIGURED))
+    261                    {
+    262                      pdev->dev.class_cb->EP0_TxSent(pdev); 
+    263                    }          
+    264                    USBD_CtlReceiveStatus(pdev);
+    265                  }
+    266                }
+    267              }
+    268              else  if ((pdev->dev.device_state == USB_EP0_STATUS_IN)&& (ADDRESS!=0))
+    269              {
+    270                
+    271                DCD_EP_SetAddress(pdev, ADDRESS); 
+    272                ADDRESS = 0;
+    273              }
+    274            }
+    275            else if((pdev->dev.class_cb->DataIn != NULL)&& 
+    276                    (pdev->dev.device_status == USB_CONFIGURED))
+    277            {
+    278              pdev->dev.class_cb->DataIn(pdev, epnum); 
+    279            }  
+    280            return USBD_OK;
+    281          }
+    282          
+    283          /**
+    284            * @brief  USBD_Reset 
+    285            *         Handle Reset event
+    286            * @param  pdev: device instance
+    287            * @retval status
+    288            */
+    289          
+    290          static uint8_t USBD_Reset(USB_CORE_HANDLE  *pdev)
+    291          {
+    292          
+    293            DCD_PMA_Config(pdev , 0x00 ,USB_SNG_BUF, ENDP0_RX_ADDRESS);
+    294            DCD_PMA_Config(pdev , 0x80 ,USB_SNG_BUF, ENDP0_TX_ADDRESS);
+    295          
+    296            /* Open EP0 OUT */
+    297            DCD_EP_Open(pdev,
+    298                        0x00,
+    299                        USB_MAX_EP0_SIZE,
+    300                        EP_TYPE_CTRL);
+    301            
+    302            /* Open EP0 IN */
+    303            DCD_EP_Open(pdev,
+    304                        0x80,
+    305                        USB_MAX_EP0_SIZE,
+    306                        EP_TYPE_CTRL);
+    307            
+    308            /* Upon Reset call user call back */
+    309            pdev->dev.device_status = USB_DEFAULT;
+    310            pdev->dev.usr_cb->DeviceReset(pdev->dev.speed);
+    311            
+    312            return USBD_OK;
+    313          }
+    314          
+    315          /**
+    316            * @brief  USBD_Resume 
+    317            *         Handle Resume event
+    318            * @param  pdev: device instance
+    319            * @retval status
+    320            */
+    321          
+    322          static uint8_t USBD_Resume(USB_CORE_HANDLE  *pdev)
+    323          {
+    324            /* Upon Resume call user call back */
+    325            pdev->dev.usr_cb->DeviceResumed(); 
+    326            pdev->dev.device_status = pdev->dev.device_old_status;   
+    327            return USBD_OK;
+    328          }
+    329          
+    330          
+    331          /**
+    332            * @brief  USBD_Suspend 
+    333            *         Handle Suspend event
+    334            * @param  pdev: device instance
+    335            * @retval status
+    336            */
+    337          
+    338          static uint8_t USBD_Suspend(USB_CORE_HANDLE  *pdev)
+    339          {
+    340            pdev->dev.device_old_status = pdev->dev.device_status;
+    341            /*Device is in Suspended State*/
+    342            pdev->dev.device_status  = USB_SUSPENDED;
+    343            /* Upon Resume call user call back */
+    344            pdev->dev.usr_cb->DeviceSuspended(); 
+    345            return USBD_OK;
+    346          }
+    347          
+    348          
+    349          /**
+    350            * @brief  USBD_SOF 
+    351            *         Handle SOF event
+    352            * @param  pdev: device instance
+    353            * @retval status
+    354            */
+    355          
+    356          static uint8_t USBD_SOF(USB_CORE_HANDLE  *pdev)
+    357          {
+    358            if(pdev->dev.class_cb->SOF)
+    359            {
+    360              pdev->dev.class_cb->SOF(pdev); 
+    361            }
+    362            return USBD_OK;
+    363          }
+    364          /**
+    365            * @brief  USBD_SetCfg 
+    366            *        Configure device and start the interface
+    367            * @param  pdev: device instance
+    368            * @param  cfgidx: configuration index
+    369            * @retval status
+    370            */
+    371          
+    372          USBD_Status USBD_SetCfg(USB_CORE_HANDLE  *pdev, uint8_t cfgidx)
+    373          {
+    374            pdev->dev.class_cb->Init(pdev, cfgidx); 
+    375            
+    376            /* Upon set config call user call back */
+    377            pdev->dev.usr_cb->DeviceConfigured();
+    378            return USBD_OK; 
+    379          }
+    380          
+    381          /**
+    382            * @brief  USBD_ClrCfg 
+    383            *         Clear current configuration
+    384            * @param  pdev: device instance
+    385            * @param  cfgidx: configuration index
+    386            * @retval status: USBD_Status
+    387            */
+    388          USBD_Status USBD_ClrCfg(USB_CORE_HANDLE  *pdev, uint8_t cfgidx)
+    389          {
+    390            pdev->dev.class_cb->DeInit(pdev, cfgidx);   
+    391            return USBD_OK;
+    392          }
+    393          
+    394          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+    395          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   USBD_ClrCfg
+         8   -- Indirect call
+      24   USBD_DataInStage
+        24   -- Indirect call
+        24   -> DCD_EP_SetAddress
+        24   -> USBD_CtlContinueSendData
+        24   -> USBD_CtlReceiveStatus
+        24 __aeabi_uidivmod
+       8   USBD_DataOutStage
+         8   -- Indirect call
+         8   -> USBD_CtlContinueRx
+         8   -> USBD_CtlSendStatus
+       0   USBD_DeInit
+      24   USBD_Init
+        24   -- Indirect call
+        24   -> DCD_DevConnect
+        24   -> DCD_Init
+        24   -> Get_SerialNum
+        24   -> USB_BSP_EnableInterrupt
+        24   -> USB_BSP_Init
+       8   USBD_Reset
+         8   -- Indirect call
+         8   -> DCD_EP_Open
+         8   -> DCD_PMA_Config
+       8   USBD_Resume
+         8   -- Indirect call
+       8   USBD_SOF
+         8   -- Indirect call
+       8   USBD_SetCfg
+         8   -- Indirect call
+      16   USBD_SetupStage
+        16   -> DCD_EP_Stall
+        16   -> USBD_ParseSetupRequest
+        16   -> USBD_StdDevReq
+        16   -> USBD_StdEPReq
+        16   -> USBD_StdItfReq
+        16   -> USBD_VendDevReq
+       8   USBD_Suspend
+         8   -- Indirect call
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+      16  USBD_ClrCfg
+      28  USBD_DCD_INT_cb
+       4  USBD_DCD_INT_fops
+     160  USBD_DataInStage
+     108  USBD_DataOutStage
+       4  USBD_DeInit
+      56  USBD_Init
+      72  USBD_Reset
+      22  USBD_Resume
+      20  USBD_SOF
+      24  USBD_SetCfg
+      98  USBD_SetupStage
+      24  USBD_Suspend
+
+ 
+  32 bytes in section .data
+ 608 bytes in section .text
+ 
+ 608 bytes of CODE memory
+  32 bytes of DATA memory
+
+Errors: none
+Warnings: none

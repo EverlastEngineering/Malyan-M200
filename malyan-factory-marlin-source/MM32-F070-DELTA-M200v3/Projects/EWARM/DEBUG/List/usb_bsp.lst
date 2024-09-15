@@ -1,0 +1,340 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usb_bsp.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW46AD.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usb_bsp.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usb_bsp.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_bsp.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usb_bsp.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usb_bsp.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   This file Provides Device Core configuration Functions
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usb_bsp.h"
+     30          #include "usbd_cdc_vcp.h"
+     31          
+     32          /* Private typedef -----------------------------------------------------------*/
+     33          /* Private define ------------------------------------------------------------*/
+     34          /* Private macro -------------------------------------------------------------*/
+     35          /* Private variables ---------------------------------------------------------*/
+     36          /* Private function prototypes -----------------------------------------------*/
+     37          #if defined USB_CLOCK_SOURCE_CRS
+     38           static void CRS_Config(void);
+     39          #endif /* USB_CLOCK_SOURCE_CRS */
+     40          
+     41          /* Private functions ---------------------------------------------------------*/
+     42          
+     43          /**
+     44            * @brief  Initialize BSP configurations
+     45            * @param  None
+     46            * @retval None
+     47            */
+     48          uint8_t xtal_failed=0;
+     49          void HSE_failed()
+     50          {
+     51              RCC_PREDIV1Config(RCC_PREDIV1_Div1);
+     52              RCC_PLLConfig(RCC_PLLSource_HSI_Div2,RCC_PLLMul_12);
+     53              
+     54              RCC_PLLCmd(ENABLE);
+     55            
+     56              /* Wait till PLL is ready */
+     57              while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+     58              {}
+     59              
+     60              RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+     61              
+     62              /* Wait till PLL is used as system clock source */
+     63              uint32_t timeout=0;
+     64              while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)RCC_CFGR_SWS_PLL)
+     65              {
+     66                  if (timeout++>100000) break;
+     67              }
+     68              RCC_HCLKConfig(RCC_SYSCLK_Div1);
+     69              RCC_PCLKConfig(RCC_HCLK_Div1);
+     70              
+     71              /* Configure USBCLK from PLL clock */
+     72              RCC_USBCLKConfig(RCC_USBCLK_PLLCLK); 
+     73              xtal_failed=1;
+     74          }
+     75          
+     76          void USB_BSP_Init(USB_CORE_HANDLE *pdev)
+     77          {
+     78          #ifdef USB_DEVICE_LOW_PWR_MGMT_SUPPORT 
+     79            EXTI_InitTypeDef EXTI_InitStructure;
+     80          #endif /*USB_DEVICE_LOW_PWR_MGMT_SUPPORT */  
+     81            xtal_failed=0;
+     82            /* Enable USB clock */
+     83            RCC_APB1PeriphClockCmd(RCC_APB1Periph_USB, ENABLE);
+     84            
+     85          #if defined USB_CLOCK_SOURCE_CRS
+     86            
+     87            /*For using CRS, you need to do the following:
+     88            - Enable HSI48 (managed by the SystemInit() function at the application startup)
+     89            - Select HSI48 as USB clock
+     90            - Enable CRS clock
+     91            - Set AUTOTRIMEN
+     92            - Set CEN
+     93            */
+     94            
+     95            /* Select HSI48 as USB clock */
+     96            RCC_USBCLKConfig(RCC_USBCLK_HSI48);
+     97            
+     98            /* Configure the Clock Recovery System */
+     99            CRS_Config();  
+    100          #else 
+    101            /* Configure PLL to be used as USB clock:
+    102               - Enable HSE external clock (for this example the system is clocked by HSI48
+    103                 managed by the SystemInit() function at the application startup)
+    104               - Enable PLL
+    105               - Select PLL as USB clock */
+    106            /* Enable HSE */
+    107            RCC_HSEConfig(RCC_HSE_ON);
+    108            
+    109            /* Wait till HSE is ready */
+    110            /*uint32_t timeout=0;
+    111            while (RCC_GetFlagStatus(RCC_FLAG_HSERDY) == RESET)
+    112            {
+    113                if (timeout++>100000)
+    114                {
+    115                    //RCC_HSEConfig(RCC_HSE_ON);
+    116                    RCC_PREDIV1Config(RCC_PREDIV1_Div1);
+    117                    RCC_PLLConfig(RCC_PLLSource_HSI_Div2,RCC_PLLMul_12);
+    118                    goto pass;
+    119                }
+    120            }*/
+    121            if (RCC_WaitForHSEStartUp()==ERROR)
+    122            {
+    123                RCC_PREDIV1Config(RCC_PREDIV1_Div1);
+    124                RCC_PLLConfig(RCC_PLLSource_HSI_Div2,RCC_PLLMul_12);
+    125                IWDG_ReloadCounter();
+    126                xtal_failed=1;
+    127                goto pass;
+    128            }
+    129            
+    130            /*Config the PREDIV for RCC_CFGR2*/
+    131            RCC_PREDIV1Config(RCC_PREDIV1_Div1);
+    132            /*HSE/PREDIV selected as PLL input clock*/
+    133            RCC_PLLConfig(RCC_PLLSource_PREDIV1,RCC_PLLMul_6);
+    134          pass:
+    135            /* Enable PLL */
+    136            RCC_PLLCmd(ENABLE);
+    137            
+    138            /* Wait till PLL is ready */
+    139            uint32_t timeout=0;
+    140            while (RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET)
+    141            {
+    142                IWDG_ReloadCounter();
+    143                if (timeout++>100000)
+    144                {
+    145                    HSE_failed();
+    146                    return;
+    147                }
+    148            }
+    149            
+    150            RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    151            
+    152            /* Wait till PLL is used as system clock source */
+    153            timeout=0;
+    154            while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)RCC_CFGR_SWS_PLL)
+    155            {
+    156                IWDG_ReloadCounter();
+    157                if (timeout++>100000)
+    158                {
+    159                    HSE_failed();
+    160                    return;
+    161                }
+    162            }
+    163            RCC_HCLKConfig(RCC_SYSCLK_Div1);
+    164            RCC_PCLKConfig(RCC_HCLK_Div1);
+    165            
+    166            /* Configure USBCLK from PLL clock */
+    167            RCC_USBCLKConfig(RCC_USBCLK_PLLCLK); 
+    168          #endif /*USB_CLOCK_SOURCE_CRS */ 
+    169          
+    170          #ifdef USB_DEVICE_LOW_PWR_MGMT_SUPPORT  
+    171            
+    172            EXTI_InitTypeDef EXTI_InitStructure;
+    173            
+    174            /* Enable the PWR clock */
+    175            RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
+    176            
+    177            /* EXTI line 18 is connected to the USB Wakeup from suspend event   */
+    178            EXTI_ClearITPendingBit(EXTI_Line18);
+    179            EXTI_InitStructure.EXTI_Line = EXTI_Line18; 
+    180            /*Must Configure the EXTI Line 18 to be sensitive to rising edge*/
+    181            EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
+    182            EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    183            EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    184            EXTI_Init(&EXTI_InitStructure);
+    185          #endif /*USB_DEVICE_LOW_PWR_MGMT_SUPPORT */
+    186            
+    187          }
+    188          
+    189          /**
+    190            * @brief  Enable USB Global interrupt
+    191            * @param  None
+    192            * @retval None
+    193            */
+    194          void USB_BSP_EnableInterrupt(USB_CORE_HANDLE *pdev)
+    195          {
+    196            NVIC_InitTypeDef NVIC_InitStructure;
+    197            
+    198            /* Enable the USB interrupt */
+    199            NVIC_InitStructure.NVIC_IRQChannel = USB_IRQn;
+    200            NVIC_InitStructure.NVIC_IRQChannelPriority = 3;
+    201            NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    202            NVIC_Init(&NVIC_InitStructure);
+    203          }
+    204          
+    205          #if defined USB_CLOCK_SOURCE_CRS
+    206          /**
+    207            * @brief  Configure CRS peripheral to automatically trim the HSI 
+    208            *         oscillator according to USB SOF
+    209            * @param  None
+    210            * @retval None
+    211            */
+    212          static void CRS_Config(void)
+    213          {
+    214            /*Enable CRS Clock*/
+    215            RCC_APB1PeriphClockCmd(RCC_APB1Periph_CRS, ENABLE);
+    216            
+    217            /* Select USB SOF as synchronization source */
+    218            CRS_SynchronizationSourceConfig(CRS_SYNCSource_USB);
+    219            
+    220            /*Enables the automatic hardware adjustment of TRIM bits: AUTOTRIMEN:*/
+    221            CRS_AutomaticCalibrationCmd(ENABLE);
+    222            
+    223            /*Enables the oscillator clock for frequency error counter CEN*/
+    224            CRS_FrequencyErrorCounterCmd(ENABLE);
+    225          }
+    226          
+    227          #endif
+    228          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   HSE_failed
+         8   -> RCC_GetFlagStatus
+         8   -> RCC_HCLKConfig
+         8   -> RCC_PCLKConfig
+         8   -> RCC_PLLCmd
+         8   -> RCC_PLLConfig
+         8   -> RCC_PREDIV1Config
+         8   -> RCC_SYSCLKConfig
+         8   -> RCC_USBCLKConfig
+       8   USB_BSP_EnableInterrupt
+         8   -> NVIC_Init
+      16   USB_BSP_Init
+        16   -> HSE_failed
+        16   -> IWDG_ReloadCounter
+        16   -> RCC_APB1PeriphClockCmd
+        16   -> RCC_GetFlagStatus
+        16   -> RCC_HCLKConfig
+        16   -> RCC_HSEConfig
+        16   -> RCC_PCLKConfig
+        16   -> RCC_PLLCmd
+        16   -> RCC_PLLConfig
+        16   -> RCC_PREDIV1Config
+        16   -> RCC_SYSCLKConfig
+        16   -> RCC_USBCLKConfig
+        16   -> RCC_WaitForHSEStartUp
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_2
+      90  HSE_failed
+      22  USB_BSP_EnableInterrupt
+     160  USB_BSP_Init
+       1  xtal_failed
+
+ 
+   1 byte  in section .bss
+ 284 bytes in section .text
+ 
+ 284 bytes of CODE memory
+   1 byte  of DATA memory
+
+Errors: none
+Warnings: none

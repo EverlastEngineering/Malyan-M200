@@ -1,0 +1,5 @@
+ccsbcs.pbi: \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\ccsbcs.c \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/ff.h \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/integer.h \
+  D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs/ffconf.h

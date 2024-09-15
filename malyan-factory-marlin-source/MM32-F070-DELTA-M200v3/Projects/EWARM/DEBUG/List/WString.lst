@@ -1,0 +1,934 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:24
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\WString.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4C8E.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\WString.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\WString.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\WString.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\WString.cpp
+      1          /*
+      2            WString.cpp - String library for Wiring & Arduino
+      3            ...mostly rewritten by Paul Stoffregen...
+      4            Copyright (c) 2009-10 Hernando Barragan.  All rights reserved.
+      5            Copyright 2011, Paul Stoffregen, paul@pjrc.com
+      6          
+      7            This library is free software; you can redistribute it and/or
+      8            modify it under the terms of the GNU Lesser General Public
+      9            License as published by the Free Software Foundation; either
+     10            version 2.1 of the License, or (at your option) any later version.
+     11          
+     12            This library is distributed in the hope that it will be useful,
+     13            but WITHOUT ANY WARRANTY; without even the implied warranty of
+     14            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     15            Lesser General Public License for more details.
+     16          
+     17            You should have received a copy of the GNU Lesser General Public
+     18            License along with this library; if not, write to the Free Software
+     19            Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+     20          */
+     21          
+     22          #include "WString.h"
+     23          
+     24          #include "stdlib.h"
+     25          
+     26          /*********************************************/
+     27          /*  Constructors                             */
+     28          /*********************************************/
+     29          
+     30          String::String(const char *cstr)
+     31          {
+     32          	init();
+     33          	if (cstr) copy(cstr, strlen(cstr));
+     34          }
+     35          
+     36          String::String(const String &value)
+     37          {
+     38          	init();
+     39          	*this = value;
+     40          }
+     41          
+     42          #ifdef __GXX_EXPERIMENTAL_CXX0X__
+     43          String::String(String &&rval)
+     44          {
+     45          	init();
+     46          	move(rval);
+     47          }
+     48          String::String(StringSumHelper &&rval)
+     49          {
+     50          	init();
+     51          	move(rval);
+     52          }
+     53          #endif
+     54          
+     55          String::String(char c)
+     56          {
+     57          	init();
+     58          	char buf[2];
+     59          	buf[0] = c;
+     60          	buf[1] = 0;
+     61          	*this = buf;
+     62          }
+     63          /*
+     64          String::String(unsigned char value, unsigned char base)
+     65          {
+     66          	init();
+     67          	char buf[9];
+     68          	utoa(value, buf, base);
+     69          	*this = buf;
+     70          }
+     71          
+     72          String::String(int value, unsigned char base)
+     73          {
+     74          	init();
+     75          	char buf[18];
+     76          	itoa(value, buf, base);
+     77          	*this = buf;
+     78          }
+     79          
+     80          String::String(unsigned int value, unsigned char base)
+     81          {
+     82          	init();
+     83          	char buf[17];
+     84          	utoa(value, buf, base);
+     85          	*this = buf;
+     86          }
+     87          
+     88          String::String(long value, unsigned char base)
+     89          {
+     90          	init();
+     91          	char buf[34];
+     92          	ltoa(value, buf, base);
+     93          	*this = buf;
+     94          }
+     95          
+     96          String::String(unsigned long value, unsigned char base)
+     97          {
+     98          	init();
+     99          	char buf[33];
+    100          	ultoa(value, buf, base);
+    101          	*this = buf;
+    102          }
+    103          */
+    104          String::~String()
+    105          {
+    106          	free(buffer);
+    107          }
+    108          
+    109          /*********************************************/
+    110          /*  Memory Management                        */
+    111          /*********************************************/
+    112          
+    113          inline void String::init(void)
+    114          {
+    115          	buffer = NULL;
+    116          	capacity = 0;
+    117          	len = 0;
+    118          	flags = 0;
+    119          }
+    120          
+    121          void String::invalidate(void)
+    122          {
+    123          	if (buffer) free(buffer);
+    124          	buffer = NULL;
+    125          	capacity = len = 0;
+    126          }
+    127          
+    128          unsigned char String::reserve(unsigned int size)
+    129          {
+    130          	if (buffer && capacity >= size) return 1;
+    131          	if (changeBuffer(size)) {
+    132          		if (len == 0) buffer[0] = 0;
+    133          		return 1;
+    134          	}
+    135          	return 0;
+    136          }
+    137          
+    138          unsigned char String::changeBuffer(unsigned int maxStrLen)
+    139          {
+    140          	char *newbuffer = (char *)realloc(buffer, maxStrLen + 1);
+    141          	if (newbuffer) {
+    142          		buffer = newbuffer;
+    143          		capacity = maxStrLen;
+    144          		return 1;
+    145          	}
+    146          	return 0;
+    147          }
+    148          
+    149          /*********************************************/
+    150          /*  Copy and Move                            */
+    151          /*********************************************/
+    152          
+    153          String & String::copy(const char *cstr, unsigned int length)
+    154          {
+    155          	if (!reserve(length)) {
+    156          		invalidate();
+    157          		return *this;
+    158          	}
+    159          	len = length;
+    160          	strcpy(buffer, cstr);
+    161          	return *this;
+    162          }
+    163          
+    164          #ifdef __GXX_EXPERIMENTAL_CXX0X__
+    165          void String::move(String &rhs)
+    166          {
+    167          	if (buffer) {
+    168          		if (capacity >= rhs.len) {
+    169          			strcpy(buffer, rhs.buffer);
+    170          			len = rhs.len;
+    171          			rhs.len = 0;
+    172          			return;
+    173          		} else {
+    174          			free(buffer);
+    175          		}
+    176          	}
+    177          	buffer = rhs.buffer;
+    178          	capacity = rhs.capacity;
+    179          	len = rhs.len;
+    180          	rhs.buffer = NULL;
+    181          	rhs.capacity = 0;
+    182          	rhs.len = 0;
+    183          }
+    184          #endif
+    185          
+    186          String & String::operator = (const String &rhs)
+    187          {
+    188          	if (this == &rhs) return *this;
+    189          	
+    190          	if (rhs.buffer) copy(rhs.buffer, rhs.len);
+    191          	else invalidate();
+    192          	
+    193          	return *this;
+    194          }
+    195          
+    196          #ifdef __GXX_EXPERIMENTAL_CXX0X__
+    197          String & String::operator = (String &&rval)
+    198          {
+    199          	if (this != &rval) move(rval);
+    200          	return *this;
+    201          }
+    202          
+    203          String & String::operator = (StringSumHelper &&rval)
+    204          {
+    205          	if (this != &rval) move(rval);
+    206          	return *this;
+    207          }
+    208          #endif
+    209          
+    210          String & String::operator = (const char *cstr)
+    211          {
+    212          	if (cstr) copy(cstr, strlen(cstr));
+    213          	else invalidate();
+    214          	
+    215          	return *this;
+    216          }
+    217          
+    218          /*********************************************/
+    219          /*  concat                                   */
+    220          /*********************************************/
+    221          
+    222          unsigned char String::concat(const String &s)
+    223          {
+    224          	return concat(s.buffer, s.len);
+    225          }
+    226          
+    227          unsigned char String::concat(const char *cstr, unsigned int length)
+    228          {
+    229          	unsigned int newlen = len + length;
+    230          	if (!cstr) return 0;
+    231          	if (length == 0) return 1;
+    232          	if (!reserve(newlen)) return 0;
+    233          	strcpy(buffer + len, cstr);
+    234          	len = newlen;
+    235          	return 1;
+    236          }
+    237          
+    238          unsigned char String::concat(const char *cstr)
+    239          {
+    240          	if (!cstr) return 0;
+    241          	return concat(cstr, strlen(cstr));
+    242          }
+    243          
+    244          unsigned char String::concat(char c)
+    245          {
+    246          	char buf[2];
+    247          	buf[0] = c;
+    248          	buf[1] = 0;
+    249          	return concat(buf, 1);
+    250          }
+    251          /*
+    252          unsigned char String::concat(unsigned char num)
+    253          {
+    254          	char buf[4];
+    255          	itoa(num, buf, 10);
+    256          	return concat(buf, strlen(buf));
+    257          }
+    258          
+    259          unsigned char String::concat(int num)
+    260          {
+    261          	char buf[7];
+    262          	itoa(num, buf, 10);
+    263          	return concat(buf, strlen(buf));
+    264          }
+    265          
+    266          unsigned char String::concat(unsigned int num)
+    267          {
+    268          	char buf[6];
+    269          	utoa(num, buf, 10);
+    270          	return concat(buf, strlen(buf));
+    271          }
+    272          
+    273          unsigned char String::concat(long num)
+    274          {
+    275          	char buf[12];
+    276          	ltoa(num, buf, 10);
+    277          	return concat(buf, strlen(buf));
+    278          }
+    279          
+    280          unsigned char String::concat(unsigned long num)
+    281          {
+    282          	char buf[11];
+    283          	ultoa(num, buf, 10);
+    284          	return concat(buf, strlen(buf));
+    285          }
+    286          */
+    287          /*********************************************/
+    288          /*  Concatenate                              */
+    289          /*********************************************/
+    290          
+    291          StringSumHelper & operator + (const StringSumHelper &lhs, const String &rhs)
+    292          {
+    293          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    294          	if (!a.concat(rhs.buffer, rhs.len)) a.invalidate();
+    295          	return a;
+    296          }
+    297          
+    298          StringSumHelper & operator + (const StringSumHelper &lhs, const char *cstr)
+    299          {
+    300          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    301          	if (!cstr || !a.concat(cstr, strlen(cstr))) a.invalidate();
+    302          	return a;
+    303          }
+    304          
+    305          StringSumHelper & operator + (const StringSumHelper &lhs, char c)
+    306          {
+    307          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    308          	if (!a.concat(c)) a.invalidate();
+    309          	return a;
+    310          }
+    311          
+    312          StringSumHelper & operator + (const StringSumHelper &lhs, unsigned char num)
+    313          {
+    314          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    315          	if (!a.concat(num)) a.invalidate();
+    316          	return a;
+    317          }
+    318          
+    319          StringSumHelper & operator + (const StringSumHelper &lhs, int num)
+    320          {
+    321          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    322          	if (!a.concat(num)) a.invalidate();
+    323          	return a;
+    324          }
+    325          
+    326          StringSumHelper & operator + (const StringSumHelper &lhs, unsigned int num)
+    327          {
+    328          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    329          	if (!a.concat(num)) a.invalidate();
+    330          	return a;
+    331          }
+    332          
+    333          StringSumHelper & operator + (const StringSumHelper &lhs, long num)
+    334          {
+    335          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    336          	if (!a.concat(num)) a.invalidate();
+    337          	return a;
+    338          }
+    339          
+    340          StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long num)
+    341          {
+    342          	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
+    343          	if (!a.concat(num)) a.invalidate();
+    344          	return a;
+    345          }
+    346          
+    347          /*********************************************/
+    348          /*  Comparison                               */
+    349          /*********************************************/
+    350          
+    351          int String::compareTo(const String &s) const
+    352          {
+    353          	if (!buffer || !s.buffer) {
+    354          		if (s.buffer && s.len > 0) return 0 - *(unsigned char *)s.buffer;
+    355          		if (buffer && len > 0) return *(unsigned char *)buffer;
+    356          		return 0;
+    357          	}
+    358          	return strcmp(buffer, s.buffer);
+    359          }
+    360          
+    361          unsigned char String::equals(const String &s2) const
+    362          {
+    363          	return (len == s2.len && compareTo(s2) == 0);
+    364          }
+    365          
+    366          unsigned char String::equals(const char *cstr) const
+    367          {
+    368          	if (len == 0) return (cstr == NULL || *cstr == 0);
+    369          	if (cstr == NULL) return buffer[0] == 0;
+    370          	return strcmp(buffer, cstr) == 0;
+    371          }
+    372          
+    373          unsigned char String::operator<(const String &rhs) const
+    374          {
+    375          	return compareTo(rhs) < 0;
+    376          }
+    377          
+    378          unsigned char String::operator>(const String &rhs) const
+    379          {
+    380          	return compareTo(rhs) > 0;
+    381          }
+    382          
+    383          unsigned char String::operator<=(const String &rhs) const
+    384          {
+    385          	return compareTo(rhs) <= 0;
+    386          }
+    387          
+    388          unsigned char String::operator>=(const String &rhs) const
+    389          {
+    390          	return compareTo(rhs) >= 0;
+    391          }
+    392          
+    393          unsigned char String::equalsIgnoreCase( const String &s2 ) const
+    394          {
+    395          	if (this == &s2) return 1;
+    396          	if (len != s2.len) return 0;
+    397          	if (len == 0) return 1;
+    398          	const char *p1 = buffer;
+    399          	const char *p2 = s2.buffer;
+    400          	while (*p1) {
+    401          		if (tolower(*p1++) != tolower(*p2++)) return 0;
+    402          	} 
+    403          	return 1;
+    404          }
+    405          
+    406          unsigned char String::startsWith( const String &s2 ) const
+    407          {
+    408          	if (len < s2.len) return 0;
+    409          	return startsWith(s2, 0);
+    410          }
+    411          
+    412          unsigned char String::startsWith( const String &s2, unsigned int offset ) const
+    413          {
+    414          	if (offset > len - s2.len || !buffer || !s2.buffer) return 0;
+    415          	return strncmp( &buffer[offset], s2.buffer, s2.len ) == 0;
+    416          }
+    417          
+    418          unsigned char String::endsWith( const String &s2 ) const
+    419          {
+    420          	if ( len < s2.len || !buffer || !s2.buffer) return 0;
+    421          	return strcmp(&buffer[len - s2.len], s2.buffer) == 0;
+    422          }
+    423          
+    424          /*********************************************/
+    425          /*  Character Access                         */
+    426          /*********************************************/
+    427          
+    428          char String::charAt(unsigned int loc) const
+    429          {
+    430          	return operator[](loc);
+    431          }
+    432          
+    433          void String::setCharAt(unsigned int loc, char c) 
+    434          {
+    435          	if (loc < len) buffer[loc] = c;
+    436          }
+    437          
+    438          char & String::operator[](unsigned int index)
+    439          {
+    440          	static char dummy_writable_char;
+    441          	if (index >= len || !buffer) {
+    442          		dummy_writable_char = 0;
+    443          		return dummy_writable_char;
+    444          	}
+    445          	return buffer[index];
+    446          }
+    447          
+    448          char String::operator[]( unsigned int index ) const
+    449          {
+    450          	if (index >= len || !buffer) return 0;
+    451          	return buffer[index];
+    452          }
+    453          
+    454          void String::getBytes(unsigned char *buf, unsigned int bufsize, unsigned int index) const
+    455          {
+    456          	if (!bufsize || !buf) return;
+    457          	if (index >= len) {
+    458          		buf[0] = 0;
+    459          		return;
+    460          	}
+    461          	unsigned int n = bufsize - 1;
+    462          	if (n > len - index) n = len - index;
+    463          	strncpy((char *)buf, buffer + index, n);
+    464          	buf[n] = 0;
+    465          }
+    466          
+    467          /*********************************************/
+    468          /*  Search                                   */
+    469          /*********************************************/
+    470          
+    471          int String::indexOf(char c) const
+    472          {
+    473          	return indexOf(c, 0);
+    474          }
+    475          
+    476          int String::indexOf( char ch, unsigned int fromIndex ) const
+    477          {
+    478          	if (fromIndex >= len) return -1;
+    479          	const char* temp = strchr(buffer + fromIndex, ch);
+    480          	if (temp == NULL) return -1;
+    481          	return temp - buffer;
+    482          }
+    483          
+    484          int String::indexOf(const String &s2) const
+    485          {
+    486          	return indexOf(s2, 0);
+    487          }
+    488          
+    489          int String::indexOf(const String &s2, unsigned int fromIndex) const
+    490          {
+    491          	if (fromIndex >= len) return -1;
+    492          	const char *found = strstr(buffer + fromIndex, s2.buffer);
+    493          	if (found == NULL) return -1;
+    494          	return found - buffer;
+    495          }
+    496          
+    497          int String::lastIndexOf( char theChar ) const
+    498          {
+    499          	return lastIndexOf(theChar, len - 1);
+    500          }
+    501          
+    502          int String::lastIndexOf(char ch, unsigned int fromIndex) const
+    503          {
+    504          	if (fromIndex >= len) return -1;
+    505          	char tempchar = buffer[fromIndex + 1];
+    506          	buffer[fromIndex + 1] = '\0';
+    507          	char* temp = strrchr( buffer, ch );
+    508          	buffer[fromIndex + 1] = tempchar;
+    509          	if (temp == NULL) return -1;
+    510          	return temp - buffer;
+    511          }
+    512          
+    513          int String::lastIndexOf(const String &s2) const
+    514          {
+    515          	return lastIndexOf(s2, len - s2.len);
+    516          }
+    517          
+    518          int String::lastIndexOf(const String &s2, unsigned int fromIndex) const
+    519          {
+    520            	if (s2.len == 0 || len == 0 || s2.len > len) return -1;
+    521          	if (fromIndex >= len) fromIndex = len - 1;
+    522          	int found = -1;
+    523          	for (char *p = buffer; p <= buffer + fromIndex; p++) {
+    524          		p = strstr(p, s2.buffer);
+    525          		if (!p) break;
+    526          		if ((unsigned int)(p - buffer) <= fromIndex) found = p - buffer;
+    527          	}
+    528          	return found;
+    529          }
+    530          
+    531          String String::substring( unsigned int left ) const
+    532          {
+    533          	return substring(left, len);
+    534          }
+    535          
+    536          String String::substring(unsigned int left, unsigned int right) const
+    537          {
+    538          	if (left > right) {
+    539          		unsigned int temp = right;
+    540          		right = left;
+    541          		left = temp;
+    542          	}
+    543          	String out;
+    544          	if (left > len) return out;
+    545          	if (right > len) right = len;
+    546          	char temp = buffer[right];  // save the replaced character
+    547          	buffer[right] = '\0';	
+    548          	out = buffer + left;  // pointer arithmetic
+    549          	buffer[right] = temp;  //restore character
+    550          	return out;
+    551          }
+    552          
+    553          /*********************************************/
+    554          /*  Modification                             */
+    555          /*********************************************/
+    556          
+    557          void String::replace(char find, char replace)
+    558          {
+    559          	if (!buffer) return;
+    560          	for (char *p = buffer; *p; p++) {
+    561          		if (*p == find) *p = replace;
+    562          	}
+    563          }
+    564          
+    565          void String::replace(const String& find, const String& replace)
+    566          {
+    567          	if (len == 0 || find.len == 0) return;
+    568          	int diff = replace.len - find.len;
+    569          	char *readFrom = buffer;
+    570          	char *foundAt;
+    571          	if (diff == 0) {
+    572          		while ((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+    573          			memcpy(foundAt, replace.buffer, replace.len);
+    574          			readFrom = foundAt + replace.len;
+    575          		}
+    576          	} else if (diff < 0) {
+    577          		char *writeTo = buffer;
+    578          		while ((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+    579          			unsigned int n = foundAt - readFrom;
+    580          			memcpy(writeTo, readFrom, n);
+    581          			writeTo += n;
+    582          			memcpy(writeTo, replace.buffer, replace.len);
+    583          			writeTo += replace.len;
+    584          			readFrom = foundAt + find.len;
+    585          			len += diff;
+    586          		}
+    587          		strcpy(writeTo, readFrom);
+    588          	} else {
+    589          		unsigned int size = len; // compute size needed for result
+    590          		while ((foundAt = strstr(readFrom, find.buffer)) != NULL) {
+    591          			readFrom = foundAt + find.len;
+    592          			size += diff;
+    593          		}
+    594          		if (size == len) return;
+    595          		if (size > capacity && !changeBuffer(size)) return; // XXX: tell user!
+    596          		int index = len - 1;
+    597          		while (index >= 0 && (index = lastIndexOf(find, index)) >= 0) {
+    598          			readFrom = buffer + index + find.len;
+    599          			memmove(readFrom + diff, readFrom, len - (readFrom - buffer));
+    600          			len += diff;
+    601          			buffer[len] = 0;
+    602          			memcpy(buffer + index, replace.buffer, replace.len);
+    603          			index--;
+    604          		}
+    605          	}
+    606          }
+    607          
+    608          void String::toLowerCase(void)
+    609          {
+    610          	if (!buffer) return;
+    611          	for (char *p = buffer; *p; p++) {
+    612          		*p = tolower(*p);
+    613          	}
+    614          }
+    615          
+    616          void String::toUpperCase(void)
+    617          {
+    618          	if (!buffer) return;
+    619          	for (char *p = buffer; *p; p++) {
+    620          		*p = toupper(*p);
+    621          	}
+    622          }
+    623          
+    624          void String::trim(void)
+    625          {
+    626          	if (!buffer || len == 0) return;
+    627          	char *begin = buffer;
+    628          	while (isspace(*begin)) begin++;
+    629          	char *end = buffer + len - 1;
+    630          	while (isspace(*end) && end >= begin) end--;
+    631          	len = end + 1 - begin;
+    632          	if (begin > buffer) memcpy(buffer, begin, len);
+    633          	buffer[len] = 0;
+    634          }
+    635          
+    636          /*********************************************/
+    637          /*  Parsing / Conversion                     */
+    638          /*********************************************/
+    639          
+    640          long String::toInt(void) const
+    641          {
+    642          	if (buffer) return atol(buffer);
+    643          	return 0;
+    644          }
+    645          
+    646          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   String::String(String const &)
+        16   -> String::init()
+        16   -> String::operator=(String const &)
+      16   String::String(char const *)
+        16   -> String::copy(char const *, unsigned int)
+        16   -> String::init()
+        16   -> strlen
+      16   String::String(char)
+        16   -> String::init()
+        16   -> String::operator=(char const *)
+      16   String::changeBuffer(unsigned int)
+        16   -> realloc
+       8   String::charAt(unsigned int) const
+         8   -> String::operator[](unsigned int) const
+       8   String::compareTo(String const &) const
+         8   -> strcmp
+       8   String::concat(String const &)
+         8   -> String::concat(char const *, unsigned int)
+      16   String::concat(char const *)
+        16   -> String::concat(char const *, unsigned int)
+        16   -> strlen
+      16   String::concat(char const *, unsigned int)
+        16   -> String::reserve(unsigned int)
+        16   -> strcpy
+       8   String::concat(char)
+         8   -> String::concat(char const *, unsigned int)
+      16   String::copy(char const *, unsigned int)
+        16   -> String::invalidate()
+        16   -> String::reserve(unsigned int)
+        16   -> strcpy
+       8   String::endsWith(String const &) const
+         8   -> strcmp
+       8   String::equals(String const &) const
+         8   -> String::compareTo(String const &) const
+       8   String::equals(char const *) const
+         8   -> strcmp
+      16   String::equalsIgnoreCase(String const &) const
+        16   -> tolower
+      16   String::getBytes(unsigned char *, unsigned int, unsigned int) const
+        16   -> strncpy
+       8   String::indexOf(String const &) const
+         8   -> String::indexOf(String const &, unsigned int) const
+      16   String::indexOf(String const &, unsigned int) const
+        16   -> __iar_Strstr
+       8   String::indexOf(char) const
+         8   -> String::indexOf(char, unsigned int) const
+      16   String::indexOf(char, unsigned int) const
+        16   -> __iar_Strchr
+       0   String::init()
+       8   String::invalidate()
+         8   -> free
+       8   String::lastIndexOf(String const &) const
+         8   -> String::lastIndexOf(String const &, unsigned int) const
+      24   String::lastIndexOf(String const &, unsigned int) const
+        24   -> __iar_Strstr
+       8   String::lastIndexOf(char) const
+         8   -> String::lastIndexOf(char, unsigned int) const
+      24   String::lastIndexOf(char, unsigned int) const
+        24   -> __iar_Strrchr
+       8   String::operator<(String const &) const
+         8   -> String::compareTo(String const &) const
+       8   String::operator<=(String const &) const
+         8   -> String::compareTo(String const &) const
+       8   String::operator=(String const &)
+         8   -> String::copy(char const *, unsigned int)
+         8   -> String::invalidate()
+      16   String::operator=(char const *)
+        16   -> String::copy(char const *, unsigned int)
+        16   -> String::invalidate()
+        16   -> strlen
+       8   String::operator>(String const &) const
+         8   -> String::compareTo(String const &) const
+       8   String::operator>=(String const &) const
+         8   -> String::compareTo(String const &) const
+       0   String::operator[](unsigned int)
+       0   String::operator[](unsigned int) const
+      40   String::replace(String const &, String const &)
+        40   -> String::changeBuffer(unsigned int)
+        40   -> String::lastIndexOf(String const &, unsigned int) const
+        40   -> __aeabi_memcpy
+        40   -> __aeabi_memmove
+        40   -> __iar_Strstr
+        40   -> strcpy
+       0   String::replace(char, char)
+       8   String::reserve(unsigned int)
+         8   -> String::changeBuffer(unsigned int)
+       0   String::setCharAt(unsigned int, char)
+       8   String::startsWith(String const &) const
+         8   -> String::startsWith(String const &, unsigned int) const
+       8   String::startsWith(String const &, unsigned int) const
+         8   -> strncmp
+       8   String::subobject String(String const &)
+         8   -> String::String(String const &)
+       8   String::subobject String(char const *)
+         8   -> String::String(char const *)
+       8   String::subobject String(char)
+         8   -> String::String(char)
+       8   String::subobject ~String()
+         8   -> free
+       8   String::substring(unsigned int) const
+         8   -> String::substring(unsigned int, unsigned int) const
+      24   String::substring(unsigned int, unsigned int) const
+        24   -> String::String(char const *)
+        24   -> String::operator=(char const *)
+       8   String::toInt() const
+         8   -> atol
+       8   String::toLowerCase()
+         8   -> tolower
+       0   String::toUpperCase()
+      16   String::trim()
+        16   -> __aeabi_memcpy
+        16   -> isspace
+       0   String::~String()
+         8   -> free
+       8   operator+(StringSumHelper const &, String const &)
+         8   -> String::concat(char const *, unsigned int)
+         8   -> String::invalidate()
+      16   operator+(StringSumHelper const &, char const *)
+        16   -> String::concat(char const *, unsigned int)
+        16   -> String::invalidate()
+        16   -> strlen
+       8   operator+(StringSumHelper const &, char)
+         8   -> String::concat(char)
+         8   -> String::invalidate()
+       8   operator+(StringSumHelper const &, int)
+         8   -> String::concat(int)
+         8   -> String::invalidate()
+       8   operator+(StringSumHelper const &, long)
+         8   -> String::concat(long)
+         8   -> String::invalidate()
+       8   operator+(StringSumHelper const &, unsigned char)
+         8   -> String::concat(unsigned char)
+         8   -> String::invalidate()
+       8   operator+(StringSumHelper const &, unsigned int)
+         8   -> String::concat(unsigned int)
+         8   -> String::invalidate()
+       8   operator+(StringSumHelper const &, unsigned long)
+         8   -> String::concat(unsigned long)
+         8   -> String::invalidate()
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable3
+       4  ??DataTable3_1
+       8  ?Subroutine0
+      14  ?Subroutine1
+      12  ?Subroutine2
+       1  ?_0
+      22  String::String(String const &)
+      34  String::String(char const *)
+      30  String::String(char)
+      26  String::changeBuffer(unsigned int)
+       8  String::charAt(unsigned int) const
+      54  String::compareTo(String const &) const
+      12  String::concat(String const &)
+      30  String::concat(char const *)
+      52  String::concat(char const *, unsigned int)
+      20  String::concat(char)
+      40  String::copy(char const *, unsigned int)
+      36  String::endsWith(String const &) const
+      20  String::equals(String const &) const
+      34  String::equals(char const *) const
+      56  String::equalsIgnoreCase(String const &) const
+      50  String::getBytes(unsigned char *, unsigned int, unsigned int) const
+      10  String::indexOf(String const &) const
+      34  String::indexOf(String const &, unsigned int) const
+      10  String::indexOf(char) const
+      32  String::indexOf(char, unsigned int) const
+      12  String::init()
+      24  String::invalidate()
+      14  String::lastIndexOf(String const &) const
+      72  String::lastIndexOf(String const &, unsigned int) const
+      12  String::lastIndexOf(char) const
+      58  String::lastIndexOf(char, unsigned int) const
+      10  String::operator<(String const &) const
+      18  String::operator<=(String const &) const
+      36  String::operator=(String const &)
+      34  String::operator=(char const *)
+      18  String::operator>(String const &) const
+      12  String::operator>=(String const &) const
+      24  String::operator[](unsigned int)
+      20  String::operator[](unsigned int) const
+     286  String::replace(String const &, String const &)
+      24  String::replace(char, char)
+      40  String::reserve(unsigned int)
+      12  String::setCharAt(unsigned int, char)
+      22  String::startsWith(String const &) const
+      44  String::startsWith(String const &, unsigned int) const
+       8  String::subobject String(String const &)
+       8  String::subobject String(char const *)
+       8  String::subobject String(char)
+       4  String::subobject ~String()
+      10  String::substring(unsigned int) const
+      66  String::substring(unsigned int, unsigned int) const
+      16  String::toInt() const
+      26  String::toLowerCase()
+      30  String::toUpperCase()
+      80  String::trim()
+       2  String::~String()
+       1  dummy_writable_char
+      14  operator+(StringSumHelper const &, String const &)
+      38  operator+(StringSumHelper const &, char const *)
+       8  operator+(StringSumHelper const &, char)
+      10  operator+(StringSumHelper const &, int)
+      10  operator+(StringSumHelper const &, long)
+      10  operator+(StringSumHelper const &, unsigned char)
+      10  operator+(StringSumHelper const &, unsigned int)
+      10  operator+(StringSumHelper const &, unsigned long)
+
+ 
+     1 byte  in section .bss
+     1 byte  in section .rodata
+ 1'812 bytes in section .text
+ 
+ 1'800 bytes of CODE  memory (+ 12 bytes shared)
+     1 byte  of CONST memory
+     1 byte  of DATA  memory
+
+Errors: none
+Warnings: none

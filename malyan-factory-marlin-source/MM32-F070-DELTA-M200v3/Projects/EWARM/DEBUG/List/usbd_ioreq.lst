@@ -1,0 +1,275 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_ioreq.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4995.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_ioreq.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_ioreq.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_ioreq.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_ioreq.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_ioreq.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides the IO requests APIs for control endpoints.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_ioreq.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          /* Private function prototypes -----------------------------------------------*/
+     36          /* Private functions ---------------------------------------------------------*/
+     37          /**
+     38            * @brief  USBD_CtlSendData
+     39            *         send data on the ctl pipe
+     40            * @param  pdev: device instance
+     41            * @param  buff: pointer to data buffer
+     42            * @param  len: length of data to be sent
+     43            * @retval status
+     44            */
+     45          USBD_Status  USBD_CtlSendData (USB_CORE_HANDLE  *pdev, 
+     46                                         uint8_t *pbuf,
+     47                                         uint16_t len)
+     48          {
+     49            USBD_Status ret = USBD_OK;
+     50            
+     51            pdev->dev.in_ep[0].total_data_len = len;
+     52            pdev->dev.in_ep[0].rem_data_len   = len;
+     53            pdev->dev.device_state = USB_EP0_DATA_IN;
+     54          
+     55            DCD_EP_Tx (pdev, 0, pbuf, len);
+     56           
+     57            return ret;
+     58          }
+     59          
+     60          /**
+     61            * @brief  USBD_CtlContinueSendData
+     62            *         continue sending data on the ctl pipe
+     63            * @param  pdev: device instance
+     64            * @param  buff: pointer to data buffer
+     65            * @param  len: length of data to be sent
+     66            * @retval status
+     67            */
+     68          USBD_Status  USBD_CtlContinueSendData (USB_CORE_HANDLE  *pdev, 
+     69                                                 uint8_t *pbuf,
+     70                                                 uint16_t len)
+     71          {
+     72            USBD_Status ret = USBD_OK;
+     73            
+     74            DCD_EP_Tx (pdev, 0, pbuf, len);
+     75            
+     76            
+     77            return ret;
+     78          }
+     79          
+     80          /**
+     81            * @brief  USBD_CtlPrepareRx
+     82            *         receive data on the ctl pipe
+     83            * @param  pdev: USB device instance
+     84            * @param  buff: pointer to data buffer
+     85            * @param  len: length of data to be received
+     86            * @retval status
+     87            */
+     88          USBD_Status  USBD_CtlPrepareRx (USB_CORE_HANDLE  *pdev,
+     89                                            uint8_t *pbuf,                                  
+     90                                            uint16_t len)
+     91          {
+     92            USBD_Status ret = USBD_OK;
+     93            
+     94            pdev->dev.out_ep[0].total_data_len = len;
+     95            pdev->dev.out_ep[0].rem_data_len   = len;
+     96            pdev->dev.device_state = USB_EP0_DATA_OUT;
+     97            
+     98            DCD_EP_PrepareRx (pdev,
+     99                              0,
+    100                              pbuf,
+    101                              len);
+    102            
+    103          
+    104            return ret;
+    105          }
+    106          
+    107          /**
+    108            * @brief  USBD_CtlContinueRx
+    109            *         continue receive data on the ctl pipe
+    110            * @param  pdev: USB device instance
+    111            * @param  buff: pointer to data buffer
+    112            * @param  len: length of data to be received
+    113            * @retval status
+    114            */
+    115          USBD_Status  USBD_CtlContinueRx (USB_CORE_HANDLE  *pdev, 
+    116                                                    uint8_t *pbuf,                                          
+    117                                                    uint16_t len)
+    118          {
+    119            USBD_Status ret = USBD_OK;
+    120            
+    121            DCD_EP_PrepareRx (pdev,
+    122                              0,                     
+    123                              pbuf,                         
+    124                              len);
+    125            return ret;
+    126          }
+    127          /**
+    128            * @brief  USBD_CtlSendStatus
+    129            *         send zero length packet on the ctl pipe
+    130            * @param  pdev: USB device instance
+    131            * @retval status
+    132            */
+    133          USBD_Status  USBD_CtlSendStatus (USB_CORE_HANDLE  *pdev)
+    134          {
+    135            USBD_Status ret = USBD_OK;
+    136            pdev->dev.device_state = USB_EP0_STATUS_IN;
+    137            DCD_EP_Tx (pdev,
+    138                       0,
+    139                       NULL, 
+    140                       0); 
+    141            return ret;
+    142          }
+    143          
+    144          /**
+    145            * @brief  USBD_CtlReceiveStatus
+    146            *         receive zero length packet on the ctl pipe
+    147            * @param  pdev: USB device instance
+    148            * @retval status
+    149            */
+    150          USBD_Status  USBD_CtlReceiveStatus (USB_CORE_HANDLE  *pdev)
+    151          {
+    152            USBD_Status ret = USBD_OK;
+    153            pdev->dev.device_state = USB_EP0_STATUS_OUT;  
+    154            DCD_EP_PrepareRx ( pdev,
+    155                              0,
+    156                              NULL,
+    157                              0); 
+    158            
+    159            return ret;
+    160          }
+    161          
+    162          
+    163          /**
+    164            * @brief  USBD_GetRxCount
+    165            *         returns the received data length
+    166            * @param  pdev: USB device instance
+    167            *         epnum: endpoint index
+    168            * @retval Rx Data blength
+    169            */
+    170          uint16_t  USBD_GetRxCount (USB_CORE_HANDLE  *pdev , uint8_t epnum)
+    171          {
+    172            return pdev->dev.out_ep[epnum].xfer_count;
+    173          }
+    174          
+    175          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   USBD_CtlContinueRx
+         8   -> DCD_EP_PrepareRx
+       8   USBD_CtlContinueSendData
+         8   -> DCD_EP_Tx
+       8   USBD_CtlPrepareRx
+         8   -> DCD_EP_PrepareRx
+       8   USBD_CtlReceiveStatus
+         8   -> DCD_EP_PrepareRx
+       8   USBD_CtlSendData
+         8   -> DCD_EP_Tx
+       8   USBD_CtlSendStatus
+         8   -> DCD_EP_Tx
+       0   USBD_GetRxCount
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      12  ?Subroutine0
+      12  ?Subroutine1
+       4  USBD_CtlContinueRx
+       4  USBD_CtlContinueSendData
+      18  USBD_CtlPrepareRx
+      12  USBD_CtlReceiveStatus
+      14  USBD_CtlSendData
+      12  USBD_CtlSendStatus
+      14  USBD_GetRxCount
+
+ 
+ 102 bytes in section .text
+ 
+ 102 bytes of CODE memory
+
+Errors: none
+Warnings: none

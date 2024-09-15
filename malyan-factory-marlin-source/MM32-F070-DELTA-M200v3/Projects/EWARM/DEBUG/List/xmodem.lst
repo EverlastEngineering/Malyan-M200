@@ -1,0 +1,356 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      18/Jul/2017  22:40:31 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\mar #
+#                    lin\xmodem.c                                             #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\mar #
+#                    lin\xmodem.c -D USE_STDPERIPH_DRIVER -D                  #
+#                    USE_STM32072B_EVAL -D STM32F072 -D PRINT_INFO -lcN       #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\ -o D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\DEBUG\Obj\ --debug --endian=little          #
+#                    --cpu=Cortex-M0 -e --fpu=None --dlib_config "C:\Program  #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\INC\c\DLib_Config_Normal.h" -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\E #
+#                    WARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\src\fs\ -I                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --use_c++_inline -I "C:\Program   #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\CMSIS\Include\" --relaxed_fp                     #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\xmodem.lst                                     #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\xmodem.o                                        #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\marlin\xmodem.c
+      1          //*================================================================================================
+      2          //* 文件名				: xmodem.c
+      3          //* 功能描述			: 定时器相关函数
+      4          //* 作者    			: 罗伟东
+      5          //* 版本				: 0.01
+      6          //* 建立日期、时间		: 2011/04/24 13:30
+      7          //* 最近修改日期、时间	: 
+      8          //* 修改原因			: 
+      9          //*================================================================================================
+     10          /*------------------------------------------ 头文件 ---------------------------------------------*/
+     11          //#include 	"crc16.h"
+     12          //#include 	"timer.h"
+     13          #include 	"xmodem.h"
+     14          //#include	"decodeHex.h"
+     15          //#include	"ProgramFlash.h"
+     16          //#include	"interface.h"
+     17          //#include 	<stdio.h>
+     18          #include <stdbool.h>
+     19          
+     20          #define printf(a) SEGGER_RTT_WriteString(0,a)
+     21          /*-----------------------------------------------------------------------------------------------*/
+     22          #define	BUFFER_SIZE					256U	/*暂存HEX文件数据缓冲区大小							*/
+     23          
+     24          /*----------------------------------------- 全局变量 --------------------------------------------*/
+     25          uint32_t	g_RequestTimes=0;	//发送文件请求次数
+     26          uint8_t	g_CheckType='C';	//接收文件的校验方式
+     27          uint8_t	g_HexDataTemp[1530];//接收HEX文件缓冲区
+     28          extern uint8_t	g_ProgramFlashDataTemp[BUFFER_SIZE];
+     29          /*LAST_DATA_INFO g_LastData=
+     30          {
+     31          NO_DATA,
+     32          0,
+     33          {0}
+     34          };*/
+     35          //HEX_DATA_TEMP g_HexDataTemp
+     36          /*-----------------------------------------------------------------------------------------------*/
+     37          
+     38          /*-------------------------------------- 自定义数据类型 -----------------------------------------*/
+     39          
+     40          /*-----------------------------------------------------------------------------------------------*/
+     41          
+     42          //*================================================================================================
+     43          //*											函	数	区
+     44          //*================================================================================================
+     45          
+     46          /**************************************************************************************************
+     47          ** 函数名称 : port_outbyte
+     48          ** 功能描述 : 向串口发送一个字符数据
+     49          ** 入口参数 : <trychar>[IN] 发送的数据
+     50          ** 出口参数 : 无
+     51          ** 返 回 值 : 无
+     52          ** 其他说明 : 无
+     53          ***************************************************************************************************/ 
+     54          void port_outbyte(uint8_t trychar)
+     55          {
+     56              while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET){}
+     57              USART_SendData(USART1,trychar);
+     58          }
+     59          
+     60          /**************************************************************************************************
+     61          ** 函数名称 : port_inbyte
+     62          ** 功能描述 : 向串口接收一个字符数据
+     63          ** 入口参数 : <Time>[in] 读取数据最大延时时间
+     64          ** 出口参数 : 无
+     65          ** 返 回 值 : 从串口接收到的数据或者为0
+     66          ** 其他说明 : 无
+     67          ***************************************************************************************************/  
+     68          char port_inbyte(uint32_t Time)
+     69          {
+     70              extern volatile unsigned long systick_count;
+     71              extern volatile int16_t wifi_r_buff_ptr,wifi_w_buff_ptr;
+     72              extern char Uart_RX_WIFI[];
+     73          
+     74              unsigned long timeout=systick_count+Time;
+     75              
+     76              #define WIFI_USART_RX_BUF_SIZE 256
+     77              //wifi_r_buff_ptr = wifi_w_buff_ptr;
+     78              while(systick_count<timeout){
+     79                  if (wifi_r_buff_ptr!=wifi_w_buff_ptr)
+     80                  {
+     81                      char ch = Uart_RX_WIFI[wifi_r_buff_ptr];
+     82                      wifi_r_buff_ptr++;
+     83                      if (wifi_r_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_r_buff_ptr=0;
+     84                      return ch;
+     85                  }
+     86              }
+     87              return 0;
+     88          }
+     89          
+     90          /**************************************************************************************************
+     91          ** 函数名称 : check
+     92          ** 功能描述 : 校验，CRC为真则为CRC校验，否则为校验和
+     93          ** 入口参数 : <crc>[in] 选择是CRC校验还是SUM校验
+     94          **			  <buf>[in] 校验的原始数据
+     95          **			  <sz>[in]  校验的数据长度
+     96          ** 出口参数 : 无
+     97          ** 返 回 值 : 校验无误返回TURE,反之返回FALSE
+     98          ** 其他说明 : 无
+     99          ***************************************************************************************************/   
+    100          bool check(bool crc, const unsigned char *buf, short sz)
+    101          {
+    102              /*if (crc){
+    103                  unsigned short crc = crc16_ccitt(buf, sz);
+    104                  unsigned short tcrc = (buf[sz]<<8)+buf[sz+1];
+    105                  if (crc == tcrc)
+    106                      return true;
+    107              }
+    108              else*/{
+    109                  short i;
+    110                  unsigned char cks = 0;
+    111                  for (i = sz; i != 0; i--){
+    112                      cks += *(buf++);
+    113                  }
+    114                  if (cks == *buf)
+    115                      return true;
+    116              }
+    117              return false;
+    118          }
+    119          
+    120          /**************************************************************************************************
+    121          ** 函数名称 : xmodemReceive
+    122          ** 功能描述 : xmodem协议接收接收文件
+    123          ** 入口参数 : <checkType>[in] 接收文件的校验方式，'C':crc校验，NAK:累加和校验
+    124          ** 出口参数 : 无
+    125          ** 返 回 值 : 接收文件操作时的相关错误代码
+    126          ** 其他说明 : 无
+    127          ***************************************************************************************************/
+    128          uint8_t xmodemReceive(uint8_t checkType)
+    129          {
+    130              uint8_t xbuff[133]; /* 128 for XModem  + 3 head chars + 2 crc + nul */
+    131              uint8_t crc = 1;//启用CRC校验
+    132              uint8_t packetno = 1;
+    133              uint8_t bufsz;
+    134              short i=0;
+    135              short j=0;
+    136              uint8_t	*p_LastData;
+    137              uint8_t	*p_DataType;
+    138              uint8_t chTemp=0;//接收字符缓存
+    139              //	volatile uint32_t	RowNum2=0;	
+    140              uint8_t	RowNum=0;	//接收到的行数
+    141              p_LastData=g_HexDataTemp;
+    142              p_DataType=g_HexDataTemp;
+    143              if(checkType==CHECK_CRC){//CRC校验
+    144                  crc = 1;
+    145                  g_CheckType='C';
+    146              }else if(checkType==CHECK_SUM){
+    147                  crc = 0;
+    148                  g_CheckType=NAK;
+    149              }
+    150              while(1){
+    151                  bufsz=128;
+    152                  printf("\n\r->");
+    153                  //向上位机请求发送文件
+    154                  for(i=100;i!=0;i--){
+    155                      chTemp = port_inbyte(500);
+    156                      if(chTemp>0){
+    157                          break;
+    158                      }else{
+    159                          port_outbyte(g_CheckType);
+    160                      }
+    161                  }
+    162                  //文件传输超时
+    163                  if((chTemp==0)&&(i==0)){
+    164                      printf("\n\r->Transmit Time Out!!");
+    165                      printf("\n\r->");
+    166                      /*此处可以返回错误信息*/
+    167                      return TIME_OUT;
+    168                  }
+    169                  //用户取消文件传输
+    170                  else if((chTemp=='B')||(chTemp=='b')){
+    171                      //printf("\n\r->%c",chTemp);
+    172                      printf("\n\r->User Canceled!!");
+    173                      printf("\n\r->");
+    174                      /*此处可以返回错误信息*/
+    175                      return USER_CANCELED;
+    176                  }
+    177                  else{ //开始传输文件
+    178                      while(chTemp==SOH){//接收到有效数据帧头
+    179                          xbuff[0]=chTemp;
+    180                          for(i=0;i<sizeof(xbuff);i++){//接收一帧数据
+    181                              xbuff[i+1]=port_inbyte(1);
+    182                          }
+    183                          
+    184                          if((xbuff[1]==(uint8_t)~xbuff[2])&&(packetno==xbuff[1])//包序号无误
+    185                             &&(check(crc, &xbuff[3], bufsz))){//CRC校验无误
+    186                                 packetno++;
+    187                                 for(j=0;(j<128)&&(RowNum<16);){
+    188                                     if(xbuff[3+j]==':'){
+    189                                         p_DataType=p_LastData;
+    190                                     }
+    191                                     else if(xbuff[3+j]==0x0A){//接收到换行符
+    192                                         if(*(p_DataType+8)=='0'){
+    193                                             RowNum++; //(((8+k)>=128)?((k+8)-128):(8+k))
+    194                                         }
+    195                                     }
+    196                                     *(p_LastData++)=xbuff[3+j];
+    197                                     j++;
+    198                                     
+    199                                 }
+    200                                 if(RowNum==16){//可以进行数据烧写了
+    201                                     RowNum=0;
+    202                                     *p_LastData=0x0A;
+    203                                     //ProgramHexToFlash(g_HexDataTemp,USE_DFT_ADDR,PROM_ADDR);
+    204                                     p_LastData=g_HexDataTemp;
+    205                                     while(j<128){
+    206                                         if(xbuff[3+j]==':'){
+    207                                             p_DataType=p_LastData;
+    208                                         }
+    209                                         if(xbuff[3+j]==0x0A){//接收到换行符
+    210                                             if(*(p_DataType+8)=='0'){
+    211                                                 RowNum++;
+    212                                             }		
+    213                                         }
+    214                                         *(p_LastData++)=xbuff[3+j];//将不能构成一行的数据暂存
+    215                                         j++;
+    216                                     }
+    217                                 }
+    218                                 port_outbyte(ACK);
+    219                             }
+    220                          else{//要求重发
+    221                              port_outbyte(NAK);
+    222                          }
+    223                          do{
+    224                              chTemp = port_inbyte(10);//读取下一帧数据的帧头
+    225                          }while(chTemp==0);
+    226                      }
+    227                      port_outbyte(chTemp);
+    228                      if(chTemp==EOT){//文件发送结束标志       
+    229                          port_outbyte(ACK);
+    230                          /*烧写最后一帧数据*/
+    231                          if(RowNum<16){
+    232                              *p_LastData=0x0A;
+    233                              //ProgramHexToFlash(g_HexDataTemp,USE_DFT_ADDR,PROM_ADDR);
+    234                          }
+    235                          printf("\n\r->Load Hex File To Flash Of CRC OK ^_^");
+    236                          printf("\n\r->");
+    237                      }
+    238                      
+    239                      chTemp=port_inbyte(50);
+    240                      if(chTemp==EOT){//文件发送结束标志
+    241                          port_outbyte(ACK);
+    242                          printf("\n\r->Load Hex File To Flash Of CRC OK ^_^");
+    243                          printf("\n\r->");
+    244                      }
+    245                      /*此处可以返回错误信息*/
+    246                      return SUCCESSFULL;
+    247                  }
+    248              }
+    249          }
+    250          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   check
+      12   port_inbyte
+      16   port_outbyte
+        16   -> USART_GetFlagStatus
+        16   -> USART_SendData
+     168   xmodemReceive
+       168   -> SEGGER_RTT_WriteString
+       168   -> check
+       168   -> port_inbyte
+       168   -> port_outbyte
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       8  ?<Constant "\n\r->">
+      44  ?<Constant "\n\r->Load Hex File To ...">
+      24  ?<Constant "\n\r->Transmit Time Out!!">
+      20  ?<Constant "\n\r->User Canceled!!">
+       4  ??DataTable6
+       4  ??DataTable6_1
+       4  ??DataTable6_2
+       4  ??DataTable6_3
+       4  ??DataTable6_4
+       4  ??DataTable6_5
+       4  ??DataTable6_6
+      32  check
+    1536  g_CheckType
+          g_HexDataTemp
+       4  g_RequestTimes
+      62  port_inbyte
+      28  port_outbyte
+     418  xmodemReceive
+
+ 
+     4 bytes in section .bss
+ 1 536 bytes in section .data
+   664 bytes in section .text
+ 
+   664 bytes of CODE memory
+ 1 540 bytes of DATA memory
+
+Errors: none
+Warnings: 3

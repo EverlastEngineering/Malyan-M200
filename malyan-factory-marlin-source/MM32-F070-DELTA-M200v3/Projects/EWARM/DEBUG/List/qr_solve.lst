@@ -1,0 +1,1638 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:54
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\qr_solve.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EWB8F.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\qr_solve.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\qr_solve.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\qr_solve.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\qr_solve.cpp
+      1          #include "qr_solve.h"
+      2          
+      3          #if ENABLED(AUTO_BED_LEVELING_GRID)
+      4          
+      5          #include <stdlib.h>
+      6          #include <math.h>
+      7          
+      8          //# include "r8lib.h"
+      9          
+     10          int i4_min(int i1, int i2)
+     11          
+     12          /******************************************************************************/
+     13          /*
+     14            Purpose:
+     15          
+     16              I4_MIN returns the smaller of two I4's.
+     17          
+     18            Licensing:
+     19          
+     20              This code is distributed under the GNU LGPL license.
+     21          
+     22            Modified:
+     23          
+     24              29 August 2006
+     25          
+     26            Author:
+     27          
+     28              John Burkardt
+     29          
+     30            Parameters:
+     31          
+     32              Input, int I1, I2, two integers to be compared.
+     33          
+     34              Output, int I4_MIN, the smaller of I1 and I2.
+     35          */
+     36          {
+     37            return (i1 < i2) ? i1 : i2;
+     38          }
+     39          
+     40          double r8_epsilon(void)
+     41          
+     42          /******************************************************************************/
+     43          /*
+     44            Purpose:
+     45          
+     46              R8_EPSILON returns the R8 round off unit.
+     47          
+     48            Discussion:
+     49          
+     50              R8_EPSILON is a number R which is a power of 2 with the property that,
+     51              to the precision of the computer's arithmetic,
+     52                1 < 1 + R
+     53              but
+     54                1 = ( 1 + R / 2 )
+     55          
+     56            Licensing:
+     57          
+     58              This code is distributed under the GNU LGPL license.
+     59          
+     60            Modified:
+     61          
+     62              01 September 2012
+     63          
+     64            Author:
+     65          
+     66              John Burkardt
+     67          
+     68            Parameters:
+     69          
+     70              Output, double R8_EPSILON, the R8 round-off unit.
+     71          */
+     72          {
+     73            const double value = 2.220446049250313E-016;
+     74            return value;
+     75          }
+     76          
+     77          double r8_max(double x, double y)
+     78          
+     79          /******************************************************************************/
+     80          /*
+     81            Purpose:
+     82          
+     83              R8_MAX returns the maximum of two R8's.
+     84          
+     85            Licensing:
+     86          
+     87              This code is distributed under the GNU LGPL license.
+     88          
+     89            Modified:
+     90          
+     91              07 May 2006
+     92          
+     93            Author:
+     94          
+     95              John Burkardt
+     96          
+     97            Parameters:
+     98          
+     99              Input, double X, Y, the quantities to compare.
+    100          
+    101              Output, double R8_MAX, the maximum of X and Y.
+    102          */
+    103          {
+    104            return (y < x) ? x : y;
+    105          }
+    106          
+    107          double r8_abs(double x)
+    108          
+    109          /******************************************************************************/
+    110          /*
+    111            Purpose:
+    112          
+    113              R8_ABS returns the absolute value of an R8.
+    114          
+    115            Licensing:
+    116          
+    117              This code is distributed under the GNU LGPL license.
+    118          
+    119            Modified:
+    120          
+    121              07 May 2006
+    122          
+    123            Author:
+    124          
+    125              John Burkardt
+    126          
+    127            Parameters:
+    128          
+    129              Input, double X, the quantity whose absolute value is desired.
+    130          
+    131              Output, double R8_ABS, the absolute value of X.
+    132          */
+    133          {
+    134            return (x < 0.0) ? -x : x;
+    135          }
+    136          
+    137          double r8_sign(double x)
+    138          
+    139          /******************************************************************************/
+    140          /*
+    141            Purpose:
+    142          
+    143              R8_SIGN returns the sign of an R8.
+    144          
+    145            Licensing:
+    146          
+    147              This code is distributed under the GNU LGPL license.
+    148          
+    149            Modified:
+    150          
+    151              08 May 2006
+    152          
+    153            Author:
+    154          
+    155              John Burkardt
+    156          
+    157            Parameters:
+    158          
+    159              Input, double X, the number whose sign is desired.
+    160          
+    161              Output, double R8_SIGN, the sign of X.
+    162          */
+    163          {
+    164            return (x < 0.0) ? -1.0 : 1.0;
+    165          }
+    166          
+    167          double r8mat_amax(int m, int n, double a[])
+    168          
+    169          /******************************************************************************/
+    170          /*
+    171            Purpose:
+    172          
+    173              R8MAT_AMAX returns the maximum absolute value entry of an R8MAT.
+    174          
+    175            Discussion:
+    176          
+    177              An R8MAT is a doubly dimensioned array of R8 values, stored as a vector
+    178              in column-major order.
+    179          
+    180            Licensing:
+    181          
+    182              This code is distributed under the GNU LGPL license.
+    183          
+    184            Modified:
+    185          
+    186              07 September 2012
+    187          
+    188            Author:
+    189          
+    190              John Burkardt
+    191          
+    192            Parameters:
+    193          
+    194              Input, int M, the number of rows in A.
+    195          
+    196              Input, int N, the number of columns in A.
+    197          
+    198              Input, double A[M*N], the M by N matrix.
+    199          
+    200              Output, double R8MAT_AMAX, the maximum absolute value entry of A.
+    201          */
+    202          {
+    203            double value = r8_abs(a[0 + 0 * m]);
+    204            for (int j = 0; j < n; j++) {
+    205              for (int i = 0; i < m; i++) {
+    206                if (value < r8_abs(a[i + j * m]))
+    207                  value = r8_abs(a[i + j * m]);
+    208              }
+    209            }
+    210            return value;
+    211          }
+    212          
+    213          void r8mat_copy(double a2[], int m, int n, double a1[])
+    214          
+    215          /******************************************************************************/
+    216          /*
+    217            Purpose:
+    218          
+    219              R8MAT_COPY_NEW copies one R8MAT to a "new" R8MAT.
+    220          
+    221            Discussion:
+    222          
+    223              An R8MAT is a doubly dimensioned array of R8 values, stored as a vector
+    224              in column-major order.
+    225          
+    226            Licensing:
+    227          
+    228              This code is distributed under the GNU LGPL license.
+    229          
+    230            Modified:
+    231          
+    232              26 July 2008
+    233          
+    234            Author:
+    235          
+    236              John Burkardt
+    237          
+    238            Parameters:
+    239          
+    240              Input, int M, N, the number of rows and columns.
+    241          
+    242              Input, double A1[M*N], the matrix to be copied.
+    243          
+    244              Output, double R8MAT_COPY_NEW[M*N], the copy of A1.
+    245          */
+    246          {
+    247            for (int j = 0; j < n; j++) {
+    248              for (int i = 0; i < m; i++)
+    249                a2[i + j * m] = a1[i + j * m];
+    250            }
+    251          }
+    252          
+    253          /******************************************************************************/
+    254          
+    255          void daxpy(int n, double da, double dx[], int incx, double dy[], int incy)
+    256          
+    257          /******************************************************************************/
+    258          /*
+    259            Purpose:
+    260          
+    261              DAXPY computes constant times a vector plus a vector.
+    262          
+    263            Discussion:
+    264          
+    265              This routine uses unrolled loops for increments equal to one.
+    266          
+    267            Licensing:
+    268          
+    269              This code is distributed under the GNU LGPL license.
+    270          
+    271            Modified:
+    272          
+    273              30 March 2007
+    274          
+    275            Author:
+    276          
+    277              C version by John Burkardt
+    278          
+    279            Reference:
+    280          
+    281              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+    282              LINPACK User's Guide,
+    283              SIAM, 1979.
+    284          
+    285              Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,
+    286              Basic Linear Algebra Subprograms for Fortran Usage,
+    287              Algorithm 539,
+    288              ACM Transactions on Mathematical Software,
+    289              Volume 5, Number 3, September 1979, pages 308-323.
+    290          
+    291            Parameters:
+    292          
+    293              Input, int N, the number of elements in DX and DY.
+    294          
+    295              Input, double DA, the multiplier of DX.
+    296          
+    297              Input, double DX[*], the first vector.
+    298          
+    299              Input, int INCX, the increment between successive entries of DX.
+    300          
+    301              Input/output, double DY[*], the second vector.
+    302              On output, DY[*] has been replaced by DY[*] + DA * DX[*].
+    303          
+    304              Input, int INCY, the increment between successive entries of DY.
+    305          */
+    306          {
+    307            if (n <= 0 || da == 0.0) return;
+    308          
+    309            int i, ix, iy, m;
+    310            /*
+    311              Code for unequal increments or equal increments
+    312              not equal to 1.
+    313            */
+    314            if (incx != 1 || incy != 1) {
+    315              if (0 <= incx)
+    316                ix = 0;
+    317              else
+    318                ix = (- n + 1) * incx;
+    319              if (0 <= incy)
+    320                iy = 0;
+    321              else
+    322                iy = (- n + 1) * incy;
+    323              for (i = 0; i < n; i++) {
+    324                dy[iy] = dy[iy] + da * dx[ix];
+    325                ix = ix + incx;
+    326                iy = iy + incy;
+    327              }
+    328            }
+    329            /*
+    330              Code for both increments equal to 1.
+    331            */
+    332            else {
+    333              m = n % 4;
+    334              for (i = 0; i < m; i++)
+    335                dy[i] = dy[i] + da * dx[i];
+    336              for (i = m; i < n; i = i + 4) {
+    337                dy[i  ] = dy[i  ] + da * dx[i  ];
+    338                dy[i + 1] = dy[i + 1] + da * dx[i + 1];
+    339                dy[i + 2] = dy[i + 2] + da * dx[i + 2];
+    340                dy[i + 3] = dy[i + 3] + da * dx[i + 3];
+    341              }
+    342            }
+    343          }
+    344          /******************************************************************************/
+    345          
+    346          double ddot(int n, double dx[], int incx, double dy[], int incy)
+    347          
+    348          /******************************************************************************/
+    349          /*
+    350            Purpose:
+    351          
+    352              DDOT forms the dot product of two vectors.
+    353          
+    354            Discussion:
+    355          
+    356              This routine uses unrolled loops for increments equal to one.
+    357          
+    358            Licensing:
+    359          
+    360              This code is distributed under the GNU LGPL license.
+    361          
+    362            Modified:
+    363          
+    364              30 March 2007
+    365          
+    366            Author:
+    367          
+    368              C version by John Burkardt
+    369          
+    370            Reference:
+    371          
+    372              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+    373              LINPACK User's Guide,
+    374              SIAM, 1979.
+    375          
+    376              Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,
+    377              Basic Linear Algebra Subprograms for Fortran Usage,
+    378              Algorithm 539,
+    379              ACM Transactions on Mathematical Software,
+    380              Volume 5, Number 3, September 1979, pages 308-323.
+    381          
+    382            Parameters:
+    383          
+    384              Input, int N, the number of entries in the vectors.
+    385          
+    386              Input, double DX[*], the first vector.
+    387          
+    388              Input, int INCX, the increment between successive entries in DX.
+    389          
+    390              Input, double DY[*], the second vector.
+    391          
+    392              Input, int INCY, the increment between successive entries in DY.
+    393          
+    394              Output, double DDOT, the sum of the product of the corresponding
+    395              entries of DX and DY.
+    396          */
+    397          {
+    398          
+    399            if (n <= 0) return 0.0;
+    400          
+    401            int i, m;
+    402            double dtemp = 0.0;
+    403          
+    404            /*
+    405              Code for unequal increments or equal increments
+    406              not equal to 1.
+    407            */
+    408            if (incx != 1 || incy != 1) {
+    409              int ix = (incx >= 0) ? 0 : (-n + 1) * incx,
+    410                  iy = (incy >= 0) ? 0 : (-n + 1) * incy;
+    411              for (i = 0; i < n; i++) {
+    412                dtemp += dx[ix] * dy[iy];
+    413                ix = ix + incx;
+    414                iy = iy + incy;
+    415              }
+    416            }
+    417            /*
+    418              Code for both increments equal to 1.
+    419            */
+    420            else {
+    421              m = n % 5;
+    422              for (i = 0; i < m; i++)
+    423                dtemp += dx[i] * dy[i];
+    424              for (i = m; i < n; i = i + 5) {
+    425                dtemp += dx[i] * dy[i]
+    426                        + dx[i + 1] * dy[i + 1]
+    427                        + dx[i + 2] * dy[i + 2]
+    428                        + dx[i + 3] * dy[i + 3]
+    429                        + dx[i + 4] * dy[i + 4];
+    430              }
+    431            }
+    432            return dtemp;
+    433          }
+    434          /******************************************************************************/
+    435          
+    436          double dnrm2(int n, double x[], int incx)
+    437          
+    438          /******************************************************************************/
+    439          /*
+    440            Purpose:
+    441          
+    442              DNRM2 returns the euclidean norm of a vector.
+    443          
+    444            Discussion:
+    445          
+    446               DNRM2 ( X ) = sqrt ( X' * X )
+    447          
+    448            Licensing:
+    449          
+    450              This code is distributed under the GNU LGPL license.
+    451          
+    452            Modified:
+    453          
+    454              30 March 2007
+    455          
+    456            Author:
+    457          
+    458              C version by John Burkardt
+    459          
+    460            Reference:
+    461          
+    462              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+    463              LINPACK User's Guide,
+    464              SIAM, 1979.
+    465          
+    466              Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,
+    467              Basic Linear Algebra Subprograms for Fortran Usage,
+    468              Algorithm 539,
+    469              ACM Transactions on Mathematical Software,
+    470              Volume 5, Number 3, September 1979, pages 308-323.
+    471          
+    472            Parameters:
+    473          
+    474              Input, int N, the number of entries in the vector.
+    475          
+    476              Input, double X[*], the vector whose norm is to be computed.
+    477          
+    478              Input, int INCX, the increment between successive entries of X.
+    479          
+    480              Output, double DNRM2, the Euclidean norm of X.
+    481          */
+    482          {
+    483            double norm;
+    484            if (n < 1 || incx < 1)
+    485              norm = 0.0;
+    486            else if (n == 1)
+    487              norm = r8_abs(x[0]);
+    488            else {
+    489              double scale = 0.0, ssq = 1.0;
+    490              int ix = 0;
+    491              for (int i = 0; i < n; i++) {
+    492                if (x[ix] != 0.0) {
+    493                  double absxi = r8_abs(x[ix]);
+    494                  if (scale < absxi) {
+    495                    ssq = 1.0 + ssq * (scale / absxi) * (scale / absxi);
+    496                    scale = absxi;
+    497                  }
+    498                  else
+    499                    ssq = ssq + (absxi / scale) * (absxi / scale);
+    500                }
+    501                ix += incx;
+    502              }
+    503              norm = scale * sqrt(ssq);
+    504            }
+    505            return norm;
+    506          }
+    507          /******************************************************************************/
+    508          
+    509          void dqrank(double a[], int lda, int m, int n, double tol, int* kr,
+    510                      int jpvt[], double qraux[])
+    511          
+    512          /******************************************************************************/
+    513          /*
+    514            Purpose:
+    515          
+    516              DQRANK computes the QR factorization of a rectangular matrix.
+    517          
+    518            Discussion:
+    519          
+    520              This routine is used in conjunction with DQRLSS to solve
+    521              overdetermined, underdetermined and singular linear systems
+    522              in a least squares sense.
+    523          
+    524              DQRANK uses the LINPACK subroutine DQRDC to compute the QR
+    525              factorization, with column pivoting, of an M by N matrix A.
+    526              The numerical rank is determined using the tolerance TOL.
+    527          
+    528              Note that on output, ABS ( A(1,1) ) / ABS ( A(KR,KR) ) is an estimate
+    529              of the condition number of the matrix of independent columns,
+    530              and of R.  This estimate will be <= 1/TOL.
+    531          
+    532            Licensing:
+    533          
+    534              This code is distributed under the GNU LGPL license.
+    535          
+    536            Modified:
+    537          
+    538              21 April 2012
+    539          
+    540            Author:
+    541          
+    542              C version by John Burkardt.
+    543          
+    544            Reference:
+    545          
+    546              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+    547              LINPACK User's Guide,
+    548              SIAM, 1979,
+    549              ISBN13: 978-0-898711-72-1,
+    550              LC: QA214.L56.
+    551          
+    552            Parameters:
+    553          
+    554              Input/output, double A[LDA*N].  On input, the matrix whose
+    555              decomposition is to be computed.  On output, the information from DQRDC.
+    556              The triangular matrix R of the QR factorization is contained in the
+    557              upper triangle and information needed to recover the orthogonal
+    558              matrix Q is stored below the diagonal in A and in the vector QRAUX.
+    559          
+    560              Input, int LDA, the leading dimension of A, which must
+    561              be at least M.
+    562          
+    563              Input, int M, the number of rows of A.
+    564          
+    565              Input, int N, the number of columns of A.
+    566          
+    567              Input, double TOL, a relative tolerance used to determine the
+    568              numerical rank.  The problem should be scaled so that all the elements
+    569              of A have roughly the same absolute accuracy, EPS.  Then a reasonable
+    570              value for TOL is roughly EPS divided by the magnitude of the largest
+    571              element.
+    572          
+    573              Output, int *KR, the numerical rank.
+    574          
+    575              Output, int JPVT[N], the pivot information from DQRDC.
+    576              Columns JPVT(1), ..., JPVT(KR) of the original matrix are linearly
+    577              independent to within the tolerance TOL and the remaining columns
+    578              are linearly dependent.
+    579          
+    580              Output, double QRAUX[N], will contain extra information defining
+    581              the QR factorization.
+    582          */
+    583          {
+    584            double work[6];
+    585          
+    586            for (int i = 0; i < n; i++)
+    587              jpvt[i] = 0;
+    588          
+    589            int job = 1;
+    590          
+    591            dqrdc(a, lda, m, n, qraux, jpvt, work, job);
+    592          
+    593            *kr = 0;
+    594            int k = i4_min(m, n);
+    595            for (int j = 0; j < k; j++) {
+    596              if (r8_abs(a[j + j * lda]) <= tol * r8_abs(a[0 + 0 * lda]))
+    597                return;
+    598              *kr = j + 1;
+    599            }
+    600          }
+    601          /******************************************************************************/
+    602          
+    603          void dqrdc(double a[], int lda, int n, int p, double qraux[], int jpvt[],
+    604                     double work[], int job)
+    605          
+    606          /******************************************************************************/
+    607          /*
+    608            Purpose:
+    609          
+    610              DQRDC computes the QR factorization of a real rectangular matrix.
+    611          
+    612            Discussion:
+    613          
+    614              DQRDC uses Householder transformations.
+    615          
+    616              Column pivoting based on the 2-norms of the reduced columns may be
+    617              performed at the user's option.
+    618          
+    619            Licensing:
+    620          
+    621              This code is distributed under the GNU LGPL license.
+    622          
+    623            Modified:
+    624          
+    625              07 June 2005
+    626          
+    627            Author:
+    628          
+    629              C version by John Burkardt.
+    630          
+    631            Reference:
+    632          
+    633              Jack Dongarra, Cleve Moler, Jim Bunch and Pete Stewart,
+    634              LINPACK User's Guide,
+    635              SIAM, (Society for Industrial and Applied Mathematics),
+    636              3600 University City Science Center,
+    637              Philadelphia, PA, 19104-2688.
+    638              ISBN 0-89871-172-X
+    639          
+    640            Parameters:
+    641          
+    642              Input/output, double A(LDA,P).  On input, the N by P matrix
+    643              whose decomposition is to be computed.  On output, A contains in
+    644              its upper triangle the upper triangular matrix R of the QR
+    645              factorization.  Below its diagonal A contains information from
+    646              which the orthogonal part of the decomposition can be recovered.
+    647              Note that if pivoting has been requested, the decomposition is not that
+    648              of the original matrix A but that of A with its columns permuted
+    649              as described by JPVT.
+    650          
+    651              Input, int LDA, the leading dimension of the array A.  LDA must
+    652              be at least N.
+    653          
+    654              Input, int N, the number of rows of the matrix A.
+    655          
+    656              Input, int P, the number of columns of the matrix A.
+    657          
+    658              Output, double QRAUX[P], contains further information required
+    659              to recover the orthogonal part of the decomposition.
+    660          
+    661              Input/output, integer JPVT[P].  On input, JPVT contains integers that
+    662              control the selection of the pivot columns.  The K-th column A(*,K) of A
+    663              is placed in one of three classes according to the value of JPVT(K).
+    664                > 0, then A(K) is an initial column.
+    665                = 0, then A(K) is a free column.
+    666                < 0, then A(K) is a final column.
+    667              Before the decomposition is computed, initial columns are moved to
+    668              the beginning of the array A and final columns to the end.  Both
+    669              initial and final columns are frozen in place during the computation
+    670              and only free columns are moved.  At the K-th stage of the
+    671              reduction, if A(*,K) is occupied by a free column it is interchanged
+    672              with the free column of largest reduced norm.  JPVT is not referenced
+    673              if JOB == 0.  On output, JPVT(K) contains the index of the column of the
+    674              original matrix that has been interchanged into the K-th column, if
+    675              pivoting was requested.
+    676          
+    677              Workspace, double WORK[P].  WORK is not referenced if JOB == 0.
+    678          
+    679              Input, int JOB, initiates column pivoting.
+    680              0, no pivoting is done.
+    681              nonzero, pivoting is done.
+    682          */
+    683          {
+    684            int jp;
+    685            int j;
+    686            int lup;
+    687            int maxj;
+    688            double maxnrm, nrmxl, t, tt;
+    689          
+    690            int pl = 1, pu = 0;
+    691            /*
+    692              If pivoting is requested, rearrange the columns.
+    693            */
+    694            if (job != 0) {
+    695              for (j = 1; j <= p; j++) {
+    696                int swapj = (0 < jpvt[j - 1]);
+    697                jpvt[j - 1] = (jpvt[j - 1] < 0) ? -j : j;
+    698                if (swapj) {
+    699                  if (j != pl)
+    700                    dswap(n, a + 0 + (pl - 1)*lda, 1, a + 0 + (j - 1), 1);
+    701                  jpvt[j - 1] = jpvt[pl - 1];
+    702                  jpvt[pl - 1] = j;
+    703                  pl++;
+    704                }
+    705              }
+    706              pu = p;
+    707              for (j = p; 1 <= j; j--) {
+    708                if (jpvt[j - 1] < 0) {
+    709                  jpvt[j - 1] = -jpvt[j - 1];
+    710                  if (j != pu) {
+    711                    dswap(n, a + 0 + (pu - 1)*lda, 1, a + 0 + (j - 1)*lda, 1);
+    712                    jp = jpvt[pu - 1];
+    713                    jpvt[pu - 1] = jpvt[j - 1];
+    714                    jpvt[j - 1] = jp;
+    715                  }
+    716                  pu = pu - 1;
+    717                }
+    718              }
+    719            }
+    720            /*
+    721              Compute the norms of the free columns.
+    722            */
+    723            for (j = pl; j <= pu; j++)
+    724              qraux[j - 1] = dnrm2(n, a + 0 + (j - 1) * lda, 1);
+    725            for (j = pl; j <= pu; j++)
+    726              work[j - 1] = qraux[j - 1];
+    727            /*
+    728              Perform the Householder reduction of A.
+    729            */
+    730            lup = i4_min(n, p);
+    731            for (int l = 1; l <= lup; l++) {
+    732              /*
+    733                Bring the column of largest norm into the pivot position.
+    734              */
+    735              if (pl <= l && l < pu) {
+    736                maxnrm = 0.0;
+    737                maxj = l;
+    738                for (j = l; j <= pu; j++) {
+    739                  if (maxnrm < qraux[j - 1]) {
+    740                    maxnrm = qraux[j - 1];
+    741                    maxj = j;
+    742                  }
+    743                }
+    744                if (maxj != l) {
+    745                  dswap(n, a + 0 + (l - 1)*lda, 1, a + 0 + (maxj - 1)*lda, 1);
+    746                  qraux[maxj - 1] = qraux[l - 1];
+    747                  work[maxj - 1] = work[l - 1];
+    748                  jp = jpvt[maxj - 1];
+    749                  jpvt[maxj - 1] = jpvt[l - 1];
+    750                  jpvt[l - 1] = jp;
+    751                }
+    752              }
+    753              /*
+    754                Compute the Householder transformation for column L.
+    755              */
+    756              qraux[l - 1] = 0.0;
+    757              if (l != n) {
+    758                nrmxl = dnrm2(n - l + 1, a + l - 1 + (l - 1) * lda, 1);
+    759                if (nrmxl != 0.0) {
+    760                  if (a[l - 1 + (l - 1)*lda] != 0.0)
+    761                    nrmxl = nrmxl * r8_sign(a[l - 1 + (l - 1) * lda]);
+    762                  dscal(n - l + 1, 1.0 / nrmxl, a + l - 1 + (l - 1)*lda, 1);
+    763                  a[l - 1 + (l - 1)*lda] = 1.0 + a[l - 1 + (l - 1) * lda];
+    764                  /*
+    765                    Apply the transformation to the remaining columns, updating the norms.
+    766                  */
+    767                  for (j = l + 1; j <= p; j++) {
+    768                    t = -ddot(n - l + 1, a + l - 1 + (l - 1) * lda, 1, a + l - 1 + (j - 1) * lda, 1)
+    769                        / a[l - 1 + (l - 1) * lda];
+    770                    daxpy(n - l + 1, t, a + l - 1 + (l - 1)*lda, 1, a + l - 1 + (j - 1)*lda, 1);
+    771                    if (pl <= j && j <= pu) {
+    772                      if (qraux[j - 1] != 0.0) {
+    773                        tt = 1.0 - pow(r8_abs(a[l - 1 + (j - 1) * lda]) / qraux[j - 1], 2);
+    774                        tt = r8_max(tt, 0.0);
+    775                        t = tt;
+    776                        tt = 1.0 + 0.05 * tt * pow(qraux[j - 1] / work[j - 1], 2);
+    777                        if (tt != 1.0)
+    778                          qraux[j - 1] = qraux[j - 1] * sqrt(t);
+    779                        else {
+    780                          qraux[j - 1] = dnrm2(n - l, a + l + (j - 1) * lda, 1);
+    781                          work[j - 1] = qraux[j - 1];
+    782                        }
+    783                      }
+    784                    }
+    785                  }
+    786                  /*
+    787                    Save the transformation.
+    788                  */
+    789                  qraux[l - 1] = a[l - 1 + (l - 1) * lda];
+    790                  a[l - 1 + (l - 1)*lda] = -nrmxl;
+    791                }
+    792              }
+    793            }
+    794          }
+    795          /******************************************************************************/
+    796          
+    797          int dqrls(double a[], int lda, int m, int n, double tol, int* kr, double b[],
+    798                    double x[], double rsd[], int jpvt[], double qraux[], int itask)
+    799          
+    800          /******************************************************************************/
+    801          /*
+    802            Purpose:
+    803          
+    804              DQRLS factors and solves a linear system in the least squares sense.
+    805          
+    806            Discussion:
+    807          
+    808              The linear system may be overdetermined, underdetermined or singular.
+    809              The solution is obtained using a QR factorization of the
+    810              coefficient matrix.
+    811          
+    812              DQRLS can be efficiently used to solve several least squares
+    813              problems with the same matrix A.  The first system is solved
+    814              with ITASK = 1.  The subsequent systems are solved with
+    815              ITASK = 2, to avoid the recomputation of the matrix factors.
+    816              The parameters KR, JPVT, and QRAUX must not be modified
+    817              between calls to DQRLS.
+    818          
+    819              DQRLS is used to solve in a least squares sense
+    820              overdetermined, underdetermined and singular linear systems.
+    821              The system is A*X approximates B where A is M by N.
+    822              B is a given M-vector, and X is the N-vector to be computed.
+    823              A solution X is found which minimimzes the sum of squares (2-norm)
+    824              of the residual,  A*X - B.
+    825          
+    826              The numerical rank of A is determined using the tolerance TOL.
+    827          
+    828              DQRLS uses the LINPACK subroutine DQRDC to compute the QR
+    829              factorization, with column pivoting, of an M by N matrix A.
+    830          
+    831            Licensing:
+    832          
+    833              This code is distributed under the GNU LGPL license.
+    834          
+    835            Modified:
+    836          
+    837              10 September 2012
+    838          
+    839            Author:
+    840          
+    841              C version by John Burkardt.
+    842          
+    843            Reference:
+    844          
+    845              David Kahaner, Cleve Moler, Steven Nash,
+    846              Numerical Methods and Software,
+    847              Prentice Hall, 1989,
+    848              ISBN: 0-13-627258-4,
+    849              LC: TA345.K34.
+    850          
+    851            Parameters:
+    852          
+    853              Input/output, double A[LDA*N], an M by N matrix.
+    854              On input, the matrix whose decomposition is to be computed.
+    855              In a least squares data fitting problem, A(I,J) is the
+    856              value of the J-th basis (model) function at the I-th data point.
+    857              On output, A contains the output from DQRDC.  The triangular matrix R
+    858              of the QR factorization is contained in the upper triangle and
+    859              information needed to recover the orthogonal matrix Q is stored
+    860              below the diagonal in A and in the vector QRAUX.
+    861          
+    862              Input, int LDA, the leading dimension of A.
+    863          
+    864              Input, int M, the number of rows of A.
+    865          
+    866              Input, int N, the number of columns of A.
+    867          
+    868              Input, double TOL, a relative tolerance used to determine the
+    869              numerical rank.  The problem should be scaled so that all the elements
+    870              of A have roughly the same absolute accuracy EPS.  Then a reasonable
+    871              value for TOL is roughly EPS divided by the magnitude of the largest
+    872              element.
+    873          
+    874              Output, int *KR, the numerical rank.
+    875          
+    876              Input, double B[M], the right hand side of the linear system.
+    877          
+    878              Output, double X[N], a least squares solution to the linear
+    879              system.
+    880          
+    881              Output, double RSD[M], the residual, B - A*X.  RSD may
+    882              overwrite B.
+    883          
+    884              Workspace, int JPVT[N], required if ITASK = 1.
+    885              Columns JPVT(1), ..., JPVT(KR) of the original matrix are linearly
+    886              independent to within the tolerance TOL and the remaining columns
+    887              are linearly dependent.  ABS ( A(1,1) ) / ABS ( A(KR,KR) ) is an estimate
+    888              of the condition number of the matrix of independent columns,
+    889              and of R.  This estimate will be <= 1/TOL.
+    890          
+    891              Workspace, double QRAUX[N], required if ITASK = 1.
+    892          
+    893              Input, int ITASK.
+    894              1, DQRLS factors the matrix A and solves the least squares problem.
+    895              2, DQRLS assumes that the matrix A was factored with an earlier
+    896                 call to DQRLS, and only solves the least squares problem.
+    897          
+    898              Output, int DQRLS, error code.
+    899              0:  no error
+    900              -1: LDA < M   (fatal error)
+    901              -2: N < 1     (fatal error)
+    902              -3: ITASK < 1 (fatal error)
+    903          */
+    904          {
+    905            int ind;
+    906            if (lda < m) {
+    907              /*fprintf ( stderr, "\n" );
+    908              fprintf ( stderr, "DQRLS - Fatal error!\n" );
+    909              fprintf ( stderr, "  LDA < M.\n" );*/
+    910              ind = -1;
+    911              return ind;
+    912            }
+    913          
+    914            if (n <= 0) {
+    915              /*fprintf ( stderr, "\n" );
+    916              fprintf ( stderr, "DQRLS - Fatal error!\n" );
+    917              fprintf ( stderr, "  N <= 0.\n" );*/
+    918              ind = -2;
+    919              return ind;
+    920            }
+    921          
+    922            if (itask < 1) {
+    923              /*fprintf ( stderr, "\n" );
+    924              fprintf ( stderr, "DQRLS - Fatal error!\n" );
+    925              fprintf ( stderr, "  ITASK < 1.\n" );*/
+    926              ind = -3;
+    927              return ind;
+    928            }
+    929          
+    930            ind = 0;
+    931            /*
+    932              Factor the matrix.
+    933            */
+    934            if (itask == 1)
+    935              dqrank(a, lda, m, n, tol, kr, jpvt, qraux);
+    936            /*
+    937              Solve the least-squares problem.
+    938            */
+    939            dqrlss(a, lda, m, n, *kr, b, x, rsd, jpvt, qraux);
+    940            return ind;
+    941          }
+    942          /******************************************************************************/
+    943          
+    944          void dqrlss(double a[], int lda, int m, int n, int kr, double b[], double x[],
+    945                      double rsd[], int jpvt[], double qraux[])
+    946          
+    947          /******************************************************************************/
+    948          /*
+    949            Purpose:
+    950          
+    951              DQRLSS solves a linear system in a least squares sense.
+    952          
+    953            Discussion:
+    954          
+    955              DQRLSS must be preceded by a call to DQRANK.
+    956          
+    957              The system is to be solved is
+    958                A * X = B
+    959              where
+    960                A is an M by N matrix with rank KR, as determined by DQRANK,
+    961                B is a given M-vector,
+    962                X is the N-vector to be computed.
+    963          
+    964              A solution X, with at most KR nonzero components, is found which
+    965              minimizes the 2-norm of the residual (A*X-B).
+    966          
+    967              Once the matrix A has been formed, DQRANK should be
+    968              called once to decompose it.  Then, for each right hand
+    969              side B, DQRLSS should be called once to obtain the
+    970              solution and residual.
+    971          
+    972            Licensing:
+    973          
+    974              This code is distributed under the GNU LGPL license.
+    975          
+    976            Modified:
+    977          
+    978              10 September 2012
+    979          
+    980            Author:
+    981          
+    982              C version by John Burkardt
+    983          
+    984            Parameters:
+    985          
+    986              Input, double A[LDA*N], the QR factorization information
+    987              from DQRANK.  The triangular matrix R of the QR factorization is
+    988              contained in the upper triangle and information needed to recover
+    989              the orthogonal matrix Q is stored below the diagonal in A and in
+    990              the vector QRAUX.
+    991          
+    992              Input, int LDA, the leading dimension of A, which must
+    993              be at least M.
+    994          
+    995              Input, int M, the number of rows of A.
+    996          
+    997              Input, int N, the number of columns of A.
+    998          
+    999              Input, int KR, the rank of the matrix, as estimated by DQRANK.
+   1000          
+   1001              Input, double B[M], the right hand side of the linear system.
+   1002          
+   1003              Output, double X[N], a least squares solution to the
+   1004              linear system.
+   1005          
+   1006              Output, double RSD[M], the residual, B - A*X.  RSD may
+   1007              overwrite B.
+   1008          
+   1009              Input, int JPVT[N], the pivot information from DQRANK.
+   1010              Columns JPVT[0], ..., JPVT[KR-1] of the original matrix are linearly
+   1011              independent to within the tolerance TOL and the remaining columns
+   1012              are linearly dependent.
+   1013          
+   1014              Input, double QRAUX[N], auxiliary information from DQRANK
+   1015              defining the QR factorization.
+   1016          */
+   1017          {
+   1018            int i;
+   1019            int info;
+   1020            int j;
+   1021            int job;
+   1022            int k;
+   1023            double t;
+   1024          
+   1025            if (kr != 0) {
+   1026              job = 110;
+   1027              info = dqrsl(a, lda, m, kr, qraux, b, rsd, rsd, x, rsd, rsd, job); UNUSED(info);
+   1028            }
+   1029          
+   1030            for (i = 0; i < n; i++)
+   1031              jpvt[i] = - jpvt[i];
+   1032          
+   1033            for (i = kr; i < n; i++)
+   1034              x[i] = 0.0;
+   1035          
+   1036            for (j = 1; j <= n; j++) {
+   1037              if (jpvt[j - 1] <= 0) {
+   1038                k = - jpvt[j - 1];
+   1039                jpvt[j - 1] = k;
+   1040          
+   1041                while (k != j) {
+   1042                  t = x[j - 1];
+   1043                  x[j - 1] = x[k - 1];
+   1044                  x[k - 1] = t;
+   1045                  jpvt[k - 1] = -jpvt[k - 1];
+   1046                  k = jpvt[k - 1];
+   1047                }
+   1048              }
+   1049            }
+   1050          }
+   1051          /******************************************************************************/
+   1052          
+   1053          int dqrsl(double a[], int lda, int n, int k, double qraux[], double y[],
+   1054                    double qy[], double qty[], double b[], double rsd[], double ab[], int job)
+   1055          
+   1056          /******************************************************************************/
+   1057          /*
+   1058            Purpose:
+   1059          
+   1060              DQRSL computes transformations, projections, and least squares solutions.
+   1061          
+   1062            Discussion:
+   1063          
+   1064              DQRSL requires the output of DQRDC.
+   1065          
+   1066              For K <= min(N,P), let AK be the matrix
+   1067          
+   1068                AK = ( A(JPVT[0]), A(JPVT(2)), ..., A(JPVT(K)) )
+   1069          
+   1070              formed from columns JPVT[0], ..., JPVT(K) of the original
+   1071              N by P matrix A that was input to DQRDC.  If no pivoting was
+   1072              done, AK consists of the first K columns of A in their
+   1073              original order.  DQRDC produces a factored orthogonal matrix Q
+   1074              and an upper triangular matrix R such that
+   1075          
+   1076                AK = Q * (R)
+   1077                         (0)
+   1078          
+   1079              This information is contained in coded form in the arrays
+   1080              A and QRAUX.
+   1081          
+   1082              The parameters QY, QTY, B, RSD, and AB are not referenced
+   1083              if their computation is not requested and in this case
+   1084              can be replaced by dummy variables in the calling program.
+   1085              To save storage, the user may in some cases use the same
+   1086              array for different parameters in the calling sequence.  A
+   1087              frequently occurring example is when one wishes to compute
+   1088              any of B, RSD, or AB and does not need Y or QTY.  In this
+   1089              case one may identify Y, QTY, and one of B, RSD, or AB, while
+   1090              providing separate arrays for anything else that is to be
+   1091              computed.
+   1092          
+   1093              Thus the calling sequence
+   1094          
+   1095                dqrsl ( a, lda, n, k, qraux, y, dum, y, b, y, dum, 110, info )
+   1096          
+   1097              will result in the computation of B and RSD, with RSD
+   1098              overwriting Y.  More generally, each item in the following
+   1099              list contains groups of permissible identifications for
+   1100              a single calling sequence.
+   1101          
+   1102                1. (Y,QTY,B) (RSD) (AB) (QY)
+   1103          
+   1104                2. (Y,QTY,RSD) (B) (AB) (QY)
+   1105          
+   1106                3. (Y,QTY,AB) (B) (RSD) (QY)
+   1107          
+   1108                4. (Y,QY) (QTY,B) (RSD) (AB)
+   1109          
+   1110                5. (Y,QY) (QTY,RSD) (B) (AB)
+   1111          
+   1112                6. (Y,QY) (QTY,AB) (B) (RSD)
+   1113          
+   1114              In any group the value returned in the array allocated to
+   1115              the group corresponds to the last member of the group.
+   1116          
+   1117            Licensing:
+   1118          
+   1119              This code is distributed under the GNU LGPL license.
+   1120          
+   1121            Modified:
+   1122          
+   1123              07 June 2005
+   1124          
+   1125            Author:
+   1126          
+   1127              C version by John Burkardt.
+   1128          
+   1129            Reference:
+   1130          
+   1131              Jack Dongarra, Cleve Moler, Jim Bunch and Pete Stewart,
+   1132              LINPACK User's Guide,
+   1133              SIAM, (Society for Industrial and Applied Mathematics),
+   1134              3600 University City Science Center,
+   1135              Philadelphia, PA, 19104-2688.
+   1136              ISBN 0-89871-172-X
+   1137          
+   1138            Parameters:
+   1139          
+   1140              Input, double A[LDA*P], contains the output of DQRDC.
+   1141          
+   1142              Input, int LDA, the leading dimension of the array A.
+   1143          
+   1144              Input, int N, the number of rows of the matrix AK.  It must
+   1145              have the same value as N in DQRDC.
+   1146          
+   1147              Input, int K, the number of columns of the matrix AK.  K
+   1148              must not be greater than min(N,P), where P is the same as in the
+   1149              calling sequence to DQRDC.
+   1150          
+   1151              Input, double QRAUX[P], the auxiliary output from DQRDC.
+   1152          
+   1153              Input, double Y[N], a vector to be manipulated by DQRSL.
+   1154          
+   1155              Output, double QY[N], contains Q * Y, if requested.
+   1156          
+   1157              Output, double QTY[N], contains Q' * Y, if requested.
+   1158          
+   1159              Output, double B[K], the solution of the least squares problem
+   1160                minimize norm2 ( Y - AK * B),
+   1161              if its computation has been requested.  Note that if pivoting was
+   1162              requested in DQRDC, the J-th component of B will be associated with
+   1163              column JPVT(J) of the original matrix A that was input into DQRDC.
+   1164          
+   1165              Output, double RSD[N], the least squares residual Y - AK * B,
+   1166              if its computation has been requested.  RSD is also the orthogonal
+   1167              projection of Y onto the orthogonal complement of the column space
+   1168              of AK.
+   1169          
+   1170              Output, double AB[N], the least squares approximation Ak * B,
+   1171              if its computation has been requested.  AB is also the orthogonal
+   1172              projection of Y onto the column space of A.
+   1173          
+   1174              Input, integer JOB, specifies what is to be computed.  JOB has
+   1175              the decimal expansion ABCDE, with the following meaning:
+   1176          
+   1177                if A != 0, compute QY.
+   1178                if B != 0, compute QTY.
+   1179                if C != 0, compute QTY and B.
+   1180                if D != 0, compute QTY and RSD.
+   1181                if E != 0, compute QTY and AB.
+   1182          
+   1183              Note that a request to compute B, RSD, or AB automatically triggers
+   1184              the computation of QTY, for which an array must be provided in the
+   1185              calling sequence.
+   1186          
+   1187              Output, int DQRSL, is zero unless the computation of B has
+   1188              been requested and R is exactly singular.  In this case, INFO is the
+   1189              index of the first zero diagonal element of R, and B is left unaltered.
+   1190          */
+   1191          {
+   1192            int cab;
+   1193            int cb;
+   1194            int cqty;
+   1195            int cqy;
+   1196            int cr;
+   1197            int i;
+   1198            int info;
+   1199            int j;
+   1200            int jj;
+   1201            int ju;
+   1202            double t;
+   1203            double temp;
+   1204            /*
+   1205              Set INFO flag.
+   1206            */
+   1207            info = 0;
+   1208          
+   1209            /*
+   1210              Determine what is to be computed.
+   1211            */
+   1212            cqy  = ( job / 10000        != 0);
+   1213            cqty = ((job % 10000)       != 0);
+   1214            cb   = ((job %  1000) / 100 != 0);
+   1215            cr   = ((job %   100) /  10 != 0);
+   1216            cab  = ((job %    10)       != 0);
+   1217            ju = i4_min(k, n - 1);
+   1218          
+   1219            /*
+   1220              Special action when N = 1.
+   1221            */
+   1222            if (ju == 0) {
+   1223              if (cqy)
+   1224                qy[0] = y[0];
+   1225              if (cqty)
+   1226                qty[0] = y[0];
+   1227              if (cab)
+   1228                ab[0] = y[0];
+   1229              if (cb) {
+   1230                if (a[0 + 0 * lda] == 0.0)
+   1231                  info = 1;
+   1232                else
+   1233                  b[0] = y[0] / a[0 + 0 * lda];
+   1234              }
+   1235              if (cr)
+   1236                rsd[0] = 0.0;
+   1237              return info;
+   1238            }
+   1239            /*
+   1240              Set up to compute QY or QTY.
+   1241            */
+   1242            if (cqy) {
+   1243              for (i = 1; i <= n; i++)
+   1244                qy[i - 1] = y[i - 1];
+   1245            }
+   1246            if (cqty) {
+   1247              for (i = 1; i <= n; i++)
+   1248                qty[i - 1] = y[i - 1];
+   1249            }
+   1250            /*
+   1251              Compute QY.
+   1252            */
+   1253            if (cqy) {
+   1254              for (jj = 1; jj <= ju; jj++) {
+   1255                j = ju - jj + 1;
+   1256                if (qraux[j - 1] != 0.0) {
+   1257                  temp = a[j - 1 + (j - 1) * lda];
+   1258                  a[j - 1 + (j - 1)*lda] = qraux[j - 1];
+   1259                  t = -ddot(n - j + 1, a + j - 1 + (j - 1) * lda, 1, qy + j - 1, 1) / a[j - 1 + (j - 1) * lda];
+   1260                  daxpy(n - j + 1, t, a + j - 1 + (j - 1)*lda, 1, qy + j - 1, 1);
+   1261                  a[j - 1 + (j - 1)*lda] = temp;
+   1262                }
+   1263              }
+   1264            }
+   1265            /*
+   1266              Compute Q'*Y.
+   1267            */
+   1268            if (cqty) {
+   1269              for (j = 1; j <= ju; j++) {
+   1270                if (qraux[j - 1] != 0.0) {
+   1271                  temp = a[j - 1 + (j - 1) * lda];
+   1272                  a[j - 1 + (j - 1)*lda] = qraux[j - 1];
+   1273                  t = -ddot(n - j + 1, a + j - 1 + (j - 1) * lda, 1, qty + j - 1, 1) / a[j - 1 + (j - 1) * lda];
+   1274                  daxpy(n - j + 1, t, a + j - 1 + (j - 1)*lda, 1, qty + j - 1, 1);
+   1275                  a[j - 1 + (j - 1)*lda] = temp;
+   1276                }
+   1277              }
+   1278            }
+   1279            /*
+   1280              Set up to compute B, RSD, or AB.
+   1281            */
+   1282            if (cb) {
+   1283              for (i = 1; i <= k; i++)
+   1284                b[i - 1] = qty[i - 1];
+   1285            }
+   1286            if (cab) {
+   1287              for (i = 1; i <= k; i++)
+   1288                ab[i - 1] = qty[i - 1];
+   1289            }
+   1290            if (cr && k < n) {
+   1291              for (i = k + 1; i <= n; i++)
+   1292                rsd[i - 1] = qty[i - 1];
+   1293            }
+   1294            if (cab && k + 1 <= n) {
+   1295              for (i = k + 1; i <= n; i++)
+   1296                ab[i - 1] = 0.0;
+   1297            }
+   1298            if (cr) {
+   1299              for (i = 1; i <= k; i++)
+   1300                rsd[i - 1] = 0.0;
+   1301            }
+   1302            /*
+   1303              Compute B.
+   1304            */
+   1305            if (cb) {
+   1306              for (jj = 1; jj <= k; jj++) {
+   1307                j = k - jj + 1;
+   1308                if (a[j - 1 + (j - 1)*lda] == 0.0) {
+   1309                  info = j;
+   1310                  break;
+   1311                }
+   1312                b[j - 1] = b[j - 1] / a[j - 1 + (j - 1) * lda];
+   1313                if (j != 1) {
+   1314                  t = -b[j - 1];
+   1315                  daxpy(j - 1, t, a + 0 + (j - 1)*lda, 1, b, 1);
+   1316                }
+   1317              }
+   1318            }
+   1319            /*
+   1320              Compute RSD or AB as required.
+   1321            */
+   1322            if (cr || cab) {
+   1323              for (jj = 1; jj <= ju; jj++) {
+   1324                j = ju - jj + 1;
+   1325                if (qraux[j - 1] != 0.0) {
+   1326                  temp = a[j - 1 + (j - 1) * lda];
+   1327                  a[j - 1 + (j - 1)*lda] = qraux[j - 1];
+   1328                  if (cr) {
+   1329                    t = -ddot(n - j + 1, a + j - 1 + (j - 1) * lda, 1, rsd + j - 1, 1)
+   1330                        / a[j - 1 + (j - 1) * lda];
+   1331                    daxpy(n - j + 1, t, a + j - 1 + (j - 1)*lda, 1, rsd + j - 1, 1);
+   1332                  }
+   1333                  if (cab) {
+   1334                    t = -ddot(n - j + 1, a + j - 1 + (j - 1) * lda, 1, ab + j - 1, 1)
+   1335                        / a[j - 1 + (j - 1) * lda];
+   1336                    daxpy(n - j + 1, t, a + j - 1 + (j - 1)*lda, 1, ab + j - 1, 1);
+   1337                  }
+   1338                  a[j - 1 + (j - 1)*lda] = temp;
+   1339                }
+   1340              }
+   1341            }
+   1342            return info;
+   1343          }
+   1344          /******************************************************************************/
+   1345          
+   1346          /******************************************************************************/
+   1347          
+   1348          void dscal(int n, double sa, double x[], int incx)
+   1349          
+   1350          /******************************************************************************/
+   1351          /*
+   1352            Purpose:
+   1353          
+   1354              DSCAL scales a vector by a constant.
+   1355          
+   1356            Licensing:
+   1357          
+   1358              This code is distributed under the GNU LGPL license.
+   1359          
+   1360            Modified:
+   1361          
+   1362              30 March 2007
+   1363          
+   1364            Author:
+   1365          
+   1366              C version by John Burkardt
+   1367          
+   1368            Reference:
+   1369          
+   1370              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+   1371              LINPACK User's Guide,
+   1372              SIAM, 1979.
+   1373          
+   1374              Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,
+   1375              Basic Linear Algebra Subprograms for Fortran Usage,
+   1376              Algorithm 539,
+   1377              ACM Transactions on Mathematical Software,
+   1378              Volume 5, Number 3, September 1979, pages 308-323.
+   1379          
+   1380            Parameters:
+   1381          
+   1382              Input, int N, the number of entries in the vector.
+   1383          
+   1384              Input, double SA, the multiplier.
+   1385          
+   1386              Input/output, double X[*], the vector to be scaled.
+   1387          
+   1388              Input, int INCX, the increment between successive entries of X.
+   1389          */
+   1390          {
+   1391            int i;
+   1392            int ix;
+   1393            int m;
+   1394          
+   1395            if (n <= 0) return;
+   1396          
+   1397            if (incx == 1) {
+   1398              m = n % 5;
+   1399              for (i = 0; i < m; i++)
+   1400                x[i] = sa * x[i];
+   1401              for (i = m; i < n; i = i + 5) {
+   1402                x[i]   = sa * x[i];
+   1403                x[i + 1] = sa * x[i + 1];
+   1404                x[i + 2] = sa * x[i + 2];
+   1405                x[i + 3] = sa * x[i + 3];
+   1406                x[i + 4] = sa * x[i + 4];
+   1407              }
+   1408            }
+   1409            else {
+   1410              if (0 <= incx)
+   1411                ix = 0;
+   1412              else
+   1413                ix = (- n + 1) * incx;
+   1414              for (i = 0; i < n; i++) {
+   1415                x[ix] = sa * x[ix];
+   1416                ix = ix + incx;
+   1417              }
+   1418            }
+   1419          }
+   1420          /******************************************************************************/
+   1421          
+   1422          
+   1423          void dswap(int n, double x[], int incx, double y[], int incy)
+   1424          
+   1425          /******************************************************************************/
+   1426          /*
+   1427            Purpose:
+   1428          
+   1429              DSWAP interchanges two vectors.
+   1430          
+   1431            Licensing:
+   1432          
+   1433              This code is distributed under the GNU LGPL license.
+   1434          
+   1435            Modified:
+   1436          
+   1437              30 March 2007
+   1438          
+   1439            Author:
+   1440          
+   1441              C version by John Burkardt
+   1442          
+   1443            Reference:
+   1444          
+   1445              Jack Dongarra, Cleve Moler, Jim Bunch, Pete Stewart,
+   1446              LINPACK User's Guide,
+   1447              SIAM, 1979.
+   1448          
+   1449              Charles Lawson, Richard Hanson, David Kincaid, Fred Krogh,
+   1450              Basic Linear Algebra Subprograms for Fortran Usage,
+   1451              Algorithm 539,
+   1452              ACM Transactions on Mathematical Software,
+   1453              Volume 5, Number 3, September 1979, pages 308-323.
+   1454          
+   1455            Parameters:
+   1456          
+   1457              Input, int N, the number of entries in the vectors.
+   1458          
+   1459              Input/output, double X[*], one of the vectors to swap.
+   1460          
+   1461              Input, int INCX, the increment between successive entries of X.
+   1462          
+   1463              Input/output, double Y[*], one of the vectors to swap.
+   1464          
+   1465              Input, int INCY, the increment between successive elements of Y.
+   1466          */
+   1467          {
+   1468            if (n <= 0) return;
+   1469          
+   1470            int i, ix, iy, m;
+   1471            double temp;
+   1472          
+   1473            if (incx == 1 && incy == 1) {
+   1474              m = n % 3;
+   1475              for (i = 0; i < m; i++) {
+   1476                temp = x[i];
+   1477                x[i] = y[i];
+   1478                y[i] = temp;
+   1479              }
+   1480              for (i = m; i < n; i = i + 3) {
+   1481                temp = x[i];
+   1482                x[i] = y[i];
+   1483                y[i] = temp;
+   1484                temp = x[i + 1];
+   1485                x[i + 1] = y[i + 1];
+   1486                y[i + 1] = temp;
+   1487                temp = x[i + 2];
+   1488                x[i + 2] = y[i + 2];
+   1489                y[i + 2] = temp;
+   1490              }
+   1491            }
+   1492            else {
+   1493              ix = (incx >= 0) ? 0 : (-n + 1) * incx;
+   1494              iy = (incy >= 0) ? 0 : (-n + 1) * incy;
+   1495              for (i = 0; i < n; i++) {
+   1496                temp = x[ix];
+   1497                x[ix] = y[iy];
+   1498                y[iy] = temp;
+   1499                ix = ix + incx;
+   1500                iy = iy + incy;
+   1501              }
+   1502            }
+   1503          }
+   1504          /******************************************************************************/
+   1505          
+   1506          /******************************************************************************/
+   1507          
+   1508          void qr_solve(double x[], int m, int n, double a[], double b[])
+   1509          
+   1510          /******************************************************************************/
+   1511          /*
+   1512            Purpose:
+   1513          
+   1514              QR_SOLVE solves a linear system in the least squares sense.
+   1515          
+   1516            Discussion:
+   1517          
+   1518              If the matrix A has full column rank, then the solution X should be the
+   1519              unique vector that minimizes the Euclidean norm of the residual.
+   1520          
+   1521              If the matrix A does not have full column rank, then the solution is
+   1522              not unique; the vector X will minimize the residual norm, but so will
+   1523              various other vectors.
+   1524          
+   1525            Licensing:
+   1526          
+   1527              This code is distributed under the GNU LGPL license.
+   1528          
+   1529            Modified:
+   1530          
+   1531              11 September 2012
+   1532          
+   1533            Author:
+   1534          
+   1535              John Burkardt
+   1536          
+   1537            Reference:
+   1538          
+   1539              David Kahaner, Cleve Moler, Steven Nash,
+   1540              Numerical Methods and Software,
+   1541              Prentice Hall, 1989,
+   1542              ISBN: 0-13-627258-4,
+   1543              LC: TA345.K34.
+   1544          
+   1545            Parameters:
+   1546          
+   1547              Input, int M, the number of rows of A.
+   1548          
+   1549              Input, int N, the number of columns of A.
+   1550          
+   1551              Input, double A[M*N], the matrix.
+   1552          
+   1553              Input, double B[M], the right hand side.
+   1554          
+   1555              Output, double QR_SOLVE[N], the least squares solution.
+   1556          */
+   1557          {
+   1558            double a_qr[36], qraux[6], r[6], tol;
+   1559            int ind, itask, jpvt[6], kr, lda;
+   1560          
+   1561            r8mat_copy(a_qr, m, n, a);
+   1562            lda = m;
+   1563            tol = r8_epsilon() / r8mat_amax(m, n, a_qr);
+   1564            itask = 1;
+   1565          
+   1566            ind = dqrls(a_qr, lda, m, n, tol, &kr, b, x, r, jpvt, qraux, itask); UNUSED(ind);
+   1567          }
+   1568          /******************************************************************************/
+   1569          
+   1570          #endif
+
+
+ 
+ 
+ 0 bytes of memory
+
+Errors: none
+Warnings: 5

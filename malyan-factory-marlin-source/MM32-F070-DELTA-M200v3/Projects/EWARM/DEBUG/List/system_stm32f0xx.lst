@@ -1,0 +1,370 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\system_stm32f0xx.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW464E.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\system_stm32f0xx.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\system_stm32f0xx.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\system_stm32f0xx.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\system_stm32f0xx.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    system_stm32f0xx.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   CMSIS Cortex-M0 Device Peripheral Access Layer System Source File.
+      8            *          This file contains the system clock configuration for STM32F0xx devices,
+      9            *          and  is customized for use with STM32F0x2-USB-FS_Device Library.  
+     10            *
+     11            *
+     12            *          The STM32F072x is configured to run at 48 MHz, using Internal HSI48
+     13            *          clock source  * 
+     14            *
+     15            * 1.  This file provides two functions and one global variable to be called from 
+     16            *     user application:
+     17            *      - SystemInit(): Setups the system clock (System clock source, PLL Multiplier
+     18            *                      and Divider factors, AHB/APBx prescalers and Flash settings),
+     19            *                      depending on the configuration made in the clock xls tool.
+     20            *                      This function is called at startup just after reset and 
+     21            *                      before branch to main program. This call is made inside
+     22            *                      the "startup_stm32f072.s" file.
+     23            *
+     24            *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
+     25            *                                  by the user application to setup the SysTick 
+     26            *                                  timer or configure other parameters.
+     27            *
+     28            *      - SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must
+     29            *                                 be called whenever the core clock is changed
+     30            *                                 during program execution.
+     31            *
+     32            * 2. After each device reset the HSI (8 MHz Range) is used as system clock source.
+     33            *    Then SystemInit() function is called, in "startup_stm32f072.s" file, to
+     34            *    configure the system clock before to branch to main program.
+     35            *
+     36            * 3. If the system clock source selected by user fails to startup, the SystemInit()
+     37            *    function will do nothing and HSI still used as system clock source. User can 
+     38            *    add some code to deal with this issue inside the SetSysClock() function.
+     39            *
+     40            * 4. The default value of HSE crystal is set to 8MHz, refer to "HSE_VALUE" define
+     41            *    in "stm32f0xx.h" file. When HSE is used as system clock source, directly or
+     42            *    through PLL, and you are using different crystal you have to adapt the HSE
+     43            *    value to your own configuration.
+     44            *
+     45            ******************************************************************************
+     46            * @attention
+     47            *
+     48            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     49            *
+     50            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     51            * You may not use this file except in compliance with the License.
+     52            * You may obtain a copy of the License at:
+     53            *
+     54            *        http://www.st.com/software_license_agreement_liberty_v2
+     55            *
+     56            * Unless required by applicable law or agreed to in writing, software 
+     57            * distributed under the License is distributed on an "AS IS" BASIS, 
+     58            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     59            * See the License for the specific language governing permissions and
+     60            * limitations under the License.
+     61            *
+     62            ******************************************************************************
+     63            */
+     64          
+     65          /** @addtogroup CMSIS
+     66            * @{
+     67            */
+     68          
+     69          /** @addtogroup stm32f0xx_system
+     70            * @{
+     71            */  
+     72            
+     73          /** @addtogroup STM32F0xx_System_Private_Includes
+     74            * @{
+     75            */
+     76          
+     77          #include "stm32f0xx.h"
+     78          
+     79          /**
+     80            * @}
+     81            */
+     82          
+     83          /* Private typedef -----------------------------------------------------------*/
+     84          /* Private define ------------------------------------------------------------*/
+     85          /* Private macro ------------------------------------------------------------*/
+     86          /* Private variables ---------------------------------------------------------*/
+     87          uint32_t SystemCoreClock    = 48000000;
+     88          __I uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+     89          
+     90          /* Private function prototypes -----------------------------------------------*/
+     91          static void SetSysClock(void);
+     92          
+     93          /* Private functions ---------------------------------------------------------*/
+     94          /** @addtogroup STM32F0xx_System_Private_Functions
+     95            * @{
+     96            */
+     97          
+     98          /**
+     99            * @brief  Setup the microcontroller system.
+    100            *         Initialize the Embedded Flash Interface, the PLL and update the 
+    101            *         SystemCoreClock variable.
+    102            * @param  None
+    103            * @retval None
+    104            */
+    105          void SystemInit (void)
+    106          {    
+    107            /* Set HSION bit */
+    108            RCC->CR |= (uint32_t)0x00000001;
+    109          
+    110            /* Reset SW[1:0], HPRE[3:0], PPRE[2:0], ADCPRE and MCOSEL[3:0] bits MCOPRE[2:0] */
+    111            RCC->CFGR &= (uint32_t)0x80FFB80C;
+    112            
+    113            /* Reset HSEON, CSSON and PLLON bits */
+    114            RCC->CR &= (uint32_t)0xFEF6FFFF;
+    115          
+    116            /* Reset HSEBYP bit */
+    117            RCC->CR &= (uint32_t)0xFFFBFFFF;
+    118          
+    119            /* Reset PLLSRC, PLLXTPRE and PLLMUL[3:0] bits */
+    120            RCC->CFGR &= (uint32_t)0xFFC07FFF;
+    121          
+    122            /* Reset PREDIV1[3:0] bits */
+    123            RCC->CFGR2 &= (uint32_t)0xFFFFFFF0;
+    124          
+    125            /* Reset USARTSW[1:0], I2CSW, CECSW and ADCSW bits */
+    126            RCC->CFGR3 &= (uint32_t)0xFFFFFEAC;
+    127            
+    128            /* Reset HSI14 & HSI48 bit */
+    129            RCC->CR2 &= (uint32_t)0xFFFEFFFE;
+    130          
+    131            /* Disable all interrupts */
+    132            RCC->CIR = 0x00000000;
+    133          
+    134            /* Configure the System clock frequency, AHB/APBx prescalers and Flash settings */
+    135            SetSysClock();
+    136          }
+    137          
+    138          /**
+    139            * @brief  Update SystemCoreClock according to Clock Register Values
+    140            *         The SystemCoreClock variable contains the core clock (HCLK), it can
+    141            *         be used by the user application to setup the SysTick timer or configure
+    142            *         other parameters.
+    143            *
+    144            * @note   Each time the core clock (HCLK) changes, this function must be called
+    145            *         to update SystemCoreClock variable value. Otherwise, any configuration
+    146            *         based on this variable will be incorrect.         
+    147            *
+    148            * @note   - The system frequency computed by this function is not the real 
+    149            *           frequency in the chip. It is calculated based on the predefined 
+    150            *           constant and the selected clock source:
+    151            *
+    152            *           - If SYSCLK source is HSI, SystemCoreClock will contain the HSI_VALUE(*)
+    153            *                                              
+    154            *           - If SYSCLK source is HSE, SystemCoreClock will contain the HSE_VALUE(**)
+    155            *                          
+    156            *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**)
+    157            *             or HSI_VALUE(*) multiplied/divided by the PLL factors.
+    158            * @note     - If SYSCLK source is HSI48, function returns constant HSI48_VALUE(***) 
+    159            *
+    160            *         (*) HSI_VALUE is a constant defined in stm32f0xx.h file (default value
+    161            *             8 MHz) but the real value may vary depending on the variations
+    162            *             in voltage and temperature.
+    163            *
+    164            *         (**) HSE_VALUE is a constant defined in stm32f0xx.h file (default value
+    165            *              8 MHz), user has to ensure that HSE_VALUE is same as the real
+    166            *              frequency of the crystal used. Otherwise, this function may
+    167            *              have wrong result.
+    168            * @note  (***) HSI48_VALUE is a constant defined in stm32f0xx.h file (default value
+    169            *              48 MHz) but the real value may vary depending on the variations
+    170            *              in voltage and temperature.
+    171            *
+    172            *         - The result of this function could be not correct when using fractional
+    173            *           value for HSE crystal.
+    174            * @param  None
+    175            * @retval None
+    176            */
+    177          void SystemCoreClockUpdate (void)
+    178          {
+    179            uint32_t tmp = 0, pllmull = 0, pllsource = 0, prediv1factor = 0;
+    180          
+    181            /* Get SYSCLK source -------------------------------------------------------*/
+    182            tmp = RCC->CFGR & RCC_CFGR_SWS;
+    183            
+    184            switch (tmp)
+    185            {
+    186            case 0x00:  /* HSI used as system clock */
+    187              SystemCoreClock = HSI_VALUE;
+    188              break;
+    189            case 0x04:  /* HSE used as system clock */
+    190              SystemCoreClock = HSE_VALUE;
+    191              break;
+    192            case 0x08:  /* PLL used as system clock */
+    193              /* Get PLL clock source and multiplication factor ----------------------*/
+    194              pllmull = RCC->CFGR & RCC_CFGR_PLLMULL;
+    195              pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
+    196              pllmull = ( pllmull >> 18) + 2;
+    197              
+    198              if (pllsource == 0x00)
+    199              {
+    200                /* HSI oscillator clock divided by 2 selected as PLL clock entry */
+    201                SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+    202              }
+    203              else
+    204              {
+    205                prediv1factor = (RCC->CFGR2 & RCC_CFGR2_PREDIV1) + 1;
+    206                /* HSE oscillator clock selected as PREDIV1 clock entry */
+    207                SystemCoreClock = (HSE_VALUE / prediv1factor) * pllmull; 
+    208              }      
+    209              break;
+    210            case 0x0C:  /* HSI48 used as system clock */
+    211              SystemCoreClock = HSI48_VALUE;
+    212              break;
+    213            default: /* HSI used as system clock */
+    214              SystemCoreClock = HSI_VALUE;
+    215              break;
+    216              
+    217            }
+    218            /* Compute HCLK clock frequency ----------------*/
+    219            /* Get HCLK prescaler */
+    220            tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+    221            /* HCLK clock frequency */
+    222            SystemCoreClock >>= tmp;  
+    223          }
+    224          
+    225          /**
+    226            * @brief  Configures the System clock frequency, AHB/APBx prescalers and Flash
+    227            *         settings.
+    228            * @note   This function should be called only once the RCC clock configuration
+    229            *         is reset to the default reset state (done in SystemInit() function).
+    230            * @param  None
+    231            * @retval None
+    232            */
+    233          static void SetSysClock(void)
+    234          {
+    235             /* SYSCLK, HCLK, PCLK configuration ----------------------------------------*/
+    236              /* At this stage the HSI is already enabled */
+    237           
+    238              /* Enable Prefetch Buffer and set Flash Latency */
+    239              FLASH->ACR = FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY;
+    240           
+    241              /* HCLK = SYSCLK */
+    242              RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+    243                
+    244              /* PCLK = HCLK */
+    245              RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
+    246             
+    247             /* Enable HSI48 */   
+    248              RCC->CR2 |= RCC_CR2_HSI48ON;
+    249            /* Wait till HSI48RDY is set */
+    250              while((RCC->CR2 & RCC_CR2_HSI48RDY) == 0)
+    251              { }
+    252            /* Select HSI48 as system clock source */
+    253              RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+    254              RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI48;     
+    255            
+    256          }
+    257          
+    258          /**
+    259            * @}
+    260            */
+    261          
+    262          /**
+    263            * @}
+    264            */
+    265          
+    266          /**
+    267            * @}
+    268            */
+    269          
+    270          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   SystemCoreClockUpdate
+        16 __aeabi_uidiv
+       0   SystemInit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_10
+       4  ??DataTable1_11
+       4  ??DataTable1_12
+       4  ??DataTable1_2
+       4  ??DataTable1_3
+       4  ??DataTable1_4
+       4  ??DataTable1_5
+       4  ??DataTable1_6
+       4  ??DataTable1_7
+       4  ??DataTable1_8
+       4  ??DataTable1_9
+      20  AHBPrescTable
+          SystemCoreClock
+      86  SystemCoreClockUpdate
+     116  SystemInit
+
+ 
+  20 bytes in section .data
+ 254 bytes in section .text
+ 
+ 254 bytes of CODE memory
+  20 bytes of DATA memory
+
+Errors: none
+Warnings: none

@@ -1,0 +1,1194 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:53
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Platform.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW88F.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Platform.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\Platform.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Platform.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Platform.cpp
+      1          #include "Configuration.h"
+      2          //#include "platform.h"
+      3          #include "stm32f0xx_gpio.h"
+      4          #include "stm32f0xx_usart.h"
+      5          #include "stdio.h"
+      6          
+      7          // Must be volatile or gcc will optimize away some uses of it.
+      8          volatile unsigned long systick_count;
+      9          volatile unsigned timeout=0;
+     10          
+     11          char btn_status=0;
+     12          unsigned long btn_timer;
+     13          
+     14          //__no_init const char MACHINE_TYPE[4] @ 0x08001000;
+     15          extern const char MACHINE_TYPE[];
+     16          
+     17          extern "C" void SysTick_Handler(void)
+     18          {
+     19          	systick_count++;
+     20          
+     21                  if (systick_count&~16)
+     22                  {
+     23                      //if (model!=2) return;
+     24                      //extern volatile signed long count_position[];
+     25                      //SERIAL_ECHOLN(count_position[2]);
+     26                      if (model==6)
+     27                      {
+     28          #if ENABLED(DELTA)
+     29                          if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_7)==RESET) {LED_STOP_ON;}
+     30                          else {LED_STOP_OFF;}
+     31          #endif
+     32                          if (!GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_15))
+     33                          {//release
+     34                             if (btn_status &1)
+     35                             {
+     36                                 btn_status &= ~1;
+     37                                 if ((systick_count-btn_timer)>100) btn_status|=2;
+     38                                 //if ((systick_count-btn_timer)>3000) btn_status|=4;
+     39                             }
+     40                          }
+     41                          else
+     42                          {//press
+     43                              if (!(btn_status &1))
+     44                              {
+     45                                  btn_status |= 1;
+     46                                  btn_timer=systick_count;
+     47                              }
+     48                              else
+     49                              {
+     50                                  if ((systick_count-btn_timer)>4000) btn_status|=4;
+     51                                  if ((systick_count-btn_timer)>8000) btn_status|=8;
+     52                              }
+     53                          }
+     54                          return;
+     55                      }
+     56                      
+     57                      else if (model==2)
+     58                      {
+     59                          if (!GPIO_ReadInputDataBit(GPIOC,GPIO_Pin_15))
+     60                          {//release
+     61                             if (btn_status &1)
+     62                             {
+     63                                 btn_status &= ~1;
+     64                                 if ((systick_count-btn_timer)>100) btn_status|=2;
+     65                                 //if ((systick_count-btn_timer)>3000) btn_status|=4;
+     66                             }
+     67                          }
+     68                          else
+     69                          {//press
+     70                              if (!(btn_status &1))
+     71                              {
+     72                                  btn_status |= 1;
+     73                                  btn_timer=systick_count;
+     74                              }
+     75                              else
+     76                              {
+     77                                  if ((systick_count-btn_timer)>4000) btn_status|=4;
+     78                                  if ((systick_count-btn_timer)>8000) btn_status|=8;
+     79                              }
+     80                          }
+     81                      }
+     82                  }
+     83          }
+     84          
+     85          unsigned long millis()
+     86          {
+     87              return systick_count;
+     88          }
+     89          
+     90          void delay(unsigned long ms)
+     91          {
+     92              unsigned long start = millis();
+     93          
+     94              while (millis() - start < ms)
+     95              {
+     96                  IWDG_ReloadCounter();
+     97              }
+     98          }
+     99          
+    100          void delay_ms(uint32_t ms)
+    101          {
+    102              delay(ms);
+    103          }
+    104          
+    105          #define MCK 48000000UL
+    106          unsigned long micros()
+    107          {
+    108          	// Glitch free clock
+    109          	long v0 = SysTick->VAL;
+    110          	long c0 = systick_count;
+    111          	long v1 = SysTick->VAL;
+    112          	long c1 = systick_count;
+    113          
+    114          	if (v1 < v0)
+    115          		// Downcounting, no systick rollover
+    116          		return c0*8000-v1/(MCK/8000000UL);
+    117          	else
+    118          		// systick rollover, use last count value
+    119          		return c1*8000-v1/(MCK/8000000UL);
+    120          }
+    121          
+    122          /* Delay for the given number of microseconds.  Assumes a 72 MHz clock.
+    123           * Disables interrupts, which will disrupt the millis() function if used
+    124           * too frequently. */
+    125          void delayMicroseconds(unsigned int us)
+    126          {
+    127          	uint32_t startUs = micros();
+    128          	uint32_t endUs = startUs + 8*us;
+    129          
+    130          //	DisableInterrups();
+    131          
+    132          	if (endUs>startUs)
+    133          		while (micros() < endUs )
+    134          			;
+    135          	else
+    136          	{
+    137          		// Handle micros() overflow
+    138          		while (micros() >= startUs)
+    139          			;
+    140          		while (micros() < endUs)
+    141          			;
+    142          	}
+    143          
+    144          //	EnableInterrups();
+    145          }
+    146          
+    147          extern "C" void delay_C(unsigned long ms)
+    148          {
+    149              delay(ms);
+    150          }
+    151          extern "C" void delayMicroseconds_C(unsigned int us)
+    152          {
+    153              delayMicroseconds(us);
+    154          }
+    155          
+    156          #include "stm32f0xx_adc.h"
+    157          #define ADC1_DR_Address    ((uint32_t)0x40012440)
+    158          
+    159          volatile int16_t* adc_destination; //< Address to write the sampled data to
+    160          volatile bool* adc_finished; //< Flag to set once the data is sampled
+    161          
+    162          uint16_t AD_Value[5];
+    163          uint16_t AD_Value_avr[5];
+    164          
+    165          void analog_init() {
+    166              GPIO_InitTypeDef GPIO_InitStructure;
+    167              ADC_InitTypeDef ADC_InitStructure;
+    168              DMA_InitTypeDef DMA_InitStructure;
+    169              NVIC_InitTypeDef NVIC_InitStructure;
+    170              extern void delay_ms(uint32_t ms);
+    171          
+    172              //RCC_ADCCLKConfig(RCC_PCLK2_Div6);
+    173              ADC_ClockModeConfig(ADC1,RCC_ADCCLK_PCLK_Div4);
+    174              RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1|RCC_AHBPeriph_GPIOA, ENABLE);
+    175              RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+    176          
+    177              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    178              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+    179              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    180              
+    181              if (model!=6)
+    182              {
+    183                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    184                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+    185                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    186              }
+    187          
+    188              if (model==4 || model==5 || model==6)
+    189              {
+    190                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    191                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+    192                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    193              }
+    194          
+    195              NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel1_IRQn;
+    196              NVIC_InitStructure.NVIC_IRQChannelPriority = 3;
+    197              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    198              NVIC_Init(&NVIC_InitStructure);          // Enable the DMA Interrupt
+    199          
+    200              ADC_DeInit(ADC1);
+    201              ADC_StructInit(&ADC_InitStructure);
+    202              /* ADC1 configuration ------------------------------------------------------*/
+    203              ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
+    204              ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+    205              ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
+    206              ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+    207              ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;
+    208              ADC_Init(ADC1, &ADC_InitStructure);
+    209          
+    210              /* ADC1 regular channel14 configuration */
+    211              
+    212              //ADC_ChannelConfig(ADC1, ADC_Channel_1, ADC_SampleTime_239_5Cycles);
+    213              ADC_TempSensorCmd(ENABLE);
+    214              if (model==6) ADC_ChannelConfig(ADC1, ADC_Channel_0|ADC_Channel_4|ADC_Channel_TempSensor, ADC_SampleTime_239_5Cycles);
+    215              else ADC_ChannelConfig(ADC1, ADC_Channel_0|ADC_Channel_1|ADC_Channel_TempSensor, ADC_SampleTime_239_5Cycles);
+    216              
+    217              /* Enable ADC1 reset calibaration register */
+    218              ADC_GetCalibrationFactor(ADC1);
+    219          
+    220          /*    ADC_TempSensorVrefintCmd(ENABLE);
+    221              ADC_RegularChannelConfig(ADC1, ADC_Channel_16, 3, ADC_SampleTime_239Cycles5);
+    222              if (model==4 || model==5) ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 4, ADC_SampleTime_239Cycles5);
+    223          */
+    224              DMA_DeInit(DMA1_Channel1);
+    225              DMA_InitStructure.DMA_PeripheralBaseAddr = ADC1_DR_Address;
+    226              DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&AD_Value;
+    227              DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    228          
+    229              DMA_InitStructure.DMA_BufferSize = 3;
+    230              //if (model==4 || model==5) DMA_InitStructure.DMA_BufferSize = 4;
+    231              DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    232              DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    233              DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+    234              DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+    235          
+    236              DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+    237              DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
+    238              DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    239              DMA_Init(DMA1_Channel1, &DMA_InitStructure);
+    240          
+    241              DMA_Cmd(DMA1_Channel1, ENABLE);
+    242              DMA_ITConfig(DMA1_Channel1, DMA_IT_TC, ENABLE);
+    243              
+    244              ADC_DMARequestModeConfig(ADC1, ADC_DMAMode_Circular);
+    245              
+    246              /* Enable ADC1 DMA */
+    247              ADC_DMACmd(ADC1, ENABLE);
+    248          
+    249              /* Enable ADC1 */
+    250            ADC_Cmd(ADC1, ENABLE);
+    251            
+    252            /* Wait the ADCEN falg */
+    253            while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADEN)); 
+    254            
+    255            /* ADC1 regular Software Start Conv */ 
+    256            ADC_StartOfConversion(ADC1);
+    257            
+    258            /* Test DMA1 TC flag */
+    259              while((DMA_GetFlagStatus(DMA1_FLAG_TC1)) == RESET ); 
+    260              
+    261              /* Clear DMA TC flag */
+    262              DMA_ClearFlag(DMA1_FLAG_TC1);
+    263          }
+    264          
+    265          int16_t abs16(int16_t i)
+    266          {
+    267              if (i>=0) return i;
+    268              return -i;
+    269          }
+    270          
+    271          uint16_t raw_temp_value[4] = { 0 };
+    272          uint16_t raw_temp_bed_value = 0;
+    273          uint16_t raw_temp_cpu_value = 0;
+    274          unsigned char temp_count;//yongzong
+    275          
+    276          static char adc_loop;
+    277          
+    278          extern "C" void DMA1_Channel1_IRQHandler(void)
+    279          {
+    280              uint8_t i;
+    281          
+    282            if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)
+    283            {
+    284              DMA_ClearITPendingBit(DMA1_IT_TC1);
+    285          
+    286              /*for (i=0;i<3;i++)
+    287              {
+    288                  if (abs16(AD_Value[i]-AD_Value_avr[i]) < 256) AD_Value_avr[i]=(AD_Value_avr[i]*7+AD_Value[i])>>3;
+    289                  else AD_Value_avr[i]=AD_Value[i];
+    290              }*/
+    291          
+    292              AD_Value_avr[0]+=AD_Value[0];
+    293              AD_Value_avr[1]+=AD_Value[1];
+    294              AD_Value_avr[2]+=AD_Value[2];
+    295          
+    296              if (model==4 || model==5)
+    297              {
+    298                  AD_Value_avr[3]+=AD_Value[3];
+    299          
+    300                  if (adc_loop>=3)
+    301                  {
+    302                      adc_loop=0;
+    303                      raw_temp_value[1] = AD_Value_avr[0];
+    304                      raw_temp_value[0] = AD_Value_avr[1];
+    305                      raw_temp_cpu_value = AD_Value_avr[2]/4;
+    306                      raw_temp_bed_value = AD_Value_avr[3];
+    307          #if FAKE_TEMPERATURE
+    308                      raw_temp_value[0]=2000;
+    309                      raw_temp_value[1]=2000;
+    310                      raw_temp_bed_value=12000;
+    311          #endif
+    312                      AD_Value_avr[0]=0;
+    313                      AD_Value_avr[1]=0;
+    314                      AD_Value_avr[2]=0;
+    315                      AD_Value_avr[3]=0;
+    316                      temp_count++;
+    317                  } else adc_loop++;
+    318                  return;
+    319              }
+    320              else
+    321              {
+    322                  if (adc_loop>=3)
+    323                  {
+    324                    adc_loop=0;
+    325                    raw_temp_value[0] = AD_Value_avr[0];
+    326                    raw_temp_bed_value = AD_Value_avr[1];
+    327                    raw_temp_cpu_value = AD_Value_avr[2]/4;
+    328              #if FAKE_TEMPERATURE
+    329                    raw_temp_value[0]=2000;
+    330                    raw_temp_bed_value=12000;
+    331              #endif
+    332                    AD_Value_avr[0]=0;
+    333                    AD_Value_avr[1]=0;
+    334                    AD_Value_avr[2]=0;
+    335                    temp_count++;
+    336                  } else adc_loop++;
+    337                  //printf("ADC1=%d, ADC2=%d, ADC3=%d\r\n",AD_Value_avr[0],AD_Value_avr[1],AD_Value_avr[2]);
+    338                  //*adc_finished = true;
+    339                }
+    340            }
+    341          }
+    342          
+    343          //Page 127 0x0801 FC00 - 0x0801 FFFF 1 Kbyte
+    344          #define EEPROM_ADDRESS  0x0801FC00
+    345          __no_init uint16_t eeprom[512]@EEPROM_ADDRESS;
+    346          
+    347          void eeprom_write_byte(uint16_t pos, uint8_t value)
+    348          {
+    349              FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR);
+    350              FLASH_ProgramHalfWord(EEPROM_ADDRESS+(pos*2),value|0xFF00);
+    351          }
+    352          
+    353          void eeprom_erase()
+    354          {
+    355              RCC_HSICmd(ENABLE);
+    356          
+    357              FLASH_Unlock();
+    358              FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPERR);
+    359              FLASH_ErasePage(EEPROM_ADDRESS);
+    360          }
+    361          
+    362          uint8_t eeprom_read_byte(uint16_t pos)
+    363          {
+    364              return eeprom[pos];
+    365          }
+    366          
+    367          void eeprom_lock()
+    368          {
+    369              FLASH_Lock();
+    370          }
+    371          
+    372          //TIM1 = 72Mhz -> 2Mhz
+    373          void stepper_timer_init()
+    374          {
+    375              TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    376              NVIC_InitTypeDef NVIC_InitStructure;
+    377          
+    378              NVIC_InitStructure.NVIC_IRQChannel = TIM1_BRK_UP_TRG_COM_IRQn;
+    379              NVIC_InitStructure.NVIC_IRQChannelPriority = 1;
+    380              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    381              NVIC_Init(&NVIC_InitStructure);
+    382          
+    383              RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+    384          
+    385              TIM_TimeBaseStructure.TIM_Period = 1000;
+    386              TIM_TimeBaseStructure.TIM_Prescaler = 24;   //36    //2Mhz
+    387              TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    388              TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    389              TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+    390              TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+    391          
+    392              TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);
+    393              TIM_Cmd(TIM1, ENABLE);
+    394          }
+    395          
+    396          /*void stepper_timer_set(uint16_t t)	//inline
+    397          {
+    398              TIM_SetAutoreload(TIM1,t);
+    399          }*/
+    400          
+    401          void stepper_timer_enable()	//inline
+    402          {
+    403              TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);
+    404              //TIM_Cmd(TIM4, ENABLE);
+    405          }
+    406          
+    407          void stepper_timer_disable()	//inline
+    408          {
+    409              TIM_ITConfig(TIM1, TIM_IT_Update, DISABLE);
+    410              //TIM_Cmd(TIM4, DISABLE);
+    411          }
+    412          
+    413          extern void stepper_timer();
+    414          extern "C" void TIM1_BRK_UP_TRG_COM_IRQHandler()
+    415          {
+    416              TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
+    417              stepper_timer();
+    418          }
+    419          
+    420          //TIM3 = 36Mhz->10Khz
+    421          void adv_timer_init()
+    422          {
+    423              TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    424              NVIC_InitTypeDef NVIC_InitStructure;
+    425          
+    426              /* Enable the TIM2 global Interrupt */
+    427              NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+    428              NVIC_InitStructure.NVIC_IRQChannelPriority = 2;
+    429              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    430          
+    431              NVIC_Init(&NVIC_InitStructure);
+    432          
+    433              /* TIM2 clock enable */
+    434              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    435          
+    436              /* Time base configuration */
+    437              TIM_TimeBaseStructure.TIM_Period = 100;//64; //10Khz
+    438              TIM_TimeBaseStructure.TIM_Prescaler = 48;//72;
+    439              TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    440              TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    441              TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+    442          
+    443              TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+    444          
+    445              /* TIM IT enable */
+    446              TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+    447          
+    448              /* TIM2 enable counter */
+    449              TIM_Cmd(TIM3, ENABLE);
+    450          }
+    451          
+    452          extern void adv_timer_exec();
+    453          extern "C" void TIM3_IRQHandler()
+    454          {
+    455              TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+    456          	adv_timer_exec();
+    457          }
+    458          
+    459          //TIM2 = 36Mhz
+    460          void extruder_timer_init()
+    461          {
+    462              TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+    463              NVIC_InitTypeDef NVIC_InitStructure;
+    464          
+    465              /* Enable the TIM2 global Interrupt */
+    466              NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    467              NVIC_InitStructure.NVIC_IRQChannelPriority = 2;
+    468              NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    469          
+    470              NVIC_Init(&NVIC_InitStructure);
+    471          
+    472              /* TIM2 clock enable */
+    473              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+    474          
+    475              /* Time base configuration */
+    476              TIM_TimeBaseStructure.TIM_Period = 200;
+    477              TIM_TimeBaseStructure.TIM_Prescaler = 24;   //2Mhz
+    478              TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+    479              TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    480              TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+    481          
+    482              TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+    483          
+    484              /* TIM IT enable */
+    485              TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+    486          
+    487              /* TIM2 enable counter */
+    488              TIM_Cmd(TIM2, ENABLE);
+    489          
+    490              //////////////////////////
+    491              if (model!=2) return;
+    492              GPIO_InitTypeDef GPIO_InitStructure;
+    493              TIM_OCInitTypeDef  TIM_OCInitStructure;
+    494          
+    495              /*GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    496              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    497              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    498              GPIO_Init(GPIOA, &GPIO_InitStructure);
+    499              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    500              GPIO_Init(GPIOA, &GPIO_InitStructure);*/
+    501              //GPIO_PinRemapConfig(GPIO_Remap_USART2,ENABLE);
+    502          /*
+    503              GPIO_PinRemapConfig( GPIO_FullRemap_TIM2, ENABLE);
+    504          
+    505              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    506              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    507              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    508              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    509          
+    510              RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+    511          
+    512              TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+    513              TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+    514              TIM_OCInitStructure.TIM_Pulse = 0;
+    515              TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;
+    516          
+    517              TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+    518              TIM_OC3PreloadConfig(TIM2, TIM_OCPreload_Enable);
+    519              TIM_OC4Init(TIM2, &TIM_OCInitStructure);
+    520              TIM_OC4PreloadConfig(TIM2, TIM_OCPreload_Enable);
+    521          
+    522              TIM_SetCompare2(TIM2,200);
+    523              TIM_SetCompare4(TIM2,0);
+    524              TIM_CtrlPWMOutputs(TIM2,ENABLE);*/
+    525          }
+    526          
+    527          extern void os_timer_exec();
+    528          extern void extruder_timer_exec();
+    529          extern "C" void TIM2_IRQHandler()
+    530          {
+    531              TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    532              //os_timer_exec();
+    533              extruder_timer_exec();
+    534          }
+    535          
+    536          extern "C" void SetSysTick()
+    537          {
+    538              RCC_APB2PeriphClockCmd(0xFFFFFFFF, ENABLE);
+    539              //GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+    540          
+    541              SysTick_Config(48000);
+    542              SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
+    543          }
+    544          /*
+    545          extern "C" void SetSysClockTo72()
+    546          {
+    547              RCC_HSEConfig(RCC_HSE_ON);
+    548              RCC_WaitForHSEStartUp();
+    549              FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+    550              FLASH_SetLatency(FLASH_Latency_2);
+    551              RCC_HCLKConfig(RCC_SYSCLK_Div1);
+    552              RCC_PCLK2Config(RCC_HCLK_Div1);
+    553              RCC_PCLK1Config(RCC_HCLK_Div2);
+    554              RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
+    555              RCC_PLLCmd(ENABLE);
+    556              while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+    557              RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    558              while(RCC_GetSYSCLKSource()!=0x08);
+    559          
+    560              RCC_APB2PeriphClockCmd(0xFFFFFFFF, ENABLE);
+    561          
+    562              SysTick_Config(72000);
+    563              SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
+    564          }
+    565          */
+    566          /*
+    567          extern "C" void SetSysClockTo64()
+    568          {
+    569              RCC_DeInit();
+    570              RCC_HSEConfig(RCC_HSE_OFF);
+    571              RCC_HSICmd(ENABLE);
+    572              while(RCC_GetFlagStatus(RCC_FLAG_HSIRDY) == RESET);
+    573              FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
+    574              FLASH_SetLatency(FLASH_Latency_2);
+    575              RCC_HCLKConfig(RCC_SYSCLK_Div1);
+    576              RCC_PCLK2Config(RCC_HCLK_Div1);
+    577              RCC_PCLK1Config(RCC_HCLK_Div2);
+    578              RCC_PLLConfig(RCC_PLLSource_HSI_Div2, RCC_PLLMul_16);
+    579              RCC_PLLCmd(ENABLE);
+    580              while(RCC_GetFlagStatus(RCC_FLAG_PLLRDY) == RESET);
+    581              RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    582              while(RCC_GetSYSCLKSource()!=0x08);
+    583          
+    584              RCC_APB2PeriphClockCmd(0xFFFFFFFF, ENABLE);
+    585              //GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+    586          
+    587              SysTick_Config(64000);
+    588              SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
+    589          }
+    590          */
+    591          //uint32_t tmp;
+    592          /* Usart rx dma receive buffer, this address must be 256 aligned  */
+    593          
+    594          void gpio_init()
+    595          {
+    596              RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA|RCC_AHBPeriph_GPIOB|RCC_AHBPeriph_GPIOC, ENABLE);
+    597          
+    598              GPIO_InitTypeDef GPIO_InitStructure;
+    599              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    600              GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    601              GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    602              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    603              /*GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    604              GPIO_Init(GPIOA, &GPIO_InitStructure);*/
+    605          
+    606              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
+    607              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    608          
+    609              //PB8 = FAN-PIN
+    610              GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    611              GPIO_Init(GPIOB, &GPIO_InitStructure);
+    612          
+    613              if (Z_ULN2003)
+    614              {
+    615                  //Z-AXIS
+    616                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    617                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    618          
+    619                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    620                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    621          
+    622                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    623                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    624          
+    625                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+    626                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    627          
+    628                  GPIO_ResetBits(GPIOB, GPIO_Pin_1);
+    629                  GPIO_ResetBits(GPIOB, GPIO_Pin_0);
+    630                  GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+    631                  GPIO_ResetBits(GPIOC, GPIO_Pin_14);
+    632              }
+    633          }
+    634          
+    635          /* Usart rx dma receive buffer, this address must be 256 aligned  */
+    636          #define USART_RX_BUF_SIZE 256
+    637          //#pragma data_alignment=256
+    638          uint8_t Uart_Rx[USART_RX_BUF_SIZE];
+    639          uint16_t buff_ptr=USART_RX_BUF_SIZE;
+    640          
+    641          void serial_init(int baud)
+    642          {
+    643              NVIC_InitTypeDef NVIC_InitStructure;
+    644              USART_InitTypeDef USART_InitStructure;
+    645              GPIO_InitTypeDef GPIO_InitStructure;
+    646              DMA_InitTypeDef DMA_InitStructure;
+    647          
+    648              gpio_init();
+    649          
+    650              //if (USARTx == USART1)
+    651              {
+    652              RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+    653              RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+    654              RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+    655          
+    656              RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+    657              DMA_DeInit(DMA1_Channel5);
+    658              DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&USART1->RDR);//0x40013824
+    659              DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)Uart_Rx;
+    660              DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    661              DMA_InitStructure.DMA_BufferSize = USART_RX_BUF_SIZE;
+    662              DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    663              DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    664              DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    665              DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    666              DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+    667              DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
+    668              DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+    669              DMA_Init(DMA1_Channel5,&DMA_InitStructure);
+    670          
+    671              SYSCFG_DMAChannelRemapConfig(SYSCFG_DMARemap_USART1Rx,ENABLE);
+    672              DMA_Cmd(DMA1_Channel5,ENABLE);
+    673          
+    674              buff_ptr=USART_RX_BUF_SIZE;
+    675          
+    676                  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+    677                  NVIC_InitStructure.NVIC_IRQChannelPriority = 3;
+    678                  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    679                  NVIC_Init(&NVIC_InitStructure);
+    680          
+    681                  //USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+    682                  USART_ClearITPendingBit(USART1, USART_IT_TC | USART_IT_RXNE);
+    683                  USART_ClearITPendingBit(USART1, USART_IT_PE | USART_IT_FE | USART_IT_NE);
+    684          
+    685                  GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_1); 
+    686                  GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_1);
+    687                  
+    688                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;
+    689                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+    690                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    691                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    692                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;//GPIO_PuPd_UP;
+    693                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    694          
+    695                  USART_InitStructure.USART_BaudRate = baud;//512000;//115200;
+    696                  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    697                  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    698                  USART_InitStructure.USART_Parity = USART_Parity_No;
+    699                  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    700                  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    701              USART_Init(USART1, &USART_InitStructure);
+    702              USART_Cmd(USART1, ENABLE);
+    703              USART_DMACmd(USART1,USART_DMAReq_Rx,ENABLE);
+    704              USART_ITConfig(USART1, USART_IT_IDLE, ENABLE);
+    705              }
+    706              //else
+    707          /*
+    708              {
+    709                  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+    710          
+    711                  NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+    712                  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    713                  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    714                  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    715                  NVIC_Init(&NVIC_InitStructure);
+    716          
+    717                  USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    718                  USART_ClearITPendingBit(USART2, USART_IT_TC | USART_IT_RXNE);
+    719                  USART_ClearITPendingBit(USART2, USART_IT_PE | USART_IT_FE | USART_IT_NE);
+    720          
+    721                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    722                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    723                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    724                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    725          
+    726                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;//GPIO_Mode_IN_FLOATING;
+    727                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    728                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    729          
+    730                  USART_InitStructure.USART_BaudRate = 115200;
+    731                  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    732                  USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    733                  USART_InitStructure.USART_Parity = USART_Parity_No;
+    734                  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    735                  USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+    736          
+    737                  USART_Init(USART2, &USART_InitStructure);
+    738                  USART_Cmd(USART2, ENABLE);
+    739              }
+    740          */
+    741          }
+    742          
+    743          extern "C" void store_char(unsigned char c);
+    744          
+    745          extern "C" void DMA1_Channel4_5_6_7_IRQHandler(void)
+    746          {
+    747            if(DMA_GetITStatus(DMA1_IT_TC5) != RESET)
+    748            {
+    749              DMA_ClearITPendingBit(DMA1_IT_TC5);
+    750            }
+    751          
+    752            if (DMA_GetITStatus(DMA1_IT_TE5) != RESET)
+    753            {
+    754              DMA_ClearITPendingBit(DMA1_IT_TE5);
+    755            }
+    756          }
+    757          
+    758          #define WIFI_USART_RX_BUF_SIZE 256
+    759          char Uart_RX_WIFI[WIFI_USART_RX_BUF_SIZE];
+    760          volatile int16_t wifi_w_buff_ptr=0;
+    761          extern unsigned char download_state;
+    762          
+    763          void WIFI_enable(unsigned char e)
+    764          {
+    765              if (e!=0)
+    766              {
+    767                  USART_ITConfig(WIFI_UART, USART_IT_RXNE, ENABLE);
+    768              }
+    769              else
+    770              {
+    771                  USART_ITConfig(WIFI_UART, USART_IT_RXNE, DISABLE);
+    772              }
+    773          }
+    774          
+    775          extern "C" void WIFI_UART_IRQHandler()
+    776          {
+    777            uint8_t c;
+    778            extern volatile uint8_t wifi_download;
+    779          
+    780            /*if(USART_GetITStatus(WIFI_UART, USART_IT_RXNE) != RESET)
+    781            {
+    782              USART_ClearITPendingBit(WIFI_UART, USART_IT_RXNE);
+    783          
+    784              c=WIFI_UART->DR;
+    785              if (wifi_download)
+    786              {
+    787                  Uart_RX_WIFI[wifi_w_buff_ptr++]=c;
+    788                  if (wifi_w_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_w_buff_ptr=0;
+    789                  return;
+    790              }
+    791          
+    792              /if (c<0x80)
+    793              {
+    794                store_char(c);
+    795                //extern bool sdprint_cancel;
+    796                //if (c==0x1B) sdprint_cancel=true;
+    797              }
+    798              else
+    799              {
+    800                Uart_RX_WIFI[wifi_w_buff_ptr++]=(c-0x80);
+    801                if (wifi_w_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_w_buff_ptr=0;
+    802              }
+    803            }
+    804            */
+    805          
+    806            ////////////////////////////////////////////////////
+    807            if(USART_GetITStatus(USART1, USART_IT_IDLE) != RESET)
+    808            {
+    809                uint8_t c;
+    810                uint16_t temp;
+    811              // Read one byte from the receive data register
+    812              //serial_rx_exec(USART_ReceiveData(USART1));
+    813          
+    814              //if (temp==USART_RX_BUF_SIZE) temp=0;
+    815          
+    816              //printf("+%c: DMA=%d/CNT=%d\n",Uart_Rx[USART_RX_BUF_SIZE-buff_ptr],temp,buff_ptr);
+    817              //serial_rx_exec(Uart_Rx[USART_RX_BUF_SIZE-buff_ptr]);
+    818              c=Uart_Rx[USART_RX_BUF_SIZE-buff_ptr];
+    819              if (wifi_download)
+    820              {
+    821                  Uart_RX_WIFI[wifi_w_buff_ptr++]=c;
+    822                  if (wifi_w_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_w_buff_ptr=0;
+    823              }
+    824              else
+    825              {
+    826                  if (c<0x80)
+    827                  {
+    828                    store_char(c);
+    829                    /*extern bool sdprint_cancel;
+    830                    if (c==0x1B) sdprint_cancel=true;*/
+    831                  }
+    832                  else
+    833                  {
+    834                    Uart_RX_WIFI[wifi_w_buff_ptr++]=(c-0x80);
+    835                    if (wifi_w_buff_ptr>=WIFI_USART_RX_BUF_SIZE) wifi_w_buff_ptr=0;
+    836                  }
+    837              }
+    838          
+    839              if (buff_ptr<=1) buff_ptr=USART_RX_BUF_SIZE;
+    840              else buff_ptr--;
+    841          
+    842              temp=DMA_GetCurrDataCounter(DMA1_Channel5);
+    843              if (buff_ptr==temp)
+    844              {
+    845                  //temp = USART1->SR;
+    846                  //temp = USART1->RDR;
+    847                  USART_ClearITPendingBit(USART1, USART_IT_IDLE);
+    848              }
+    849          
+    850            }
+    851          
+    852            else if(USART_GetFlagStatus(WIFI_UART,USART_FLAG_ORE)==SET)
+    853            {
+    854                USART_ClearFlag(WIFI_UART,USART_FLAG_ORE);
+    855                USART_ReceiveData(WIFI_UART);
+    856            }
+    857          
+    858            /*if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
+    859            {
+    860              // Write one byte to the transmit data register
+    861              serial_tx_exec();
+    862            }*/
+    863            ////////////////////////////////////////////////////
+    864          
+    865          }
+    866          
+    867          //#include "platform_config.h"
+    868          //#define USB_DISCONNECT                      GPIOB
+    869          //#define USB_DISCONNECT_PIN                  GPIO_Pin_9
+    870          extern "C" void PowerOn();
+    871          extern "C" void PowerOff();
+    872          void USB_enable(uint8_t en)
+    873          {
+    874              if (en==0)
+    875              {
+    876                  PowerOff();
+    877                  //GPIO_ResetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+    878                  bDeviceState = 0;
+    879              }
+    880              else PowerOn();//GPIO_SetBits(USB_DISCONNECT, USB_DISCONNECT_PIN);
+    881          }
+    882          
+    883          void uart_flush()
+    884          {
+    885              char c;
+    886              extern volatile int16_t wifi_r_buff_ptr;
+    887          
+    888              USART_ClearITPendingBit(WIFI_UART, USART_IT_RXNE);
+    889              c=WIFI_UART->RDR;
+    890          
+    891              MYSERIAL.flush();
+    892              wifi_w_buff_ptr=0;
+    893              wifi_r_buff_ptr=0;
+    894          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      32   DMA1_Channel1_IRQHandler
+        32   -> DMA_ClearITPendingBit
+        32   -> DMA_GetITStatus
+       8   DMA1_Channel4_5_6_7_IRQHandler
+         8   -> DMA_ClearITPendingBit
+         8   -> DMA_GetITStatus
+       8   SetSysTick
+         8   -> RCC_APB2PeriphClockCmd
+         8   -> SysTick_CLKSourceConfig
+      24   SysTick_Handler
+        24   -> GPIO_ReadInputDataBit
+       8   TIM1_BRK_UP_TRG_COM_IRQHandler
+         8   -> TIM_ClearITPendingBit
+         8   -> stepper_timer()
+       8   TIM2_IRQHandler
+         8   -> TIM_ClearITPendingBit
+         8   -> extruder_timer_exec()
+       8   TIM3_IRQHandler
+         8   -> TIM_ClearITPendingBit
+         8   -> adv_timer_exec()
+      24   USART1_IRQHandler
+        24   -> DMA_GetCurrDataCounter
+        24   -> USART_ClearFlag
+        24   -> USART_ClearITPendingBit
+        24   -> USART_GetFlagStatus
+        24   -> USART_GetITStatus
+        24   -> USART_ReceiveData
+        24   -> store_char
+       8   USB_enable(uint8_t)
+         8   -> PowerOff
+         8   -> PowerOn
+       8   WIFI_enable(unsigned char)
+         8   -> USART_ITConfig
+       0   abs16(int16_t)
+      24   adv_timer_init()
+        24   -> NVIC_Init
+        24   -> RCC_APB1PeriphClockCmd
+        24   -> TIM_Cmd
+        24   -> TIM_ITConfig
+        24   -> TIM_TimeBaseInit
+     104   analog_init()
+       104   -> ADC_ChannelConfig
+       104   -> ADC_ClockModeConfig
+       104   -> ADC_Cmd
+       104   -> ADC_DMACmd
+       104   -> ADC_DMARequestModeConfig
+       104   -> ADC_DeInit
+       104   -> ADC_GetCalibrationFactor
+       104   -> ADC_GetFlagStatus
+       104   -> ADC_Init
+       104   -> ADC_StartOfConversion
+       104   -> ADC_StructInit
+       104   -> ADC_TempSensorCmd
+       104   -> DMA_ClearFlag
+       104   -> DMA_Cmd
+       104   -> DMA_DeInit
+       104   -> DMA_GetFlagStatus
+       104   -> DMA_ITConfig
+       104   -> DMA_Init
+       104   -> GPIO_Init
+       104   -> NVIC_Init
+       104   -> RCC_AHBPeriphClockCmd
+       104   -> RCC_APB2PeriphClockCmd
+      16   delay(unsigned long)
+        16   -> IWDG_ReloadCounter
+      16   delayMicroseconds(unsigned int)
+        16   -> micros()
+       8   delayMicroseconds_C
+         8   -> delayMicroseconds(unsigned int)
+       8   delay_C
+         8   -> delay(unsigned long)
+       8   delay_ms(uint32_t)
+         8   -> delay(unsigned long)
+       8   eeprom_erase()
+         8   -> FLASH_ClearFlag
+         8   -> FLASH_ErasePage
+         8   -> FLASH_Unlock
+         8   -> RCC_HSICmd
+       8   eeprom_lock()
+         8   -> FLASH_Lock
+       0   eeprom_read_byte(uint16_t)
+      16   eeprom_write_byte(uint16_t, uint8_t)
+        16   -> FLASH_ClearFlag
+        16   -> FLASH_ProgramHalfWord
+      24   extruder_timer_init()
+        24   -> NVIC_Init
+        24   -> RCC_APB1PeriphClockCmd
+        24   -> TIM_Cmd
+        24   -> TIM_ITConfig
+        24   -> TIM_TimeBaseInit
+      32   gpio_init()
+        32   -> GPIO_Init
+        32   -> GPIO_ResetBits
+        32   -> RCC_AHBPeriphClockCmd
+      20   micros()
+        20 __aeabi_uidiv
+       0   millis()
+     104   serial_init(int)
+       104   -> DMA_Cmd
+       104   -> DMA_DeInit
+       104   -> DMA_Init
+       104   -> GPIO_Init
+       104   -> GPIO_PinAFConfig
+       104   -> NVIC_Init
+       104   -> RCC_AHBPeriphClockCmd
+       104   -> RCC_APB2PeriphClockCmd
+       104   -> SYSCFG_DMAChannelRemapConfig
+       104   -> USART_ClearITPendingBit
+       104   -> USART_Cmd
+       104   -> USART_DMACmd
+       104   -> USART_ITConfig
+       104   -> USART_Init
+       104   -> gpio_init()
+       8   stepper_timer_disable()
+         8   -> TIM_ITConfig
+       8   stepper_timer_enable()
+         8   -> TIM_ITConfig
+      24   stepper_timer_init()
+        24   -> NVIC_Init
+        24   -> RCC_APB2PeriphClockCmd
+        24   -> TIM_Cmd
+        24   -> TIM_ITConfig
+        24   -> TIM_TimeBaseInit
+       8   uart_flush()
+         8   -> MarlinSerial::flush()
+         8   -> USART_ClearITPendingBit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable11
+       4  ??DataTable13
+       4  ??DataTable13_1
+       4  ??DataTable13_2
+       4  ??DataTable14
+       4  ??DataTable14_1
+       4  ??DataTable14_2
+       4  ??DataTable14_3
+       4  ??DataTable14_4
+       4  ??DataTable15
+       4  ??DataTable15_1
+       4  ??DataTable15_2
+       4  ??DataTable17
+       4  ??DataTable17_1
+       4  ??DataTable17_2
+       4  ??DataTable19
+       4  ??DataTable19_1
+       4  ??DataTable20
+       4  ??DataTable20_1
+       4  ??DataTable20_10
+       4  ??DataTable20_11
+       4  ??DataTable20_12
+       4  ??DataTable20_13
+       4  ??DataTable20_14
+       4  ??DataTable20_15
+       4  ??DataTable20_16
+       4  ??DataTable20_17
+       4  ??DataTable20_2
+       4  ??DataTable20_3
+       4  ??DataTable20_4
+       4  ??DataTable20_5
+       4  ??DataTable20_6
+       4  ??DataTable20_7
+       4  ??DataTable20_8
+       4  ??DataTable20_9
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+       4  ??DataTable5
+       4  ??DataTable8
+      10  ?Subroutine0
+      28  ?Subroutine1
+     142  DMA1_Channel1_IRQHandler
+      42  DMA1_Channel4_5_6_7_IRQHandler
+      50  SetSysTick
+     214  SysTick_Handler
+      16  TIM1_BRK_UP_TRG_COM_IRQHandler
+      16  TIM2_IRQHandler
+      16  TIM3_IRQHandler
+     146  USART1_IRQHandler
+      24  USB_enable(uint8_t)
+     256  Uart_RX_WIFI
+     256  Uart_Rx
+      20  WIFI_enable(unsigned char)
+      10  abs16(int16_t)
+       4  adc_destination
+       4  adc_finished
+      48  adv_timer_init()
+     322  analog_init()
+      12  btn_status
+          systick_count
+          btn_timer
+       4  buff_ptr
+          wifi_w_buff_ptr
+      24  delay(unsigned long)
+      36  delayMicroseconds(unsigned int)
+       8  delayMicroseconds_C
+       8  delay_C
+       8  delay_ms(uint32_t)
+    1024  eeprom
+      26  eeprom_erase()
+       8  eeprom_lock()
+      10  eeprom_read_byte(uint16_t)
+      30  eeprom_write_byte(uint16_t, uint8_t)
+      52  extruder_timer_init()
+     142  gpio_init()
+      42  micros()
+       6  millis()
+     252  serial_init(int)
+       4  stepper_timer_disable()
+       6  stepper_timer_enable()
+      50  stepper_timer_init()
+      40  temp_count
+          adc_loop
+          AD_Value
+          AD_Value_avr
+          raw_temp_value
+          raw_temp_bed_value
+          raw_temp_cpu_value
+       4  timeout
+      32  uart_flush()
+
+ 
+   576 bytes in section .bss
+     4 bytes in section .data
+ 1'024 bytes in section .noinit  (abs)
+ 2'008 bytes in section .text
+ 
+ 2'008 bytes of CODE memory
+   580 bytes of DATA memory (+ 1'024 bytes shared)
+
+Errors: none
+Warnings: 10

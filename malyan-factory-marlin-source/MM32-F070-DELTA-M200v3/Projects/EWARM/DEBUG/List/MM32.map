@@ -1,0 +1,2440 @@
+###############################################################################
+#
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  10/Oct/2019  17:33:37
+# Copyright 2007-2019 IAR Systems AB.
+#
+#    Output file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Exe\MM32.out
+#    Map file     =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\MM32.map
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EWB3C0.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\cardreader.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\ccsbcs.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\configuration_store.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\diskio.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\ff.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Main.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Marlin_main.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\MarlinSerial.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\mesh_bed_leveling.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\planner.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Platform.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\port.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Print.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\qr_solve.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\sd.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\servo.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\SPI_MSD0_Driver.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\startup_stm32f072.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stepper.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stepper_indirection.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32_it.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_adc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_can.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_cec.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_comp.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_crc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_crs.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_dac.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_dbgmcu.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_dma.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_exti.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_flash.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_gpio.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_i2c.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_iwdg.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_misc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_pwr.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_rcc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_rtc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_spi.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_syscfg.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_tim.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_usart.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_wwdg.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\system_stm32f0xx.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\temperature.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_bsp.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_core.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_dcd.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_dcd_int.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_cdc_core.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_cdc_msc_wrapper.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_cdc_vcp.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_core.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_desc.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_ioreq.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_bot.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_core.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_data.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_msc_scsi.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_pwr.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_req.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_storage.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_usr.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\vector_3.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\wifi.o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\WString.o
+#        --redirect _Scanf=_ScanfSmallNoMb --no_out_extension -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Exe\MM32.out
+#        --map
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\MM32.map
+#        --config
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\stm32f070xb_flash.icf
+#        --entry __iar_program_start --inline --merge_duplicate_sections --vfe
+#        --enable_stack_usage --text_out locale)
+#
+###############################################################################
+
+*******************************************************************************
+*** MESSAGES
+***
+
+Warning[Ls016]: [stack usage analysis] the program contains at least one
+          indirect call. Example: from "USBD_Init". A complete list of such
+          functions is in the map file.
+Warning[Ls017]: [stack usage analysis] the program contains at least one
+          instance of recursion for which stack usage analysis has not been
+          able to calculate a maximum stack depth. One function involved is
+          "MarlinSerial::print(long, int)". A complete list of all recursion
+          nests is in the map file.
+
+
+*******************************************************************************
+*** RUNTIME MODEL ATTRIBUTES
+***
+
+CppFlavor                     = *
+__CPP_Exceptions              = Disabled
+__CPP_Language                = C++14
+__Heap_Handler                = DLMalloc
+__SystemLibrary               = DLib
+__dlib_dynamic_initialization = normal
+__dlib_version                = 6
+
+
+*******************************************************************************
+*** HEAP SELECTION
+***
+
+The advanced heap was selected because the application calls memory
+allocation functions outside of system library functions, and there
+are calls to deallocation functions in the application.
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A0":  place at address 0x800'2000 { ro section .intvec };
+"P1":  place in [from 0x800'2000 to 0x801'ffff] { ro };
+define block CSTACK with size = 2K, alignment = 8 { };
+define block HEAP with size = 2K, alignment = 8 { };
+"P2":  place in [from 0x2000'0100 to 0x2000'3fff] {
+          rw, block CSTACK, block HEAP };
+initialize by copy { rw };
+
+  Section                Kind         Address      Size  Object
+  -------                ----         -------      ----  ------
+Absolute sections, part 1 of 4:                     0x4
+  .noinit                uninit    0x800'1000       0x4  port.o [1]
+                                 - 0x800'1004       0x4
+
+"A0":                                              0xc0
+  .intvec                ro code   0x800'2000      0xc0  startup_stm32f072.o [1]
+                                 - 0x800'20c0      0xc0
+
+"P1":                                          0x1'3e71
+  .text                  ro code   0x800'20c0    0x2cf4  ff.o [1]
+  .text                  ro code   0x800'4db4      0xe4  diskio.o [1]
+  .text                  ro code   0x800'4e98      0x5e  I32DivMod.o [5]
+  .text                  ro code   0x800'4ef6      0x7e  lz77_init_single.o [5]
+  .text                  ro code   0x800'4f74     0x568  ccsbcs.o [1]
+  .text                  ro code   0x800'54dc      0x6a  I64DivMod.o [5]
+  .text                  ro code   0x800'5546       0xa  xsprout.o [2]
+  .text                  ro code   0x800'5550     0xa62  SPI_MSD0_Driver.o [1]
+  .rodata                const     0x800'5fb2       0x2  Marlin_main.o [1]
+  .text                  ro code   0x800'5fb4      0x92  stm32f0xx_spi.o [1]
+  .rodata                const     0x800'6046       0x2  Marlin_main.o [1]
+  .text                  ro code   0x800'6048     0x2c8  stm32f0xx_rcc.o [1]
+  .text                  ro code   0x800'6310      0xa8  stm32f0xx_gpio.o [1]
+  .text                  ro code   0x800'63b8      0x14  memset.o [5]
+  .text                  ro code   0x800'63cc      0xb6  sd.o [1]
+  .rodata                const     0x800'6482       0x2  Marlin_main.o [1]
+  .text                  ro code   0x800'6484      0x10  ABImemset_small.o [5]
+  .text                  ro code   0x800'6494       0xc  sd.o [1]
+  .text                  ro code   0x800'64a0       0xa  sd.o [1]
+  .text                  ro code   0x800'64aa       0x2  startup_stm32f072.o [1]
+  .text                  ro code   0x800'64ac    0x29dc  Marlin_main.o [1]
+  .text                  ro code   0x800'8e88     0x8c4  cardreader.o [1]
+  .text                  ro code   0x800'974c      0x10  temperature.o [1]
+  .text                  ro code   0x800'975c     0x248  MarlinSerial.o [1]
+  .text                  ro code   0x800'99a4      0x32  FltToDbl.o [4]
+  .text                  ro code   0x800'99d8    0x10fc  wifi.o [1]
+  .text                  ro code   0x800'aad4      0x22  strncpy_small.o [5]
+  .text                  ro code   0x800'aaf8      0x10  strcpy_small.o [5]
+  .text                  ro code   0x800'ab08     0xff0  configuration_store.o [1]
+  .text                  ro code   0x800'baf8    0x1240  temperature.o [1]
+  .text                  ro code   0x800'cd38     0x708  Platform.o [1]
+  .text                  ro code   0x800'd440     0xd08  planner.o [1]
+  .text                  ro code   0x800'e148     0xb28  stepper.o [1]
+  .text                  ro code   0x800'ec70      0x48  Marlin_main.o [1]
+  .text                  ro code   0x800'ecb8      0x2e  strstr.o [2]
+  .text                  ro code   0x800'ece8      0x48  temperature.o [1]
+  .text                  ro code   0x800'ed30      0x12  strchr.o [5]
+  .text                  ro code   0x800'ed44      0xa2  iar_Stolx.o [2]
+  .text                  ro code   0x800'ede8      0x14  strcmp_small.o [5]
+  .text                  ro code   0x800'edfc      0x1e  Marlin_main.o [1]
+  .text                  ro code   0x800'ee1c      0x40  sprintf.o [2]
+  .text                  ro code   0x800'ee5c       0x8  temperature.o [1]
+  .text                  ro code   0x800'ee64     0x420  strto64.o [4]
+  .text                  ro code   0x800'f284      0x62  DblToFlt.o [4]
+  .text                  ro code   0x800'f2e8      0x36  IxxToFlt.o [4]
+  .text                  ro code   0x800'f31e     0x120  FltAddSub.o [4]
+  .text                  ro code   0x800'f440      0x38  MarlinSerial.o [1]
+  .text                  ro code   0x800'f478      0x1c  Marlin_main.o [1]
+  .text                  ro code   0x800'f494      0x34  IxxToDbl.o [4]
+  .text                  ro code   0x800'f4c8     0x184  DblMul.o [4]
+  .text                  ro code   0x800'f64c      0x10  Marlin_main.o [1]
+  .text                  ro code   0x800'f65c      0xb0  FltMul.o [4]
+  .text                  ro code   0x800'f70c      0x58  Marlin_main.o [1]
+  .text                  ro code   0x800'f764      0x28  FltCmpGe.o [4]
+  .text                  ro code   0x800'f78c      0x3a  FltToS32.o [4]
+  .text                  ro code   0x800'f7c8      0x20  Marlin_main.o [1]
+  .text                  ro code   0x800'f7e8      0x38  stm32f0xx_iwdg.o [1]
+  .text                  ro code   0x800'f820      0x16  Marlin_main.o [1]
+  .text                  ro code   0x800'f838      0x10  Marlin_main.o [1]
+  .text                  ro code   0x800'f848      0x26  FltToU32.o [4]
+  .text                  ro code   0x800'f870     0x228  Marlin_main.o [1]
+  .text                  ro code   0x800'fa98      0x1c  wifi.o [1]
+  .text                  ro code   0x800'fab4     0x1d4  Marlin_main.o [1]
+  .text                  ro code   0x800'fc88     0x18c  Marlin_main.o [1]
+  .text                  ro code   0x800'fe14     0x154  Marlin_main.o [1]
+  .text                  ro code   0x800'ff68      0x26  FltCmpLe.o [4]
+  .text                  ro code   0x800'ff8e      0xaa  FltDiv.o [4]
+  .text                  ro code   0x801'0038     0x1ec  port.o [1]
+  .text                  ro code   0x801'0224      0x30  stm32f0xx_syscfg.o [1]
+  .text                  ro code   0x801'0254      0x20  FltCmpEq.o [4]
+  .text                  ro code   0x801'0274     0x174  Marlin_main.o [1]
+  .text                  ro code   0x801'03e8      0xdc  Marlin_main.o [1]
+  .text                  ro code   0x801'04c4      0x20  stm32f0xx_pwr.o [1]
+  .text                  ro code   0x801'04e4     0x19c  Marlin_main.o [1]
+  .text                  ro code   0x801'0680     0x1c8  Marlin_main.o [1]
+  .text                  ro code   0x801'0848      0xf0  Marlin_main.o [1]
+  .text                  ro code   0x801'0938      0x30  Marlin_main.o [1]
+  .text                  ro code   0x801'0968      0x14  Marlin_main.o [1]
+  .text                  ro code   0x801'097c      0x50  hypot32.o [4]
+  .text                  ro code   0x801'09cc      0xde  atan2_32.o [4]
+  .text                  ro code   0x801'0aac      0x34  floorf.o [4]
+  .text                  ro code   0x801'0ae0     0x270  cos_sin32.o [4]
+  .text                  ro code   0x801'0d50     0x1c0  stm32f0xx_usart.o [1]
+  .text                  ro code   0x801'0f10     0x172  usbd_cdc_vcp.o [1]
+  .text                  ro code   0x801'1084       0xe  strlen.o [5]
+  .text                  ro code   0x801'1094      0x4e  ABImemcpy.o [5]
+  .text                  ro code   0x801'10e4      0x3c  temperature.o [1]
+  .text                  ro code   0x801'1120      0x32  DblCmpLe.o [4]
+  .text                  ro code   0x801'1152      0xc2  DblDiv.o [4]
+  .text                  ro code   0x801'1214     0x1b4  DblAddSub.o [4]
+  .text                  ro code   0x801'13c8      0x52  DblToI32.o [4]
+  .text                  ro code   0x801'141c      0x24  wifi.o [1]
+  .text                  ro code   0x801'1440      0x92  usbd_usr.o [1]
+  .text                  ro code   0x801'14d4     0x154  iar_Stoulx.o [2]
+  .text                  ro code   0x801'1628      0x2c  strncmp.o [2]
+  .text                  ro code   0x801'1654      0x84  temperature.o [1]
+  .text                  ro code   0x801'16d8      0x70  stm32f0xx_misc.o [1]
+  .text                  ro code   0x801'1748     0x110  stm32f0xx_adc.o [1]
+  .text                  ro code   0x801'1858     0x108  stm32f0xx_dma.o [1]
+  .text                  ro code   0x801'1960      0xfc  stm32f0xx_flash.o [1]
+  .text                  ro code   0x801'1a5c      0xa6  stm32f0xx_tim.o [1]
+  .text                  ro code   0x801'1b02      0x32  ceilf.o [4]
+  .text                  ro code   0x801'1b34      0x46  planner.o [1]
+  .text                  ro code   0x801'1b7a      0x2c  planner.o [1]
+  .text                  ro code   0x801'1ba6      0x24  DblCmpEq.o [4]
+  .text                  ro code   0x801'1bcc      0x38  lround32.o [4]
+  .text                  ro code   0x801'1c04      0x66  sqrtf.o [4]
+  .text                  ro code   0x801'1c6c      0x54  lround64.o [4]
+  .text                  ro code   0x801'1cc0      0x32  DblCmpGe.o [4]
+  .text                  ro code   0x801'1cf4     0x184  stepper.o [1]
+  .text                  ro code   0x801'1e78      0x20  stepper.o [1]
+  .text                  ro code   0x801'1e98      0x34  stepper.o [1]
+  .text                  ro code   0x801'1ecc      0x32  I64Mul.o [5]
+  .text                  ro code   0x801'1efe     0x172  xprintftiny.o [2]
+  .text                  ro code   0x801'2070     0x124  iar_Stopfx.o [2]
+  .text                  ro code   0x801'2194     0x1c0  iar_Stoflt.o [2]
+  .text                  ro code   0x801'2354     0x22c  iar_Stoxflt.o [2]
+  .text                  ro code   0x801'2580      0x14  Marlin_main.o [1]
+  .text                  ro code   0x801'2594      0x2c  Marlin_main.o [1]
+  .text                  ro code   0x801'25c0      0x1c  strcat.o [2]
+  .text                  ro code   0x801'25dc      0x2a  strncat.o [2]
+  .text                  ro code   0x801'2608     0x1f0  iar_Hypot32.o [4]
+  .text                  ro code   0x801'27f8     0x134  iar_Atan32.o [4]
+  .text                  ro code   0x801'292c     0x328  usb_core.o [1]
+  .text                  ro code   0x801'2c54     0x3cc  usb_dcd.o [1]
+  .text                  ro code   0x801'3020     0x25e  usbd_core.o [1]
+  .text                  ro code   0x801'3280      0x16  memchr.o [5]
+  .text                  ro code   0x801'3298      0x98  round32.o [4]
+  .text                  ro code   0x801'3330     0x12c  round64.o [4]
+  .text                  ro code   0x801'345c     0x11e  usb_bsp.o [1]
+  .text                  ro code   0x801'357c     0x138  usbd_desc.o [1]
+  .text                  ro code   0x801'36b4     0x3f4  usbd_req.o [1]
+  .text                  ro code   0x801'3aa8      0x58  usbd_ioreq.o [1]
+  .text                  ro code   0x801'3b00     0x418  Main.o [1]
+  .rodata                const     0x801'3f18     0x3dc  ccsbcs.o [1]
+  .text                  ro code   0x801'42f4     0x364  usb_dcd_int.o [1]
+  .text                  ro code   0x801'4658      0xc4  usbd_pwr.o [1]
+  .text                  ro code   0x801'471c     0x26c  usbd_cdc_core.o [1]
+  .rodata                const     0x801'4988     0x228  configuration_store.o [1]
+  .rodata                const     0x801'4bb0     0x228  Marlin_main.o [1]
+  .rodata                const     0x801'4dd8     0x200  SPI_MSD0_Driver.o [1]
+  .rodata                const     0x801'4fd8     0x174  temperature.o [1]
+  .rodata                const     0x801'514c     0x13c  wifi.o [1]
+  .rodata                const     0x801'5288     0x104  Marlin_main.o [1]
+  .rodata                const     0x801'538c      0xa4  temperature.o [1]
+  .rodata                const     0x801'5430      0x94  usbd_desc.o [1]
+  .text                  ro code   0x801'54c4      0x94  system_stm32f0xx.o [1]
+  .rodata                const     0x801'5558      0x84  temperature.o [1]
+  .rodata                const     0x801'55dc      0x58  Marlin_main.o [1]
+  .rodata                const     0x801'5634      0x54  port.o [1]
+  .rodata                const     0x801'5688      0x50  iar_Stoulx.o [2]
+  .rodata                const     0x801'56d8      0x48  strto64.o [4]
+  .rodata                const     0x801'5720      0x44  cardreader.o [1]
+  .rodata                const     0x801'5764      0x44  usbd_cdc_core.o [1]
+  .text                  ro code   0x801'57a8      0x3c  zero_init3.o [5]
+  .rodata                const     0x801'57e4      0x34  configuration_store.o [1]
+  .rodata                const     0x801'5818      0x30  Marlin_main.o [1]
+  .rodata                const     0x801'5848      0x30  Marlin_main.o [1]
+  .rodata                const     0x801'5878      0x2c  Marlin_main.o [1]
+  .rodata                const     0x801'58a4      0x28  Marlin_main.o [1]
+  .rodata                const     0x801'58cc      0x28  usbd_desc.o [1]
+  .text                  ro code   0x801'58f4      0x28  data_init.o [5]
+  .rodata                const     0x801'591c      0x24  configuration_store.o [1]
+  .rodata                const     0x801'5940      0x24  Marlin_main.o [1]
+  .rodata                const     0x801'5964      0x24  Marlin_main.o [1]
+  .rodata                const     0x801'5988      0x24  Marlin_main.o [1]
+  .iar.init_table        const     0x801'59ac      0x24  - Linker created -
+  .rodata                const     0x801'59d0      0x20  Marlin_main.o [1]
+  .rodata                const     0x801'59f0      0x20  Marlin_main.o [1]
+  .rodata                const     0x801'5a10      0x20  Marlin_main.o [1]
+  .rodata                const     0x801'5a30      0x20  Marlin_main.o [1]
+  .rodata                const     0x801'5a50      0x20  temperature.o [1]
+  .text                  ro code   0x801'5a70      0x20  cmain_call_ctors.o [5]
+  .text                  ro code   0x801'5a90      0x18  cppinit.o [2]
+  .text                  ro code   0x801'5aa8      0x1e  cmain.o [5]
+  .text                  ro code   0x801'5ac6       0x8  exit.o [2]
+  .text                  ro code   0x801'5ad0       0xa  cexit.o [5]
+  .text                  ro code   0x801'5adc       0xc  XXexit.o [5]
+  .rodata                const     0x801'5ae8      0x1c  Marlin_main.o [1]
+  .rodata                const     0x801'5b04      0x1c  Marlin_main.o [1]
+  .rodata                const     0x801'5b20      0x18  Marlin_main.o [1]
+  .rodata                const     0x801'5b38      0x18  Marlin_main.o [1]
+  .rodata                const     0x801'5b50      0x14  Marlin_main.o [1]
+  .rodata                const     0x801'5b64      0x14  Marlin_main.o [1]
+  .rodata                const     0x801'5b78      0x14  Marlin_main.o [1]
+  .text                  ro code   0x801'5b8c      0x12  stm32_it.o [1]
+  .rodata                const     0x801'5ba0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5bb0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5bc0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5bd0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5be0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5bf0      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5c00      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5c10      0x10  Marlin_main.o [1]
+  .rodata                const     0x801'5c20      0x10  Marlin_main.o [1]
+  .text                  ro code   0x801'5c30      0x10  startup_stm32f072.o [1]
+  .rodata                const     0x801'5c40       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c4c       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c58       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c64       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c70       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c7c       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c88       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5c94       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5ca0       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5cac       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5cb8       0xc  Marlin_main.o [1]
+  .rodata                const     0x801'5cc4       0xc  stepper.o [1]
+  .text                  ro code   0x801'5cd0       0xc  cstartup_M.o [5]
+  .rodata                const     0x801'5cdc       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5ce4       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5cec       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5cf4       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5cfc       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d04       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d0c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d14       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d1c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d24       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d2c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d34       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d3c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d44       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d4c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d54       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d5c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d64       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d6c       0x8  Marlin_main.o [1]
+  .rodata                const     0x801'5d74       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d78       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d7c       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d80       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d84       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d88       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d8c       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d90       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d94       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d98       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5d9c       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5da0       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5da4       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5da8       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5dac       0x4  Marlin_main.o [1]
+  .rodata                const     0x801'5db0       0x4  temperature.o [1]
+  SHT$$PREINIT_ARRAY               0x801'5db4       0x0  <Block>
+  SHT$$INIT_ARRAY                  0x801'5db4       0x4  <Block>
+    .init_array          const     0x801'5db4       0x4  Marlin_main.o [1]
+  __iar_tls$$INIT_ARRAY            0x801'5db8       0x0  <Block>
+  .rodata                const     0x801'5db8       0x0  zero_init3.o [5]
+  .rodata                const     0x801'5db8       0x0  lz77_init_single.o [5]
+  Initializer bytes      const     0x801'5db8     0x179  <for P2-1>
+                                 - 0x801'5f31  0x1'3e71
+
+Absolute sections, part 2 of 4:                   0x400
+  .noinit                uninit    0x801'fc00     0x400  Platform.o [1]
+                                 - 0x802'0000     0x400
+
+Absolute sections, part 3 of 4:                     0x4
+  .noinit                uninit   0x2000'0400       0x4  Main.o [1]
+                                - 0x2000'0404       0x4
+
+Absolute sections, part 4 of 4:                     0x8
+  .noinit                uninit   0x2000'0410       0x8  port.o [1]
+                                - 0x2000'0418       0x8
+
+"P2", part 1 of 3:                                0x749
+  P2-1                            0x2000'0418     0x749  <Init block>
+    .data                inited   0x2000'0418      0x60  Marlin_main.o [1]
+    .data                inited   0x2000'0478      0x80  Marlin_main.o [1]
+    .data                inited   0x2000'04f8      0x7c  Marlin_main.o [1]
+    .data                inited   0x2000'0574       0x8  Marlin_main.o [1]
+    .data                inited   0x2000'057c       0x4  Marlin_main.o [1]
+    .data                inited   0x2000'0580       0xc  Marlin_main.o [1]
+    .data                inited   0x2000'058c      0x14  planner.o [1]
+    .data                inited   0x2000'05a0      0x10  port.o [1]
+    .data                inited   0x2000'05b0      0x94  port.o [1]
+    .data                inited   0x2000'0644      0x10  port.o [1]
+    .data                inited   0x2000'0654      0x10  port.o [1]
+    .data                inited   0x2000'0664       0xc  port.o [1]
+    .data                inited   0x2000'0670      0x54  stepper.o [1]
+    .data                inited   0x2000'06c4      0x10  stm32f0xx_rcc.o [1]
+    .data                inited   0x2000'06d4      0xa8  temperature.o [1]
+    .data                inited   0x2000'077c      0x60  temperature.o [1]
+    .data                inited   0x2000'07dc     0x10c  temperature.o [1]
+    .data                inited   0x2000'08e8      0x14  usbd_cdc_core.o [1]
+    .data                inited   0x2000'08fc      0x24  usbd_cdc_core.o [1]
+    .data                inited   0x2000'0920       0xa  usbd_cdc_vcp.o [1]
+    .data                inited   0x2000'092c      0x14  usbd_cdc_vcp.o [1]
+    .data                inited   0x2000'0940      0x1c  usbd_core.o [1]
+    .data                inited   0x2000'095c       0x4  usbd_core.o [1]
+    .data                inited   0x2000'0960      0x28  usbd_desc.o [1]
+    .data                inited   0x2000'0988      0x1c  usbd_desc.o [1]
+    .data                inited   0x2000'09a4     0x17c  usbd_usr.o [1]
+    .data                inited   0x2000'0b20      0x38  wifi.o [1]
+    .data                inited   0x2000'0b58       0x4  Platform.o [1]
+    .data                inited   0x2000'0b5c       0x1  port.o [1]
+    .data                inited   0x2000'0b5d       0x1  port.o [1]
+    .data                inited   0x2000'0b5e       0x1  port.o [1]
+    .data                inited   0x2000'0b5f       0x1  port.o [1]
+    .data                inited   0x2000'0b60       0x1  port.o [1]
+                                - 0x2000'0b61     0x749
+
+"P2", part 2 of 3:                               0x1db4
+  .bss                   zero     0x2000'0b68     0x6b0  Marlin_main.o [1]
+  .bss                   zero     0x2000'1218     0x600  Marlin_main.o [1]
+  .bss                   zero     0x2000'1818     0x580  planner.o [1]
+  .bss                   zero     0x2000'1d98     0x268  ff.o [1]
+  .bss                   zero     0x2000'2000     0x200  ff.o [1]
+  .bss                   zero     0x2000'2200     0x118  usbd_cdc_core.o [1]
+  .bss                   zero     0x2000'2318     0x108  MarlinSerial.o [1]
+  .bss                   zero     0x2000'2420     0x100  Platform.o [1]
+  .bss                   zero     0x2000'2520     0x100  Platform.o [1]
+  .bss                   zero     0x2000'2620      0x7c  planner.o [1]
+  .bss                   zero     0x2000'269c      0x58  SPI_MSD0_Driver.o [1]
+  .bss                   zero     0x2000'26f4      0x40  cardreader.o [1]
+  .bss                   zero     0x2000'2734      0x40  usbd_cdc_core.o [1]
+  .bss                   zero     0x2000'2774      0x40  usbd_req.o [1]
+  .bss                   zero     0x2000'27b4      0x34  port.o [1]
+  .bss                   zero     0x2000'27e8      0x28  Platform.o [1]
+  .bss                   zero     0x2000'2810      0x20  usbd_cdc_vcp.o [1]
+  .bss                   zero     0x2000'2830      0x20  wifi.o [1]
+  .bss                   zero     0x2000'2850      0x20  wifi.o [1]
+  .bss                   zero     0x2000'2870      0x20  wifi.o [1]
+  .bss                   zero     0x2000'2890      0x18  Marlin_main.o [1]
+  .bss                   zero     0x2000'28a8      0x14  temperature.o [1]
+  .bss                   zero     0x2000'28bc      0x10  planner.o [1]
+  .bss                   zero     0x2000'28cc       0xc  Platform.o [1]
+  .bss                   zero     0x2000'28d8       0x8  usbd_pwr.o [1]
+  .bss                   zero     0x2000'28e0       0x8  usbd_req.o [1]
+  .bss                   zero     0x2000'28e8       0x4  Marlin_main.o [1]
+  .bss                   zero     0x2000'28ec       0x4  Marlin_main.o [1]
+  .bss                   zero     0x2000'28f0       0x4  Marlin_main.o [1]
+  .bss                   zero     0x2000'28f4       0x4  port.o [1]
+  .bss                   zero     0x2000'28f8       0x4  port.o [1]
+  .bss                   zero     0x2000'28fc       0x4  port.o [1]
+  .bss                   zero     0x2000'2900       0x4  usb_dcd.o [1]
+  .bss                   zero     0x2000'2904       0x2  port.o [1]
+  .bss                   zero     0x2000'2906       0x2  port.o [1]
+  .bss                   zero     0x2000'2908       0x2  port.o [1]
+  .bss                   zero     0x2000'290a       0x1  cardreader.o [1]
+  .bss                   zero     0x2000'290b       0x1  Main.o [1]
+  .bss                   zero     0x2000'290c       0x1  Marlin_main.o [1]
+  .bss                   zero     0x2000'290d       0x1  Marlin_main.o [1]
+  .bss                   zero     0x2000'290e       0x1  Marlin_main.o [1]
+  .bss                   zero     0x2000'290f       0x1  MarlinSerial.o [1]
+  .bss                   zero     0x2000'2910       0x1  SPI_MSD0_Driver.o [1]
+  .bss                   zero     0x2000'2911       0x1  SPI_MSD0_Driver.o [1]
+  .bss                   zero     0x2000'2912       0x1  temperature.o [1]
+  .bss                   zero     0x2000'2913       0x1  usb_bsp.o [1]
+  .bss                   zero     0x2000'2914       0x1  usbd_cdc_vcp.o [1]
+                                - 0x2000'2915    0x1db1
+
+"P2", part 3 of 3:                                0x800
+  CSTACK                          0x2000'2918     0x800  <Block>
+    CSTACK               uninit   0x2000'2918     0x800  <Block tail>
+                                - 0x2000'3118     0x800
+
+Unused ranges:
+
+         From           To    Size
+         ----           --    ----
+   0x801'5f31   0x801'fbff  0x9ccf
+  0x2000'0100  0x2000'03ff   0x300
+  0x2000'0404  0x2000'040f     0xc
+  0x2000'0b61  0x2000'0b63     0x3
+  0x2000'3118  0x2000'3fff   0xee8
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+          Address      Size
+          -------      ----
+Zero (__iar_zero_init3)
+    1 destination range, total size 0x1dad:
+          0x2000'0b68  0x1dad
+
+Copy/lz77 (__iar_lz77_init_single3)
+    1 source range, total size 0x179 (20% of destination):
+           0x801'5db8   0x179
+    1 destination range, total size 0x749:
+          0x2000'0418   0x749
+
+Extra (__iar_cstart_call_ctors)
+
+
+*******************************************************************************
+*** STACK USAGE
+***
+
+  Call Graph Root Category  Max Use  Total Use
+  ------------------------  -------  ---------
+  Program entry              1'376      1'376
+  Uncalled function            188      1'412
+
+
+Program entry
+  "__iar_program_start": 0x801'5cd1
+
+  Maximum call chain                            *?* 1'376  bytes
+    (** call graph contains recursive functions (example: "MarlinSerial::print(long, int)")
+                            indirect calls (example: "USBD_Init") **)
+
+    "__iar_program_start"                               0
+    "__cmain"                                           0
+    "main"                                             32
+    "update_LCD()"                                    752
+    "f_open"                                          120
+    "dir_register" in ff.o [1]                        120
+    "dir_find" in ff.o [1]                             48
+    "dir_read" in ff.o [1]                             48
+    "load_xdir" in ff.o [1]                            24
+    "dir_next" in ff.o [1]                             32
+    "create_chain" in ff.o [1]                         32
+    "find_bitmap" in ff.o [1]                          40
+    "move_window" in ff.o [1]                          16
+    "disk_read"                                         8
+    "MSD0_ReadSingleBlock"                             16
+    "SD_ReadBlock"                                     32
+    "SD_SendCmd"                                       24
+    "SD_WriteByte"                                      8
+    "MSD0_spi_read_write"                              24
+    "SPI_I2S_GetFlagStatus"                             0
+
+Uncalled function
+  "DMA1_Channel1_IRQHandler": 0x800'cf7d
+
+  Maximum call chain                               32  bytes
+
+    "DMA1_Channel1_IRQHandler"                     32
+    "DMA_ClearITPendingBit"                         0
+
+Uncalled function
+  "DMA1_Channel4_5_6_7_IRQHandler": 0x800'd301
+
+  Maximum call chain                                8  bytes
+
+    "DMA1_Channel4_5_6_7_IRQHandler"                8
+    "DMA_ClearITPendingBit"                         0
+
+Uncalled function
+  "SysTick_Handler": 0x800'cd39
+
+  Maximum call chain                               24  bytes
+
+    "SysTick_Handler"                              24
+    "GPIO_ReadInputDataBit"                         0
+
+Uncalled function
+  "TIM1_BRK_UP_TRG_COM_IRQHandler": 0x800'd093
+
+  Maximum call chain                              120  bytes
+
+    "TIM1_BRK_UP_TRG_COM_IRQHandler"                8
+    "stepper_timer()"                              32
+    "enqueuecommands_P(char const *)"               8
+    "[local to Marlin_main_cpp]::drain_queued_commands_P()" in Marlin_main.o [1]
+                                                   56
+    "enqueuecommand(char const *)"                 16
+    "__iar_small_strcpy"                            0
+
+Uncalled function
+  "TIM2_IRQHandler": 0x800'd111
+
+  Maximum call chain                            *?* 188  bytes
+    (** call graph contains recursive functions (example: "MarlinSerial::print(long, int)") **)
+
+    "TIM2_IRQHandler"                                 8
+    "extruder_timer_exec()"                          24
+    "max_temp_error(unsigned char)"                   8
+    "_temp_error(int, char const *, char const *)"
+                                                     24
+    "MarlinSerial::print(int, int)"                   8
+    "MarlinSerial::print(long, int)"                 16
+    "MarlinSerial::write(unsigned char)"             16
+    "CDC_Send_DATA"                                  32
+    "DCD_EP_Tx"                                      24
+    "SetEPDblBuffCount"                              28
+
+Uncalled function
+  "TIM3_IRQHandler": 0x800'd0c1
+
+  Maximum call chain                                8  bytes
+
+    "TIM3_IRQHandler"                               8
+
+Uncalled function
+  "USART1_IRQHandler": 0x800'd34d
+
+  Maximum call chain                               36  bytes
+
+    "USART1_IRQHandler"                            24
+    "USART_GetITStatus"                            12
+
+Uncalled function
+  "EXTI4_15_IRQHandler": 0x801'5b9d
+
+  Maximum call chain                                0  bytes
+
+    "EXTI4_15_IRQHandler"                           0
+
+Uncalled function
+  "HardFault_Handler": 0x801'5b8f
+
+  Maximum call chain                                0  bytes
+
+    "HardFault_Handler"                             0
+
+Uncalled function
+  "NMI_Handler": 0x801'5b8d
+
+  Maximum call chain                                0  bytes
+
+    "NMI_Handler"                                   0
+
+Uncalled function
+  "PendSV_Handler": 0x801'5b93
+
+  Maximum call chain                                0  bytes
+
+    "PendSV_Handler"                                0
+
+Uncalled function
+  "SVC_Handler": 0x801'5b91
+
+  Maximum call chain                                0  bytes
+
+    "SVC_Handler"                                   0
+
+Uncalled function
+  "USB_IRQHandler": 0x801'5b95
+
+  Maximum call chain                            *?* 116  bytes
+    (** call graph contains indirect calls (example: "USB_Istr") **)
+
+    "USB_IRQHandler"                                  8
+    "USB_Istr"                                       24
+    "CTR"                                            32
+    "DCD_EP_Tx"                                      24
+    "SetEPDblBuffCount"                              28
+
+Uncalled function
+  "SystemInit": 0x801'54c5
+
+  Maximum call chain                                0  bytes
+
+    "SystemInit"                                    0
+
+Uncalled function
+  "USBD_cdc_GetCfgDesc" in usbd_cdc_core.o [1]: 0x801'496d
+
+  Maximum call chain                                0  bytes
+
+    "USBD_cdc_GetCfgDesc" in usbd_cdc_core.o [1]
+                                                    0
+
+Uncalled function
+  "usbd_cdc_DataIn": 0x801'486b
+
+  Maximum call chain                               68  bytes
+
+    "usbd_cdc_DataIn"                              16
+    "DCD_EP_Tx"                                    24
+    "SetEPDblBuffCount"                            28
+
+Uncalled function
+  "usbd_cdc_DataOut": 0x801'48c3
+
+  Maximum call chain                            *?* 60  bytes
+    (** call graph contains indirect calls (example: "usbd_cdc_DataOut") **)
+
+    "usbd_cdc_DataOut"                              16
+    "DCD_EP_PrepareRx"                              16
+    "SetEPDblBuffCount"                             28
+
+Uncalled function
+  "usbd_cdc_DeInit": 0x801'4781
+
+  Maximum call chain                            *?* 24  bytes
+    (** call graph contains indirect calls (example: "usbd_cdc_DeInit") **)
+
+    "usbd_cdc_DeInit"                                8
+    "DCD_EP_Close"                                   8
+    "SetEPRxStatus"                                  8
+
+Uncalled function
+  "usbd_cdc_EP0_RxReady": 0x801'484d
+
+  Maximum call chain                            *?* 8  bytes
+    (** call graph contains indirect calls (example: "usbd_cdc_EP0_RxReady") **)
+
+    "usbd_cdc_EP0_RxReady"                          8
+
+Uncalled function
+  "usbd_cdc_Init": 0x801'471d
+
+  Maximum call chain                            *?* 52  bytes
+    (** call graph contains indirect calls (example: "usbd_cdc_Init") **)
+
+    "usbd_cdc_Init"                                  8
+    "DCD_EP_PrepareRx"                              16
+    "SetEPDblBuffCount"                             28
+
+Uncalled function
+  "usbd_cdc_SOF": 0x801'48ed
+
+  Maximum call chain                               84  bytes
+
+    "usbd_cdc_SOF"                                 32
+    "DCD_EP_Tx"                                    24
+    "SetEPDblBuffCount"                            28
+
+Uncalled function
+  "usbd_cdc_Setup": 0x801'47a5
+
+  Maximum call chain                            *?* 84  bytes
+    (** call graph contains indirect calls (example: "usbd_cdc_Setup") **)
+
+    "usbd_cdc_Setup"                                24
+    "USBD_CtlSendData"                               8
+    "DCD_EP_Tx"                                     24
+    "SetEPDblBuffCount"                             28
+
+Uncalled function
+  "VCP_Ctrl" in usbd_cdc_vcp.o [1]: 0x801'0f19
+
+  Maximum call chain                               20  bytes
+
+    "VCP_Ctrl" in usbd_cdc_vcp.o [1]                8
+    "store_char_usb"                               12
+
+Uncalled function
+  "VCP_DataRx" in usbd_cdc_vcp.o [1]: 0x801'1069
+
+  Maximum call chain                               28  bytes
+
+    "VCP_DataRx" in usbd_cdc_vcp.o [1]             16
+    "store_char_usb"                               12
+
+Uncalled function
+  "VCP_DataTx" in usbd_cdc_vcp.o [1]: 0x801'0f8d
+
+  Maximum call chain                                0  bytes
+
+    "VCP_DataTx" in usbd_cdc_vcp.o [1]              0
+
+Uncalled function
+  "VCP_DeInit" in usbd_cdc_vcp.o [1]: 0x801'0f15
+
+  Maximum call chain                                0  bytes
+
+    "VCP_DeInit" in usbd_cdc_vcp.o [1]              0
+
+Uncalled function
+  "VCP_Init" in usbd_cdc_vcp.o [1]: 0x801'0f11
+
+  Maximum call chain                                0  bytes
+
+    "VCP_Init" in usbd_cdc_vcp.o [1]                0
+
+Uncalled function
+  "USBD_DataInStage" in usbd_core.o [1]: 0x801'3127
+
+  Maximum call chain                            *?* 84  bytes
+    (** call graph contains indirect calls (example: "USBD_DataInStage" in usbd_core.o [1]) **)
+
+    "USBD_DataInStage" in usbd_core.o [1]           24
+    "USBD_CtlContinueSendData"                       8
+    "DCD_EP_Tx"                                     24
+    "SetEPDblBuffCount"                             28
+
+Uncalled function
+  "USBD_DataOutStage" in usbd_core.o [1]: 0x801'30bb
+
+  Maximum call chain                            *?* 68  bytes
+    (** call graph contains indirect calls (example: "USBD_DataOutStage" in usbd_core.o [1]) **)
+
+    "USBD_DataOutStage" in usbd_core.o [1]           8
+    "USBD_CtlSendStatus"                             8
+    "DCD_EP_Tx"                                     24
+    "SetEPDblBuffCount"                             28
+
+Uncalled function
+  "USBD_Reset" in usbd_core.o [1]: 0x801'31cd
+
+  Maximum call chain                            *?* 40  bytes
+    (** call graph contains indirect calls (example: "USBD_Reset" in usbd_core.o [1]) **)
+
+    "USBD_Reset" in usbd_core.o [1]                  8
+    "DCD_EP_Open"                                   16
+    "SetEPDblBuffAddr"                              16
+
+Uncalled function
+  "USBD_Resume" in usbd_core.o [1]: 0x801'3215
+
+  Maximum call chain                            *?* 8  bytes
+    (** call graph contains indirect calls (example: "USBD_Resume" in usbd_core.o [1]) **)
+
+    "USBD_Resume" in usbd_core.o [1]                8
+
+Uncalled function
+  "USBD_SOF" in usbd_core.o [1]: 0x801'3243
+
+  Maximum call chain                            *?* 8  bytes
+    (** call graph contains indirect calls (example: "USBD_SOF" in usbd_core.o [1]) **)
+
+    "USBD_SOF" in usbd_core.o [1]                   8
+
+Uncalled function
+  "USBD_SetupStage" in usbd_core.o [1]: 0x801'3059
+
+  Maximum call chain                            *?* 108  bytes
+    (** call graph contains indirect calls (example: "USBD_StdDevReq") **)
+
+    "USBD_SetupStage" in usbd_core.o [1]             16
+    "USBD_StdDevReq"                                 32
+    "USBD_CtlSendData"                                8
+    "DCD_EP_Tx"                                      24
+    "SetEPDblBuffCount"                              28
+
+Uncalled function
+  "USBD_Suspend" in usbd_core.o [1]: 0x801'322b
+
+  Maximum call chain                            *?* 8  bytes
+    (** call graph contains indirect calls (example: "USBD_Suspend" in usbd_core.o [1]) **)
+
+    "USBD_Suspend" in usbd_core.o [1]               8
+
+Uncalled function
+  "USBD_USR_ConfigStrDescriptor": 0x801'35b5
+
+  Maximum call chain                               24  bytes
+
+    "USBD_USR_ConfigStrDescriptor"                  8
+    "USBD_GetString"                               16
+
+Uncalled function
+  "USBD_USR_DeviceDescriptor": 0x801'357d
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_DeviceDescriptor"                     0
+
+Uncalled function
+  "USBD_USR_ExtCompatIDFeatureDescriptor": 0x801'35dd
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_ExtCompatIDFeatureDescriptor"         0
+
+Uncalled function
+  "USBD_USR_ExtPropertiesFeatureDescriptor": 0x801'35d5
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_ExtPropertiesFeatureDescriptor"       0
+
+Uncalled function
+  "USBD_USR_InterfaceStrDescriptor": 0x801'35c1
+
+  Maximum call chain                               24  bytes
+
+    "USBD_USR_InterfaceStrDescriptor"               8
+    "USBD_GetString"                               16
+
+Uncalled function
+  "USBD_USR_LangIDStrDescriptor": 0x801'3585
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_LangIDStrDescriptor"                  0
+
+Uncalled function
+  "USBD_USR_ManufacturerStrDescriptor": 0x801'3599
+
+  Maximum call chain                               24  bytes
+
+    "USBD_USR_ManufacturerStrDescriptor"            8
+    "USBD_GetString"                               16
+
+Uncalled function
+  "USBD_USR_OSStrDescriptor": 0x801'35cd
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_OSStrDescriptor"                      0
+
+Uncalled function
+  "USBD_USR_ProductStrDescriptor": 0x801'358d
+
+  Maximum call chain                               24  bytes
+
+    "USBD_USR_ProductStrDescriptor"                 8
+    "USBD_GetString"                               16
+
+Uncalled function
+  "USBD_USR_SerialStrDescriptor": 0x801'35ab
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_SerialStrDescriptor"                  0
+
+Uncalled function
+  "USBD_USR_DeviceConfigured": 0x801'148b
+
+  Maximum call chain                                8  bytes
+
+    "USBD_USR_DeviceConfigured"                     8
+
+Uncalled function
+  "USBD_USR_DeviceReset": 0x801'1473
+
+  Maximum call chain                                8  bytes
+
+    "USBD_USR_DeviceReset"                          8
+
+Uncalled function
+  "USBD_USR_DeviceResumed": 0x801'14d1
+
+  Maximum call chain                                0  bytes
+
+    "USBD_USR_DeviceResumed"                        0
+
+Uncalled function
+  "USBD_USR_DeviceSuspended": 0x801'14cd
+
+  Maximum call chain                                8  bytes
+
+    "USBD_USR_DeviceSuspended"                      8
+
+Uncalled function
+  "USBD_USR_Init": 0x801'146f
+
+  Maximum call chain                                8  bytes
+
+    "USBD_USR_Init"                                 8
+
+The following functions make up recursion nest 0, which has no maximum recursion depth specified:
+
+  "CardReader::printingHasFinished()": 0x800'9639
+  "cancel_print()": 0x800'9b89
+  "get_command()": 0x800'6739
+  "idle()": 0x800'8cd5
+  "line_to_destination(float)": 0x801'0939
+  "manage_inactivity(bool)": 0x800'8ceb
+  "plan_buffer_line(float const &, float const &, float const &, float const &, float, unsigned char)": 0x800'd8b9
+  "prepare_move()": 0x800'88dd
+  "st_synchronize()": 0x800'eb35
+  "wifi_process()": 0x800'9ea9
+  "wifi_update()": 0x800'a6d9
+
+The following functions make up recursion nest 1, which has no maximum recursion depth specified:
+
+  "MarlinSerial::print(char, int)": 0x800'97fd
+  "MarlinSerial::print(long, int)": 0x800'981d
+  "MarlinSerial::printNumber(unsigned long, unsigned char)": 0x800'987d
+
+The following functions perform unknown indirect calls:
+
+  "CTR": 0x801'42f5
+  "USBD_ClrCfg": 0x801'326f
+  "USBD_DataInStage" in usbd_core.o [1]: 0x801'3127
+  "USBD_DataOutStage" in usbd_core.o [1]: 0x801'30bb
+  "USBD_Init": 0x801'3021
+  "USBD_Reset" in usbd_core.o [1]: 0x801'31cd
+  "USBD_Resume" in usbd_core.o [1]: 0x801'3215
+  "USBD_SOF" in usbd_core.o [1]: 0x801'3243
+  "USBD_SetCfg": 0x801'3257
+  "USBD_StdDevReq": 0x801'36b5
+  "USBD_StdEPReq": 0x801'395d
+  "USBD_StdItfReq": 0x801'391d
+  "USBD_Suspend" in usbd_core.o [1]: 0x801'322b
+  "USBD_VendDevReq": 0x801'38bd
+  "USB_Istr": 0x801'4561
+  "process_next_command()": 0x800'74d5
+  "usbd_cdc_DataOut": 0x801'48c3
+  "usbd_cdc_DeInit": 0x801'4781
+  "usbd_cdc_EP0_RxReady": 0x801'484d
+  "usbd_cdc_Init": 0x801'471d
+  "usbd_cdc_Setup": 0x801'47a5
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module                 ro code  ro data  rw data  ro data  rw data
+                                                       (abs)    (abs)
+    ------                 -------  -------  -------  -------  -------
+command line/config:
+    ------------------------------------------------------------------
+    Total:
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj: [1]
+    Main.o                   1'048                 1                 4
+    MarlinSerial.o             640               265
+    Marlin_main.o           14'608    2'053    3'659
+    Platform.o               1'800               568             1'024
+    SPI_MSD0_Driver.o        2'658      512       90
+    cardreader.o             2'244       68       65
+    ccsbcs.o                 1'384      988
+    configuration_store.o    4'080      640
+    diskio.o                   228
+    ff.o                    11'508             1'128
+    planner.o                3'450        4    1'568
+    port.o                     492      128      283        4        8
+    sd.o                       204
+    startup_stm32f072.o        210
+    stepper.o                3'328       29       84
+    stm32_it.o                  18
+    stm32f0xx_adc.o            272
+    stm32f0xx_dma.o            264
+    stm32f0xx_flash.o          252
+    stm32f0xx_gpio.o           168
+    stm32f0xx_iwdg.o            56
+    stm32f0xx_misc.o           112
+    stm32f0xx_pwr.o             32
+    stm32f0xx_rcc.o            712        3       16
+    stm32f0xx_spi.o            146
+    stm32f0xx_syscfg.o          48
+    stm32f0xx_tim.o            166
+    stm32f0xx_usart.o          448
+    system_stm32f0xx.o         148
+    temperature.o            4'960      812      553
+    usb_bsp.o                  286                 1
+    usb_core.o                 808
+    usb_dcd.o                  972                 4
+    usb_dcd_int.o              868
+    usbd_cdc_core.o            620       79      400
+    usbd_cdc_vcp.o             370        6       63
+    usbd_core.o                606        7       32
+    usbd_desc.o                312      202       68
+    usbd_ioreq.o                88
+    usbd_pwr.o                 196                 8
+    usbd_req.o               1'012                72
+    usbd_usr.o                 146       76      380
+    wifi.o                   4'412      328      152
+    ------------------------------------------------------------------
+    Total:                  66'380    5'935    9'460        4    1'036
+
+dl6M_tln.a: [2]
+    cppinit.o                   24
+    exit.o                       8
+    iar_Stoflt.o               448
+    iar_Stolx.o                162
+    iar_Stopfx.o               292
+    iar_Stoulx.o               340       80
+    iar_Stoxflt.o              556
+    sprintf.o                   64
+    strcat.o                    28
+    strncat.o                   42
+    strncmp.o                   44
+    strstr.o                    46
+    xprintftiny.o              370
+    xsprout.o                   10
+    ------------------------------------------------------------------
+    Total:                   2'434       80
+
+dlpp6M_tl_nc.a: [3]
+    ------------------------------------------------------------------
+    Total:
+
+m6M_tl.a: [4]
+    DblAddSub.o                436
+    DblCmpEq.o                  36
+    DblCmpGe.o                  50
+    DblCmpLe.o                  50
+    DblDiv.o                   194
+    DblMul.o                   388
+    DblToFlt.o                  98
+    DblToI32.o                  82
+    FltAddSub.o                288
+    FltCmpEq.o                  32
+    FltCmpGe.o                  40
+    FltCmpLe.o                  38
+    FltDiv.o                   170
+    FltMul.o                   176
+    FltToDbl.o                  50
+    FltToS32.o                  58
+    FltToU32.o                  38
+    IxxToDbl.o                  52
+    IxxToFlt.o                  54
+    atan2_32.o                 222
+    ceilf.o                     50
+    cos_sin32.o                624
+    floorf.o                    52
+    hypot32.o                   80
+    iar_Atan32.o               308
+    iar_Hypot32.o              496
+    lround32.o                  56
+    lround64.o                  84
+    round32.o                  152
+    round64.o                  300
+    sqrtf.o                    102
+    strto64.o                1'056       72
+    ------------------------------------------------------------------
+    Total:                   5'912       72
+
+rt6M_tl.a: [5]
+    ABImemcpy.o                 78
+    ABImemset_small.o           16
+    I32DivMod.o                 94
+    I64DivMod.o                106
+    I64Mul.o                    50
+    XXexit.o                    12
+    cexit.o                     10
+    cmain.o                     30
+    cmain_call_ctors.o          32
+    cstartup_M.o                12
+    data_init.o                 40
+    lz77_init_single.o         126
+    memchr.o                    22
+    memset.o                    20
+    strchr.o                    18
+    strcmp_small.o              20
+    strcpy_small.o              16
+    strlen.o                    14
+    strncpy_small.o             34
+    zero_init3.o                60
+    ------------------------------------------------------------------
+    Total:                     810
+
+    Gaps                        52        2        6
+    Linker created                       36    2'048
+----------------------------------------------------------------------
+    Grand Total:            75'588    6'125   11'514        4    1'036
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                       Address    Size  Type      Object
+-----                       -------    ----  ----      ------
+.iar.init_table$$Base    0x801'59ac           --   Gb  - Linker created -
+.iar.init_table$$Limit   0x801'59d0           --   Gb  - Linker created -
+?main                    0x801'5aa9          Code  Gb  cmain.o [5]
+ADC_ChannelConfig        0x801'17c5     0xa  Code  Gb  stm32f0xx_adc.o [1]
+ADC_Cmd                  0x801'179b    0x12  Code  Gb  stm32f0xx_adc.o [1]
+ADC_DMACmd               0x801'1801    0x16  Code  Gb  stm32f0xx_adc.o [1]
+ADC_DMARequestModeConfig
+                         0x801'1817    0x10  Code  Gb  stm32f0xx_adc.o [1]
+ADC_DeInit               0x801'1749    0x1e  Code  Gb  stm32f0xx_adc.o [1]
+ADC_GetCalibrationFactor
+                         0x801'17cf    0x28  Code  Gb  stm32f0xx_adc.o [1]
+ADC_GetFlagStatus        0x801'1827    0x1a  Code  Gb  stm32f0xx_adc.o [1]
+ADC_Init                 0x801'1767    0x24  Code  Gb  stm32f0xx_adc.o [1]
+ADC_StartOfConversion    0x801'17f7     0xa  Code  Gb  stm32f0xx_adc.o [1]
+ADC_StructInit           0x801'178b    0x10  Code  Gb  stm32f0xx_adc.o [1]
+ADC_TempSensorCmd        0x801'17ad    0x18  Code  Gb  stm32f0xx_adc.o [1]
+ADDRESS                 0x2000'28e4     0x4  Data  Gb  usbd_req.o [1]
+AD_Value                0x2000'27ec     0xc  Data  Gb  Platform.o [1]
+AD_Value_avr            0x2000'27f8     0xc  Data  Gb  Platform.o [1]
+APBAHBPrescTable        0x2000'06c4    0x10  Data  Lc  stm32f0xx_rcc.o [1]
+APP_Rx_Buffer           0x2000'2218   0x100  Data  Gb  usbd_cdc_core.o [1]
+APP_Rx_length           0x2000'2210     0x4  Data  Gb  usbd_cdc_core.o [1]
+APP_Rx_ptr_in           0x2000'2208     0x4  Data  Gb  usbd_cdc_core.o [1]
+APP_Rx_ptr_out          0x2000'220c     0x4  Data  Gb  usbd_cdc_core.o [1]
+CDC_Send_DATA            0x801'0fa3    0x5c  Code  Gb  usbd_cdc_vcp.o [1]
+CDC_Send_DATA_str        0x801'0fff    0x56  Code  Gb  usbd_cdc_vcp.o [1]
+CSTACK$$Base            0x2000'2918           --   Gb  - Linker created -
+CSTACK$$Limit           0x2000'3118           --   Gb  - Linker created -
+CTR                      0x801'42f5   0x25a  Code  Gb  usb_dcd_int.o [1]
+CardReader::CardReader()
+                         0x800'8e89    0x2e  Code  Gb  cardreader.o [1]
+CardReader::LcdListFile()
+                         0x800'94f5    0x9e  Code  Gb  cardreader.o [1]
+CardReader::chdir(char const *)
+                         0x800'9621     0x6  Code  Gb  cardreader.o [1]
+CardReader::closefile(bool)
+                         0x800'945d    0x16  Code  Gb  cardreader.o [1]
+CardReader::eof()        0x800'edfd    0x1e  Code  Gb  Marlin_main.o [1]
+CardReader::findautoprint()
+                         0x800'95a1    0x7c  Code  Gb  cardreader.o [1]
+CardReader::getAbsFilename(char *)
+                         0x800'9019    0x5a  Code  Gb  cardreader.o [1]
+CardReader::getStatus()
+                         0x800'9361    0x76  Code  Gb  cardreader.o [1]
+CardReader::getfilename(unsigned short, char const *)
+                         0x800'9473    0x74  Code  Gb  cardreader.o [1]
+CardReader::initsd()     0x800'8f91    0x4c  Code  Gb  cardreader.o [1]
+CardReader::ls()         0x800'8eb7    0x84  Code  Gb  cardreader.o [1]
+CardReader::openFile(char *, bool, bool)
+                         0x800'9091   0x1f8  Code  Gb  cardreader.o [1]
+CardReader::openLogFile(char *)
+                         0x800'9009    0x10  Code  Gb  cardreader.o [1]
+CardReader::pauseSDPrint()
+                         0x800'8ffb     0xe  Code  Gb  cardreader.o [1]
+CardReader::printLongPath(char *)
+                         0x800'8f3d    0x46  Code  Gb  cardreader.o [1]
+CardReader::printingHasFinished()
+                         0x800'9639    0xb6  Code  Gb  cardreader.o [1]
+CardReader::release()    0x800'8fdd     0xa  Code  Gb  cardreader.o [1]
+CardReader::removeFile(char *)
+                         0x800'9355     0xa  Code  Gb  cardreader.o [1]
+CardReader::setIndex(long)
+                         0x800'f821    0x16  Code  Gb  Marlin_main.o [1]
+CardReader::startFileprint()
+                         0x800'8fe7    0x14  Code  Gb  cardreader.o [1]
+CardReader::write_command(char *)
+                         0x800'940d    0x50  Code  Gb  cardreader.o [1]
+ClearDTOG_RX             0x801'29f9    0x1a  Code  Gb  usb_core.o [1]
+ClearDTOG_TX             0x801'2a19    0x1a  Code  Gb  usb_core.o [1]
+CmdBuff                 0x2000'08f4     0x8  Data  Gb  usbd_cdc_core.o [1]
+Config_PrintSettings(bool)
+                         0x800'b3f9   0x690  Code  Gb  configuration_store.o [1]
+Config_ResetDefault()    0x800'b255    0xf0  Code  Gb  configuration_store.o [1]
+Config_RetrieveSettings(bool)
+                         0x800'aedd   0x2fa  Code  Gb  configuration_store.o [1]
+Config_StoreSettings()   0x800'ab89   0x2ae  Code  Gb  configuration_store.o [1]
+DCD_DevConnect           0x801'2fe1    0x10  Code  Gb  usb_dcd.o [1]
+DCD_DevDisconnect        0x801'2ff1    0x10  Code  Gb  usb_dcd.o [1]
+DCD_EP_Close             0x801'2db1    0x7e  Code  Gb  usb_dcd.o [1]
+DCD_EP_ClrStall          0x801'2f6d    0x48  Code  Gb  usb_dcd.o [1]
+DCD_EP_Open              0x801'2cb9    0xf8  Code  Gb  usb_dcd.o [1]
+DCD_EP_PrepareRx         0x801'2e2f    0x58  Code  Gb  usb_dcd.o [1]
+DCD_EP_SetAddress        0x801'2fb5    0x2c  Code  Gb  usb_dcd.o [1]
+DCD_EP_Stall             0x801'2f11    0x56  Code  Gb  usb_dcd.o [1]
+DCD_EP_Tx                0x801'2e87    0x8a  Code  Gb  usb_dcd.o [1]
+DCD_Init                 0x801'2c55    0x34  Code  Gb  usb_dcd.o [1]
+DCD_PMA_Config           0x801'2c89    0x30  Code  Gb  usb_dcd.o [1]
+DEFAULT_AXIS_STEPS_PER_UNIT
+                        0x2000'05e4    0x10  Data  Gb  port.o [1]
+DEFAULT_MAX_ACCELERATION
+                        0x2000'0654    0x10  Data  Gb  port.o [1]
+DEFAULT_MAX_FEEDRATE    0x2000'0644    0x10  Data  Gb  port.o [1]
+DIO100_PIN              0x2000'05bc     0x2  Data  Gb  port.o [1]
+DIO100_PORT             0x2000'05f4     0x4  Data  Gb  port.o [1]
+DIO101_PIN              0x2000'05be     0x2  Data  Gb  port.o [1]
+DIO101_PORT             0x2000'05f8     0x4  Data  Gb  port.o [1]
+DIO102_PIN              0x2000'05c0     0x2  Data  Gb  port.o [1]
+DIO102_PORT             0x2000'05fc     0x4  Data  Gb  port.o [1]
+DIO103_PIN              0x2000'05c2     0x2  Data  Gb  port.o [1]
+DIO103_PORT             0x2000'0600     0x4  Data  Gb  port.o [1]
+DIO104_PIN              0x2000'05c4     0x2  Data  Gb  port.o [1]
+DIO104_PORT             0x2000'0604     0x4  Data  Gb  port.o [1]
+DIO105_PIN              0x2000'05c6     0x2  Data  Gb  port.o [1]
+DIO105_PORT             0x2000'0608     0x4  Data  Gb  port.o [1]
+DIO106_PIN              0x2000'05c8     0x2  Data  Gb  port.o [1]
+DIO106_PORT             0x2000'060c     0x4  Data  Gb  port.o [1]
+DIO107_PIN              0x2000'05ca     0x2  Data  Gb  port.o [1]
+DIO107_PORT             0x2000'0610     0x4  Data  Gb  port.o [1]
+DIO108_PIN              0x2000'05cc     0x2  Data  Gb  port.o [1]
+DIO108_PORT             0x2000'0614     0x4  Data  Gb  port.o [1]
+DIO109_PIN              0x2000'05ce     0x2  Data  Gb  port.o [1]
+DIO109_PORT             0x2000'0618     0x4  Data  Gb  port.o [1]
+DIO110_PIN              0x2000'05d0     0x2  Data  Gb  port.o [1]
+DIO110_PORT             0x2000'061c     0x4  Data  Gb  port.o [1]
+DIO111_PIN              0x2000'05d2     0x2  Data  Gb  port.o [1]
+DIO111_PORT             0x2000'0620     0x4  Data  Gb  port.o [1]
+DIO112_PIN              0x2000'05d4     0x2  Data  Gb  port.o [1]
+DIO112_PORT             0x2000'0624     0x4  Data  Gb  port.o [1]
+DIO113_PIN              0x2000'05d6     0x2  Data  Gb  port.o [1]
+DIO113_PORT             0x2000'0628     0x4  Data  Gb  port.o [1]
+DIO114_PIN              0x2000'05d8     0x2  Data  Gb  port.o [1]
+DIO114_PORT             0x2000'062c     0x4  Data  Gb  port.o [1]
+DIO115_PIN              0x2000'05da     0x2  Data  Gb  port.o [1]
+DIO115_PORT             0x2000'0630     0x4  Data  Gb  port.o [1]
+DIO116_PIN              0x2000'05dc     0x2  Data  Gb  port.o [1]
+DIO116_PORT             0x2000'0634     0x4  Data  Gb  port.o [1]
+DIO117_PIN              0x2000'05de     0x2  Data  Gb  port.o [1]
+DIO117_PORT             0x2000'0638     0x4  Data  Gb  port.o [1]
+DIO118_PIN              0x2000'05e0     0x2  Data  Gb  port.o [1]
+DIO118_PORT             0x2000'063c     0x4  Data  Gb  port.o [1]
+DIO119_PIN              0x2000'05e2     0x2  Data  Gb  port.o [1]
+DIO119_PORT             0x2000'0640     0x4  Data  Gb  port.o [1]
+DIO120_PIN              0x2000'2904     0x2  Data  Gb  port.o [1]
+DIO120_PORT             0x2000'28f4     0x4  Data  Gb  port.o [1]
+DIO121_PIN              0x2000'2906     0x2  Data  Gb  port.o [1]
+DIO121_PORT             0x2000'28f8     0x4  Data  Gb  port.o [1]
+DIO122_PIN              0x2000'2908     0x2  Data  Gb  port.o [1]
+DIO122_PORT             0x2000'28fc     0x4  Data  Gb  port.o [1]
+DMA1_Channel1_IRQHandler
+                         0x800'cf7d    0x8e  Code  Gb  Platform.o [1]
+DMA1_Channel4_5_6_7_IRQHandler
+                         0x800'd301    0x2a  Code  Gb  Platform.o [1]
+DMA_ClearFlag            0x801'192d     0x6  Code  Gb  stm32f0xx_dma.o [1]
+DMA_ClearITPendingBit    0x801'1947     0x6  Code  Gb  stm32f0xx_dma.o [1]
+DMA_Cmd                  0x801'1905    0x14  Code  Gb  stm32f0xx_dma.o [1]
+DMA_DeInit               0x801'1859    0x76  Code  Gb  stm32f0xx_dma.o [1]
+DMA_GetFlagStatus        0x801'192b     0x2  Code  Gb  stm32f0xx_dma.o [1]
+DMA_GetITStatus          0x801'1935     0x2  Code  Gb  stm32f0xx_dma.o [1]
+DMA_ITConfig             0x801'1919    0x12  Code  Gb  stm32f0xx_dma.o [1]
+DMA_Init                 0x801'18cf    0x36  Code  Gb  stm32f0xx_dma.o [1]
+DirBuf                  0x2000'1da0   0x260  Data  Lc  ff.o [1]
+Dtentox                  0x800'eed5   0x214  Code  Lc  strto64.o [4]
+EXTI4_15_IRQHandler      0x801'5b9d     0x2  Code  Gb  stm32_it.o [1]
+EXTRUDERS               0x2000'05b1     0x1  Data  Gb  port.o [1]
+EndBuild()               0x800'9b61    0x1c  Code  Gb  wifi.o [1]
+ExCvt                    0x800'37f4    0x80  Data  Lc  ff.o [1]
+FLASH_ClearFlag          0x801'1a03     0x6  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_ErasePage          0x801'197f    0x38  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_GetStatus          0x801'1a09    0x28  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_Lock               0x801'1973     0xc  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_OB_GetWRP          0x801'19fd     0x6  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_ProgramHalfWord    0x801'19b7    0x32  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_Unlock             0x801'1961    0x12  Code  Gb  stm32f0xx_flash.o [1]
+FLASH_WaitForLastOperation
+                         0x801'1a3d    0x20  Code  Gb  stm32f0xx_flash.o [1]
+FatFs                   0x2000'1d9c     0x4  Data  Lc  ff.o [1]
+FlushSerialRequestResend()
+                         0x800'881d    0x28  Code  Gb  Marlin_main.o [1]
+FreeUserBuffer           0x801'2bcd    0x24  Code  Gb  usb_core.o [1]
+Fsid                    0x2000'1d98     0x2  Data  Lc  ff.o [1]
+GPIO_Init                0x800'6311    0x6a  Code  Gb  stm32f0xx_gpio.o [1]
+GPIO_PinAFConfig         0x800'6397    0x22  Code  Gb  stm32f0xx_gpio.o [1]
+GPIO_ReadInputDataBit    0x800'637b     0x8  Code  Gb  stm32f0xx_gpio.o [1]
+GPIO_ReadInputDataBit_filtered
+                         0x801'01c5    0x1e  Code  Gb  port.o [1]
+GPIO_WriteBit            0x800'638b     0xc  Code  Gb  stm32f0xx_gpio.o [1]
+GetENDPOINT              0x801'2943     0xa  Code  Gb  usb_core.o [1]
+GetEPDblBuf0Count        0x801'2b95     0x2  Code  Gb  usb_core.o [1]
+GetEPDblBuf1Count        0x801'2bb5     0xe  Code  Gb  usb_core.o [1]
+GetEPRxCount             0x801'2a9d     0xe  Code  Gb  usb_core.o [1]
+GetEPTxCount             0x801'2a9b     0x2  Code  Gb  usb_core.o [1]
+GetEPTxStatus            0x801'29b7     0xc  Code  Gb  usb_core.o [1]
+Get_SerialNum            0x801'35e5    0x26  Code  Gb  usbd_desc.o [1]
+HSE_failed               0x801'345d    0x5a  Code  Gb  usb_bsp.o [1]
+HWVER                   0x2000'0410     0x8  Data  Gb  port.o [1]
+HardFault_Handler        0x801'5b8f     0x2  Code  Gb  stm32_it.o [1]
+IWDG_Enable              0x800'f803     0x8  Code  Gb  stm32f0xx_iwdg.o [1]
+IWDG_ReloadCounter       0x800'f7fb     0x8  Code  Gb  stm32f0xx_iwdg.o [1]
+IWDG_SetPrescaler        0x800'f7ef     0x6  Code  Gb  stm32f0xx_iwdg.o [1]
+IWDG_SetReload           0x800'f7f5     0x6  Code  Gb  stm32f0xx_iwdg.o [1]
+IWDG_WriteAccessCmd      0x800'f7e9     0x6  Code  Gb  stm32f0xx_iwdg.o [1]
+IntToUnicode             0x801'3621    0x26  Code  Lc  usbd_desc.o [1]
+Kc                      0x2000'08e4     0x4  Data  Gb  temperature.o [1]
+Kd                      0x2000'073c     0x4  Data  Gb  temperature.o [1]
+Ki                      0x2000'0738     0x4  Data  Gb  temperature.o [1]
+Kp                      0x2000'0734     0x4  Data  Gb  temperature.o [1]
+L                       0x2000'0418    0x28  Data  Gb  Marlin_main.o [1]
+LfnBuf                  0x2000'2000   0x200  Data  Lc  ff.o [1]
+LfnOfs                   0x800'3430    0x10  Data  Lc  ff.o [1]
+MACHINE_TYPE             0x800'1000     0x4  Data  Gb  port.o [1]
+MAGIC                   0x2000'0400     0x4  Data  Gb  Main.o [1]
+MSD0_GetCardInfo         0x800'598d   0x27c  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_Init                0x800'57c1   0x1ba  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_Init2               0x800'5767    0x46  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_ReadMultiBlock      0x800'5cf7    0x8c  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_ReadSingleBlock     0x800'5c8f    0x68  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_SPIHighSpeed        0x800'56f9    0x6e  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_SPI_Configuration   0x800'5613    0xe6  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_WriteMultiBlock     0x800'5e1f    0xde  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_WriteSingleBlock    0x800'5d83    0x9c  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_card_disable        0x800'5579    0x2c  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_card_enable         0x800'5551    0x28  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_read_buffer         0x800'5c09    0x86  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_send_command        0x800'5f09    0x5c  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_send_command_hold   0x800'5f65    0x4e  Code  Gb  SPI_MSD0_Driver.o [1]
+MSD0_spi_read_write      0x800'55d1    0x42  Code  Gb  SPI_MSD0_Driver.o [1]
+MSG_M115_REPORT         0x2000'27b8    0x30  Data  Gb  port.o [1]
+MarlinSerial::flush()    0x800'97f5     0x8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(char const *)
+                         0x800'ee5d     0x8  Code  Gb  temperature.o [1]
+MarlinSerial::print(char, int)
+                         0x800'97fd     0x8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(double, int)
+                         0x800'9869     0xe  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(int, int)
+                         0x800'980d     0x8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(long, int)
+                         0x800'981d    0x36  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(unsigned char, int)
+                         0x800'9805     0x8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(unsigned int, int)
+                         0x800'9815     0x8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::print(unsigned long, int)
+                         0x800'9853    0x16  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::printFloat(double, unsigned char)
+                         0x800'98db    0xb8  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::printNumber(unsigned long, unsigned char)
+                         0x800'987d    0x5e  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::read()     0x800'97d5    0x20  Code  Gb  MarlinSerial.o [1]
+MarlinSerial::write(char const *)
+                         0x801'10e5    0x3c  Code  Gb  temperature.o [1]
+MarlinSerial::write(unsigned char *, unsigned char)
+                         0x800'ece9    0x48  Code  Gb  temperature.o [1]
+MarlinSerial::write(unsigned char)
+                         0x800'f441    0x38  Code  Gb  MarlinSerial.o [1]
+NMI_Handler              0x801'5b8d     0x2  Code  Gb  stm32_it.o [1]
+NVIC_Init                0x801'16d9    0x46  Code  Gb  stm32f0xx_misc.o [1]
+OCR1A_nominal           0x2000'067e     0x2  Data  Lc  stepper.o [1]
+PID_autotune(float, int, int)
+                         0x800'baf9   0x510  Code  Gb  temperature.o [1]
+PMAToUserBufferCopy      0x801'2c21    0x18  Code  Gb  usb_core.o [1]
+PWR_BackupAccessCmd      0x801'04c5    0x16  Code  Gb  stm32f0xx_pwr.o [1]
+PendSV_Handler           0x801'5b93     0x2  Code  Gb  stm32_it.o [1]
+PowerOff                 0x801'144b     0xa  Code  Gb  usbd_usr.o [1]
+PowerOn                  0x801'1441     0xa  Code  Gb  usbd_usr.o [1]
+PrintingStatus()         0x800'9cad   0x180  Code  Gb  wifi.o [1]
+R                       0x2000'0440    0x28  Data  Gb  Marlin_main.o [1]
+RCC_AHBPeriphClockCmd    0x800'623d    0x14  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_APB1PeriphClockCmd   0x800'626d    0x14  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_APB1PeriphResetCmd   0x800'629d    0x14  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_APB2PeriphClockCmd   0x800'6255    0x14  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_APB2PeriphResetCmd   0x800'6289    0x14  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_GetClocksFreq        0x800'6125   0x112  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_GetFlagStatus        0x800'62b5    0x2a  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_HCLKConfig           0x800'60f3     0xa  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_HSEConfig            0x800'6049     0xa  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_HSICmd               0x800'6083     0xc  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_LSICmd               0x800'60a5     0xc  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_PCLKConfig           0x800'60fd     0xe  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_PLLCmd               0x800'60c7    0x18  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_PLLConfig            0x800'60b1    0x16  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_PREDIV1Config        0x800'60df     0xa  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_SYSCLKConfig         0x800'60e9     0xa  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_USBCLKConfig         0x800'610b     0xe  Code  Gb  stm32f0xx_rcc.o [1]
+RCC_WaitForHSEStartUp    0x800'6053    0x30  Code  Gb  stm32f0xx_rcc.o [1]
+Region$$Table$$Base      0x801'59ac           --   Gb  - Linker created -
+Region$$Table$$Limit     0x801'59d0           --   Gb  - Linker created -
+Resume                   0x801'4671    0x9c  Code  Gb  usbd_pwr.o [1]
+ResumeS                 0x2000'28d8     0x2  Data  Gb  usbd_pwr.o [1]
+Running                 0x2000'0480     0x1  Data  Gb  Marlin_main.o [1]
+SD0_CardInfo            0x2000'269c    0x58  Data  Gb  SPI_MSD0_Driver.o [1]
+SD_GetResponse           0x800'645f    0x24  Code  Gb  sd.o [1]
+SD_ReadBlock             0x800'63cd    0x5a  Code  Gb  sd.o [1]
+SD_ReadByte              0x800'6495     0xc  Code  Gb  sd.o [1]
+SD_SendCmd               0x800'6431    0x2e  Code  Gb  sd.o [1]
+SD_WriteByte             0x800'64a1     0xa  Code  Gb  sd.o [1]
+SHT$$INIT_ARRAY$$Base    0x801'5db4           --   Gb  - Linker created -
+SHT$$INIT_ARRAY$$Limit   0x801'5db8           --   Gb  - Linker created -
+SHT$$PREINIT_ARRAY$$Base
+                         0x801'5db4           --   Gb  - Linker created -
+SHT$$PREINIT_ARRAY$$Limit
+                         0x801'5db4           --   Gb  - Linker created -
+SPI_Cmd                  0x800'5ffd    0x14  Code  Gb  stm32f0xx_spi.o [1]
+SPI_I2S_GetFlagStatus    0x800'6039     0xe  Code  Gb  stm32f0xx_spi.o [1]
+SPI_Init                 0x800'5fb5    0x48  Code  Gb  stm32f0xx_spi.o [1]
+SPI_RxFIFOThresholdConfig
+                         0x800'6011     0x6  Code  Gb  stm32f0xx_spi.o [1]
+SVC_Handler              0x801'5b91     0x2  Code  Gb  stm32_it.o [1]
+SYSCFG_DMAChannelRemapConfig
+                         0x801'022f    0x14  Code  Gb  stm32f0xx_syscfg.o [1]
+SYSCFG_MemoryRemapConfig
+                         0x801'0225     0xa  Code  Gb  stm32f0xx_syscfg.o [1]
+SetBTABLE                0x801'2939     0xa  Code  Gb  usb_core.o [1]
+SetCNTR                  0x801'292d     0x6  Code  Gb  usb_core.o [1]
+SetEPDblBuffAddr         0x801'2ab1    0x26  Code  Gb  usb_core.o [1]
+SetEPDblBuffCount        0x801'2b05    0x8e  Code  Gb  usb_core.o [1]
+SetEPDoubleBuff          0x801'29d7     0x2  Code  Gb  usb_core.o [1]
+SetEPRxAddr              0x801'2a3b     0xe  Code  Gb  usb_core.o [1]
+SetEPRxCount             0x801'2a69     0xe  Code  Gb  usb_core.o [1]
+SetEPRxStatus            0x801'2987    0x28  Code  Gb  usb_core.o [1]
+SetEPTxAddr              0x801'2a39     0x2  Code  Gb  usb_core.o [1]
+SetEPTxCount             0x801'2a4d    0x12  Code  Gb  usb_core.o [1]
+SetEPTxStatus            0x801'295f    0x28  Code  Gb  usb_core.o [1]
+SetEPType                0x801'294d    0x12  Code  Gb  usb_core.o [1]
+SetISTR                  0x801'2933     0x6  Code  Gb  usb_core.o [1]
+SetSysTick               0x800'd121    0x32  Code  Gb  Platform.o [1]
+StartBuild()             0x800'9b39    0x1c  Code  Gb  wifi.o [1]
+Suspend                  0x801'4659    0x18  Code  Gb  usbd_pwr.o [1]
+SysTick_CLKSourceConfig
+                         0x801'171f    0x18  Code  Gb  stm32f0xx_misc.o [1]
+SysTick_Handler          0x800'cd39    0xd6  Code  Gb  Platform.o [1]
+SystemInit               0x801'54c5    0x74  Code  Gb  system_stm32f0xx.o [1]
+TIM1_BRK_UP_TRG_COM_IRQHandler
+                         0x800'd093    0x10  Code  Gb  Platform.o [1]
+TIM2_IRQHandler          0x800'd111    0x10  Code  Gb  Platform.o [1]
+TIM3_IRQHandler          0x800'd0c1    0x10  Code  Gb  Platform.o [1]
+TIM_Cmd                  0x801'1ab5    0x14  Code  Gb  stm32f0xx_tim.o [1]
+TIM_ITConfig             0x801'1af1    0x12  Code  Gb  stm32f0xx_tim.o [1]
+TIM_TimeBaseInit         0x801'1a5d    0x58  Code  Gb  stm32f0xx_tim.o [1]
+Tbl                      0x800'5000   0x100  Data  Lc  ccsbcs.o [1]
+ToggleDTOG_RX            0x801'29d9    0x10  Code  Gb  usb_core.o [1]
+ToggleDTOG_TX            0x801'29e9    0x10  Code  Gb  usb_core.o [1]
+USART1_IRQHandler        0x800'd34d    0x92  Code  Gb  Platform.o [1]
+USART_ClearITPendingBit
+                         0x801'0f07     0xa  Code  Gb  stm32f0xx_usart.o [1]
+USART_Cmd                0x801'0e35    0x16  Code  Gb  stm32f0xx_usart.o [1]
+USART_DMACmd             0x801'0e89     0xe  Code  Gb  stm32f0xx_usart.o [1]
+USART_DeInit             0x801'0d51    0x52  Code  Gb  stm32f0xx_usart.o [1]
+USART_GetFlagStatus      0x801'0ec1     0xe  Code  Gb  stm32f0xx_usart.o [1]
+USART_GetITStatus        0x801'0ecf    0x38  Code  Gb  stm32f0xx_usart.o [1]
+USART_ITConfig           0x801'0e97    0x2a  Code  Gb  stm32f0xx_usart.o [1]
+USART_Init               0x801'0da3    0x92  Code  Gb  stm32f0xx_usart.o [1]
+USART_ReceiveData        0x801'0e53     0x8  Code  Gb  stm32f0xx_usart.o [1]
+USART_SendData           0x801'0e4b     0x8  Code  Gb  stm32f0xx_usart.o [1]
+USBD_CDC_cb             0x2000'08fc    0x24  Data  Gb  usbd_cdc_core.o [1]
+USBD_ClrCfg              0x801'326f    0x10  Code  Gb  usbd_core.o [1]
+USBD_CompatIDDesc        0x801'58cc    0x28  Data  Gb  usbd_desc.o [1]
+USBD_CtlContinueRx       0x801'3ad9     0x4  Code  Gb  usbd_ioreq.o [1]
+USBD_CtlContinueSendData
+                         0x801'3ab7     0x4  Code  Gb  usbd_ioreq.o [1]
+USBD_CtlError            0x801'3a5b     0xa  Code  Gb  usbd_req.o [1]
+USBD_CtlPrepareRx        0x801'3ac7    0x12  Code  Gb  usbd_ioreq.o [1]
+USBD_CtlReceiveStatus    0x801'3af5     0xc  Code  Gb  usbd_ioreq.o [1]
+USBD_CtlSendData         0x801'3aa9     0xe  Code  Gb  usbd_ioreq.o [1]
+USBD_CtlSendStatus       0x801'3ae9     0xc  Code  Gb  usbd_ioreq.o [1]
+USBD_DCD_INT_cb         0x2000'0940    0x1c  Data  Gb  usbd_core.o [1]
+USBD_DCD_INT_fops       0x2000'095c     0x4  Data  Gb  usbd_core.o [1]
+USBD_DataInStage         0x801'3127    0xa0  Code  Lc  usbd_core.o [1]
+USBD_DataOutStage        0x801'30bb    0x6c  Code  Lc  usbd_core.o [1]
+USBD_DeviceDesc          0x801'3688    0x14  Data  Gb  usbd_desc.o [1]
+USBD_ExtPropertiesDesc   0x801'5430    0x94  Data  Gb  usbd_desc.o [1]
+USBD_GetString           0x801'3a65    0x44  Code  Gb  usbd_req.o [1]
+USBD_Init                0x801'3021    0x38  Code  Gb  usbd_core.o [1]
+USBD_LangIDDesc          0x801'369c     0x4  Data  Gb  usbd_desc.o [1]
+USBD_OSStrDesc           0x801'36a0    0x14  Data  Gb  usbd_desc.o [1]
+USBD_ParseSetupRequest   0x801'3a2b    0x30  Code  Gb  usbd_req.o [1]
+USBD_Reset               0x801'31cd    0x48  Code  Lc  usbd_core.o [1]
+USBD_Resume              0x801'3215    0x16  Code  Lc  usbd_core.o [1]
+USBD_SOF                 0x801'3243    0x14  Code  Lc  usbd_core.o [1]
+USBD_SetCfg              0x801'3257    0x18  Code  Gb  usbd_core.o [1]
+USBD_SetConfig::cfgidx  0x2000'28e0     0x1  Data  Lc  usbd_req.o [1]
+USBD_SetupStage          0x801'3059    0x62  Code  Lc  usbd_core.o [1]
+USBD_StdDevReq           0x801'36b5   0x202  Code  Gb  usbd_req.o [1]
+USBD_StdEPReq            0x801'395d    0xce  Code  Gb  usbd_req.o [1]
+USBD_StdItfReq           0x801'391d    0x40  Code  Gb  usbd_req.o [1]
+USBD_StrDesc            0x2000'2774    0x40  Data  Gb  usbd_req.o [1]
+USBD_StringSerial       0x2000'0988    0x1c  Data  Gb  usbd_desc.o [1]
+USBD_Suspend             0x801'322b    0x18  Code  Lc  usbd_core.o [1]
+USBD_USR_ConfigStrDescriptor
+                         0x801'35b5     0xc  Code  Gb  usbd_desc.o [1]
+USBD_USR_DeviceConfigured
+                         0x801'148b    0x22  Code  Gb  usbd_usr.o [1]
+USBD_USR_DeviceDescriptor
+                         0x801'357d     0x8  Code  Gb  usbd_desc.o [1]
+USBD_USR_DeviceReset     0x801'1473     0x2  Code  Gb  usbd_usr.o [1]
+USBD_USR_DeviceResumed   0x801'14d1     0x2  Code  Gb  usbd_usr.o [1]
+USBD_USR_DeviceSuspended
+                         0x801'14cd     0x4  Code  Gb  usbd_usr.o [1]
+USBD_USR_ExtCompatIDFeatureDescriptor
+                         0x801'35dd     0x8  Code  Gb  usbd_desc.o [1]
+USBD_USR_ExtPropertiesFeatureDescriptor
+                         0x801'35d5     0x8  Code  Gb  usbd_desc.o [1]
+USBD_USR_Init            0x801'146f     0x4  Code  Gb  usbd_usr.o [1]
+USBD_USR_InterfaceStrDescriptor
+                         0x801'35c1     0xc  Code  Gb  usbd_desc.o [1]
+USBD_USR_LangIDStrDescriptor
+                         0x801'3585     0x8  Code  Gb  usbd_desc.o [1]
+USBD_USR_ManufacturerStrDescriptor
+                         0x801'3599     0xa  Code  Gb  usbd_desc.o [1]
+USBD_USR_OSStrDescriptor
+                         0x801'35cd     0x8  Code  Gb  usbd_desc.o [1]
+USBD_USR_ProductStrDescriptor
+                         0x801'358d     0xc  Code  Gb  usbd_desc.o [1]
+USBD_USR_SerialStrDescriptor
+                         0x801'35ab     0x8  Code  Gb  usbd_desc.o [1]
+USBD_VendDevReq          0x801'38bd    0x60  Code  Gb  usbd_req.o [1]
+USBD_cdc_GetCfgDesc      0x801'496d     0x8  Code  Lc  usbd_cdc_core.o [1]
+USB_BSP_EnableInterrupt
+                         0x801'3565    0x16  Code  Gb  usb_bsp.o [1]
+USB_BSP_Init             0x801'34b7    0xa0  Code  Gb  usb_bsp.o [1]
+USB_Device_dev          0x2000'09a4   0x168  Data  Gb  usbd_usr.o [1]
+USB_IRQHandler           0x801'5b95     0x8  Code  Gb  stm32_it.o [1]
+USB_Istr                 0x801'4561    0xbe  Code  Gb  usb_dcd_int.o [1]
+USB_Rx_Buffer           0x2000'2734    0x40  Data  Gb  usbd_cdc_core.o [1]
+USB_Tx_State            0x2000'2200     0x1  Data  Gb  usbd_cdc_core.o [1]
+USB_enable(unsigned char)
+                         0x800'd3df    0x18  Code  Gb  Platform.o [1]
+USB_main                 0x801'1455    0x1a  Code  Gb  usbd_usr.o [1]
+USR_cb                  0x2000'0b0c    0x14  Data  Gb  usbd_usr.o [1]
+USR_desc                0x2000'0960    0x28  Data  Gb  usbd_desc.o [1]
+Uart_RX_WIFI            0x2000'2520   0x100  Data  Gb  Platform.o [1]
+Uart_Rx                 0x2000'2420   0x100  Data  Gb  Platform.o [1]
+UserToPMABufferCopy      0x801'2bf5    0x20  Code  Gb  usb_core.o [1]
+VCP_Ctrl                 0x801'0f19    0x74  Code  Lc  usbd_cdc_vcp.o [1]
+VCP_DataRx               0x801'1069    0x1a  Code  Lc  usbd_cdc_vcp.o [1]
+VCP_DataTx               0x801'0f8d    0x16  Code  Lc  usbd_cdc_vcp.o [1]
+VCP_DeInit               0x801'0f15     0x4  Code  Lc  usbd_cdc_vcp.o [1]
+VCP_Init                 0x801'0f11     0x4  Code  Lc  usbd_cdc_vcp.o [1]
+VCP_fops                0x2000'092c    0x14  Data  Gb  usbd_cdc_vcp.o [1]
+VERSION                  0x801'0220     0x4  Data  Gb  port.o [1]
+WIFI_enable(unsigned char)
+                         0x800'd32b    0x14  Code  Gb  Platform.o [1]
+X_MAX_ENDSTOP_INVERTING
+                        0x2000'0b5f     0x1  Data  Gb  port.o [1]
+X_MIN_ENDSTOP_INVERTING
+                        0x2000'0b5c     0x1  Data  Gb  port.o [1]
+Y_MAX_ENDSTOP_INVERTING
+                        0x2000'0b60     0x1  Data  Gb  port.o [1]
+Y_MIN_ENDSTOP_INVERTING
+                        0x2000'0b5d     0x1  Data  Gb  port.o [1]
+Z_MIN_ENDSTOP_INVERTING
+                        0x2000'0b5e     0x1  Data  Gb  port.o [1]
+Z_ULN2003               0x2000'05b0     0x1  Data  Gb  port.o [1]
+[local to Marlin_main_cpp]::drain_queued_commands_P()
+                         0x800'6531    0x50  Code  Lc  Marlin_main.o [1]
+[local to Marlin_main_cpp]::home_bump_mm(int)
+                         0x800'6b81     0x8  Code  Lc  Marlin_main.o [1]
+[local to Marlin_main_cpp]::homeaxis(AxisEnum)
+                         0x800'6ca1   0x232  Code  Lc  Marlin_main.o [1]
+[local to temperature_cpp]::analog2temp(int, unsigned char)
+                         0x800'c601    0x92  Code  Lc  temperature.o [1]
+[local to temperature_cpp]::analog2tempBed(int)
+                         0x800'c6c5    0x40  Code  Lc  temperature.o [1]
+[local to temperature_cpp]::updateTemperaturesFromRawValues()
+                         0x800'c755    0x38  Code  Lc  temperature.o [1]
+_EEPROM_readData(unsigned short, unsigned char *, unsigned char)
+                         0x800'ab6d    0x1c  Code  Gb  configuration_store.o [1]
+_EEPROM_writeData(unsigned short, unsigned char *, unsigned char)
+                         0x800'ab09    0x40  Code  Gb  configuration_store.o [1]
+_PrintfTiny              0x801'1f19   0x158  Code  Gb  xprintftiny.o [2]
+_SProut                  0x800'5547     0xa  Code  Gb  xsprout.o [2]
+__ICFEDIT_region_RAM_end__ {Abs}
+                        0x2000'3fff          Data  Gb  <internal module>
+__ICFEDIT_region_RAM_start__ {Abs}
+                        0x2000'0100          Data  Gb  <internal module>
+__aeabi_cdcmpeq          0x801'1ba7          Code  Gb  DblCmpEq.o [4]
+__aeabi_cdcmple          0x801'1121          Code  Gb  DblCmpLe.o [4]
+__aeabi_cdrcmple         0x801'1cc1          Code  Gb  DblCmpGe.o [4]
+__aeabi_cfcmpeq          0x801'0255          Code  Gb  FltCmpEq.o [4]
+__aeabi_cfcmple          0x800'ff69          Code  Gb  FltCmpLe.o [4]
+__aeabi_cfrcmple         0x800'f765          Code  Gb  FltCmpGe.o [4]
+__aeabi_d2f              0x800'f285          Code  Gb  DblToFlt.o [4]
+__aeabi_d2iz             0x801'13c9          Code  Gb  DblToI32.o [4]
+__aeabi_d2uiz            0x801'13ed          Code  Gb  DblToI32.o [4]
+__aeabi_dadd             0x801'1215          Code  Gb  DblAddSub.o [4]
+__aeabi_ddiv             0x801'1153          Code  Gb  DblDiv.o [4]
+__aeabi_dmul             0x800'f4c9          Code  Gb  DblMul.o [4]
+__aeabi_dsub             0x801'12db          Code  Gb  DblAddSub.o [4]
+__aeabi_f2d              0x800'99a5          Code  Gb  FltToDbl.o [4]
+__aeabi_f2iz             0x800'f78d          Code  Gb  FltToS32.o [4]
+__aeabi_f2uiz            0x800'f849          Code  Gb  FltToU32.o [4]
+__aeabi_fadd             0x800'f31f          Code  Gb  FltAddSub.o [4]
+__aeabi_fdiv             0x800'ff8f          Code  Gb  FltDiv.o [4]
+__aeabi_fmul             0x800'f65d          Code  Gb  FltMul.o [4]
+__aeabi_fsub             0x800'f38f          Code  Gb  FltAddSub.o [4]
+__aeabi_i2d              0x800'f4b5          Code  Gb  IxxToDbl.o [4]
+__aeabi_i2f              0x800'f309          Code  Gb  IxxToFlt.o [4]
+__aeabi_lmul             0x801'1ecd          Code  Gb  I64Mul.o [5]
+__aeabi_memcpy           0x801'10c9          Code  Gb  ABImemcpy.o [5]
+__aeabi_memcpy4          0x801'1095          Code  Gb  ABImemcpy.o [5]
+__aeabi_memcpy8          0x801'1095          Code  Gb  ABImemcpy.o [5]
+__aeabi_ui2d             0x800'f495          Code  Gb  IxxToDbl.o [4]
+__aeabi_ui2f             0x800'f2e9          Code  Gb  IxxToFlt.o [4]
+__aeabi_uldivmod         0x800'54dd          Code  Gb  I64DivMod.o [5]
+__call_ctors             0x801'5a91    0x18  Code  Gb  cppinit.o [2]
+__cmain                  0x801'5aa9          Code  Gb  cmain.o [5]
+__exit                   0x801'5add          Code  Gb  XXexit.o [5]
+__iar_Atan32             0x801'27f9    0xf8  Code  Gb  iar_Atan32.o [4]
+__iar_Hypot32            0x801'2609   0x1f0  Code  Gb  iar_Hypot32.o [4]
+__iar_Memchr             0x801'3281          Code  Gb  memchr.o [5]
+__iar_Memcpy             0x801'10d5          Code  Gb  ABImemcpy.o [5]
+__iar_Sin32              0x801'0ae1   0x226  Code  Lc  cos_sin32.o [4]
+__iar_Sto64              0x800'f111   0x144  Code  Gb  strto64.o [4]
+__iar_Stoflt             0x801'2195   0x1c0  Code  Gb  iar_Stoflt.o [2]
+__iar_Stolx              0x800'ed45    0x92  Code  Gb  iar_Stolx.o [2]
+__iar_Stopfx             0x801'2071   0x124  Code  Gb  iar_Stopfx.o [2]
+__iar_Stoulx             0x801'14d5   0x144  Code  Gb  iar_Stoulx.o [2]
+__iar_Stoxflt            0x801'2355   0x1f8  Code  Gb  iar_Stoxflt.o [2]
+__iar_Stoxflt::digits    0x801'2550    0x18  Data  Lc  iar_Stoxflt.o [2]
+__iar_Stoxflt::vals      0x801'2568    0x18  Data  Lc  iar_Stoxflt.o [2]
+__iar_Strchr             0x800'ed31          Code  Gb  strchr.o [5]
+__iar_Strstr             0x800'ecb9    0x2e  Code  Gb  strstr.o [2]
+__iar_atan2_32           0x801'09cd    0xde  Code  Gb  atan2_32.o [4]
+__iar_ceil32             0x801'1b03          Code  Gb  ceilf.o [4]
+__iar_cos32              0x801'0d3d     0xa  Code  Gb  cos_sin32.o [4]
+__iar_cos_medium32       0x801'0d3d     0xa  Code  Gb  cos_sin32.o [4]
+__iar_cos_mediumf        0x801'0d3d     0xa  Code  Gb  cos_sin32.o [4]
+__iar_cstart_call_ctors
+                         0x801'5a71    0x20  Code  Gb  cmain_call_ctors.o [5]
+__iar_d2uiz              0x801'13f1          Code  Gb  DblToI32.o [4]
+__iar_data_init3         0x801'58f5    0x28  Code  Gb  data_init.o [5]
+__iar_floor32            0x801'0aad          Code  Gb  floorf.o [4]
+__iar_hypot32            0x801'097d    0x50  Code  Gb  hypot32.o [4]
+__iar_lround32           0x801'1bcd    0x38  Code  Gb  lround32.o [4]
+__iar_lround64           0x801'1c6d    0x54  Code  Gb  lround64.o [4]
+__iar_lz77_init_single3
+                         0x800'4ef7    0x7e  Code  Gb  lz77_init_single.o [5]
+__iar_program_start      0x801'5cd1          Code  Gb  cstartup_M.o [5]
+__iar_round32            0x801'3299    0x98  Code  Gb  round32.o [4]
+__iar_round64            0x801'3331   0x12c  Code  Gb  round64.o [4]
+__iar_sin32              0x801'0d47     0xa  Code  Gb  cos_sin32.o [4]
+__iar_sin_medium32       0x801'0d47     0xa  Code  Gb  cos_sin32.o [4]
+__iar_sin_mediumf        0x801'0d47     0xa  Code  Gb  cos_sin32.o [4]
+__iar_small_Memset4_word
+                         0x800'6489          Code  Gb  ABImemset_small.o [5]
+__iar_small_Memset_word
+                         0x800'6489          Code  Gb  ABImemset_small.o [5]
+__iar_small_idiv         0x800'4e99          Code  Gb  I32DivMod.o [5]
+__iar_small_idivmod      0x800'4e99          Code  Gb  I32DivMod.o [5]
+__iar_small_memclr       0x800'6485          Code  Gb  ABImemset_small.o [5]
+__iar_small_memclr4      0x800'6485          Code  Gb  ABImemset_small.o [5]
+__iar_small_memclr8      0x800'6485          Code  Gb  ABImemset_small.o [5]
+__iar_small_memset       0x800'6489          Code  Gb  ABImemset_small.o [5]
+__iar_small_memset4      0x800'6489          Code  Gb  ABImemset_small.o [5]
+__iar_small_memset8      0x800'6489          Code  Gb  ABImemset_small.o [5]
+__iar_small_strcmp       0x800'ede9          Code  Gb  strcmp_small.o [5]
+__iar_small_strcpy       0x800'aaf9          Code  Gb  strcpy_small.o [5]
+__iar_small_strncpy      0x800'aad5          Code  Gb  strncpy_small.o [5]
+__iar_small_uidiv        0x800'4ec1          Code  Gb  I32DivMod.o [5]
+__iar_small_uidivmod     0x800'4ec1          Code  Gb  I32DivMod.o [5]
+__iar_sqrt32             0x801'1c05          Code  Gb  sqrtf.o [4]
+__iar_tls$$INIT_ARRAY$$Base
+                         0x801'5db8           --   Gb  - Linker created -
+__iar_tls$$INIT_ARRAY$$Limit
+                         0x801'5db8           --   Gb  - Linker created -
+__iar_zero_init3         0x801'57a9    0x3c  Code  Gb  zero_init3.o [5]
+__sti__routine           0x800'64ad     0xa  Code  Lc  Marlin_main.o [1]
+__vector_table           0x800'2000          Data  Gb  startup_stm32f072.o [1]
+_call_main               0x801'5ab5          Code  Gb  cmain.o [5]
+_exit                    0x801'5ad1          Code  Gb  cexit.o [5]
+_main                    0x801'5ac3          Code  Gb  cmain.o [5]
+_temp_error(int, char const *, char const *)
+                         0x801'1655    0x84  Code  Gb  temperature.o [1]
+_temp_error(int, char const *, char const *)::killed
+                        0x2000'2912     0x1  Data  Gb  temperature.o [1]
+_temp_error(int, char const *, char const *)::string
+                         0x801'5a50    0x20  Data  Gb  temperature.o [1]
+_temp_error(int, char const *, char const *)::string (instance 3)
+                         0x801'5db0     0x4  Data  Gb  temperature.o [1]
+a                        0x801'290c    0x20  Data  Lc  iar_Atan32.o [4]
+abort_on_endstop_hit    0x2000'0679     0x1  Data  Gb  stepper.o [1]
+abspath                 0x2000'26f4    0x40  Data  Gb  cardreader.o [1]
+acc_step_rate           0x2000'067c     0x2  Data  Lc  stepper.o [1]
+acceleration            0x2000'267c     0x4  Data  Gb  planner.o [1]
+acceleration_time       0x2000'06bc     0x4  Data  Lc  stepper.o [1]
+active_extruder         0x2000'0483     0x1  Data  Gb  Marlin_main.o [1]
+adc_loop                0x2000'27e9     0x1  Data  Lc  Platform.o [1]
+analog_init()            0x800'ce2d   0x142  Code  Gb  Platform.o [1]
+atan2f                   0x801'09cd    0xde  Code  Gb  atan2_32.o [4]
+atoi                     0x801'1619     0x4  Code  Gb  iar_Stoulx.o [2]
+autotempShutdown()       0x800'ec71    0x48  Code  Gb  Marlin_main.o [1]
+autotemp_enabled        0x2000'058c     0x1  Data  Gb  planner.o [1]
+autotemp_factor         0x2000'0598     0x4  Data  Gb  planner.o [1]
+autotemp_max            0x2000'0590     0x4  Data  Gb  planner.o [1]
+autotemp_min            0x2000'0594     0x4  Data  Gb  planner.o [1]
+axis_codes               0x801'4db8     0x4  Data  Lc  Marlin_main.o [1]
+axis_known_position     0x2000'047c     0x4  Data  Gb  Marlin_main.o [1]
+axis_relative_modes     0x2000'0478     0x4  Data  Gb  Marlin_main.o [1]
+axis_steps_per_sqr_second
+                        0x2000'2634    0x10  Data  Gb  planner.o [1]
+axis_steps_per_unit     0x2000'2624    0x10  Data  Gb  planner.o [1]
+bDeviceState            0x2000'2914     0x1  Data  Gb  usbd_cdc_vcp.o [1]
+bDeviceState_last       0x2000'0b54     0x4  Data  Gb  wifi.o [1]
+base_home_pos(unsigned char)
+                         0x800'6b8d    0x32  Code  Gb  Marlin_main.o [1]
+base_max_pos            0x2000'05b4     0x8  Data  Gb  port.o [1]
+base_min_pos_P          0x2000'289c     0xc  Data  Lc  Marlin_main.o [1]
+bedKd                   0x2000'0718     0x4  Data  Gb  temperature.o [1]
+bedKi                   0x2000'0714     0x4  Data  Gb  temperature.o [1]
+bedKp                   0x2000'0710     0x4  Data  Gb  temperature.o [1]
+bed_maxttemp_raw        0x2000'07d4     0x4  Data  Lc  temperature.o [1]
+bed_minttemp_raw        0x2000'07d0     0x4  Data  Lc  temperature.o [1]
+bed_ttbl_map            0x2000'07d8     0x4  Data  Lc  temperature.o [1]
+bed_ttbllen_map         0x2000'077e     0x1  Data  Lc  temperature.o [1]
+block_buffer            0x2000'1818   0x580  Data  Gb  planner.o [1]
+block_buffer_head       0x2000'2620     0x1  Data  Gb  planner.o [1]
+block_buffer_tail       0x2000'2621     0x1  Data  Gb  planner.o [1]
+btn_status              0x2000'28cc     0x1  Data  Gb  Platform.o [1]
+btn_timer               0x2000'28d4     0x4  Data  Gb  Platform.o [1]
+buff_ptr                0x2000'0b58     0x2  Data  Gb  Platform.o [1]
+buffer_status           0x2000'0487     0x1  Data  Lc  Marlin_main.o [1]
+buffered_printing()      0x800'64fd    0x34  Code  Gb  Marlin_main.o [1]
+cTerm                   0x2000'0808     0x8  Data  Lc  temperature.o [1]
+calc_timer(unsigned short)
+                         0x801'1e99    0x34  Code  Gb  stepper.o [1]
+calculate_trapezoid_for_block(block_t *, float, float)
+                         0x800'd441   0x13c  Code  Gb  planner.o [1]
+calculate_volumetric_multiplier(float)
+                         0x800'8dd1    0x42  Code  Gb  Marlin_main.o [1]
+calculate_volumetric_multipliers()
+                         0x800'8e13    0x22  Code  Gb  Marlin_main.o [1]
+cancel_heatup           0x2000'0484     0x1  Data  Gb  Marlin_main.o [1]
+cancel_print()           0x800'9b89    0xe2  Code  Gb  wifi.o [1]
+card                    0x2000'0b68   0x6b0  Data  Gb  Marlin_main.o [1]
+card_type               0x2000'2910     0x1  Data  Gb  SPI_MSD0_Driver.o [1]
+cdcCmd                  0x2000'08ec     0x4  Data  Lc  usbd_cdc_core.o [1]
+cdcLen                  0x2000'08f0     0x4  Data  Lc  usbd_cdc_core.o [1]
+ceilf                    0x801'1b03          Code  Gb  ceilf.o [4]
+change_bitmap            0x800'25f7    0x7a  Code  Lc  ff.o [1]
+checkExtruderAutoFans()
+                         0x800'c0cd    0x7c  Code  Gb  temperature.o [1]
+checkHitEndstops()       0x800'e151    0xd4  Code  Gb  stepper.o [1]
+check_axes_activity()    0x800'd861    0x34  Code  Gb  planner.o [1]
+check_endstops          0x2000'067a     0x1  Data  Lc  stepper.o [1]
+check_fs                 0x800'3a05    0x6a  Code  Lc  ff.o [1]
+chk_chr                  0x800'21ad    0x12  Code  Lc  ff.o [1]
+cleaning_buffer_counter
+                        0x2000'06a4     0x4  Data  Gb  stepper.o [1]
+clust2sect               0x800'22e5    0x18  Code  Lc  ff.o [1]
+cmd_queue_index_r       0x2000'04c4     0x4  Data  Lc  Marlin_main.o [1]
+cmd_queue_index_w       0x2000'0520     0x4  Data  Lc  Marlin_main.o [1]
+code_seen(char)          0x800'6b65    0x16  Code  Gb  Marlin_main.o [1]
+code_value()             0x800'6b15    0x36  Code  Gb  Marlin_main.o [1]
+code_value_short()       0x800'6b51    0x14  Code  Gb  Marlin_main.o [1]
+com_opened              0x2000'0928     0x1  Data  Gb  usbd_cdc_vcp.o [1]
+command_queue           0x2000'1218   0x600  Data  Lc  Marlin_main.o [1]
+commands_in_queue       0x2000'0524     0x4  Data  Lc  Marlin_main.o [1]
+comment_mode            0x2000'04fa     0x1  Data  Lc  Marlin_main.o [1]
+cosf                     0x801'0d3d     0xa  Code  Gb  cos_sin32.o [4]
+count_direction         0x2000'0670     0x4  Data  Gb  stepper.o [1]
+count_position          0x2000'0684    0x10  Data  Gb  stepper.o [1]
+counter_e               0x2000'06b4     0x4  Data  Lc  stepper.o [1]
+counter_x               0x2000'06a8     0x4  Data  Lc  stepper.o [1]
+counter_y               0x2000'06ac     0x4  Data  Lc  stepper.o [1]
+counter_z               0x2000'06b0     0x4  Data  Lc  stepper.o [1]
+crc16_table              0x801'4dd8   0x200  Data  Lc  SPI_MSD0_Driver.o [1]
+create_chain             0x800'2789   0x122  Code  Lc  ff.o [1]
+create_name              0x800'35b1   0x238  Code  Lc  ff.o [1]
+create_xdir              0x800'2dd3    0x8a  Code  Lc  ff.o [1]
+curpos                  0x2000'0528    0x40  Data  Lc  Marlin_main.o [1]
+current_block           0x2000'06a0     0x4  Data  Gb  stepper.o [1]
+current_command         0x2000'04bc     0x4  Data  Lc  Marlin_main.o [1]
+current_command_args    0x2000'04c0     0x4  Data  Lc  Marlin_main.o [1]
+current_position        0x2000'0488    0x10  Data  Gb  Marlin_main.o [1]
+current_temperature     0x2000'06ec    0x10  Data  Gb  temperature.o [1]
+current_temperature_bed
+                        0x2000'070c     0x4  Data  Gb  temperature.o [1]
+current_temperature_bed_raw
+                        0x2000'07b4     0x4  Data  Gb  temperature.o [1]
+current_temperature_raw
+                        0x2000'0788    0x10  Data  Gb  temperature.o [1]
+customizedSerial        0x2000'290f     0x1  Data  Gb  MarlinSerial.o [1]
+dTerm                   0x2000'0800     0x8  Data  Lc  temperature.o [1]
+dTerm_bed               0x2000'07c8     0x4  Data  Lc  temperature.o [1]
+deceleration_time       0x2000'06c0     0x4  Data  Lc  stepper.o [1]
+delay(unsigned long)     0x800'ce15    0x18  Code  Gb  Platform.o [1]
+destination             0x2000'0498    0x10  Data  Gb  Marlin_main.o [1]
+digits                   0x801'56b0    0x28  Data  Lc  iar_Stoulx.o [2]
+dir_alloc                0x800'2a51    0x5a  Code  Lc  ff.o [1]
+dir_find                 0x800'2fcf   0x1f4  Code  Lc  ff.o [1]
+dir_next                 0x800'2949   0x108  Code  Lc  ff.o [1]
+dir_read                 0x800'2e5d   0x172  Code  Lc  ff.o [1]
+dir_register             0x800'31cd   0x264  Code  Lc  ff.o [1]
+dir_remove               0x800'3441    0x5e  Code  Lc  ff.o [1]
+dir_sdi                  0x800'28ab    0x9e  Code  Lc  ff.o [1]
+disable_all_heaters()    0x800'ca7d    0x64  Code  Gb  temperature.o [1]
+disable_all_steppers()   0x800'8c89    0x3a  Code  Gb  Marlin_main.o [1]
+disable_z()              0x800'e47d    0x4a  Code  Gb  stepper.o [1]
+disk_initialize          0x800'4db5    0x28  Code  Gb  diskio.o [1]
+disk_ioctl               0x800'4e53    0x42  Code  Gb  diskio.o [1]
+disk_read                0x800'4de9    0x30  Code  Gb  diskio.o [1]
+disk_status              0x800'4ddd     0xc  Code  Gb  diskio.o [1]
+disk_write               0x800'4e19    0x30  Code  Gb  diskio.o [1]
+dmul                     0x800'ee65    0x6e  Code  Lc  strto64.o [4]
+download_state          0x2000'0b38     0x1  Data  Gb  wifi.o [1]
+echomagic                0x801'4db0     0x8  Data  Gb  Marlin_main.o [1]
+eeprom                   0x801'fc00   0x400  Data  Gb  Platform.o [1]
+eeprom_erase()           0x800'd02f    0x1a  Code  Gb  Platform.o [1]
+eeprom_lock()            0x800'd059     0x8  Code  Gb  Platform.o [1]
+eeprom_read_byte(unsigned short)
+                         0x800'd049     0xa  Code  Gb  Platform.o [1]
+eeprom_write_byte(unsigned short, unsigned char)
+                         0x800'd011    0x1e  Code  Gb  Platform.o [1]
+enable_all_steppers()    0x800'8c4f    0x34  Code  Gb  Marlin_main.o [1]
+enable_endstops(bool)    0x800'e245     0x6  Code  Gb  stepper.o [1]
+enable_z()               0x800'e379    0xf0  Code  Gb  stepper.o [1]
+endstop_hit_bits        0x2000'0677     0x1  Data  Lc  stepper.o [1]
+endstops_hit_on_purpose()
+                         0x800'e149     0x8  Code  Gb  stepper.o [1]
+endstops_trigsteps      0x2000'0694     0xc  Data  Gb  stepper.o [1]
+enqueuecommand(char const *)
+                         0x800'658d    0x3c  Code  Gb  Marlin_main.o [1]
+enqueuecommands_P(char const *)
+                         0x800'6581     0xc  Code  Gb  Marlin_main.o [1]
+errormagic               0x801'4da8     0x8  Data  Gb  Marlin_main.o [1]
+estimate_acceleration_distance(float, float, float)
+                         0x801'1b35    0x46  Code  Gb  planner.o [1]
+execpos                 0x2000'28e8     0x4  Data  Gb  Marlin_main.o [1]
+exit                     0x801'5ac7     0x8  Code  Gb  exit.o [2]
+extruder_multiplier     0x2000'046c     0x8  Data  Gb  Marlin_main.o [1]
+extruder_offset         0x2000'04a8    0x10  Data  Gb  Marlin_main.o [1]
+extruder_timer_exec()    0x800'cb15   0x198  Code  Gb  temperature.o [1]
+extruder_timer_exec()::pwm_count
+                        0x2000'0781     0x1  Data  Lc  temperature.o [1]
+extruder_timer_exec()::soft_pwm_0
+                        0x2000'0782     0x1  Data  Lc  temperature.o [1]
+extruder_timer_exec()::soft_pwm_1
+                        0x2000'0783     0x1  Data  Lc  temperature.o [1]
+extruder_timer_exec()::soft_pwm_BED
+                        0x2000'0784     0x1  Data  Lc  temperature.o [1]
+extruder_timer_init()    0x800'd0dd    0x34  Code  Gb  Platform.o [1]
+f_chdir                  0x800'462d    0xa8  Code  Gb  ff.o [1]
+f_close                  0x800'460f    0x1e  Code  Gb  ff.o [1]
+f_getcwd                 0x800'46d5   0x108  Code  Gb  ff.o [1]
+f_lseek                  0x800'47e1   0x214  Code  Gb  ff.o [1]
+f_mount                  0x800'3e41    0x50  Code  Gb  ff.o [1]
+f_open                   0x800'3eb1   0x274  Code  Gb  ff.o [1]
+f_opendir                0x800'49f5    0xb8  Code  Gb  ff.o [1]
+f_read                   0x800'412d   0x192  Code  Gb  ff.o [1]
+f_readdir                0x800'4aad    0x52  Code  Gb  ff.o [1]
+f_rename                 0x800'4c49   0x168  Code  Gb  ff.o [1]
+f_stat                   0x800'4aff    0x44  Code  Gb  ff.o [1]
+f_sync                   0x800'44d9   0x136  Code  Gb  ff.o [1]
+f_unlink                 0x800'4b49    0xfa  Code  Gb  ff.o [1]
+f_write                  0x800'42bf   0x216  Code  Gb  ff.o [1]
+fanSpeed                0x2000'0474     0x4  Data  Gb  Marlin_main.o [1]
+fanSpeedSoftPwm         0x2000'06d6     0x1  Data  Gb  temperature.o [1]
+feedrate                0x2000'04b8     0x4  Data  Gb  Marlin_main.o [1]
+feedrate_multiplier     0x2000'04c8     0x4  Data  Gb  Marlin_main.o [1]
+ff_convert               0x800'4f75    0x3c  Code  Gb  ccsbcs.o [1]
+ff_wtoupper              0x800'4fb1    0x4a  Code  Gb  ccsbcs.o [1]
+ff_wtoupper::lower       0x800'5100   0x3dc  Data  Lc  ccsbcs.o [1]
+ff_wtoupper::upper       0x801'3f18   0x3dc  Data  Lc  ccsbcs.o [1]
+filament_size           0x2000'04cc     0x8  Data  Gb  Marlin_main.o [1]
+fill_fat_chain           0x800'2671    0x30  Code  Lc  ff.o [1]
+find_bitmap              0x800'2551    0xa6  Code  Lc  ff.o [1]
+find_volume              0x800'3a8d   0x376  Code  Lc  ff.o [1]
+finishAndDisableSteppers()
+                         0x800'ebc5     0xc  Code  Gb  stepper.o [1]
+floorf                   0x801'0aad          Code  Gb  floorf.o [4]
+follow_path              0x800'387d   0x146  Code  Lc  ff.o [1]
+fromsd                  0x2000'0504    0x10  Data  Lc  Marlin_main.o [1]
+gcode_G28()              0x800'f871   0x228  Code  Gb  Marlin_main.o [1]
+gcode_G28()::string      0x801'5ba0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 3)
+                         0x801'5ae8    0x1c  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 4)
+                         0x801'5878    0x2c  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 5)
+                         0x801'5cdc     0x8  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 6)
+                         0x801'5ce4     0x8  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 7)
+                         0x801'5964    0x24  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 8)
+                         0x801'5818    0x30  Data  Gb  Marlin_main.o [1]
+gcode_G28()::string (instance 9)
+                         0x801'5bb0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_LastN             0x2000'051c     0x4  Data  Lc  Marlin_main.o [1]
+gcode_M105()             0x800'fab5   0x1d4  Code  Gb  Marlin_main.o [1]
+gcode_M105()::string     0x801'5d74     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 10)
+                         0x801'5cec     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 2)
+                         0x801'5d78     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 3)
+                         0x801'5d7c     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 4)
+                         0x801'5d80     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 5)
+                         0x801'5d84     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 6)
+                         0x801'5d88     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 7)
+                         0x801'5d8c     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 8)
+                         0x801'5d90     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M105()::string (instance 9)
+                         0x801'5d94     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M109()             0x800'fc89   0x18c  Code  Gb  Marlin_main.o [1]
+gcode_M109()::string     0x801'5d98     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M109()::string (instance 2)
+                         0x801'5d9c     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M111()::string     0x801'5b50    0x14  Data  Gb  Marlin_main.o [1]
+gcode_M111()::string (instance 3)
+                         0x801'5b20    0x18  Data  Gb  Marlin_main.o [1]
+gcode_M111()::string (instance 4)
+                         0x801'5b38    0x18  Data  Gb  Marlin_main.o [1]
+gcode_M112()::string     0x801'5c40     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M114()             0x800'6f75    0xd4  Code  Gb  Marlin_main.o [1]
+gcode_M115()::string     0x801'5c4c     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M115()::string (instance 2)
+                         0x801'5c58     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M115()::string (instance 3)
+                         0x801'5cf4     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M115()::string (instance 4)
+                         0x801'5c64     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M115()::string (instance 5)
+                         0x800'6046     0x2  Data  Gb  Marlin_main.o [1]
+gcode_M115()::string (instance 6)
+                         0x801'5c70     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string     0x801'5b04    0x1c  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string (instance 3)
+                         0x801'5c7c     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string (instance 4)
+                         0x801'5c88     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string (instance 5)
+                         0x801'5cfc     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string (instance 6)
+                         0x801'5c94     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M119()::string (instance 7)
+                         0x801'5ca0     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M190()             0x800'fe15   0x154  Code  Gb  Marlin_main.o [1]
+gcode_M20()::string      0x801'5bc0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M20()::string (instance 3)
+                         0x801'5bd0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M204()::string     0x801'58a4    0x28  Data  Gb  Marlin_main.o [1]
+gcode_M204()::string (instance 3)
+                         0x801'59d0    0x20  Data  Gb  Marlin_main.o [1]
+gcode_M204()::string (instance 4)
+                         0x801'59f0    0x20  Data  Gb  Marlin_main.o [1]
+gcode_M204()::string (instance 5)
+                         0x801'5a10    0x20  Data  Gb  Marlin_main.o [1]
+gcode_M218()::string     0x801'5bf0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M301()             0x801'0275   0x174  Code  Gb  Marlin_main.o [1]
+gcode_M301()::string (instance 2)
+                         0x801'5da0     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M301()::string (instance 3)
+                         0x801'5da4     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M301()::string (instance 4)
+                         0x801'5da8     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M301()::string (instance 5)
+                         0x801'5dac     0x4  Data  Gb  Marlin_main.o [1]
+gcode_M301()::string (instance 7)
+                         0x801'5b64    0x14  Data  Gb  Marlin_main.o [1]
+gcode_M31()::string      0x801'5be0    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M428()             0x801'03e9    0xdc  Code  Gb  Marlin_main.o [1]
+gcode_M428()::string     0x801'5a30    0x20  Data  Gb  Marlin_main.o [1]
+gcode_M551()::string     0x801'5d04     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M551()::string (instance 2)
+                         0x801'5d0c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M551()::string (instance 3)
+                         0x800'6482     0x2  Data  Gb  Marlin_main.o [1]
+gcode_M555()::string     0x801'5d14     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M555()::string (instance 2)
+                         0x801'5d1c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M556()::string     0x801'5d24     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M556()::string (instance 2)
+                         0x801'5cac     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M556()::string (instance 4)
+                         0x801'5c00    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M557()::string     0x801'5d2c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M560()::string     0x801'5d34     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M560()::string (instance 2)
+                         0x801'5c10    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M561()             0x800'7051    0x76  Code  Gb  Marlin_main.o [1]
+gcode_M562()             0x801'04e5   0x19c  Code  Gb  Marlin_main.o [1]
+gcode_M562()::string     0x801'5c20    0x10  Data  Gb  Marlin_main.o [1]
+gcode_M562()::string (instance 3)
+                         0x801'5cb8     0xc  Data  Gb  Marlin_main.o [1]
+gcode_M563()             0x801'0681   0x1c8  Code  Gb  Marlin_main.o [1]
+gcode_M563()::string     0x801'5d3c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 2)
+                         0x801'5d44     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 3)
+                         0x801'5d4c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 4)
+                         0x801'5d54     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 5)
+                         0x801'5d5c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 6)
+                         0x801'5d64     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M563()::string (instance 7)
+                         0x801'5d6c     0x8  Data  Gb  Marlin_main.o [1]
+gcode_M564()             0x800'70d9    0x2a  Code  Gb  Marlin_main.o [1]
+gcode_M565()             0x800'710d    0x30  Code  Gb  Marlin_main.o [1]
+gcode_M566()             0x800'7159    0x16  Code  Gb  Marlin_main.o [1]
+gcode_M600()             0x800'7361   0x132  Code  Gb  Marlin_main.o [1]
+gcode_N                 0x2000'0518     0x4  Data  Lc  Marlin_main.o [1]
+gcode_T(unsigned char)   0x801'0849    0xf0  Code  Gb  Marlin_main.o [1]
+gcode_T(unsigned char)::string (instance 3)
+                         0x801'5b78    0x14  Data  Gb  Marlin_main.o [1]
+gcode_get_destination()
+                         0x800'6ee5    0x50  Code  Gb  Marlin_main.o [1]
+gcode_line_error(char const *, bool)
+                         0x800'66c9    0x38  Code  Gb  Marlin_main.o [1]
+gen_numname              0x800'2af3    0x7e  Code  Lc  ff.o [1]
+getHeaterPower(int)      0x800'c0a9     0xe  Code  Gb  temperature.o [1]
+getHighESpeed()          0x800'd77d    0xe4  Code  Gb  planner.o [1]
+getHighESpeed()::oldt   0x2000'059c     0x4  Data  Lc  planner.o [1]
+get_command()            0x800'6739   0x3c8  Code  Gb  Marlin_main.o [1]
+get_command()::stop_buffering
+                        0x2000'04ff     0x1  Data  Lc  Marlin_main.o [1]
+get_endstop()            0x801'3b5d    0x82  Code  Gb  Main.o [1]
+get_fat                  0x800'22fd   0x14a  Code  Lc  ff.o [1]
+get_fileinfo             0x800'349f   0x10e  Code  Lc  ff.o [1]
+get_firmware_info        0x801'0039    0x5c  Code  Gb  port.o [1]
+get_ldnumber             0x800'39c3    0x42  Code  Lc  ff.o [1]
+get_pid_output(int)      0x800'c1d1   0x1ae  Code  Gb  temperature.o [1]
+get_pid_output_bed()     0x800'c399    0xce  Code  Gb  temperature.o [1]
+get_xdir_info            0x800'2c0d    0x86  Code  Lc  ff.o [1]
+gpio_init()              0x800'd169    0x8e  Code  Gb  Platform.o [1]
+heater_ttbl_map         0x2000'07a8     0x8  Data  Lc  temperature.o [1]
+heater_ttbllen_map      0x2000'077c     0x2  Data  Lc  temperature.o [1]
+homeX                   0x2000'0500     0x1  Data  Gb  Marlin_main.o [1]
+homeY                   0x2000'0501     0x1  Data  Gb  Marlin_main.o [1]
+homeZ                   0x2000'0502     0x1  Data  Gb  Marlin_main.o [1]
+home_all_axis           0x2000'04fd     0x1  Data  Lc  Marlin_main.o [1]
+home_bump_mm_P          0x2000'0580     0xc  Data  Lc  Marlin_main.o [1]
+home_offset             0x2000'04d4     0xc  Data  Gb  Marlin_main.o [1]
+homing                  0x2000'04f8     0x1  Data  Gb  Marlin_main.o [1]
+homing_feedrate         0x2000'05a0    0x10  Data  Gb  port.o [1]
+hypotf                   0x801'097d    0x50  Code  Gb  hypot32.o [4]
+iTerm                   0x2000'07f8     0x8  Data  Lc  temperature.o [1]
+idle()                   0x800'8cd5    0x16  Code  Gb  Marlin_main.o [1]
+invert_byte             0x2000'067b     0x1  Data  Gb  stepper.o [1]
+isHeatingHotend(unsigned char)
+                         0x801'2595    0x2c  Code  Gb  Marlin_main.o [1]
+kill(char const *)       0x800'8d41    0x2a  Code  Gb  Marlin_main.o [1]
+last_endstop_stat       0x2000'0b39     0x1  Data  Lc  wifi.o [1]
+last_packet             0x2000'2204     0x4  Data  Gb  usbd_cdc_core.o [1]
+last_position           0x2000'071c     0x8  Data  Lc  temperature.o [1]
+ld_clust                 0x800'2aab    0x24  Code  Lc  ff.o [1]
+ld_dword                 0x800'20cd    0x16  Code  Lc  ff.o [1]
+ld_qword                 0x800'20e3    0x46  Code  Lc  ff.o [1]
+ld_word                  0x800'20c1     0xc  Code  Lc  ff.o [1]
+line_buff               0x2000'2810    0x20  Data  Gb  usbd_cdc_vcp.o [1]
+line_buff_pos           0x2000'0929     0x1  Data  Gb  usbd_cdc_vcp.o [1]
+line_to_destination()    0x800'f64d    0x10  Code  Gb  Marlin_main.o [1]
+line_to_destination(float)
+                         0x801'0939    0x30  Code  Gb  Marlin_main.o [1]
+linecoding              0x2000'0920     0x8  Data  Gb  usbd_cdc_vcp.o [1]
+load_obj_dir             0x800'2d39    0x36  Code  Lc  ff.o [1]
+load_xdir                0x800'2c93    0xa6  Code  Lc  ff.o [1]
+loop()                   0x800'65f9    0xd0  Code  Gb  Marlin_main.o [1]
+lpq                     0x2000'0810    0xc8  Data  Lc  temperature.o [1]
+lpq_len                 0x2000'057c     0x4  Data  Gb  Marlin_main.o [1]
+lpq_ptr                 0x2000'08d8     0x4  Data  Lc  temperature.o [1]
+lround                   0x801'1c6d    0x54  Code  Gb  lround64.o [4]
+lroundf                  0x801'1bcd    0x38  Code  Gb  lround32.o [4]
+lroundl                  0x801'1c6d    0x54  Code  Gb  lround64.o [4]
+m600_resume             0x2000'290e     0x1  Data  Gb  Marlin_main.o [1]
+machine_list             0x801'5634    0x54  Data  Gb  port.o [1]
+main                     0x801'3be5   0x214  Code  Gb  Main.o [1]
+manage_heater()          0x800'c495   0x166  Code  Gb  temperature.o [1]
+manage_inactivity(bool)
+                         0x800'8ceb    0x4c  Code  Gb  Marlin_main.o [1]
+marlin_debug_flags      0x2000'0481     0x1  Data  Gb  Marlin_main.o [1]
+max_acceleration_units_per_sq_second
+                        0x2000'28bc    0x10  Data  Gb  planner.o [1]
+max_allowable_speed(float, float, float)
+                         0x801'1b7b    0x2c  Code  Gb  planner.o [1]
+max_e_jerk              0x2000'2690     0x4  Data  Gb  planner.o [1]
+max_feedrate            0x2000'2668    0x10  Data  Gb  planner.o [1]
+max_inactive_time       0x2000'04e8     0x4  Data  Lc  Marlin_main.o [1]
+max_pos                 0x2000'0664     0xc  Data  Gb  port.o [1]
+max_temp_error(unsigned char)
+                         0x800'c14d     0xe  Code  Gb  temperature.o [1]
+max_xy_jerk             0x2000'2688     0x4  Data  Gb  planner.o [1]
+max_z_jerk              0x2000'268c     0x4  Data  Gb  planner.o [1]
+maxttemp                0x2000'0704     0x8  Data  Lc  temperature.o [1]
+maxttemp_raw            0x2000'07a0     0x8  Data  Lc  temperature.o [1]
+mem_cmp                  0x800'2193    0x1a  Code  Lc  ff.o [1]
+mem_cpy                  0x800'2177    0x12  Code  Lc  ff.o [1]
+mem_set                  0x800'2189     0xa  Code  Lc  ff.o [1]
+memchr                   0x801'3281          Code  Gb  memchr.o [5]
+memset                   0x800'63b9    0x14  Code  Gb  memset.o [5]
+millis()                 0x800'ce0f     0x6  Code  Gb  Platform.o [1]
+min_pos                 0x2000'2890     0xc  Data  Gb  Marlin_main.o [1]
+min_temp_error(unsigned char)
+                         0x800'c19d    0x10  Code  Gb  temperature.o [1]
+minimumfeedrate         0x2000'2678     0x4  Data  Gb  planner.o [1]
+minsegmenttime          0x2000'2664     0x4  Data  Gb  planner.o [1]
+mintravelfeedrate       0x2000'2694     0x4  Data  Gb  planner.o [1]
+minttemp                0x2000'06fc     0x8  Data  Lc  temperature.o [1]
+minttemp_raw            0x2000'0798     0x8  Data  Lc  temperature.o [1]
+model                   0x2000'27b4     0x1  Data  Gb  port.o [1]
+move_window              0x800'2215    0x36  Code  Lc  ff.o [1]
+ndigs                    0x801'5688    0x28  Data  Lc  iar_Stoulx.o [2]
+next_auto_fan_check_ms  0x2000'0730     0x4  Data  Lc  temperature.o [1]
+no_wait_for_cooling     0x2000'04fb     0x1  Data  Gb  Marlin_main.o [1]
+ok_to_send()             0x800'8869    0x6c  Code  Gb  Marlin_main.o [1]
+old_endstop_bits        0x2000'0678     0x1  Data  Lc  stepper.o [1]
+out                      0x801'1eff    0x1a  Code  Lc  xprintftiny.o [2]
+out_bits                0x2000'0675     0x1  Data  Lc  stepper.o [1]
+pTerm                   0x2000'07f0     0x8  Data  Lc  temperature.o [1]
+pid_error               0x2000'08dc     0x8  Data  Lc  temperature.o [1]
+pid_reset               0x2000'07dc     0x2  Data  Lc  temperature.o [1]
+plan_arc(float *, float *, unsigned char)
+                         0x800'8989   0x2c6  Code  Gb  Marlin_main.o [1]
+plan_buffer_line(float const &, float const &, float const &, float const &, float, unsigned char)
+                         0x800'd8b9   0x798  Code  Gb  planner.o [1]
+plan_discard_current_block()
+                         0x801'1e79    0x20  Code  Gb  stepper.o [1]
+plan_init()              0x800'd753    0x2a  Code  Gb  planner.o [1]
+plan_set_e_position(float const &)
+                         0x800'e0ef    0x1c  Code  Gb  planner.o [1]
+plan_set_position(float const &, float const &, float const &, float const &)
+                         0x800'e051    0x9e  Code  Gb  planner.o [1]
+planner_forward_pass()   0x800'd693    0x38  Code  Gb  planner.o [1]
+planner_forward_pass_kernel(block_t *, block_t *, block_t *)
+                         0x800'd625    0x6e  Code  Gb  planner.o [1]
+planner_recalculate_trapezoids()
+                         0x800'd6cb    0x88  Code  Gb  planner.o [1]
+planner_reverse_pass()   0x800'd5db    0x4a  Code  Gb  planner.o [1]
+planner_reverse_pass_kernel(block_t *, block_t *, block_t *)
+                         0x800'd57d    0x5e  Code  Gb  planner.o [1]
+port_init                0x801'00b7    0xe0  Code  Gb  port.o [1]
+position                0x2000'2644    0x10  Data  Gb  planner.o [1]
+pows                     0x801'56d8    0x48  Data  Lc  strto64.o [4]
+prepare_move()           0x800'88dd    0x3e  Code  Gb  Marlin_main.o [1]
+previous_cmd_ms         0x2000'04e4     0x4  Data  Gb  Marlin_main.o [1]
+previous_nominal_speed  0x2000'2698     0x4  Data  Lc  planner.o [1]
+previous_speed          0x2000'2654    0x10  Data  Lc  planner.o [1]
+print_endstop(unsigned char)
+                         0x801'3b29    0x34  Code  Gb  Main.o [1]
+print_job_start_ms      0x2000'04f0     0x4  Data  Gb  Marlin_main.o [1]
+print_job_stop_ms       0x2000'04f4     0x4  Data  Gb  Marlin_main.o [1]
+print_xyz(char const *, float const *)
+                         0x800'6bfd     0xe  Code  Gb  Marlin_main.o [1]
+print_xyz(char const *, float, float, float)
+                         0x800'6bc5    0x38  Code  Gb  Marlin_main.o [1]
+process_next_command()   0x800'74d5  0x133c  Code  Gb  Marlin_main.o [1]
+procpos                 0x2000'0468     0x4  Data  Gb  Marlin_main.o [1]
+put_fat                  0x800'2447   0x10a  Code  Lc  ff.o [1]
+putc(char)               0x800'f7c9    0x20  Code  Gb  Marlin_main.o [1]
+puts(unsigned char *, unsigned short)
+                         0x800'716f    0x1a  Code  Gb  Marlin_main.o [1]
+queued_commands_P       0x2000'28ec     0x4  Data  Gb  Marlin_main.o [1]
+quickStop()              0x800'ebd1    0x36  Code  Gb  stepper.o [1]
+raw_temp_bed_value      0x2000'280c     0x2  Data  Gb  Platform.o [1]
+raw_temp_cpu_value      0x2000'280e     0x2  Data  Gb  Platform.o [1]
+raw_temp_value          0x2000'2804     0x8  Data  Gb  Platform.o [1]
+recal_probe_offset      0x2000'0570     0x4  Data  Gb  Marlin_main.o [1]
+refresh_cmd_timeout()    0x800'f839    0x10  Code  Gb  Marlin_main.o [1]
+relative_mode           0x2000'0485     0x1  Data  Gb  Marlin_main.o [1]
+remotewakeupon          0x2000'28dc     0x4  Data  Gb  usbd_pwr.o [1]
+remove_chain             0x800'26a1    0xe8  Code  Lc  ff.o [1]
+reset_acceleration_rates()
+                         0x800'e10b    0x26  Code  Gb  planner.o [1]
+reset_invert_bit         0x801'0095    0x22  Code  Gb  port.o [1]
+retract_acceleration    0x2000'2680     0x4  Data  Gb  planner.o [1]
+round                    0x801'3331   0x12c  Code  Gb  round64.o [4]
+roundf                   0x801'3299    0x98  Code  Gb  round32.o [4]
+roundl                   0x801'3331   0x12c  Code  Gb  round64.o [4]
+rx_buffer               0x2000'2318   0x108  Data  Gb  MarlinSerial.o [1]
+saved_feedrate          0x2000'0514     0x4  Data  Gb  Marlin_main.o [1]
+saved_feedrate_multiplier
+                        0x2000'0568     0x4  Data  Gb  Marlin_main.o [1]
+scalePID_d(float)        0x800'cccd     0x2  Code  Gb  temperature.o [1]
+scalePID_i(float)        0x800'ccc5     0x4  Code  Gb  temperature.o [1]
+sd_crc16                 0x800'55a5    0x2c  Code  Gb  SPI_MSD0_Driver.o [1]
+sdprint_cancel          0x2000'04fe     0x1  Data  Gb  Marlin_main.o [1]
+sdprinting              0x2000'290a     0x1  Data  Gb  cardreader.o [1]
+seen_pointer            0x2000'04e0     0x4  Data  Lc  Marlin_main.o [1]
+serial_char             0x2000'04f9     0x1  Data  Lc  Marlin_main.o [1]
+serial_count            0x2000'056c     0x4  Data  Lc  Marlin_main.o [1]
+serial_echopair_P(char const *, float)
+                         0x800'64cb    0x1e  Code  Gb  Marlin_main.o [1]
+serial_echopair_P(char const *, int)
+                         0x800'64b7    0x14  Code  Gb  Marlin_main.o [1]
+serial_echopair_P(char const *, unsigned long)
+                         0x800'64e9    0x14  Code  Gb  Marlin_main.o [1]
+serial_init(int)         0x800'd205    0xfc  Code  Gb  Platform.o [1]
+serial_rate             0x2000'290c     0x1  Data  Gb  Marlin_main.o [1]
+serialprintPGM(char const *)
+                         0x800'974d    0x10  Code  Gb  temperature.o [1]
+setTargetHotend(float const &, unsigned char)
+                         0x800'fa99    0x1c  Code  Gb  wifi.o [1]
+setTargetedHotend(int)   0x800'8d71    0x60  Code  Gb  Marlin_main.o [1]
+set_axis_is_at_home(AxisEnum)
+                         0x800'6c0b    0x6a  Code  Gb  Marlin_main.o [1]
+set_current_to_destination()
+                         0x801'0969    0x14  Code  Gb  Marlin_main.o [1]
+set_destination_to_current()
+                         0x801'2581    0x14  Code  Gb  Marlin_main.o [1]
+set_homing_bump_feedrate(AxisEnum)
+                         0x800'f70d    0x58  Code  Gb  Marlin_main.o [1]
+set_homing_bump_feedrate(AxisEnum)::homing_bump_divisor
+                         0x801'4dbc     0xc  Data  Lc  Marlin_main.o [1]
+set_homing_bump_feedrate(AxisEnum)::string
+                         0x801'5940    0x24  Data  Gb  Marlin_main.o [1]
+set_homing_bump_feedrate(AxisEnum)::string (instance 2)
+                         0x800'5fb2     0x2  Data  Gb  Marlin_main.o [1]
+set_stepper_direction()
+                         0x800'e261   0x102  Code  Gb  stepper.o [1]
+setup()                  0x800'65c9    0x30  Code  Gb  Marlin_main.o [1]
+sinf                     0x801'0d47     0xa  Code  Gb  cos_sin32.o [4]
+slow_card               0x2000'2911     0x1  Data  Gb  SPI_MSD0_Driver.o [1]
+soft_pwm                0x2000'06d4     0x2  Data  Lc  temperature.o [1]
+soft_pwm_bed            0x2000'06d7     0x1  Data  Gb  temperature.o [1]
+soft_pwm_fan            0x2000'06d9     0x1  Data  Lc  temperature.o [1]
+sprintf                  0x800'ee1d    0x40  Code  Gb  sprintf.o [2]
+sqrtf                    0x801'1c05          Code  Gb  sqrtf.o [4]
+st_clust                 0x800'2acf    0x24  Code  Lc  ff.o [1]
+st_dword                 0x800'2131    0x10  Code  Lc  ff.o [1]
+st_get_position(unsigned char)
+                         0x800'eb85     0xe  Code  Gb  stepper.o [1]
+st_get_position_mm(AxisEnum)
+                         0x800'eb99    0x18  Code  Gb  stepper.o [1]
+st_init()                0x800'e87d   0x2a8  Code  Gb  stepper.o [1]
+st_qword                 0x800'2141    0x36  Code  Lc  ff.o [1]
+st_set_e_position(long const &)
+                         0x800'eb75     0xc  Code  Gb  stepper.o [1]
+st_set_position(long const &, long const &, long const &, long const &)
+                         0x800'eb51    0x1a  Code  Gb  stepper.o [1]
+st_synchronize()         0x800'eb35    0x16  Code  Gb  stepper.o [1]
+st_wake_up()             0x800'e253     0xe  Code  Gb  stepper.o [1]
+st_word                  0x800'2129     0x8  Code  Lc  ff.o [1]
+start_after_download    0x2000'290d     0x1  Data  Gb  Marlin_main.o [1]
+start_watching_heater(int)
+                         0x800'c95d    0x4a  Code  Gb  temperature.o [1]
+started                 0x2000'0b3a     0x1  Data  Gb  wifi.o [1]
+step_events_completed   0x2000'06b8     0x4  Data  Lc  stepper.o [1]
+step_loops              0x2000'0676     0x1  Data  Lc  stepper.o [1]
+step_loops_nominal      0x2000'0680     0x2  Data  Lc  stepper.o [1]
+stepper_inactive_time   0x2000'04ec     0x4  Data  Lc  Marlin_main.o [1]
+stepper_timer()          0x800'e515   0x328  Code  Gb  stepper.o [1]
+stepper_timer_init()     0x800'd061    0x32  Code  Gb  Platform.o [1]
+store_char               0x800'975d    0x5c  Code  Gb  MarlinSerial.o [1]
+store_char_usb           0x800'97b9    0x1c  Code  Gb  MarlinSerial.o [1]
+store_xdir               0x800'2d6f    0x64  Code  Lc  ff.o [1]
+strcat                   0x801'25c1    0x1c  Code  Gb  strcat.o [2]
+strchr                   0x800'ed31          Code  Gb  strchr.o [5]
+strlen                   0x801'1085          Code  Gb  strlen.o [5]
+strncat                  0x801'25dd    0x2a  Code  Gb  strncat.o [2]
+strncmp                  0x801'1629    0x2c  Code  Gb  strncmp.o [2]
+strtod                   0x800'f279     0xc  Code  Gb  strto64.o [4]
+strtol                   0x800'eddd     0xa  Code  Gb  iar_Stolx.o [2]
+strtold                  0x800'f279     0xc  Code  Gb  strto64.o [4]
+sum_sfn                  0x800'2b75    0x1a  Code  Lc  ff.o [1]
+sync()                   0x800'7189    0x1e  Code  Gb  Marlin_main.o [1]
+sync()::sync_packet      0x801'4dc8    0x10  Data  Lc  Marlin_main.o [1]
+sync_fs                  0x800'224b    0x88  Code  Lc  ff.o [1]
+sync_plan_position()     0x800'f479    0x1c  Code  Gb  Marlin_main.o [1]
+sync_window              0x800'21bf    0x56  Code  Lc  ff.o [1]
+systick_count           0x2000'28d0     0x4  Data  Gb  Platform.o [1]
+target_direction        0x2000'04fc     0x1  Data  Gb  Marlin_main.o [1]
+target_extruder         0x2000'0486     0x1  Data  Lc  Marlin_main.o [1]
+target_temperature      0x2000'06dc    0x10  Data  Gb  temperature.o [1]
+target_temperature_bed  0x2000'07b0     0x4  Data  Gb  temperature.o [1]
+temp_count              0x2000'27e8     0x1  Data  Gb  Platform.o [1]
+temp_cpu                0x2000'06da     0x2  Data  Gb  temperature.o [1]
+temp_dState             0x2000'07e8     0x8  Data  Lc  temperature.o [1]
+temp_dState_bed         0x2000'07c4     0x4  Data  Lc  temperature.o [1]
+temp_iState             0x2000'07e0     0x8  Data  Lc  temperature.o [1]
+temp_iState_bed         0x2000'07c0     0x4  Data  Lc  temperature.o [1]
+temp_iState_max         0x2000'0724     0x8  Data  Lc  temperature.o [1]
+temp_iState_max_bed     0x2000'072c     0x4  Data  Lc  temperature.o [1]
+temp_iState_min         0x2000'07b8     0x8  Data  Lc  temperature.o [1]
+temp_iState_min_bed     0x2000'07cc     0x4  Data  Lc  temperature.o [1]
+temp_meas_ready         0x2000'06d8     0x1  Data  Lc  temperature.o [1]
+temptable_1              0x801'4fd8    0xf4  Data  Lc  temperature.o [1]
+temptable_5              0x801'50cc    0x80  Data  Lc  temperature.o [1]
+thermal_runaway_protection(TRState *, millis_t *, float, float, int, int, int)::tr_target_temperature
+                        0x2000'28a8    0x14  Data  Lc  temperature.o [1]
+thermal_runaway_protection(TRState *, unsigned long *, float, float, int, int, int)
+                         0x800'c9b1    0xac  Code  Gb  temperature.o [1]
+thermal_runaway_state_machine
+                        0x2000'0768     0x4  Data  Lc  temperature.o [1]
+thermal_runaway_timer   0x2000'076c    0x10  Data  Lc  temperature.o [1]
+thermistor_bed_type     0x2000'0780     0x1  Data  Gb  temperature.o [1]
+thermistor_type         0x2000'077f     0x1  Data  Gb  temperature.o [1]
+tp_init()                0x800'c7c9   0x194  Code  Gb  temperature.o [1]
+travel_acceleration     0x2000'2684     0x4  Data  Gb  planner.o [1]
+unknown_command_error()
+                         0x800'6f41    0x20  Code  Gb  Marlin_main.o [1]
+unlocked                0x2000'290b     0x1  Data  Gb  Main.o [1]
+unscalePID_d(float)      0x800'ccd7     0x2  Code  Gb  temperature.o [1]
+unscalePID_i(float)      0x800'ccc9     0x4  Code  Gb  temperature.o [1]
+updatePID()              0x800'c071    0x32  Code  Gb  temperature.o [1]
+update_LCD()             0x800'71e1   0x154  Code  Gb  Marlin_main.o [1]
+update_endstops()        0x801'1cf5   0x184  Code  Gb  stepper.o [1]
+update_endstops_ext()    0x800'e24b     0x8  Code  Gb  stepper.o [1]
+usbd_cdc_AltSet         0x2000'08e8     0x4  Data  Lc  usbd_cdc_core.o [1]
+usbd_cdc_CfgDesc         0x801'5764    0x44  Data  Gb  usbd_cdc_core.o [1]
+usbd_cdc_DataIn          0x801'486b    0x58  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_DataOut         0x801'48c3    0x2a  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_DeInit          0x801'4781    0x24  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_EP0_RxReady     0x801'484d    0x1e  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_Init            0x801'471d    0x64  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_SOF             0x801'48ed    0x80  Code  Gb  usbd_cdc_core.o [1]
+usbd_cdc_SOF::FrameCount
+                        0x2000'2214     0x4  Data  Lc  usbd_cdc_core.o [1]
+usbd_cdc_Setup           0x801'47a5    0xa8  Code  Gb  usbd_cdc_core.o [1]
+validate                 0x800'3e09    0x38  Code  Lc  ff.o [1]
+volumetric_enabled      0x2000'0482     0x1  Data  Gb  Marlin_main.o [1]
+volumetric_multiplier   0x2000'0574     0x8  Data  Gb  Marlin_main.o [1]
+wInterrupt_Mask         0x2000'2900     0x4  Data  Gb  usb_dcd.o [1]
+watch_heater_next_ms    0x2000'0754    0x14  Data  Gb  temperature.o [1]
+watch_target_temp       0x2000'0740    0x14  Data  Gb  temperature.o [1]
+wifi_buff_obj           0x2000'0b2c     0x8  Data  Gb  wifi.o [1]
+wifi_buff_ptr           0x2000'0b34     0x1  Data  Gb  wifi.o [1]
+wifi_buff_state         0x2000'0b35     0x1  Data  Gb  wifi.o [1]
+wifi_buff_value         0x2000'2830    0x20  Data  Gb  wifi.o [1]
+wifi_download           0x2000'0b37     0x1  Data  Gb  wifi.o [1]
+wifi_gw                 0x2000'0b28     0x4  Data  Gb  wifi.o [1]
+wifi_init()              0x800'9aed    0x34  Code  Gb  wifi.o [1]
+wifi_ip                 0x2000'0b20     0x4  Data  Gb  wifi.o [1]
+wifi_mac                0x2000'0b3c    0x14  Data  Gb  wifi.o [1]
+wifi_mask               0x2000'0b24     0x4  Data  Gb  wifi.o [1]
+wifi_password           0x2000'2870    0x20  Data  Gb  wifi.o [1]
+wifi_process()           0x800'9ea9   0x79c  Code  Gb  wifi.o [1]
+wifi_put(char)           0x801'141d    0x24  Code  Gb  wifi.o [1]
+wifi_r_buff_ptr         0x2000'0b50     0x2  Data  Gb  wifi.o [1]
+wifi_ssid               0x2000'2850    0x20  Data  Gb  wifi.o [1]
+wifi_status             0x2000'0b36     0x1  Data  Gb  wifi.o [1]
+wifi_update()            0x800'a6d9   0x3bc  Code  Gb  wifi.o [1]
+wifi_w_buff_ptr         0x2000'0b5a     0x2  Data  Gb  Platform.o [1]
+wifi_writeInt(unsigned short, unsigned char)
+                         0x800'9a11    0x6a  Code  Gb  wifi.o [1]
+wifi_writeInt32(unsigned int, unsigned char)
+                         0x800'9a7d    0x70  Code  Gb  wifi.o [1]
+wifi_writeString(char *)
+                         0x800'99d9    0x14  Code  Gb  wifi.o [1]
+wifi_writeString_safe(char *)
+                         0x800'99ed    0x24  Code  Gb  wifi.o [1]
+writeString(char *)      0x801'3b01    0x26  Code  Gb  Main.o [1]
+xdir_sum                 0x800'2b8f    0x3a  Code  Lc  ff.o [1]
+xname_sum                0x800'2bc9    0x44  Code  Lc  ff.o [1]
+xtal_failed             0x2000'2913     0x1  Data  Gb  usb_bsp.o [1]
+z_counter               0x2000'0674     0x1  Data  Gb  stepper.o [1]
+zprobe_zoffset          0x2000'28f0     0x4  Data  Gb  Marlin_main.o [1]
+
+
+[1] = D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+[2] = dl6M_tln.a
+[3] = dlpp6M_tl_nc.a
+[4] = m6M_tl.a
+[5] = rt6M_tl.a
+
+  75'588 bytes of readonly  code memory
+   6'125 bytes of readonly  data memory (+ 4     absolute)
+  11'514 bytes of readwrite data memory (+ 1'036 absolute)
+
+Errors: none
+Warnings: 2

@@ -1,0 +1,802 @@
+###############################################################################
+#                                                                             #
+# IAR ANSI C/C++ Compiler V6.70.1.5641/W32 for ARM      01/May/2017  16:26:34 #
+# Copyright 1999-2013 IAR Systems AB.                                         #
+#                                                                             #
+#    Cpu mode     =  thumb                                                    #
+#    Endian       =  little                                                   #
+#    Source file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\ #
+#                    TinyJS_Functions.cpp                                     #
+#    Command line =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\ #
+#                    TinyJS_Functions.cpp -D USE_STDPERIPH_DRIVER -D          #
+#                    USE_STM32072B_EVAL -D STM32F072 -lcN                     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\ -o D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\DEBUG\Obj\ --debug --endian=little          #
+#                    --cpu=Cortex-M0 -e --fpu=None --dlib_config "C:\Program  #
+#                    Files (x86)\IAR Systems\Embedded Workbench               #
+#                    6.5\arm\INC\c\DLib_Config_Normal.h" -I                   #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\E #
+#                    WARM\..\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\ #
+#                    Projects\EWARM\..\src\fs\ -I                             #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\js\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pro #
+#                    jects\EWARM\..\src\marlin\ -I                            #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\src\rtt\ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Pr #
+#                    ojects\EWARM\..\src\usb\ -I                              #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\ -I        #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Driver\inc\ -I           #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Core\inc\ -I     #
+#                    D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\. #
+#                    .\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\   #
+#                    -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWAR #
+#                    M\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc #
+#                    \ -I D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EW #
+#                    ARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_m #
+#                    sc_wrapper\inc\ -I D:\Projects\3DPrint\SRC\MM32-F070-DEL #
+#                    TA\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Libra #
+#                    ry\Class\msc\inc\ -Ohz --eec++ --no_static_destruction   #
+#                    -I "C:\Program Files (x86)\IAR Systems\Embedded          #
+#                    Workbench 6.5\arm\CMSIS\Include\" --relaxed_fp           #
+#    List file    =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\List\TinyJS_Functions.lst                           #
+#    Object file  =  D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\EWARM\D #
+#                    EBUG\Obj\TinyJS_Functions.o                              #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA\Projects\src\js\TinyJS_Functions.cpp
+      1          /*
+      2           * TinyJS
+      3           *
+      4           * A single-file Javascript-alike engine
+      5           *
+      6           * - Useful language functions
+      7           *
+      8           * Authored By Gordon Williams <gw@pur3.co.uk>
+      9           *
+     10           * Copyright (C) 2009 Pur3 Ltd
+     11           *
+     12           * Permission is hereby granted, free of charge, to any person obtaining a copy of
+     13           * this software and associated documentation files (the "Software"), to deal in
+     14           * the Software without restriction, including without limitation the rights to
+     15           * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+     16           * of the Software, and to permit persons to whom the Software is furnished to do
+     17           * so, subject to the following conditions:
+     18          
+     19           * The above copyright notice and this permission notice shall be included in all
+     20           * copies or substantial portions of the Software.
+     21          
+     22           * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     23           * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     24           * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     25           * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     26           * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     27           * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+     28           * SOFTWARE.
+     29           */
+     30          
+     31          #include "TinyJS_Functions.h"
+     32          #include <math.h>
+     33          #include <cstdlib>
+     34          #include <sstream>
+     35          
+     36          // ----------------------------------------------- Actual Functions
+     37          void scTrace(CScriptVar *c, void *userdata) {
+     38              CTinyJS *js = (CTinyJS*)userdata;
+     39              js->root->trace();
+     40          }
+     41          
+     42          void scObjectDump(CScriptVar *c, void *) {
+     43              c->getParameter("this")->trace("> ");
+     44          }
+     45          
+     46          void scObjectClone(CScriptVar *c, void *) {
+     47              CScriptVar *obj = c->getParameter("this");
+     48              c->getReturnVar()->copyValue(obj);
+     49          }
+     50          
+     51          void scMathRand(CScriptVar *c, void *) {
+     52              c->getReturnVar()->setDouble((double)rand()/RAND_MAX);
+     53          }
+     54          
+     55          void scMathRandInt(CScriptVar *c, void *) {
+     56              int min = c->getParameter("min")->getInt();
+     57              int max = c->getParameter("max")->getInt();
+     58              int val = min + (int)(rand()%(1+max-min));
+     59              c->getReturnVar()->setInt(val);
+     60          }
+     61          
+     62          void scCharToInt(CScriptVar *c, void *) {
+     63              string str = c->getParameter("ch")->getString();;
+     64              int val = 0;
+     65              if (str.length()>0)
+     66                  val = (int)str.c_str()[0];
+     67              c->getReturnVar()->setInt(val);
+     68          }
+     69          
+     70          void scStringIndexOf(CScriptVar *c, void *) {
+     71              string str = c->getParameter("this")->getString();
+     72              string search = c->getParameter("search")->getString();
+     73              size_t p = str.find(search);
+     74              int val = (p==string::npos) ? -1 : p;
+     75              c->getReturnVar()->setInt(val);
+     76          }
+     77          
+     78          void scStringSubstring(CScriptVar *c, void *) {
+     79              string str = c->getParameter("this")->getString();
+     80              int lo = c->getParameter("lo")->getInt();
+     81              int hi = c->getParameter("hi")->getInt();
+     82          
+     83              int l = hi-lo;
+     84              if (l>0 && lo>=0 && lo+l<=(int)str.length())
+     85                c->getReturnVar()->setString(str.substr(lo, l));
+     86              else
+     87                c->getReturnVar()->setString("");
+     88          }
+     89          
+     90          void scStringCharAt(CScriptVar *c, void *) {
+     91              string str = c->getParameter("this")->getString();
+     92              int p = c->getParameter("pos")->getInt();
+     93              if (p>=0 && p<(int)str.length())
+     94                c->getReturnVar()->setString(str.substr(p, 1));
+     95              else
+     96                c->getReturnVar()->setString("");
+     97          }
+     98          
+     99          void scStringCharCodeAt(CScriptVar *c, void *) {
+    100              string str = c->getParameter("this")->getString();
+    101              int p = c->getParameter("pos")->getInt();
+    102              if (p>=0 && p<(int)str.length())
+    103                c->getReturnVar()->setInt(str.at(p));
+    104              else
+    105                c->getReturnVar()->setInt(0);
+    106          }
+    107          
+    108          void scStringSplit(CScriptVar *c, void *) {
+    109              string str = c->getParameter("this")->getString();
+    110              string sep = c->getParameter("separator")->getString();
+    111              CScriptVar *result = c->getReturnVar();
+    112              result->setArray();
+    113              int length = 0;
+    114          
+    115              size_t pos = str.find(sep);
+    116              while (pos != string::npos) {
+    117                result->setArrayIndex(length++, new CScriptVar(str.substr(0,pos)));
+    118                str = str.substr(pos+1);
+    119                pos = str.find(sep);
+    120              }
+    121          
+    122              if (str.size()>0)
+    123                result->setArrayIndex(length++, new CScriptVar(str));
+    124          }
+    125          
+    126          void scStringFromCharCode(CScriptVar *c, void *) {
+    127              char str[2];
+    128              str[0] = c->getParameter("char")->getInt();
+    129              str[1] = 0;
+    130              c->getReturnVar()->setString(str);
+    131          }
+    132          
+    133          void scIntegerParseInt(CScriptVar *c, void *) {
+    134              string str = c->getParameter("str")->getString();
+    135              int val = strtol(str.c_str(),0,0);
+    136              c->getReturnVar()->setInt(val);
+    137          }
+    138          
+    139          void scIntegerValueOf(CScriptVar *c, void *) {
+    140              string str = c->getParameter("str")->getString();
+    141          
+    142              int val = 0;
+    143              if (str.length()==1)
+    144                val = str[0];
+    145              c->getReturnVar()->setInt(val);
+    146          }
+    147          
+    148          void scJSONStringify(CScriptVar *c, void *) {
+    149              ostringstream result;
+    150              c->getParameter("obj")->getJSON(result);
+    151              c->getReturnVar()->setString(result.str());
+    152          }
+    153          
+    154          void scExec(CScriptVar *c, void *data) {
+    155              CTinyJS *tinyJS = (CTinyJS *)data;
+    156              string str = c->getParameter("jsCode")->getString();
+    157              tinyJS->execute(str);
+    158          }
+    159          
+    160          void scEval(CScriptVar *c, void *data) {
+    161              CTinyJS *tinyJS = (CTinyJS *)data;
+    162              string str = c->getParameter("jsCode")->getString();
+    163              c->setReturnVar(tinyJS->evaluateComplex(str).var);
+    164          }
+    165          
+    166          void scArrayContains(CScriptVar *c, void *data) {
+    167            CScriptVar *obj = c->getParameter("obj");
+    168            CScriptVarLink *v = c->getParameter("this")->firstChild;
+    169          
+    170            bool contains = false;
+    171            while (v) {
+    172                if (v->var->equals(obj)) {
+    173                  contains = true;
+    174                  break;
+    175                }
+    176                v = v->nextSibling;
+    177            }
+    178          
+    179            c->getReturnVar()->setInt(contains);
+    180          }
+    181          
+    182          void scArrayRemove(CScriptVar *c, void *data) {
+    183            CScriptVar *obj = c->getParameter("obj");
+    184            vector<int> removedIndices;
+    185            CScriptVarLink *v;
+    186            // remove
+    187            v = c->getParameter("this")->firstChild;
+    188            while (v) {
+    189                if (v->var->equals(obj)) {
+    190                  removedIndices.push_back(v->getIntName());
+    191                }
+    192                v = v->nextSibling;
+    193            }
+    194            // renumber
+    195            v = c->getParameter("this")->firstChild;
+    196            while (v) {
+    197                int n = v->getIntName();
+    198                int newn = n;
+    199                for (size_t i=0;i<removedIndices.size();i++)
+    200                  if (n>=removedIndices[i])
+    201                    newn--;
+    202                if (newn!=n)
+    203                  v->setIntName(newn);
+    204                v = v->nextSibling;
+    205            }
+    206          }
+    207          
+    208          void scArrayJoin(CScriptVar *c, void *data) {
+    209            string sep = c->getParameter("separator")->getString();
+    210            CScriptVar *arr = c->getParameter("this");
+    211          
+    212            ostringstream sstr;
+    213            int l = arr->getArrayLength();
+    214            for (int i=0;i<l;i++) {
+    215              if (i>0) sstr << sep;
+    216              sstr << arr->getArrayIndex(i)->getString();
+    217            }
+    218          
+    219            c->getReturnVar()->setString(sstr.str());
+    220          }
+    221          
+    222          // ----------------------------------------------- Register Functions
+    223          void registerFunctions(CTinyJS *tinyJS) {
+    224              tinyJS->addNative("function exec(jsCode)", scExec, tinyJS); // execute the given code
+    225              tinyJS->addNative("function eval(jsCode)", scEval, tinyJS); // execute the given string (an expression) and return the result
+    226              tinyJS->addNative("function trace()", scTrace, tinyJS);
+    227              tinyJS->addNative("function Object.dump()", scObjectDump, 0);
+    228              tinyJS->addNative("function Object.clone()", scObjectClone, 0);
+    229              tinyJS->addNative("function Math.rand()", scMathRand, 0);
+    230              tinyJS->addNative("function Math.randInt(min, max)", scMathRandInt, 0);
+    231              tinyJS->addNative("function charToInt(ch)", scCharToInt, 0); //  convert a character to an int - get its value
+    232              tinyJS->addNative("function String.indexOf(search)", scStringIndexOf, 0); // find the position of a string in a string, -1 if not
+    233              tinyJS->addNative("function String.substring(lo,hi)", scStringSubstring, 0);
+    234              tinyJS->addNative("function String.charAt(pos)", scStringCharAt, 0);
+    235              tinyJS->addNative("function String.charCodeAt(pos)", scStringCharCodeAt, 0);
+    236              tinyJS->addNative("function String.fromCharCode(char)", scStringFromCharCode, 0);
+    237              tinyJS->addNative("function String.split(separator)", scStringSplit, 0);
+    238              tinyJS->addNative("function Integer.parseInt(str)", scIntegerParseInt, 0); // string to int
+    239              tinyJS->addNative("function Integer.valueOf(str)", scIntegerValueOf, 0); // value of a single character
+    240              tinyJS->addNative("function JSON.stringify(obj, replacer)", scJSONStringify, 0); // convert to JSON. replacer is ignored at the moment
+    241              // JSON.parse is left out as you can (unsafely!) use eval instead
+    242              tinyJS->addNative("function Array.contains(obj)", scArrayContains, 0);
+    243              tinyJS->addNative("function Array.remove(obj)", scArrayRemove, 0);
+    244              tinyJS->addNative("function Array.join(separator)", scArrayJoin, 0);
+    245          }
+    246          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   _Copy_backward_opt(unsigned int const *, unsigned int const *, unsigned int *)
+         8   -> __iar_Copy_backward_a4
+       4   _String_val::subobject _String_val(char_allocator)
+       8   _Uninit_copier<unsigned int, true>::_Copy(unsigned int const *, unsigned int const *, unsigned int *)
+         8   -> __iar_Copy_a4
+       8   _Uninit_copy(unsigned int const *, unsigned int const *, unsigned int *, allocator<unsigned int> &)
+         8   -> _Uninit_copier<unsigned int, true>::_Copy(unsigned int const *, unsigned int const *, unsigned int *)
+       0   _Uninitialized_fill_n(unsigned int *, unsigned int, unsigned int const &, allocator<unsigned int> &)
+       0   _Vector_impl<unsigned int, allocator<unsigned int>>::_Altyval() const
+       0   _Vector_impl<unsigned int, allocator<unsigned int>>::_EraseAll()
+      16   _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert0(unsigned int *, unsigned int)
+        16   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert_n(unsigned int *, unsigned int, unsigned int const &)
+      16   _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert_n(unsigned int *, unsigned int, unsigned int const &)
+        16   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Make_room(unsigned int *, unsigned int)
+        16   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Ufill(unsigned int *, unsigned int, unsigned int)
+      40   _Vector_impl<unsigned int, allocator<unsigned int>>::_Make_room(unsigned int *, unsigned int)
+        40   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Tidy0()
+        40   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Ucopy(unsigned int const *, unsigned int const *, unsigned int *)
+        40   -> _Vector_value<allocator<void>>::_Size<4U>() const
+        40   -> copy_backward(unsigned int *, unsigned int *, unsigned int *)
+        40   -> operator new(size_t)
+       8   _Vector_impl<unsigned int, allocator<unsigned int>>::_Push_back0(unsigned int)
+         8   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert0(unsigned int *, unsigned int)
+         8   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Ufill(unsigned int *, unsigned int, unsigned int)
+      16   _Vector_impl<unsigned int, allocator<unsigned int>>::_Tidy0()
+        16   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Altyval() const
+        16   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_EraseAll()
+        16   -> operator delete(void *)
+       8   _Vector_impl<unsigned int, allocator<unsigned int>>::_Ucopy(unsigned int const *, unsigned int const *, unsigned int *)
+         8   -> _Uninit_copy(unsigned int const *, unsigned int const *, unsigned int *, allocator<unsigned int> &)
+      24   _Vector_impl<unsigned int, allocator<unsigned int>>::_Ufill(unsigned int *, unsigned int, unsigned int)
+        24   -> _Uninitialized_fill_n(unsigned int *, unsigned int, unsigned int const &, allocator<unsigned int> &)
+       0   _Vector_value<allocator<void>>::_Size<4U>() const
+       0   _Vector_value<allocator<void>>::_Zero()
+       8   char_traits::copy(char *, char const *, size_t)
+         8   -> __aeabi_memcpy
+       0   char_traits::eq_int_type(int const &, int const &)
+       8   copy_backward(unsigned int *, unsigned int *, unsigned int *)
+         8   -> _Copy_backward_opt(unsigned int const *, unsigned int const *, unsigned int *)
+       8   fpos::fpos(long)
+         8   -> __aeabi_memcpy4
+       8   ios::deleter ~ios()
+         8   -> ios::~ios()
+         8   -> operator delete(void *)
+       8   ios::setstate(int, bool)
+         8   -> ios_base::clear(int, bool)
+       8   ios::~ios()
+         8   -> ios_base::subobject ~ios_base()
+       8   ostream::deleter ~ostream()
+         8   -> operator delete(void *)
+         8   -> ostream::~ostream()
+      16   ostream::ostream(streambuf *, bool)
+        16   -> ios::setstate(int, bool)
+        16   -> ios_base::_Addstd()
+        16   -> ios_base::_Init()
+       8   ostream::~ostream()
+         8   -> ios::~ios()
+       8   ostringstream::deleter ~ostringstream()
+         8   -> operator delete(void *)
+         8   -> ostringstream::~ostringstream()
+      16   ostringstream::ostringstream(int)
+        16   -> ostream::ostream(streambuf *, bool)
+        16   -> stringbuf::stringbuf(int)
+       8   ostringstream::str() const
+         8   -> stringbuf::str() const
+       8   ostringstream::~ostringstream()
+         8   -> ostream::~ostream()
+         8   -> stringbuf::~stringbuf()
+     568   registerFunctions(CTinyJS *)
+       568   -> CTinyJS::addNative(string const &, JSCallback, void *)
+       568   -> string::string(char const *)
+       568   -> string::~string()
+      80   scArrayContains(CScriptVar *, void *)
+        80   -> CScriptVar::equals(CScriptVar *)
+        80   -> CScriptVar::getParameter(string const &)
+        80   -> CScriptVar::getReturnVar()
+        80   -> CScriptVar::setInt(int)
+        80   -> string::string(char const *)
+        80   -> string::~string()
+     232   scArrayJoin(CScriptVar *, void *)
+       232   -> CScriptVar::getArrayIndex(int)
+       232   -> CScriptVar::getArrayLength()
+       232   -> CScriptVar::getParameter(string const &)
+       232   -> CScriptVar::getReturnVar()
+       232   -> CScriptVar::getString()
+       232   -> CScriptVar::setString(string const &)
+       232   -> operator<<(ostream &, string const &)
+       232   -> ostringstream::ostringstream(int)
+       232   -> ostringstream::str() const
+       232   -> ostringstream::~ostringstream()
+       232   -> string::string(char const *)
+       232   -> string::string(string const &)
+       232   -> string::~string()
+      88   scArrayRemove(CScriptVar *, void *)
+        88   -> CScriptVar::equals(CScriptVar *)
+        88   -> CScriptVar::getParameter(string const &)
+        88   -> CScriptVarLink::getIntName()
+        88   -> CScriptVarLink::setIntName(int)
+        88   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Push_back0(unsigned int)
+        88   -> _Vector_value<allocator<void>>::_Size<4U>() const
+        88   -> string::string(char const *)
+        88   -> string::~string()
+        88   -> vector<int>::vector()
+        88   -> vector<int>::~vector()
+      72   scCharToInt(CScriptVar *, void *)
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getReturnVar()
+        72   -> CScriptVar::getString()
+        72   -> CScriptVar::setInt(int)
+        72   -> string::c_str() const
+        72   -> string::string(char const *)
+        72   -> string::string(string const &)
+        72   -> string::~string()
+     112   scEval(CScriptVar *, void *)
+       112   -> CScriptVar::getParameter(string const &)
+       112   -> CScriptVar::getString()
+       112   -> CScriptVar::setReturnVar(CScriptVar *)
+       112   -> CScriptVarLink::~CScriptVarLink()
+       112   -> CTinyJS::evaluateComplex(string const &)
+       112   -> string::string(char const *)
+       112   -> string::string(string const &)
+       112   -> string::~string()
+      72   scExec(CScriptVar *, void *)
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getString()
+        72   -> CTinyJS::execute(string const &)
+        72   -> string::string(char const *)
+        72   -> string::string(string const &)
+        72   -> string::~string()
+      72   scIntegerParseInt(CScriptVar *, void *)
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getReturnVar()
+        72   -> CScriptVar::getString()
+        72   -> CScriptVar::setInt(int)
+        72   -> __iar_Stolx
+        72   -> string::c_str() const
+        72   -> string::string(char const *)
+        72   -> string::string(string const &)
+        72   -> string::~string()
+      72   scIntegerValueOf(CScriptVar *, void *)
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getReturnVar()
+        72   -> CScriptVar::getString()
+        72   -> CScriptVar::setInt(int)
+        72   -> string::_Myptr()
+        72   -> string::string(char const *)
+        72   -> string::string(string const &)
+        72   -> string::~string()
+     216   scJSONStringify(CScriptVar *, void *)
+       216   -> CScriptVar::getJSON(ostringstream &, string)
+       216   -> CScriptVar::getParameter(string const &)
+       216   -> CScriptVar::getReturnVar()
+       216   -> CScriptVar::setString(string const &)
+       216   -> ostringstream::ostringstream(int)
+       216   -> ostringstream::str() const
+       216   -> ostringstream::~ostringstream()
+       216   -> string::string(char const *)
+       216   -> string::~string()
+      16   scMathRand(CScriptVar *, void *)
+        16   -> CScriptVar::getReturnVar()
+        16   -> CScriptVar::setDouble(double)
+        16   -> __aeabi_ddiv
+        16   -> __aeabi_i2d
+        16   -> rand
+      80   scMathRandInt(CScriptVar *, void *)
+        80   -> CScriptVar::getInt()
+        80   -> CScriptVar::getParameter(string const &)
+        80   -> CScriptVar::getReturnVar()
+        80   -> CScriptVar::setInt(int)
+        80   -> __aeabi_idivmod
+        80   -> rand
+        80   -> string::string(char const *)
+        80   -> string::~string()
+      40   scObjectClone(CScriptVar *, void *)
+        40   -> CScriptVar::copyValue(CScriptVar *)
+        40   -> CScriptVar::getParameter(string const &)
+        40   -> CScriptVar::getReturnVar()
+        40   -> string::string(char const *)
+        40   -> string::~string()
+      96   scObjectDump(CScriptVar *, void *)
+        96   -> CScriptVar::getParameter(string const &)
+        96   -> CScriptVar::trace(string, string const &)
+        96   -> string::string(char const *)
+        96   -> string::~string()
+      96   scStringCharAt(CScriptVar *, void *)
+        96   -> CScriptVar::getInt()
+        96   -> CScriptVar::getParameter(string const &)
+        96   -> CScriptVar::getReturnVar()
+        96   -> CScriptVar::getString()
+        96   -> CScriptVar::setString(string const &)
+        96   -> string::string(char const *)
+        96   -> string::string(string const &)
+        96   -> string::substr(size_t, size_t) const
+        96   -> string::~string()
+     104   scStringCharCodeAt(CScriptVar *, void *)
+       104   -> CScriptVar::getInt()
+       104   -> CScriptVar::getParameter(string const &)
+       104   -> CScriptVar::getReturnVar()
+       104   -> CScriptVar::getString()
+       104   -> CScriptVar::setInt(int)
+       104   -> _String_base::_Xran() const
+       104   -> string::_Myptr()
+       104   -> string::string(char const *)
+       104   -> string::string(string const &)
+       104   -> string::~string()
+      72   scStringFromCharCode(CScriptVar *, void *)
+        72   -> CScriptVar::getInt()
+        72   -> CScriptVar::getParameter(string const &)
+        72   -> CScriptVar::getReturnVar()
+        72   -> CScriptVar::setString(string const &)
+        72   -> string::string(char const *)
+        72   -> string::~string()
+     128   scStringIndexOf(CScriptVar *, void *)
+       128   -> CScriptVar::getParameter(string const &)
+       128   -> CScriptVar::getReturnVar()
+       128   -> CScriptVar::getString()
+       128   -> CScriptVar::setInt(int)
+       128   -> string::find(string const &, size_t) const
+       128   -> string::string(char const *)
+       128   -> string::string(string const &)
+       128   -> string::~string()
+     136   scStringSplit(CScriptVar *, void *)
+       136   -> CScriptVar::CScriptVar(string const &)
+       136   -> CScriptVar::getParameter(string const &)
+       136   -> CScriptVar::getReturnVar()
+       136   -> CScriptVar::getString()
+       136   -> CScriptVar::setArray()
+       136   -> CScriptVar::setArrayIndex(int, CScriptVar *)
+       136   -> operator new(size_t)
+       136   -> string::assign(string const &, size_t, size_t)
+       136   -> string::find(string const &, size_t) const
+       136   -> string::string(char const *)
+       136   -> string::string(string const &)
+       136   -> string::substr(size_t, size_t) const
+       136   -> string::~string()
+     128   scStringSubstring(CScriptVar *, void *)
+       128   -> CScriptVar::getInt()
+       128   -> CScriptVar::getParameter(string const &)
+       128   -> CScriptVar::getReturnVar()
+       128   -> CScriptVar::getString()
+       128   -> CScriptVar::setString(string const &)
+       128   -> string::string(char const *)
+       128   -> string::string(string const &)
+       128   -> string::substr(size_t, size_t) const
+       128   -> string::~string()
+      72   scTrace(CScriptVar *, void *)
+        72   -> CScriptVar::trace(string, string const &)
+        72   -> string::string(char const *)
+        72   -> string::~string()
+       0   streambuf::_Init()
+       8   streambuf::_Lock()
+         8   -> __iar_Mutex::_Lock()
+       8   streambuf::_Unlock()
+         8   -> __iar_Mutex::_Unlock()
+       8   streambuf::deleter ~streambuf()
+         8   -> operator delete(void *)
+         8   -> streambuf::~streambuf()
+       0   streambuf::imbue(locale const &)
+       0   streambuf::overflow(int)
+       0   streambuf::pbackfail(int)
+      40   streambuf::seekoff(long, int, int)
+        40   -> __aeabi_memcpy4
+        40   -> fpos::fpos(long)
+      48   streambuf::seekpos(fpos, int)
+        48   -> __aeabi_memcpy4
+        48   -> fpos::fpos(long)
+       0   streambuf::setbuf(char *, int)
+       0   streambuf::showmanyc()
+       0   streambuf::sync()
+      24   streambuf::uflow()
+        24   -- Indirect call
+        24   -> char_traits::eq_int_type(int const &, int const &)
+       0   streambuf::underflow()
+      32   streambuf::xsgetn(char *, int)
+        32   -- Indirect call
+        32   -> char_traits::copy(char *, char const *, size_t)
+        32   -> char_traits::eq_int_type(int const &, int const &)
+      32   streambuf::xsputn(char const *, int)
+        32   -- Indirect call
+        32   -> char_traits::copy(char *, char const *, size_t)
+        32   -> char_traits::eq_int_type(int const &, int const &)
+       8   streambuf::~streambuf()
+         8   -> __iar_Mutex::~__iar_Mutex()
+         8   -> operator delete(void *)
+       0   string::_Myptr()
+       0   string::_Myptr() const
+       8   string::c_str() const
+         8   -> string::_Myptr() const
+      16   string::find(string const &, size_t) const
+        16   -> string::_Myptr() const
+        16   -> string::find(char const *, size_t, size_t) const
+      16   string::string(char const *)
+        16   -> _String_val::subobject _String_val(char_allocator)
+        16   -> string::_Tidy(bool, size_t)
+        16   -> string::assign(char const *, size_t)
+        16   -> strlen
+      16   string::string(string const &)
+        16   -> _String_val::subobject _String_val(char_allocator)
+        16   -> string::_Tidy(bool, size_t)
+        16   -> string::assign(string const &, size_t, size_t)
+      24   string::string(string const &, size_t, size_t, string::_Alloc const &)
+        24   -> _String_val::subobject _String_val(char_allocator)
+        24   -> string::_Tidy(bool, size_t)
+        24   -> string::assign(string const &, size_t, size_t)
+      16   string::substr(size_t, size_t) const
+        16   -> string::string(string const &, size_t, size_t, string::_Alloc const &)
+       8   string::~string()
+         8   -> string::_Tidy(bool, size_t)
+      16   stringbuf::stringbuf(int)
+        16   -> __iar_Mutex::__iar_Mutex()
+        16   -> operator new(size_t)
+        16   -> streambuf::_Init()
+        16   -> stringbuf::_Getstate(int)
+        16   -> stringbuf::_Init(char const *, size_t, int)
+       8   stringbuf::~stringbuf()
+         8   -> streambuf::~streambuf()
+         8   -> stringbuf::_Tidy()
+       8   vector<int>::vector()
+         8   -> _Vector_value<allocator<void>>::_Zero()
+       8   vector<int>::~vector()
+         8   -> _Vector_impl<unsigned int, allocator<unsigned int>>::_Tidy0()
+         8   -> _Vector_value<allocator<void>>::_Zero()
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ?<Constant "">
+       4  ?<Constant "> ">
+       4  ?<Constant "ch">
+       8  ?<Constant "char">
+      32  ?<Constant "function Array.contai...">
+      32  ?<Constant "function Array.join(s...">
+      28  ?<Constant "function Array.remove...">
+      32  ?<Constant "function Integer.pars...">
+      32  ?<Constant "function Integer.valu...">
+      40  ?<Constant "function JSON.stringi...">
+      24  ?<Constant "function Math.rand()">
+      32  ?<Constant "function Math.randInt...">
+      24  ?<Constant "function Object.clone()">
+      24  ?<Constant "function Object.dump()">
+      28  ?<Constant "function String.charA...">
+      32  ?<Constant "function String.charC...">
+      36  ?<Constant "function String.fromC...">
+      32  ?<Constant "function String.index...">
+      36  ?<Constant "function String.split...">
+      36  ?<Constant "function String.subst...">
+      24  ?<Constant "function charToInt(ch)">
+      24  ?<Constant "function eval(jsCode)">
+      24  ?<Constant "function exec(jsCode)">
+      20  ?<Constant "function trace()">
+       4  ?<Constant "hi">
+       8  ?<Constant "jsCode">
+       4  ?<Constant "lo">
+       4  ?<Constant "max">
+       4  ?<Constant "min">
+       4  ?<Constant "obj">
+       4  ?<Constant "pos">
+       8  ?<Constant "search">
+      12  ?<Constant "separator">
+       4  ?<Constant "str">
+       8  ?<Constant "this">
+       4  ??DataTable43
+       4  ??DataTable43_1
+       4  ??DataTable43_2
+       4  ??DataTable44
+       8  ??DataTable44_1
+       4  ??DataTable44_2
+       4  ??DataTable44_3
+       4  ??DataTable45
+       4  ??DataTable45_1
+       4  ??DataTable45_2
+       4  ??DataTable47
+       4  ??DataTable47_1
+       4  ??DataTable47_2
+       4  ??DataTable48
+       4  ??DataTable48_1
+       4  ??DataTable48_2
+       4  ??DataTable48_3
+       4  ??DataTable49
+       4  ??DataTable49_1
+       4  ??DataTable49_10
+       4  ??DataTable49_11
+       4  ??DataTable49_12
+       4  ??DataTable49_13
+       4  ??DataTable49_14
+       4  ??DataTable49_15
+       4  ??DataTable49_16
+       4  ??DataTable49_17
+       4  ??DataTable49_18
+       4  ??DataTable49_19
+       4  ??DataTable49_2
+       4  ??DataTable49_3
+       4  ??DataTable49_4
+       4  ??DataTable49_5
+       4  ??DataTable49_6
+       4  ??DataTable49_7
+       4  ??DataTable49_8
+       4  ??DataTable49_9
+      10  ??Subroutine2_0
+      12  ?Subroutine0
+       8  ?Subroutine1
+       8  _Copy_backward_opt(unsigned int const *, unsigned int const *, unsigned int *)
+      12  _String_val::subobject _String_val(char_allocator)
+       8  _Uninit_copier<unsigned int, true>::_Copy(unsigned int const *, unsigned int const *, unsigned int *)
+       8  _Uninit_copy(unsigned int const *, unsigned int const *, unsigned int *, allocator<unsigned int> &)
+      16  _Uninitialized_fill_n(unsigned int *, unsigned int, unsigned int const &, allocator<unsigned int> &)
+       2  _Vector_impl<unsigned int, allocator<unsigned int>>::_Altyval() const
+       6  _Vector_impl<unsigned int, allocator<unsigned int>>::_EraseAll()
+      32  _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert0(unsigned int *, unsigned int)
+      26  _Vector_impl<unsigned int, allocator<unsigned int>>::_Insert_n(unsigned int *, unsigned int, unsigned int const &)
+     164  _Vector_impl<unsigned int, allocator<unsigned int>>::_Make_room(unsigned int *, unsigned int)
+      36  _Vector_impl<unsigned int, allocator<unsigned int>>::_Push_back0(unsigned int)
+      34  _Vector_impl<unsigned int, allocator<unsigned int>>::_Tidy0()
+      16  _Vector_impl<unsigned int, allocator<unsigned int>>::_Ucopy(unsigned int const *, unsigned int const *, unsigned int *)
+      26  _Vector_impl<unsigned int, allocator<unsigned int>>::_Ufill(unsigned int *, unsigned int, unsigned int)
+      10  _Vector_value<allocator<void>>::_Size<4U>() const
+      10  _Vector_value<allocator<void>>::_Zero()
+      12  char_traits::copy(char *, char const *, size_t)
+      16  char_traits::eq_int_type(int const &, int const &)
+       8  copy_backward(unsigned int *, unsigned int *, unsigned int *)
+      40  fpos::fpos(long)
+      18  ios::deleter ~ios()
+      30  ios::setstate(int, bool)
+      12  ios::~ios()
+      18  ostream::deleter ~ostream()
+      80  ostream::ostream(streambuf *, bool)
+      12  ostream::~ostream()
+      18  ostringstream::deleter ~ostringstream()
+      40  ostringstream::ostringstream(int)
+      10  ostringstream::str() const
+      32  ostringstream::~ostringstream()
+     572  registerFunctions(CTinyJS *)
+      86  scArrayContains(CScriptVar *, void *)
+     168  scArrayJoin(CScriptVar *, void *)
+     188  scArrayRemove(CScriptVar *, void *)
+      58  scCharToInt(CScriptVar *, void *)
+      76  scEval(CScriptVar *, void *)
+      52  scExec(CScriptVar *, void *)
+      58  scIntegerParseInt(CScriptVar *, void *)
+      58  scIntegerValueOf(CScriptVar *, void *)
+      94  scJSONStringify(CScriptVar *, void *)
+      44  scMathRand(CScriptVar *, void *)
+      92  scMathRandInt(CScriptVar *, void *)
+      46  scObjectClone(CScriptVar *, void *)
+      68  scObjectDump(CScriptVar *, void *)
+     128  scStringCharAt(CScriptVar *, void *)
+     126  scStringCharCodeAt(CScriptVar *, void *)
+      66  scStringFromCharCode(CScriptVar *, void *)
+     126  scStringIndexOf(CScriptVar *, void *)
+     260  scStringSplit(CScriptVar *, void *)
+     162  scStringSubstring(CScriptVar *, void *)
+      42  scTrace(CScriptVar *, void *)
+      64  streambuf::_Init()
+      10  streambuf::_Lock()
+      10  streambuf::_Unlock()
+      18  streambuf::deleter ~streambuf()
+       2  streambuf::imbue(locale const &)
+       6  streambuf::overflow(int)
+       6  streambuf::pbackfail(int)
+      36  streambuf::seekoff(long, int, int)
+      44  streambuf::seekpos(fpos, int)
+       2  streambuf::setbuf(char *, int)
+       4  streambuf::showmanyc()
+       4  streambuf::sync()
+      46  streambuf::uflow()
+       6  streambuf::underflow()
+     112  streambuf::xsgetn(char *, int)
+     110  streambuf::xsputn(char const *, int)
+      28  streambuf::~streambuf()
+      14  string::_Myptr()
+      14  string::_Myptr() const
+       8  string::c_str() const
+      28  string::find(string const &, size_t) const
+      40  string::string(char const *)
+      52  string::string(string const &)
+      50  string::string(string const &, size_t, size_t, string::_Alloc const &)
+      12  string::substr(size_t, size_t) const
+      16  string::~string()
+      68  stringbuf::stringbuf(int)
+      28  stringbuf::~stringbuf()
+      12  vector<int>::vector()
+      18  vector<int>::~vector()
+     125  -- Other
+
+ 
+   162 bytes in section .rodata
+ 5 016 bytes in section .text
+ 
+ 3 388 bytes of CODE  memory (+ 1 628 bytes shared)
+    37 bytes of CONST memory (+   125 bytes shared)
+
+Errors: none
+Warnings: none

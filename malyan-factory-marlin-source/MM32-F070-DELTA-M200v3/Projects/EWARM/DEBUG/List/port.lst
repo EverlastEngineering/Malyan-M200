@@ -1,0 +1,1113 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:09:14
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\port.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW6430.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\port.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\port.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\port.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\port.c
+      1          #include "port.h"
+      2          #include <string.h>
+      3          #include "stm32f0xx_gpio.h"
+      4          
+      5          char MSG_M115_REPORT[48];
+      6          float homing_feedrate[] = {50*60, 50*60, 4*60, 0};
+      7          float DEFAULT_AXIS_STEPS_PER_UNIT[] = {93,93,1097.5,97};
+      8          float DEFAULT_MAX_FEEDRATE[] = {150, 150, 1.5, 50};
+      9          long DEFAULT_MAX_ACCELERATION[] = {800,800,20,10000};
+     10          bool Z_ULN2003=false;
+     11          uint8_t model;
+     12          uint8_t EXTRUDERS;
+     13          
+     14          /*int16_t X_MAX_POS=150;
+     15          int16_t Y_MAX_POS=150;
+     16          int16_t Z_MAX_POS=150;*/
+     17          #define X_MAX_POS base_max_pos[0]
+     18          #define Y_MAX_POS base_max_pos[1]
+     19          #define Z_MAX_POS base_max_pos[2]
+     20          int16_t base_max_pos[3]={120,130,120};
+     21          float max_pos[3] = { 150, 150, 150 };
+     22          
+     23          bool X_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     24          bool Y_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     25          bool Z_MIN_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     26          bool X_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     27          bool Y_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     28          bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     29          bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the logic of the endstop.
+     30          
+     31          #if 1
+     32          GPIO_TypeDef* DIO100_PORT;
+     33          uint16_t DIO100_PIN;
+     34          GPIO_TypeDef* DIO101_PORT;
+     35          uint16_t DIO101_PIN;
+     36          GPIO_TypeDef* DIO102_PORT;
+     37          uint16_t DIO102_PIN;
+     38          GPIO_TypeDef* DIO103_PORT;
+     39          uint16_t DIO103_PIN;
+     40          GPIO_TypeDef* DIO104_PORT;
+     41          uint16_t DIO104_PIN;
+     42          GPIO_TypeDef* DIO105_PORT;
+     43          uint16_t DIO105_PIN;
+     44          GPIO_TypeDef* DIO106_PORT;
+     45          uint16_t DIO106_PIN;
+     46          GPIO_TypeDef* DIO107_PORT;
+     47          uint16_t DIO107_PIN;
+     48          GPIO_TypeDef* DIO108_PORT;
+     49          uint16_t DIO108_PIN;
+     50          GPIO_TypeDef* DIO109_PORT;
+     51          uint16_t DIO109_PIN;
+     52          GPIO_TypeDef* DIO110_PORT;
+     53          uint16_t DIO110_PIN;
+     54          GPIO_TypeDef* DIO111_PORT;
+     55          uint16_t DIO111_PIN;
+     56          GPIO_TypeDef* DIO112_PORT;
+     57          uint16_t DIO112_PIN;
+     58          GPIO_TypeDef* DIO113_PORT;
+     59          uint16_t DIO113_PIN;
+     60          GPIO_TypeDef* DIO114_PORT;
+     61          uint16_t DIO114_PIN;
+     62          GPIO_TypeDef* DIO115_PORT;
+     63          uint16_t DIO115_PIN;
+     64          GPIO_TypeDef* DIO116_PORT;
+     65          uint16_t DIO116_PIN;
+     66          GPIO_TypeDef* DIO117_PORT;
+     67          uint16_t DIO117_PIN;
+     68          GPIO_TypeDef* DIO118_PORT;
+     69          uint16_t DIO118_PIN;
+     70          GPIO_TypeDef* DIO119_PORT;
+     71          uint16_t DIO119_PIN;
+     72          GPIO_TypeDef* DIO120_PORT;
+     73          uint16_t DIO120_PIN;
+     74          GPIO_TypeDef* DIO121_PORT;
+     75          uint16_t DIO121_PIN;
+     76          GPIO_TypeDef* DIO122_PORT;
+     77          uint16_t DIO122_PIN;
+     78          GPIO_TypeDef* DIO123_PORT;
+     79          uint16_t DIO123_PIN;
+     80          #endif
+     81          
+     82          #define MAX_MACHINE_TYPE_NUM    8
+     83          #define FORCE_MACHINE_TYPE      1
+     84          
+     85          const char machine_list[][MAX_MACHINE_TYPE_NUM+1]=
+     86          {//0        1       2       3       4       5       6       7      8
+     87              "M000", "M200", "M100", "M160", "M450", "M180", "M300", "MA10","M203"
+     88          };
+     89          
+     90          const char VERSION[]="4.7";
+     91          __no_init char HWVER[8] @ 0x20000410;
+     92          __no_init const char MACHINE_TYPE[4] @ 0x08001000;
+     93          __no_init const char HW_VER[4] @ 0x08001008;
+     94          
+     95          void get_firmware_info()
+     96          {
+     97              //char n[1];
+     98              if (FLASH_OB_GetWRP()==0xFFFFFFFF) strcpy(MSG_M115_REPORT, "NAME. Malyan\tVER: ");
+     99              else strcpy(MSG_M115_REPORT, "NAME: Malyan\tVER: ");
+    100              strcat(MSG_M115_REPORT, VERSION);
+    101              strcat(MSG_M115_REPORT, "\tMODEL: ");
+    102              strcat(MSG_M115_REPORT, machine_list[model]);
+    103              //n[0]=model+'0';
+    104              //strncat(MSG_M115_REPORT, n, 1);
+    105              strcat(MSG_M115_REPORT, "\tHW: ");
+    106              strncat(MSG_M115_REPORT, HWVER, 4);
+    107              strcat(MSG_M115_REPORT, "\n");
+    108          
+    109              /*strncat(MSG_M115_REPORT, HWVER, 8);
+    110              strcat(MSG_M115_REPORT, "\r\n");*/
+    111          }
+    112          
+    113          void reset_invert_bit()
+    114          {
+    115              //invert_byte = 0xB;
+    116              invert_byte = 0x9;
+    117          
+    118              /*if (HWVER[0]=='H' && HWVER[1]=='A')
+    119              {
+    120                  if (HWVER[2]=='0' && HWVER[3]=='2') invert_byte = 0xA;
+    121              }
+    122              
+    123              if (HWVER[0]=='H' && HWVER[1]=='H')
+    124              {
+    125                  if (model<=1 && HWVER[2]=='0' && HWVER[3]=='1') invert_byte = 0xA;
+    126                  if (HWVER[2]=='0' && HWVER[3]=='2') invert_byte = 9;
+    127              }
+    128          
+    129              if (HWVER[0]=='H' && HWVER[1]=='B')
+    130              {
+    131                  if (HWVER[2]=='0' && HWVER[3]=='2') invert_byte = 0xA;
+    132              }*/
+    133            
+    134              if (model==2) invert_byte = 0x4A;
+    135              else if (model==5) invert_byte = 0xB;
+    136              else if (model==6) invert_byte = 8;
+    137              
+    138              //3D PRIMA BLUE VERSION
+    139              //invert_byte^=3;
+    140          }
+    141          
+    142          void port_init()
+    143          {
+    144              extern bool Z_ULN2003;
+    145              
+    146              model = FORCE_MACHINE_TYPE;
+    147              if (model>MAX_MACHINE_TYPE_NUM) model=0;
+    148          
+    149              /*if (HWVER[4]!='M')
+    150              {
+    151                  HWVER[0]=HW_VER[0];
+    152                  HWVER[1]=HW_VER[1];
+    153                  HWVER[2]=HW_VER[2];
+    154                  HWVER[3]=HW_VER[3];
+    155          
+    156                  HWVER[4]=MACHINE_TYPE[0];
+    157                  HWVER[5]=MACHINE_TYPE[1];
+    158                  HWVER[6]=MACHINE_TYPE[2];
+    159                  HWVER[7]=MACHINE_TYPE[3];
+    160              }*/
+    161              //invert_byte = 0x9;
+    162              if (model==0)
+    163              {
+    164                  model = 1;//default
+    165                  if (HWVER[4]!='M')
+    166                  {
+    167                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='1' && MACHINE_TYPE[2]=='0' && MACHINE_TYPE[3]=='0') model=2;
+    168                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='2' && MACHINE_TYPE[2]=='0' && MACHINE_TYPE[3]=='0') model=1;
+    169                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='4' && MACHINE_TYPE[2]=='5' && MACHINE_TYPE[3]=='0') model=4;
+    170                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='1' && MACHINE_TYPE[2]=='6' && MACHINE_TYPE[3]=='0') model=3;
+    171                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='1' && MACHINE_TYPE[2]=='8' && MACHINE_TYPE[3]=='0') model=5;
+    172                      if (MACHINE_TYPE[0]=='M' && MACHINE_TYPE[1]=='3' && MACHINE_TYPE[2]=='0' && MACHINE_TYPE[3]=='0') model=6;
+    173                      
+    174                      if (MACHINE_TYPE[0]!='M')
+    175                      {
+    176                          //LOCK SD CARD
+    177                          RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, DISABLE);
+    178                      }
+    179                  }
+    180                  if (HWVER[4]=='M' && HWVER[5]=='1' && HWVER[6]=='0' && HWVER[7]=='0') model=2;
+    181                  if (HWVER[4]=='M' && HWVER[5]=='2' && HWVER[6]=='0' && HWVER[7]=='0') model=1;
+    182                  if (HWVER[4]=='M' && HWVER[5]=='4' && HWVER[6]=='5' && HWVER[7]=='0') model=4;
+    183                  if (HWVER[4]=='M' && HWVER[5]=='1' && HWVER[6]=='6' && HWVER[7]=='0') model=3;
+    184                  if (HWVER[4]=='M' && HWVER[5]=='1' && HWVER[6]=='8' && HWVER[7]=='0') model=5;
+    185              }
+    186          
+    187              EXTRUDERS=1;
+    188              Z_ULN2003=false;
+    189          
+    190              if (model==1 || model==0 || model==8)
+    191              {
+    192                  /*if (HWVER[0]=='H' && HWVER[1]=='A' && HWVER[2]=='0' && HWVER[3]=='2')
+    193                  {
+    194                      DEFAULT_AXIS_STEPS_PER_UNIT[3]=125.0;
+    195                  }*/
+    196                  if (HWVER[3]>='4')
+    197                  {
+    198                      DEFAULT_AXIS_STEPS_PER_UNIT[0] = 46.5;
+    199                      DEFAULT_AXIS_STEPS_PER_UNIT[1] = 46.5;
+    200                      DEFAULT_AXIS_STEPS_PER_UNIT[2] = 548.75;
+    201                      DEFAULT_AXIS_STEPS_PER_UNIT[3] = 48.5;
+    202                  }
+    203                  //GPIO_PinRemapConfig(GPIO_Remap_SWJ_NoJTRST, ENABLE);
+    204                  //GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+    205                  base_max_pos[0]=120;
+    206                  base_max_pos[1]=120;
+    207                  base_max_pos[2]=120;
+    208                  
+    209                  //Z_MIN_ENDSTOP_INVERTING=false;
+    210          
+    211                  GPIO_InitTypeDef GPIO_InitStructure;
+    212          
+    213                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    214                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    215                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    216                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    217                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    218                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    219                  GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    220          
+    221                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    222                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    223                  GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    224          
+    225                  X_MAX_POS=120;Y_MAX_POS=120;Z_MAX_POS=120;
+    226                  DIO100_PORT=GPIOB;
+    227                  DIO100_PIN=GPIO_Pin_14;
+    228          
+    229                  DIO101_PORT=GPIOB;
+    230                  DIO101_PIN=GPIO_Pin_15;
+    231          
+    232                  DIO102_PORT=GPIOB;
+    233                  DIO102_PIN=GPIO_Pin_4;
+    234          
+    235                  DIO103_PORT=GPIOB;
+    236                  DIO103_PIN=GPIO_Pin_12;
+    237          
+    238                  DIO104_PORT=GPIOB;
+    239                  DIO104_PIN=GPIO_Pin_13;
+    240          
+    241                  DIO105_PORT=GPIOA;
+    242                  DIO105_PIN=GPIO_Pin_15;
+    243          
+    244                  DIO106_PORT=GPIOB;
+    245                  DIO106_PIN=GPIO_Pin_10;
+    246          
+    247                  DIO107_PORT=GPIOB;
+    248                  DIO107_PIN=GPIO_Pin_2;
+    249          
+    250                  DIO108_PORT=GPIOB;
+    251                  DIO108_PIN=GPIO_Pin_5;
+    252          
+    253                  DIO109_PORT=GPIOB;
+    254                  DIO109_PIN=GPIO_Pin_0;
+    255          
+    256                  DIO110_PORT=GPIOC;
+    257                  DIO110_PIN=GPIO_Pin_13;
+    258          
+    259                  DIO111_PORT=GPIOB;
+    260                  DIO111_PIN=GPIO_Pin_8;
+    261          
+    262                  DIO112_PORT=GPIOB;
+    263                  DIO112_PIN=GPIO_Pin_6;
+    264          
+    265                  DIO113_PORT=GPIOB;
+    266                  DIO113_PIN=GPIO_Pin_7;
+    267          
+    268                  DIO114_PORT=GPIOA;
+    269                  DIO114_PIN=GPIO_Pin_8;
+    270          
+    271                  DIO115_PORT=GPIOA;
+    272                  DIO115_PIN=GPIO_Pin_8;
+    273          
+    274                  DIO116_PORT=GPIOB;
+    275                  DIO116_PIN=GPIO_Pin_11;
+    276          
+    277                  DIO117_PORT=GPIOB;
+    278                  DIO117_PIN=GPIO_Pin_1;
+    279          
+    280                  DIO118_PORT=GPIOA;
+    281                  DIO118_PIN=GPIO_Pin_0;
+    282          
+    283                  DIO119_PORT=GPIOA;
+    284                  DIO119_PIN=GPIO_Pin_1;
+    285              }
+    286              else if (model==2)
+    287              {
+    288                  Z_ULN2003=true;
+    289                  DEFAULT_MAX_FEEDRATE[2]=1.0;
+    290                  DEFAULT_AXIS_STEPS_PER_UNIT[2]=137.1875;
+    291                  X_MAX_POS=100;Y_MAX_POS=100;Z_MAX_POS=100;
+    292                  DEFAULT_MAX_ACCELERATION[0]=1500;
+    293                  DEFAULT_MAX_ACCELERATION[1]=1500;
+    294          
+    295                  GPIO_InitTypeDef GPIO_InitStructure;
+    296                  TIM_OCInitTypeDef  TIM_OCInitStructure;
+    297                  NVIC_InitTypeDef NVIC_InitStructure;
+    298                  EXTI_InitTypeDef EXTI_InitStructure;
+    299          
+    300                  //GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable, ENABLE);
+    301                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    302                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    303                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    304                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    305                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    306                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    307                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+    308                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    309                  
+    310                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    311                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    312                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    313                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    314                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    315                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    316                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+    317                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    318                  
+    319                  GPIO_ResetBits(GPIOB, GPIO_Pin_1);
+    320                  GPIO_ResetBits(GPIOB, GPIO_Pin_0);
+    321                  GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+    322                  GPIO_ResetBits(GPIOC, GPIO_Pin_14);
+    323          
+    324                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    325                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    326                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    327                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    328                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    329                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    330          
+    331                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    332                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    333                  GPIO_ResetBits(GPIOA,GPIO_Pin_13);
+    334          
+    335                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+    336                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    337                  GPIO_SetBits(GPIOA,GPIO_Pin_14);
+    338          
+    339                  /*GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    340                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    341                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    342                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    343                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    344                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    345          
+    346                  GPIO_ResetBits(GPIOA,GPIO_Pin_2);
+    347                  GPIO_ResetBits(GPIOA,GPIO_Pin_3);*/
+    348          
+    349                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+    350                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    351                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    352                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    353                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    354          
+    355          /*
+    356                  NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+    357                  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
+    358                  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
+    359                  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    360                  NVIC_Init(&NVIC_InitStructure);
+    361          
+    362                  GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource15);
+    363                  EXTI_InitStructure.EXTI_Line = EXTI_Line15;
+    364                  EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    365                  EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+    366                  EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    367                  EXTI_Init(&EXTI_InitStructure);*/
+    368          
+    369                  DIO100_PORT=GPIOB;
+    370                  DIO100_PIN=GPIO_Pin_14;
+    371          
+    372                  DIO101_PORT=GPIOB;
+    373                  DIO101_PIN=GPIO_Pin_15;
+    374          
+    375                  DIO102_PORT=GPIOB;
+    376                  DIO102_PIN=GPIO_Pin_4;
+    377          
+    378                  DIO103_PORT=GPIOB;
+    379                  DIO103_PIN=GPIO_Pin_10;
+    380          
+    381                  DIO104_PORT=GPIOB;
+    382                  DIO104_PIN=GPIO_Pin_2;
+    383          
+    384                  DIO105_PORT=GPIOA;
+    385                  DIO105_PIN=GPIO_Pin_15;
+    386          
+    387                  DIO106_PORT=GPIOB;
+    388                  DIO106_PIN=GPIO_Pin_10;
+    389          
+    390                  DIO107_PORT=GPIOB;
+    391                  DIO107_PIN=GPIO_Pin_2;
+    392          
+    393                  DIO108_PORT=GPIOB;
+    394                  DIO108_PIN=GPIO_Pin_5;
+    395          
+    396                  DIO109_PORT=GPIOB;
+    397                  DIO109_PIN=GPIO_Pin_12;
+    398          
+    399                  DIO110_PORT=GPIOB;
+    400                  DIO110_PIN=GPIO_Pin_13;
+    401          
+    402                  DIO111_PORT=GPIOB;
+    403                  DIO111_PIN=GPIO_Pin_8;
+    404          
+    405                  DIO112_PORT=GPIOB;
+    406                  DIO112_PIN=GPIO_Pin_6;
+    407          
+    408                  DIO113_PORT=GPIOB;
+    409                  DIO113_PIN=GPIO_Pin_7;
+    410          
+    411                  DIO114_PORT=GPIOA;
+    412                  DIO114_PIN=GPIO_Pin_8;
+    413          
+    414                  DIO115_PORT=GPIOA;
+    415                  DIO115_PIN=GPIO_Pin_8;
+    416          
+    417                  DIO116_PORT=GPIOB;
+    418                  DIO116_PIN=GPIO_Pin_11;
+    419          
+    420                  DIO117_PORT=GPIOB;
+    421                  DIO117_PIN=GPIO_Pin_11;
+    422          
+    423                  DIO118_PORT=GPIOA;
+    424                  DIO118_PIN=GPIO_Pin_0;
+    425          
+    426                  DIO119_PORT=GPIOA;
+    427                  DIO119_PIN=GPIO_Pin_1;
+    428              }
+    429              else if (model==3)
+    430              {
+    431                  X_MAX_POS=200;Y_MAX_POS=200;Z_MAX_POS=180;
+    432          
+    433                  DIO103_PORT=GPIOB;
+    434                  DIO103_PIN=GPIO_Pin_15;
+    435          
+    436                  DIO104_PORT=GPIOB;
+    437                  DIO104_PIN=GPIO_Pin_14;
+    438          
+    439                  DIO102_PORT=GPIOB;
+    440                  DIO102_PIN=GPIO_Pin_4;
+    441          
+    442                  DIO100_PORT=GPIOB;
+    443                  DIO100_PIN=GPIO_Pin_13;
+    444          
+    445                  DIO101_PORT=GPIOB;
+    446                  DIO101_PIN=GPIO_Pin_12;
+    447          
+    448                  DIO105_PORT=GPIOB;
+    449                  DIO105_PIN=GPIO_Pin_0;
+    450          
+    451                  DIO106_PORT=GPIOB;
+    452                  DIO106_PIN=GPIO_Pin_10;
+    453          
+    454                  DIO107_PORT=GPIOB;
+    455                  DIO107_PIN=GPIO_Pin_2;
+    456          
+    457                  DIO108_PORT=GPIOB;
+    458                  DIO108_PIN=GPIO_Pin_5;
+    459          
+    460                  DIO109_PORT=GPIOC;
+    461                  DIO109_PIN=GPIO_Pin_14;
+    462          
+    463                  DIO110_PORT=GPIOC;
+    464                  DIO110_PIN=GPIO_Pin_13;
+    465          
+    466                  DIO111_PORT=GPIOB;
+    467                  DIO111_PIN=GPIO_Pin_8;
+    468          
+    469                  DIO112_PORT=GPIOB;
+    470                  DIO112_PIN=GPIO_Pin_7;
+    471          
+    472                  DIO113_PORT=GPIOB;
+    473                  DIO113_PIN=GPIO_Pin_6;
+    474          
+    475                  DIO114_PORT=GPIOA;
+    476                  DIO114_PIN=GPIO_Pin_8;
+    477          
+    478                  DIO115_PORT=GPIOA;
+    479                  DIO115_PIN=GPIO_Pin_8;
+    480          
+    481                  DIO116_PORT=GPIOB;
+    482                  DIO116_PIN=GPIO_Pin_11;
+    483          
+    484                  DIO117_PORT=GPIOB;
+    485                  DIO117_PIN=GPIO_Pin_1;
+    486          
+    487                  DIO118_PORT=GPIOA;
+    488                  DIO118_PIN=GPIO_Pin_0;
+    489          
+    490                  DIO119_PORT=GPIOA;
+    491                  DIO119_PIN=GPIO_Pin_1;
+    492              }
+    493              else if (model==4)
+    494              {
+    495                  extern bool unlocked;
+    496          
+    497                  //GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable,ENABLE);
+    498                  EXTRUDERS=2;
+    499                  DEFAULT_AXIS_STEPS_PER_UNIT[2]=640;
+    500                  DEFAULT_MAX_FEEDRATE[2]=15;
+    501                  DEFAULT_MAX_ACCELERATION[2]=200;
+    502          
+    503                  X_MAX_POS=300;Y_MAX_POS=300;Z_MAX_POS=450;
+    504          
+    505                  //X_MIN_ENDSTOP_INVERTING=false;
+    506                  //Y_MIN_ENDSTOP_INVERTING=false;
+    507                  //Z_MIN_ENDSTOP_INVERTING=false;
+    508          
+    509                  DIO100_PORT=GPIOB;
+    510                  DIO100_PIN=GPIO_Pin_15;
+    511          
+    512                  DIO101_PORT=GPIOB;
+    513                  DIO101_PIN=GPIO_Pin_14;
+    514          
+    515                  DIO102_PORT=GPIOB;
+    516                  DIO102_PIN=GPIO_Pin_4;
+    517          
+    518                  DIO103_PORT=GPIOB;
+    519                  DIO103_PIN=GPIO_Pin_13;
+    520          
+    521                  DIO104_PORT=GPIOB;
+    522                  DIO104_PIN=GPIO_Pin_12;
+    523          
+    524                  DIO105_PORT=GPIOA;
+    525                  DIO105_PIN=GPIO_Pin_15;
+    526          
+    527                  DIO106_PORT=GPIOB;
+    528                  DIO106_PIN=GPIO_Pin_10;
+    529          
+    530                  DIO107_PORT=GPIOB;
+    531                  DIO107_PIN=GPIO_Pin_2;
+    532          
+    533                  DIO108_PORT=GPIOB;
+    534                  DIO108_PIN=GPIO_Pin_5;
+    535          
+    536                  DIO109_PORT=GPIOC;
+    537                  DIO109_PIN=GPIO_Pin_14;
+    538          
+    539                  DIO110_PORT=GPIOC;
+    540                  DIO110_PIN=GPIO_Pin_13;
+    541          
+    542                  DIO111_PORT=GPIOB;
+    543                  DIO111_PIN=GPIO_Pin_9;
+    544          
+    545                  DIO112_PORT=GPIOB;
+    546                  DIO112_PIN=GPIO_Pin_7;
+    547          
+    548                  DIO113_PORT=GPIOB;
+    549                  DIO113_PIN=GPIO_Pin_6;
+    550          
+    551                  DIO114_PORT=GPIOA;
+    552                  DIO114_PIN=GPIO_Pin_8;
+    553          
+    554                  DIO115_PORT=GPIOA;
+    555                  DIO115_PIN=GPIO_Pin_8;
+    556          
+    557                  DIO116_PORT=GPIOB;
+    558                  DIO116_PIN=GPIO_Pin_11;
+    559          
+    560                  DIO117_PORT=GPIOB;
+    561                  DIO117_PIN=GPIO_Pin_1;
+    562          
+    563                  DIO118_PORT=GPIOA;
+    564                  DIO118_PIN=GPIO_Pin_0;
+    565          
+    566                  DIO119_PORT=GPIOA;
+    567                  DIO119_PIN=GPIO_Pin_1;
+    568          
+    569                  DIO120_PORT=GPIOB;
+    570                  DIO120_PIN=GPIO_Pin_8;
+    571          
+    572                  DIO121_PORT=GPIOC;
+    573                  DIO121_PIN=GPIO_Pin_15;
+    574          
+    575                  DIO122_PORT=GPIOA;
+    576                  DIO122_PIN=GPIO_Pin_14;
+    577          
+    578                  GPIO_InitTypeDef GPIO_InitStructure;
+    579                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    580                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    581                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    582                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    583                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    584                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    585          
+    586                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    587                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    588                  GPIO_SetBits(GPIOB,GPIO_Pin_0);
+    589              }
+    590              else if (model==5)
+    591              {
+    592                  extern bool unlocked;
+    593          
+    594                  //GPIO_PinRemapConfig(GPIO_Remap_SWJ_Disable,ENABLE);
+    595                  EXTRUDERS=2;
+    596                  DEFAULT_AXIS_STEPS_PER_UNIT[2]=1600;
+    597                  DEFAULT_MAX_FEEDRATE[2]=8;
+    598                  DEFAULT_MAX_ACCELERATION[2]=200;
+    599          
+    600                  X_MAX_POS=220;Y_MAX_POS=170;Z_MAX_POS=165;
+    601          
+    602                  X_MIN_ENDSTOP_INVERTING=false;
+    603                  Y_MIN_ENDSTOP_INVERTING=false;
+    604                  Z_MIN_ENDSTOP_INVERTING=false;
+    605          
+    606                  DIO100_PORT=GPIOB;
+    607                  DIO100_PIN=GPIO_Pin_15;
+    608          
+    609                  DIO101_PORT=GPIOB;
+    610                  DIO101_PIN=GPIO_Pin_14;
+    611          
+    612                  DIO102_PORT=GPIOB;
+    613                  DIO102_PIN=GPIO_Pin_4;
+    614          
+    615                  DIO103_PORT=GPIOB;
+    616                  DIO103_PIN=GPIO_Pin_13;
+    617          
+    618                  DIO104_PORT=GPIOB;
+    619                  DIO104_PIN=GPIO_Pin_12;
+    620          
+    621                  DIO105_PORT=GPIOA;
+    622                  DIO105_PIN=GPIO_Pin_15;
+    623          
+    624                  DIO106_PORT=GPIOB;
+    625                  DIO106_PIN=GPIO_Pin_10;
+    626          
+    627                  DIO107_PORT=GPIOB;
+    628                  DIO107_PIN=GPIO_Pin_2;
+    629          
+    630                  DIO108_PORT=GPIOB;
+    631                  DIO108_PIN=GPIO_Pin_5;
+    632          
+    633                  DIO121_PORT=GPIOC;
+    634                  DIO121_PIN=GPIO_Pin_14;
+    635          
+    636                  DIO122_PORT=GPIOC;
+    637                  DIO122_PIN=GPIO_Pin_13;
+    638          
+    639                  DIO111_PORT=GPIOB;
+    640                  DIO111_PIN=GPIO_Pin_9;
+    641          
+    642                  DIO112_PORT=GPIOB;
+    643                  DIO112_PIN=GPIO_Pin_7;
+    644          
+    645                  DIO113_PORT=GPIOB;
+    646                  DIO113_PIN=GPIO_Pin_6;
+    647          
+    648                  DIO114_PORT=GPIOA;
+    649                  DIO114_PIN=GPIO_Pin_8;
+    650          
+    651                  DIO115_PORT=GPIOA;
+    652                  DIO115_PIN=GPIO_Pin_8;
+    653          
+    654                  DIO116_PORT=GPIOB;
+    655                  DIO116_PIN=GPIO_Pin_11;
+    656          
+    657                  DIO117_PORT=GPIOB;
+    658                  DIO117_PIN=GPIO_Pin_1;
+    659          
+    660                  DIO118_PORT=GPIOA;
+    661                  DIO118_PIN=GPIO_Pin_0;
+    662          
+    663                  DIO119_PORT=GPIOA;
+    664                  DIO119_PIN=GPIO_Pin_1;
+    665          
+    666                  DIO120_PORT=GPIOB;
+    667                  DIO120_PIN=GPIO_Pin_8;
+    668          
+    669                  DIO109_PORT=GPIOC;
+    670                  DIO109_PIN=GPIO_Pin_15;
+    671          
+    672                  DIO110_PORT=GPIOA;
+    673                  DIO110_PIN=GPIO_Pin_14;
+    674          
+    675                  GPIO_InitTypeDef GPIO_InitStructure;
+    676                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    677                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    678                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    679                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    680                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    681          
+    682                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+    683                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    684                  GPIO_SetBits(GPIOB,GPIO_Pin_0);
+    685          
+    686                  
+    687                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    688                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    689                  GPIO_SetBits(GPIOB,GPIO_Pin_3);
+    690              }
+    691              else if (model==6)
+    692              {
+    693                  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA|RCC_AHBPeriph_GPIOC, ENABLE);
+    694                  
+    695                  GPIO_InitTypeDef GPIO_InitStructure;
+    696                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+    697                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    698                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    699                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    700                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    701                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
+    702                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    703                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    704                  GPIO_Init(GPIOC, &GPIO_InitStructure);
+    705                  
+    706                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_2;
+    707                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    708                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    709                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    710                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    711                  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    712                  
+    713                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    714                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    715                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    716                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    717                  
+    718                  //////////////////////////////////////
+    719                  //  Disable BTN LED                 //
+    720                  //////////////////////////////////////
+    721                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+    722                  //////////////////////////////////////
+    723                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    724                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    725                  
+    726                  DIO100_PORT=GPIOB;
+    727                  DIO100_PIN=GPIO_Pin_14;
+    728          
+    729                  DIO101_PORT=GPIOB;
+    730                  DIO101_PIN=GPIO_Pin_13;
+    731          
+    732                  DIO102_PORT=GPIOC;
+    733                  DIO102_PIN=GPIO_Pin_13;
+    734          
+    735                  DIO103_PORT=GPIOB;
+    736                  DIO103_PIN=GPIO_Pin_12;
+    737          
+    738                  DIO104_PORT=GPIOB;
+    739                  DIO104_PIN=GPIO_Pin_11;
+    740          
+    741                  DIO105_PORT=GPIOC;
+    742                  DIO105_PIN=GPIO_Pin_14;
+    743          
+    744                  DIO106_PORT=GPIOB;
+    745                  DIO106_PIN=GPIO_Pin_2;
+    746          
+    747                  DIO107_PORT=GPIOB;
+    748                  DIO107_PIN=GPIO_Pin_1;
+    749          
+    750                  DIO108_PORT=GPIOC;
+    751                  DIO108_PIN=GPIO_Pin_15;
+    752          
+    753                  DIO109_PORT=GPIOA;
+    754                  DIO109_PIN=GPIO_Pin_7;
+    755          
+    756                  DIO110_PORT=GPIOA;
+    757                  DIO110_PIN=GPIO_Pin_6;
+    758          
+    759                  DIO111_PORT=GPIOA;
+    760                  DIO111_PIN=GPIO_Pin_8;
+    761          
+    762                  DIO112_PORT=GPIOA;
+    763                  DIO112_PIN=GPIO_Pin_1;
+    764                  
+    765                  DIO120_PORT=GPIOA;
+    766                  DIO120_PIN=GPIO_Pin_1;
+    767          
+    768                  DIO113_PORT=GPIOA;
+    769                  DIO113_PIN=GPIO_Pin_5;
+    770          
+    771                  DIO114_PORT=GPIOB;
+    772                  DIO114_PIN=GPIO_Pin_10;
+    773          
+    774                  DIO115_PORT=GPIOB;
+    775                  DIO115_PIN=GPIO_Pin_10;
+    776          
+    777                  /*DIO116_PORT=GPIOB;
+    778                  DIO116_PIN=GPIO_Pin_10;*/
+    779                  DIO116_PORT=GPIOA;
+    780                  DIO116_PIN=GPIO_Pin_2;
+    781          
+    782                  DIO117_PORT=GPIOB;
+    783                  DIO117_PIN=GPIO_Pin_0;
+    784          
+    785                  DIO118_PORT=GPIOB;
+    786                  DIO118_PIN=GPIO_Pin_0;
+    787          
+    788                  DIO119_PORT=GPIOA;
+    789                  DIO119_PIN=GPIO_Pin_4;
+    790                          
+    791                  DIO123_PORT=GPIOB;
+    792                  DIO123_PIN=GPIO_Pin_7;
+    793                  
+    794                  //DIO108_PORT=DIO123_PORT;
+    795                  //DIO108_PIN=DIO123_PIN;
+    796                  
+    797                  invert_byte=0;
+    798                  /*X_MIN_ENDSTOP_INVERTING=true;
+    799                  Y_MIN_ENDSTOP_INVERTING=true;
+    800                  Z_MIN_ENDSTOP_INVERTING=true;
+    801                  X_MAX_ENDSTOP_INVERTING=false;
+    802                  Y_MAX_ENDSTOP_INVERTING=false;
+    803                  Z_MAX_ENDSTOP_INVERTING=false;*/
+    804                  
+    805                  /*homing_feedrate[0]=80*60;
+    806                  homing_feedrate[1]=80*60;
+    807                  homing_feedrate[2]=80*60;
+    808                  
+    809                  DEFAULT_AXIS_STEPS_PER_UNIT[0]=56.5;
+    810                  DEFAULT_AXIS_STEPS_PER_UNIT[1]=56.5;
+    811                  DEFAULT_AXIS_STEPS_PER_UNIT[2]=56.5;
+    812                  DEFAULT_AXIS_STEPS_PER_UNIT[3]=48.5;
+    813                  
+    814                  DEFAULT_MAX_FEEDRATE[2]=DEFAULT_MAX_FEEDRATE[0];
+    815                  DEFAULT_MAX_ACCELERATION[2]=DEFAULT_MAX_ACCELERATION[0];*/
+    816              }
+    817              else if (model==7)
+    818              {
+    819                  base_max_pos[0]=300;
+    820                  base_max_pos[1]=300;
+    821                  base_max_pos[2]=450;
+    822                  
+    823                  invert_byte = 0x48;
+    824          
+    825                  GPIO_InitTypeDef GPIO_InitStructure;
+    826          
+    827                  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    828                  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    829                  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+    830                  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    831                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    832                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    833                  GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    834          
+    835                  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+    836                  GPIO_Init(GPIOB, &GPIO_InitStructure);
+    837                  GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+    838          
+    839                  X_MAX_POS=300;Y_MAX_POS=300;Z_MAX_POS=450;
+    840                  DEFAULT_AXIS_STEPS_PER_UNIT[2]=1600;
+    841                  DEFAULT_MAX_FEEDRATE[2]=6;
+    842                  homing_feedrate[2]=5*60;
+    843                  
+    844                  DIO100_PORT=GPIOB;
+    845                  DIO100_PIN=GPIO_Pin_14;
+    846          
+    847                  DIO101_PORT=GPIOB;
+    848                  DIO101_PIN=GPIO_Pin_15;
+    849          
+    850                  DIO102_PORT=GPIOB;
+    851                  DIO102_PIN=GPIO_Pin_4;
+    852          
+    853                  DIO103_PORT=GPIOB;
+    854                  DIO103_PIN=GPIO_Pin_12;
+    855          
+    856                  DIO104_PORT=GPIOB;
+    857                  DIO104_PIN=GPIO_Pin_13;
+    858          
+    859                  DIO105_PORT=GPIOA;
+    860                  DIO105_PIN=GPIO_Pin_15;
+    861          
+    862                  DIO106_PORT=GPIOB;
+    863                  DIO106_PIN=GPIO_Pin_10;
+    864          
+    865                  DIO107_PORT=GPIOB;
+    866                  DIO107_PIN=GPIO_Pin_2;
+    867          
+    868                  DIO108_PORT=GPIOB;
+    869                  DIO108_PIN=GPIO_Pin_5;
+    870          
+    871                  DIO109_PORT=GPIOB;
+    872                  DIO109_PIN=GPIO_Pin_0;
+    873          
+    874                  DIO110_PORT=GPIOC;
+    875                  DIO110_PIN=GPIO_Pin_13;
+    876          
+    877                  DIO111_PORT=GPIOB;
+    878                  DIO111_PIN=GPIO_Pin_8;
+    879          
+    880                  DIO112_PORT=GPIOB;
+    881                  DIO112_PIN=GPIO_Pin_6;
+    882          
+    883                  DIO113_PORT=GPIOB;
+    884                  DIO113_PIN=GPIO_Pin_7;
+    885          
+    886                  DIO114_PORT=GPIOA;
+    887                  DIO114_PIN=GPIO_Pin_8;
+    888          
+    889                  DIO115_PORT=GPIOA;
+    890                  DIO115_PIN=GPIO_Pin_8;
+    891          
+    892                  DIO116_PORT=GPIOB;
+    893                  DIO116_PIN=GPIO_Pin_11;
+    894          
+    895                  DIO117_PORT=GPIOB;
+    896                  DIO117_PIN=GPIO_Pin_1;
+    897          
+    898                  DIO118_PORT=GPIOA;
+    899                  DIO118_PIN=GPIO_Pin_0;
+    900          
+    901                  DIO119_PORT=GPIOA;
+    902                  DIO119_PIN=GPIO_Pin_1;
+    903              }
+    904          
+    905              get_firmware_info();
+    906              return;
+    907          }
+    908          
+    909          uint8_t GPIO_ReadInputDataBit_filtered(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+    910          {
+    911            //return GPIO_ReadInputDataBit(GPIOx, GPIO_Pin);
+    912            uint8_t bitstatus_old = 0;
+    913            uint8_t bitstatus = 0xFF;
+    914          
+    915            while (bitstatus!=bitstatus_old)
+    916            {
+    917                bitstatus_old=bitstatus;
+    918                if ((GPIOx->IDR & GPIO_Pin) != (uint32_t)Bit_RESET)
+    919                {
+    920                  bitstatus = (uint8_t)Bit_SET;
+    921                }
+    922                else
+    923                {
+    924                  bitstatus = (uint8_t)Bit_RESET;
+    925                }
+    926            }
+    927            
+    928            return bitstatus;
+    929          }
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   GPIO_ReadInputDataBit_filtered
+       8   get_firmware_info
+         8   -> FLASH_OB_GetWRP
+         8   -> __aeabi_memcpy4
+         8   -> strcat
+         8   -> strncat
+      32   port_init
+        32   -> GPIO_Init
+        32   -> GPIO_ResetBits
+        32   -> get_firmware_info
+       0   reset_invert_bit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable8
+       4  ??DataTable8_1
+       4  ??DataTable8_10
+       4  ??DataTable8_2
+       4  ??DataTable8_3
+       4  ??DataTable8_4
+       4  ??DataTable8_5
+       4  ??DataTable8_6
+       4  ??DataTable8_7
+       4  ??DataTable8_8
+       4  ??DataTable8_9
+      20  ?_0
+      20  ?_1
+      12  ?_2
+       8  ?_3
+       2  ?_4
+      16  DEFAULT_MAX_ACCELERATION
+      16  DEFAULT_MAX_FEEDRATE
+       2  DIO120_PIN
+       4  DIO120_PORT
+       2  DIO121_PIN
+       4  DIO121_PORT
+       2  DIO122_PIN
+       4  DIO122_PORT
+       2  DIO123_PIN
+       4  DIO123_PORT
+      30  GPIO_ReadInputDataBit_filtered
+       8  HWVER
+       4  MACHINE_TYPE
+       4  VERSION
+       1  X_MAX_ENDSTOP_INVERTING
+       1  X_MIN_ENDSTOP_INVERTING
+       1  Y_MAX_ENDSTOP_INVERTING
+       1  Y_MIN_ENDSTOP_INVERTING
+       1  Z_MAX_ENDSTOP_INVERTING
+       1  Z_MIN_ENDSTOP_INVERTING
+       1  Z_MIN_PROBE_ENDSTOP_INVERTING
+     148  Z_ULN2003
+          EXTRUDERS
+          base_max_pos
+          DIO100_PIN
+          DIO101_PIN
+          DIO102_PIN
+          DIO103_PIN
+          DIO104_PIN
+          DIO105_PIN
+          DIO106_PIN
+          DIO107_PIN
+          DIO108_PIN
+          DIO109_PIN
+          DIO110_PIN
+          DIO111_PIN
+          DIO112_PIN
+          DIO113_PIN
+          DIO114_PIN
+          DIO115_PIN
+          DIO116_PIN
+          DIO117_PIN
+          DIO118_PIN
+          DIO119_PIN
+          DEFAULT_AXIS_STEPS_PER_UNIT
+          DIO100_PORT
+          DIO101_PORT
+          DIO102_PORT
+          DIO103_PORT
+          DIO104_PORT
+          DIO105_PORT
+          DIO106_PORT
+          DIO107_PORT
+          DIO108_PORT
+          DIO109_PORT
+          DIO110_PORT
+          DIO111_PORT
+          DIO112_PORT
+          DIO113_PORT
+          DIO114_PORT
+          DIO115_PORT
+          DIO116_PORT
+          DIO117_PORT
+          DIO118_PORT
+          DIO119_PORT
+      92  get_firmware_info
+      16  homing_feedrate
+      84  machine_list
+      12  max_pos
+      52  model
+          MSG_M115_REPORT
+     224  port_init
+      34  reset_invert_bit
+
+ 
+  76 bytes in section .bss
+ 215 bytes in section .data
+  12 bytes in section .noinit  (abs)
+  86 bytes in section .rodata
+ 488 bytes in section .text
+ 
+ 488 bytes of CODE  memory
+  86 bytes of CONST memory
+ 291 bytes of DATA  memory (+ 12 bytes shared)
+
+Errors: none
+Warnings: 3

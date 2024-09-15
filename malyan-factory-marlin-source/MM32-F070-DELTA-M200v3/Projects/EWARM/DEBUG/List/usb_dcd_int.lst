@@ -1,0 +1,485 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:23
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd_int.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW47AA.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd_int.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usb_dcd_int.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usb_dcd_int.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Driver\src\usb_dcd_int.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usb_dcd_int.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides the interrupt subroutines for the Device
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usb_dcd_int.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          extern USB_CORE_HANDLE  USB_Device_dev;
+     36          extern uint32_t wInterrupt_Mask;
+     37          #ifdef LPM_ENABLED
+     38          __IO uint32_t  L1_remote_wakeup =0;
+     39          __IO uint32_t BESL = 0;
+     40          #endif
+     41          
+     42          /* Private function prototypes -----------------------------------------------*/
+     43          /* Private functions ---------------------------------------------------------*/
+     44          
+     45          /**
+     46            * @brief  Correct Transfer interrupt's service
+     47            * @param  None
+     48            * @retval None
+     49            */
+     50          void CTR(void)
+     51          {
+     52            USB_EP *ep;
+     53            uint16_t count=0;
+     54            uint8_t EPindex;
+     55            __IO uint16_t wIstr;  
+     56            __IO uint16_t wEPVal = 0;
+     57            /* stay in loop while pending interrupts */
+     58            while (((wIstr = _GetISTR()) & ISTR_CTR) != 0)
+     59            {
+     60              /* extract highest priority endpoint number */
+     61              EPindex = (uint8_t)(wIstr & ISTR_EP_ID);
+     62              
+     63              if (EPindex == 0)
+     64              {
+     65                /* Decode and service control endpoint interrupt */
+     66                
+     67                /* DIR bit = origin of the interrupt */   
+     68                if ((wIstr & ISTR_DIR) == 0)
+     69                {
+     70                  /* DIR = 0 */
+     71                  
+     72                  /* DIR = 0      => IN  int */
+     73                  /* DIR = 0 implies that (EP_CTR_TX = 1) always  */
+     74                  _ClearEP_CTR_TX(ENDP0);
+     75                  ep = &((&USB_Device_dev)->dev.in_ep[0]);
+     76                  
+     77                  ep->xfer_count = GetEPTxCount(ep->num);
+     78                  ep->xfer_buff += ep->xfer_count;
+     79           
+     80                  /* TX COMPLETE */
+     81                  USBD_DCD_INT_fops->DataInStage(&USB_Device_dev, 0x00);
+     82                }
+     83                else
+     84                {
+     85                  /* DIR = 1 */
+     86                  
+     87                  /* DIR = 1 & CTR_RX       => SETUP or OUT int */
+     88                  /* DIR = 1 & (CTR_TX | CTR_RX) => 2 int pending */
+     89                  ep = &((&USB_Device_dev)->dev.out_ep[0]);
+     90                  wEPVal = _GetENDPOINT(ENDP0);
+     91                  
+     92                  if ((wEPVal &EP_SETUP) != 0)
+     93                  {
+     94                    /* Get SETUP Packet*/
+     95                    ep->xfer_count = GetEPRxCount(ep->num);
+     96                    PMAToUserBufferCopy(&((&USB_Device_dev)->dev.setup_packet[0]),ep->pmaadress , ep->xfer_count);       
+     97                    /* SETUP bit kept frozen while CTR_RX = 1*/ 
+     98                    _ClearEP_CTR_RX(ENDP0); 
+     99                    
+    100                    /* Process SETUP Packet*/
+    101                    USBD_DCD_INT_fops->SetupStage(&USB_Device_dev);
+    102                  }
+    103                  
+    104                  else if ((wEPVal & EP_CTR_RX) != 0)
+    105                  {
+    106                    _ClearEP_CTR_RX(ENDP0);
+    107                    /* Get Control Data OUT Packet*/
+    108                    ep->xfer_count = GetEPRxCount(ep->num);
+    109                    
+    110                    if (ep->xfer_count != 0)
+    111                    {
+    112                      PMAToUserBufferCopy(ep->xfer_buff, ep->pmaadress, ep->xfer_count);
+    113                      ep->xfer_buff+=ep->xfer_count;
+    114                    }
+    115                    
+    116                    /* Process Control Data OUT Packet*/
+    117                    USBD_DCD_INT_fops->DataOutStage(&USB_Device_dev, 0x00);
+    118                    
+    119                    _SetEPRxCount(ENDP0, ep->maxpacket);
+    120                    _SetEPRxStatus(ENDP0,EP_RX_VALID);
+    121                  }
+    122                }
+    123              }/* if(EPindex == 0) */
+    124              else
+    125              {
+    126                
+    127                /* Decode and service non control endpoints interrupt  */
+    128                
+    129                /* process related endpoint register */
+    130                wEPVal = _GetENDPOINT(EPindex);
+    131                if ((wEPVal & EP_CTR_RX) != 0)
+    132                {  
+    133                  /* clear int flag */
+    134                  _ClearEP_CTR_RX(EPindex);
+    135                  ep = &((&USB_Device_dev)->dev.out_ep[EPindex]);
+    136                  
+    137                  /* OUT double Buffering*/
+    138                  if (ep->doublebuffer == 0)
+    139                  {
+    140                    count = GetEPRxCount(ep->num);
+    141                    if (count != 0)
+    142                    {
+    143                      PMAToUserBufferCopy(ep->xfer_buff, ep->pmaadress, count);
+    144                    }
+    145                  }
+    146                  else
+    147                  {
+    148                    if (GetENDPOINT(ep->num) & EP_DTOG_RX)
+    149                    {
+    150                      /*read from endpoint BUF0Addr buffer*/
+    151                      count = GetEPDblBuf0Count(ep->num);
+    152                      if (count != 0)
+    153                      {
+    154                        PMAToUserBufferCopy(ep->xfer_buff, ep->pmaaddr0, count);
+    155                      }
+    156                    }
+    157                    else
+    158                    {
+    159                      /*read from endpoint BUF1Addr buffer*/
+    160                      count = GetEPDblBuf1Count(ep->num);
+    161                      if (count != 0)
+    162                      {
+    163                        PMAToUserBufferCopy(ep->xfer_buff, ep->pmaaddr1, count);
+    164                      }
+    165                    }
+    166                    FreeUserBuffer(ep->num, EP_DBUF_OUT);  
+    167                  }
+    168                  /*multi-packet on the NON control OUT endpoint*/
+    169                  ep->xfer_count+=count;
+    170                  ep->xfer_buff+=count;
+    171                 
+    172                  if ((ep->xfer_len == 0) || (count < ep->maxpacket))
+    173                  {
+    174                    /* RX COMPLETE */
+    175                    USBD_DCD_INT_fops->DataOutStage(&USB_Device_dev, ep->num);
+    176                  }
+    177                  else
+    178                  {
+    179                    DCD_EP_PrepareRx (&USB_Device_dev,ep->num, ep->xfer_buff, ep->xfer_len);
+    180                  }
+    181                  
+    182                } /* if((wEPVal & EP_CTR_RX) */
+    183                
+    184                if ((wEPVal & EP_CTR_TX) != 0)
+    185                {
+    186                  ep = &((&USB_Device_dev)->dev.in_ep[EPindex]);
+    187                  
+    188                  /* clear int flag */
+    189                  _ClearEP_CTR_TX(EPindex);
+    190                  
+    191                  /* IN double Buffering*/
+    192                  if (ep->doublebuffer == 0)
+    193                  {
+    194                    ep->xfer_count = GetEPTxCount(ep->num);
+    195                    if (ep->xfer_count != 0)
+    196                    {
+    197                      UserToPMABufferCopy(ep->xfer_buff, ep->pmaadress, ep->xfer_count);
+    198                    }
+    199                  }
+    200                  else
+    201                  {
+    202                    if (GetENDPOINT(ep->num) & EP_DTOG_TX)
+    203                    {
+    204                      /*read from endpoint BUF0Addr buffer*/
+    205                      ep->xfer_count = GetEPDblBuf0Count(ep->num);
+    206                      if (ep->xfer_count != 0)
+    207                      {
+    208                        UserToPMABufferCopy(ep->xfer_buff, ep->pmaaddr0, ep->xfer_count);
+    209                      }
+    210                    }
+    211                    else
+    212                    {
+    213                      /*read from endpoint BUF1Addr buffer*/
+    214                      ep->xfer_count = GetEPDblBuf1Count(ep->num);
+    215                      if (ep->xfer_count != 0)
+    216                      {
+    217                        UserToPMABufferCopy(ep->xfer_buff, ep->pmaaddr1, ep->xfer_count);
+    218                      }
+    219                    }
+    220                    FreeUserBuffer(ep->num, EP_DBUF_IN);  
+    221                  }
+    222                  /*multi-packet on the NON control IN endpoint*/
+    223                  ep->xfer_count =GetEPTxCount(ep->num);
+    224                  ep->xfer_buff+=ep->xfer_count;
+    225                 
+    226                  /* Zero Length Packet? */
+    227                  if (ep->xfer_len == 0)
+    228                  {
+    229                    /* TX COMPLETE */
+    230                    USBD_DCD_INT_fops->DataInStage(&USB_Device_dev, ep->num);
+    231                  }
+    232                  else
+    233                  {
+    234                    DCD_EP_Tx  (&USB_Device_dev,ep->num, ep->xfer_buff, ep->xfer_len);
+    235                  }
+    236                  
+    237                } /* if((wEPVal & EP_CTR_TX) != 0) */
+    238                
+    239              }/* if(EPindex == 0) else */
+    240              
+    241            }/* while(...) */
+    242          }
+    243          
+    244          /**
+    245            * @brief ISTR events interrupt service routine
+    246            * @param  None
+    247            * @retval None
+    248            */
+    249          void USB_Istr(void)
+    250          {
+    251            __IO uint16_t wIstr = 0; 
+    252            
+    253            wIstr = _GetISTR();
+    254            
+    255          #if (IMR_MSK & ISTR_CTR)
+    256            if (wIstr & ISTR_CTR & wInterrupt_Mask)
+    257            {
+    258              /* servicing of the endpoint correct transfer interrupt */
+    259              /* clear of the CTR flag into the sub */
+    260              CTR();
+    261            }
+    262          #endif  
+    263            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    264          #if (IMR_MSK & ISTR_RESET)
+    265            if (wIstr & ISTR_RESET & wInterrupt_Mask)
+    266            {
+    267              _SetISTR((uint16_t)CLR_RESET);
+    268              USBD_DCD_INT_fops->Reset(&USB_Device_dev);
+    269              DCD_EP_SetAddress(&USB_Device_dev, 0);
+    270            }
+    271          #endif
+    272            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    273          #if (IMR_MSK & ISTR_DOVR)
+    274            if (wIstr & ISTR_DOVR & wInterrupt_Mask)
+    275            {
+    276              _SetISTR((uint16_t)CLR_DOVR);
+    277            }
+    278          #endif
+    279            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    280          #if (IMR_MSK & ISTR_ERR)
+    281            if (wIstr & ISTR_ERR & wInterrupt_Mask)
+    282            {
+    283              _SetISTR((uint16_t)CLR_ERR);
+    284            }
+    285          #endif
+    286            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    287          #if (IMR_MSK & ISTR_WKUP)
+    288            if (wIstr & ISTR_WKUP & wInterrupt_Mask)
+    289            {
+    290              _SetISTR((uint16_t)CLR_WKUP);
+    291              
+    292              USBD_DCD_INT_fops->Resume(&USB_Device_dev);
+    293               
+    294              /* Handle Resume state machine */  
+    295              Resume(RESUME_EXTERNAL);
+    296          
+    297          #ifdef LPM_ENABLED    
+    298              /* clear L1 remote wakeup flag */
+    299              L1_remote_wakeup = 0;
+    300          #endif
+    301            }
+    302          #endif
+    303            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    304          #if (IMR_MSK & ISTR_SUSP)
+    305            if (wIstr & ISTR_SUSP & wInterrupt_Mask)
+    306            {
+    307             /* clear of the ISTR bit must be done after setting of CNTR_FSUSP */
+    308              _SetISTR((uint16_t)CLR_SUSP);
+    309              
+    310              /* process library core layer suspend routine*/
+    311              USBD_DCD_INT_fops->Suspend(&USB_Device_dev); 
+    312              
+    313              /* enter macrocell in suspend and system in low power mode when 
+    314                 USB_DEVICE_LOW_PWR_MGMT_SUPPORT defined in usb_conf.h */
+    315              Suspend();   
+    316            }
+    317          #endif
+    318            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    319          #if (IMR_MSK & ISTR_SOF)
+    320            if (wIstr & ISTR_SOF & wInterrupt_Mask)
+    321            {
+    322              _SetISTR((uint16_t)CLR_SOF);
+    323              USBD_DCD_INT_fops->SOF(&USB_Device_dev);
+    324            }
+    325          #endif
+    326            /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+    327          #if (IMR_MSK & ISTR_ESOF)
+    328            if (wIstr & ISTR_ESOF & wInterrupt_Mask)
+    329            {
+    330              /* clear ESOF flag in ISTR */
+    331              _SetISTR((uint16_t)CLR_ESOF);
+    332              
+    333              /* resume handling timing is made with ESOFs */
+    334              Resume(RESUME_ESOF); /* request without change of the machine state */
+    335            }
+    336          #endif
+    337          
+    338          #ifdef LPM_ENABLED  
+    339          #if (IMR_MSK & ISTR_L1REQ)
+    340            if (wIstr & ISTR_L1REQ & wInterrupt_Mask)
+    341            {
+    342               /* clear L1REQ flag in ISTR */
+    343              _SetISTR((uint16_t)CLR_L1REQ);
+    344              
+    345              /* read BESL field which coressponds to HIRD parameter in LPM spec*/
+    346              /* In your application depending on BESL value, you can choose the right 
+    347              low power mode during L1 state, allowing wakeup time within the request time from host.*/
+    348              BESL = (_GetLPMCSR()&LPMCSR_BESL) >>4 ;
+    349              
+    350              /* read REMWAKE bit which corresponding to bRemoteWake bit in LPM request*/
+    351              /* if this bit is set then L1 remote wakeup is possible */
+    352              L1_remote_wakeup = (_GetLPMCSR()&LPMCSR_REMWAKE) >>3;
+    353              
+    354              /* process library core layer suspend routine*/
+    355              USBD_DCD_INT_fops->Suspend(&USB_Device_dev); 
+    356              
+    357              /* enter macrocell in suspend and system in low power mode (STOP mode) when 
+    358              USB_DEVICE_LOW_PWR_MGMT_SUPPORT defined in usb_conf.h.*/   
+    359              /* Please note that in this example we enter in STOP mode during L1 state independently
+    360              from value read in BESL (even for BESL= 0 which corresponds to 50us delay) because
+    361              STM32F072 can wakeup system from STOP mode in less than 50 us */
+    362              Suspend();
+    363            }
+    364          #endif
+    365          #endif
+    366          } /* USB_Istr */
+    367          
+    368          
+    369          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      32   CTR
+        32   -- Indirect call
+        32   -> DCD_EP_PrepareRx
+        32   -> DCD_EP_Tx
+        32   -> FreeUserBuffer
+        32   -> GetENDPOINT
+        32   -> GetEPDblBuf0Count
+        32   -> GetEPDblBuf1Count
+        32   -> GetEPRxCount
+        32   -> GetEPTxCount
+        32   -> PMAToUserBufferCopy
+        32   -> UserToPMABufferCopy
+      24   USB_Istr
+        24   -- Indirect call
+        24   -> CTR
+        24   -> DCD_EP_SetAddress
+        24   -> Resume
+        24   -> Suspend
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable0
+       4  ??DataTable0_1
+       4  ??DataTable0_2
+       4  ??DataTable0_3
+       4  ??DataTable1
+       4  ??DataTable1_1
+       4  ??DataTable1_10
+       4  ??DataTable1_11
+       4  ??DataTable1_12
+       4  ??DataTable1_13
+       4  ??DataTable1_2
+       4  ??DataTable1_3
+       4  ??DataTable1_4
+       4  ??DataTable1_5
+       4  ??DataTable1_6
+       4  ??DataTable1_7
+       4  ??DataTable1_8
+       4  ??DataTable1_9
+     602  CTR
+     190  USB_Istr
+
+ 
+ 864 bytes in section .text
+ 
+ 864 bytes of CODE memory
+
+Errors: none
+Warnings: none

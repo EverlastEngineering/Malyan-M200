@@ -1,0 +1,206 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:54
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\vector_3.cpp
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EWDD6.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\vector_3.cpp
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\vector_3.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\vector_3.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\vector_3.cpp
+      1          /*
+      2            vector_3.cpp - Vector library for bed leveling
+      3            Copyright (c) 2012 Lars Brubaker.  All right reserved.
+      4          
+      5            This library is free software; you can redistribute it and/or
+      6            modify it under the terms of the GNU Lesser General Public
+      7            License as published by the Free Software Foundation; either
+      8            version 2.1 of the License, or (at your option) any later version.
+      9          
+     10            This library is distributed in the hope that it will be useful,
+     11            but WITHOUT ANY WARRANTY; without even the implied warranty of
+     12            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     13            Lesser General Public License for more details.
+     14          
+     15            You should have received a copy of the GNU Lesser General Public
+     16            License along with this library; if not, write to the Free Software
+     17            Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+     18          */
+     19          #include <math.h>
+     20          #include "Marlin.h"
+     21          
+     22          #if ENABLED(AUTO_BED_LEVELING_FEATURE)
+     23          #include "vector_3.h"
+     24          
+     25          vector_3::vector_3() : x(0), y(0), z(0) { }
+     26          
+     27          vector_3::vector_3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) { }
+     28          
+     29          vector_3 vector_3::cross(vector_3 left, vector_3 right) {
+     30            return vector_3(left.y * right.z - left.z * right.y,
+     31                            left.z * right.x - left.x * right.z,
+     32                            left.x * right.y - left.y * right.x);
+     33          }
+     34          
+     35          vector_3 vector_3::operator+(vector_3 v) { return vector_3((x + v.x), (y + v.y), (z + v.z)); }
+     36          vector_3 vector_3::operator-(vector_3 v) { return vector_3((x - v.x), (y - v.y), (z - v.z)); }
+     37          
+     38          vector_3 vector_3::get_normal() {
+     39            vector_3 normalized = vector_3(x, y, z);
+     40            normalized.normalize();
+     41            return normalized;
+     42          }
+     43          
+     44          float vector_3::get_length() { return sqrt((x * x) + (y * y) + (z * z)); }
+     45          
+     46          void vector_3::normalize() {
+     47            float length = get_length();
+     48            x /= length;
+     49            y /= length;
+     50            z /= length;
+     51          }
+     52          
+     53          void vector_3::apply_rotation(matrix_3x3 matrix) {
+     54            float resultX = x * matrix.matrix[3 * 0 + 0] + y * matrix.matrix[3 * 1 + 0] + z * matrix.matrix[3 * 2 + 0];
+     55            float resultY = x * matrix.matrix[3 * 0 + 1] + y * matrix.matrix[3 * 1 + 1] + z * matrix.matrix[3 * 2 + 1];
+     56            float resultZ = x * matrix.matrix[3 * 0 + 2] + y * matrix.matrix[3 * 1 + 2] + z * matrix.matrix[3 * 2 + 2];
+     57            x = resultX;
+     58            y = resultY;
+     59            z = resultZ;
+     60          }
+     61          
+     62          void vector_3::debug(const char title[]) {
+     63            SERIAL_PROTOCOL(title);
+     64            SERIAL_PROTOCOLPGM(" x: ");
+     65            SERIAL_PROTOCOL_F(x, 6);
+     66            SERIAL_PROTOCOLPGM(" y: ");
+     67            SERIAL_PROTOCOL_F(y, 6);
+     68            SERIAL_PROTOCOLPGM(" z: ");
+     69            SERIAL_PROTOCOL_F(z, 6);
+     70            SERIAL_EOL;
+     71          }
+     72          
+     73          void apply_rotation_xyz(matrix_3x3 matrix, float& x, float& y, float& z) {
+     74            vector_3 vector = vector_3(x, y, z);
+     75            vector.apply_rotation(matrix);
+     76            x = vector.x;
+     77            y = vector.y;
+     78            z = vector.z;
+     79          }
+     80          
+     81          matrix_3x3 matrix_3x3::create_from_rows(vector_3 row_0, vector_3 row_1, vector_3 row_2) {
+     82            //row_0.debug("row_0");
+     83            //row_1.debug("row_1");
+     84            //row_2.debug("row_2");
+     85            matrix_3x3 new_matrix;
+     86            new_matrix.matrix[0] = row_0.x; new_matrix.matrix[1] = row_0.y; new_matrix.matrix[2] = row_0.z;
+     87            new_matrix.matrix[3] = row_1.x; new_matrix.matrix[4] = row_1.y; new_matrix.matrix[5] = row_1.z;
+     88            new_matrix.matrix[6] = row_2.x; new_matrix.matrix[7] = row_2.y; new_matrix.matrix[8] = row_2.z;
+     89            //new_matrix.debug("new_matrix");
+     90            return new_matrix;
+     91          }
+     92          
+     93          void matrix_3x3::set_to_identity() {
+     94            matrix[0] = 1; matrix[1] = 0; matrix[2] = 0;
+     95            matrix[3] = 0; matrix[4] = 1; matrix[5] = 0;
+     96            matrix[6] = 0; matrix[7] = 0; matrix[8] = 1;
+     97          }
+     98          
+     99          matrix_3x3 matrix_3x3::create_look_at(vector_3 target) {
+    100            vector_3 z_row = target.get_normal();
+    101            vector_3 x_row = vector_3(1, 0, -target.x / target.z).get_normal();
+    102            vector_3 y_row = vector_3::cross(z_row, x_row).get_normal();
+    103          
+    104            // x_row.debug("x_row");
+    105            // y_row.debug("y_row");
+    106            // z_row.debug("z_row");
+    107          
+    108            // create the matrix already correctly transposed
+    109            matrix_3x3 rot = matrix_3x3::create_from_rows(x_row, y_row, z_row);
+    110          
+    111            // rot.debug("rot");
+    112            return rot;
+    113          }
+    114          
+    115          matrix_3x3 matrix_3x3::transpose(matrix_3x3 original) {
+    116            matrix_3x3 new_matrix;
+    117            new_matrix.matrix[0] = original.matrix[0]; new_matrix.matrix[1] = original.matrix[3]; new_matrix.matrix[2] = original.matrix[6];
+    118            new_matrix.matrix[3] = original.matrix[1]; new_matrix.matrix[4] = original.matrix[4]; new_matrix.matrix[5] = original.matrix[7];
+    119            new_matrix.matrix[6] = original.matrix[2]; new_matrix.matrix[7] = original.matrix[5]; new_matrix.matrix[8] = original.matrix[8];
+    120            return new_matrix;
+    121          }
+    122          
+    123          void matrix_3x3::debug(const char title[]) {
+    124            SERIAL_PROTOCOLLN(title);
+    125            int count = 0;
+    126            for (int i = 0; i < 3; i++) {
+    127              for (int j = 0; j < 3; j++) {
+    128                if (matrix[count] >= 0.0) SERIAL_PROTOCOLCHAR('+');
+    129                SERIAL_PROTOCOL_F(matrix[count], 6);
+    130                SERIAL_PROTOCOLCHAR(' ');
+    131                count++;
+    132              }
+    133              SERIAL_EOL;
+    134            }
+    135          }
+    136          
+    137          #endif // AUTO_BED_LEVELING_FEATURE
+    138          
+
+
+ 
+ 
+ 0 bytes of memory
+
+Errors: none
+Warnings: 5

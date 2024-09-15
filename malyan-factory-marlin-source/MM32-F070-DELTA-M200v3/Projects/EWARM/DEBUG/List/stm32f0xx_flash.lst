@@ -1,0 +1,1428 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:22
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_flash.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW42D6.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_flash.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32f0xx_flash.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_flash.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_flash.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f0xx_flash.c
+      4            * @author  MCD Application Team
+      5            * @version V1.3.0
+      6            * @date    16-January-2014
+      7            * @brief   This file provides firmware functions to manage the following 
+      8            *          functionalities of the FLASH peripheral:
+      9            *            - FLASH Interface configuration
+     10            *            - FLASH Memory Programming
+     11            *            - Option Bytes Programming
+     12            *            - Interrupts and flags management
+     13            *
+     14            *  @verbatim
+     15           ===============================================================================
+     16                              ##### How to use this driver #####
+     17           ===============================================================================
+     18              [..] This driver provides functions to configure and program the Flash 
+     19                   memory of all STM32F0xx devices. These functions are split in 4 groups
+     20                   (#) FLASH Interface configuration functions: this group includes the 
+     21                       management of following features:
+     22                       (++) Set the latency
+     23                       (++) Enable/Disable the prefetch buffer
+     24          
+     25                   (#) FLASH Memory Programming functions: this group includes all needed 
+     26                       functions to erase and program the main memory:
+     27                       (++) Lock and Unlock the Flash interface.
+     28                       (++) Erase function: Erase Page, erase all pages.
+     29                       (++) Program functions: Half Word and Word write.
+     30          
+     31                   (#) FLASH Option Bytes Programming functions: this group includes all 
+     32                       needed functions to:
+     33                       (++) Lock and Unlock the Flash Option bytes.
+     34                       (++) Launch the Option Bytes loader
+     35                       (++) Erase the Option Bytes
+     36                       (++)Set/Reset the write protection
+     37                       (++) Set the Read protection Level
+     38                       (++) Program the user option Bytes
+     39                       (++) Set/Reset the BOOT1 bit
+     40                       (++) Enable/Disable the VDDA Analog Monitoring
+     41                       (++) Get the user option bytes
+     42                       (++) Get the Write protection
+     43                       (++) Get the read protection status
+     44          
+     45                   (#) FLASH Interrupts and flag management functions: this group includes 
+     46                       all needed functions to:
+     47                       (++) Enable/Disable the flash interrupt sources
+     48                       (++) Get flags status
+     49                       (++) Clear flags
+     50                       (++) Get Flash operation status
+     51                       (++) Wait for last flash operation
+     52          
+     53           @endverbatim
+     54            
+     55            ******************************************************************************
+     56            * @attention
+     57            *
+     58            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     59            *
+     60            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     61            * You may not use this file except in compliance with the License.
+     62            * You may obtain a copy of the License at:
+     63            *
+     64            *        http://www.st.com/software_license_agreement_liberty_v2
+     65            *
+     66            * Unless required by applicable law or agreed to in writing, software 
+     67            * distributed under the License is distributed on an "AS IS" BASIS, 
+     68            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     69            * See the License for the specific language governing permissions and
+     70            * limitations under the License.
+     71            *
+     72            ******************************************************************************
+     73            */
+     74          
+     75          /* Includes ------------------------------------------------------------------*/
+     76          #include "stm32f0xx_flash.h"
+     77          
+     78          /** @addtogroup STM32F0xx_StdPeriph_Driver
+     79            * @{
+     80            */
+     81          
+     82          /** @defgroup FLASH 
+     83            * @brief FLASH driver modules
+     84            * @{
+     85            */ 
+     86          
+     87          /* Private typedef -----------------------------------------------------------*/
+     88          /* Private define ------------------------------------------------------------*/
+     89          /* Private macro -------------------------------------------------------------*/
+     90          /* Private variables ---------------------------------------------------------*/
+     91          /* Private function prototypes -----------------------------------------------*/
+     92          /* Private functions ---------------------------------------------------------*/
+     93           
+     94          /** @defgroup FLASH_Private_Functions
+     95            * @{
+     96            */ 
+     97          
+     98          /** @defgroup FLASH_Group1 FLASH Interface configuration functions
+     99            *  @brief   FLASH Interface configuration functions 
+    100           *
+    101          @verbatim   
+    102           ===============================================================================
+    103                         ##### FLASH Interface configuration functions #####
+    104           ===============================================================================
+    105          
+    106              [..] FLASH_Interface configuration_Functions, includes the following functions:
+    107                 (+) void FLASH_SetLatency(uint32_t FLASH_Latency):
+    108              [..] To correctly read data from Flash memory, the number of wait states (LATENCY) 
+    109               must be correctly programmed according to the frequency of the CPU clock (HCLK) 
+    110              [..]
+    111                  +--------------------------------------------- +
+    112                  |  Wait states  |   HCLK clock frequency (MHz) |
+    113                  |---------------|------------------------------|
+    114                  |0WS(1CPU cycle)|       0 < HCLK <= 24         |
+    115                  |---------------|------------------------------|
+    116                  |1WS(2CPU cycle)|       24 < HCLK <= 48        |
+    117                  +----------------------------------------------+
+    118              [..]
+    119                 (+) void FLASH_PrefetchBufferCmd(FunctionalState NewState);
+    120              [..]
+    121               All these functions don't need the unlock sequence.
+    122          
+    123          @endverbatim
+    124            * @{
+    125            */
+    126          
+    127          /**
+    128            * @brief  Sets the code latency value.
+    129            * @param  FLASH_Latency: specifies the FLASH Latency value.
+    130            *          This parameter can be one of the following values:
+    131            *             @arg FLASH_Latency_0: FLASH Zero Latency cycle
+    132            *             @arg FLASH_Latency_1: FLASH One Latency cycle
+    133            * @retval None
+    134            */
+    135          void FLASH_SetLatency(uint32_t FLASH_Latency)
+    136          {
+    137             uint32_t tmpreg = 0;
+    138          
+    139            /* Check the parameters */
+    140            assert_param(IS_FLASH_LATENCY(FLASH_Latency));
+    141          
+    142            /* Read the ACR register */
+    143            tmpreg = FLASH->ACR;  
+    144          
+    145            /* Sets the Latency value */
+    146            tmpreg &= (uint32_t) (~((uint32_t)FLASH_ACR_LATENCY));
+    147            tmpreg |= FLASH_Latency;
+    148          
+    149            /* Write the ACR register */
+    150            FLASH->ACR = tmpreg;
+    151          }
+    152          
+    153          /**
+    154            * @brief  Enables or disables the Prefetch Buffer.
+    155            * @param  NewState: new state of the FLASH prefetch buffer.
+    156            *          This parameter can be: ENABLE or DISABLE. 
+    157            * @retval None
+    158            */
+    159          void FLASH_PrefetchBufferCmd(FunctionalState NewState)
+    160          {
+    161            /* Check the parameters */
+    162            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    163          
+    164            if(NewState != DISABLE)
+    165            {
+    166              FLASH->ACR |= FLASH_ACR_PRFTBE;
+    167            }
+    168            else
+    169            {
+    170              FLASH->ACR &= (uint32_t)(~((uint32_t)FLASH_ACR_PRFTBE));
+    171            }
+    172          }
+    173          
+    174          /**
+    175            * @brief  Checks whether the FLASH Prefetch Buffer status is set or not.
+    176            * @param  None
+    177            * @retval FLASH Prefetch Buffer Status (SET or RESET).
+    178            */
+    179          FlagStatus FLASH_GetPrefetchBufferStatus(void)
+    180          {
+    181            FlagStatus bitstatus = RESET;
+    182          
+    183            if ((FLASH->ACR & FLASH_ACR_PRFTBS) != (uint32_t)RESET)
+    184            {
+    185              bitstatus = SET;
+    186            }
+    187            else
+    188            {
+    189              bitstatus = RESET;
+    190            }
+    191            /* Return the new state of FLASH Prefetch Buffer Status (SET or RESET) */
+    192            return bitstatus; 
+    193          }
+    194          
+    195          /**
+    196            * @}
+    197            */
+    198          
+    199          /** @defgroup FLASH_Group2 FLASH Memory Programming functions
+    200           *  @brief   FLASH Memory Programming functions
+    201           *
+    202          @verbatim   
+    203           ===============================================================================
+    204                          ##### FLASH Memory Programming functions #####
+    205           ===============================================================================
+    206          
+    207              [..] The FLASH Memory Programming functions, includes the following functions:
+    208                 (+) void FLASH_Unlock(void);
+    209                 (+) void FLASH_Lock(void);
+    210                 (+) FLASH_Status FLASH_ErasePage(uint32_t Page_Address);
+    211                 (+) FLASH_Status FLASH_EraseAllPages(void);
+    212                 (+) FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data);
+    213                 (+) FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data);
+    214          
+    215              [..] Any operation of erase or program should follow these steps:
+    216                 
+    217                 (#) Call the FLASH_Unlock() function to enable the flash control register and 
+    218                     program memory access
+    219                 (#) Call the desired function to erase page or program data
+    220                 (#) Call the FLASH_Lock() to disable the flash program memory access 
+    221                (recommended to protect the FLASH memory against possible unwanted operation)
+    222          
+    223          @endverbatim
+    224            * @{
+    225            */
+    226          
+    227          /**
+    228            * @brief  Unlocks the FLASH control register and program memory access.
+    229            * @param  None
+    230            * @retval None
+    231            */
+    232          void FLASH_Unlock(void)
+    233          {
+    234            if((FLASH->CR & FLASH_CR_LOCK) != RESET)
+    235            {
+    236              /* Unlocking the program memory access */
+    237              FLASH->KEYR = FLASH_FKEY1;
+    238              FLASH->KEYR = FLASH_FKEY2;
+    239            }
+    240          }
+    241          
+    242          /**
+    243            * @brief  Locks the Program memory access.
+    244            * @param  None
+    245            * @retval None
+    246            */
+    247          void FLASH_Lock(void)
+    248          {
+    249            /* Set the LOCK Bit to lock the FLASH control register and program memory access */
+    250            FLASH->CR |= FLASH_CR_LOCK;
+    251          }
+    252          
+    253          /**
+    254            * @brief  Erases a specified page in program memory.
+    255            * @note   To correctly run this function, the FLASH_Unlock() function must be called before.
+    256            * @note   Call the FLASH_Lock() to disable the flash memory access (recommended
+    257            *         to protect the FLASH memory against possible unwanted operation)
+    258            * @param  Page_Address: The page address in program memory to be erased.
+    259            * @note   A Page is erased in the Program memory only if the address to load 
+    260            *         is the start address of a page (multiple of 1024 bytes).
+    261            * @retval FLASH Status: The returned value can be: 
+    262            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    263            */
+    264          FLASH_Status FLASH_ErasePage(uint32_t Page_Address)
+    265          {
+    266            FLASH_Status status = FLASH_COMPLETE;
+    267          
+    268            /* Check the parameters */
+    269            assert_param(IS_FLASH_PROGRAM_ADDRESS(Page_Address));
+    270           
+    271            /* Wait for last operation to be completed */
+    272            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    273            
+    274            if(status == FLASH_COMPLETE)
+    275            { 
+    276              /* If the previous operation is completed, proceed to erase the page */
+    277              FLASH->CR |= FLASH_CR_PER;
+    278              FLASH->AR  = Page_Address;
+    279              FLASH->CR |= FLASH_CR_STRT;
+    280              
+    281              /* Wait for last operation to be completed */
+    282              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    283              
+    284              /* Disable the PER Bit */
+    285              FLASH->CR &= ~FLASH_CR_PER;
+    286            }
+    287              
+    288            /* Return the Erase Status */
+    289            return status;
+    290          }
+    291          
+    292          /**
+    293            * @brief  Erases all FLASH pages.
+    294            * @note   To correctly run this function, the FLASH_Unlock() function must be called before.
+    295            * @note   Call the FLASH_Lock() to disable the flash memory access (recommended
+    296            *         to protect the FLASH memory against possible unwanted operation)
+    297            * @param  None
+    298            * @retval FLASH Status: The returned value can be: FLASH_ERROR_PG,
+    299            *         FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    300            */
+    301          FLASH_Status FLASH_EraseAllPages(void)
+    302          {
+    303            FLASH_Status status = FLASH_COMPLETE;
+    304          
+    305            /* Wait for last operation to be completed */
+    306            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    307            
+    308            if(status == FLASH_COMPLETE)
+    309            {
+    310              /* if the previous operation is completed, proceed to erase all pages */
+    311               FLASH->CR |= FLASH_CR_MER;
+    312               FLASH->CR |= FLASH_CR_STRT;
+    313              
+    314              /* Wait for last operation to be completed */
+    315              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    316          
+    317              /* Disable the MER Bit */
+    318              FLASH->CR &= ~FLASH_CR_MER;
+    319            }
+    320          
+    321            /* Return the Erase Status */
+    322            return status;
+    323          }
+    324          
+    325          /**
+    326            * @brief  Programs a word at a specified address.
+    327            * @note   To correctly run this function, the FLASH_Unlock() function must be called before.
+    328            * @note   Call the FLASH_Lock() to disable the flash memory access (recommended
+    329            *         to protect the FLASH memory against possible unwanted operation)
+    330            * @param  Address: specifies the address to be programmed.
+    331            * @param  Data: specifies the data to be programmed.
+    332            * @retval FLASH Status: The returned value can be: FLASH_ERROR_PG,
+    333            *         FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT. 
+    334            */
+    335          FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data)
+    336          {
+    337            FLASH_Status status = FLASH_COMPLETE;
+    338            __IO uint32_t tmp = 0;
+    339          
+    340            /* Check the parameters */
+    341            assert_param(IS_FLASH_PROGRAM_ADDRESS(Address));
+    342          
+    343            /* Wait for last operation to be completed */
+    344            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    345            
+    346            if(status == FLASH_COMPLETE)
+    347            {
+    348              /* If the previous operation is completed, proceed to program the new first 
+    349              half word */
+    350              FLASH->CR |= FLASH_CR_PG;
+    351            
+    352              *(__IO uint16_t*)Address = (uint16_t)Data;
+    353              
+    354              /* Wait for last operation to be completed */
+    355              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    356           
+    357              if(status == FLASH_COMPLETE)
+    358              {
+    359                /* If the previous operation is completed, proceed to program the new second 
+    360                half word */
+    361                tmp = Address + 2;
+    362          
+    363                *(__IO uint16_t*) tmp = Data >> 16;
+    364              
+    365                /* Wait for last operation to be completed */
+    366                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    367                  
+    368                /* Disable the PG Bit */
+    369                FLASH->CR &= ~FLASH_CR_PG;
+    370              }
+    371              else
+    372              {
+    373                /* Disable the PG Bit */
+    374                FLASH->CR &= ~FLASH_CR_PG;
+    375              }
+    376            }
+    377             
+    378            /* Return the Program Status */
+    379            return status;
+    380          }
+    381          
+    382          /**
+    383            * @brief  Programs a half word at a specified address.
+    384            * @note   To correctly run this function, the FLASH_Unlock() function must be called before.
+    385            * @note   Call the FLASH_Lock() to disable the flash memory access (recommended
+    386            *         to protect the FLASH memory against possible unwanted operation)
+    387            * @param  Address: specifies the address to be programmed.
+    388            * @param  Data: specifies the data to be programmed.
+    389            * @retval FLASH Status: The returned value can be: FLASH_ERROR_PG,
+    390            *         FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT. 
+    391            */
+    392          FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data)
+    393          {
+    394            FLASH_Status status = FLASH_COMPLETE;
+    395          
+    396            /* Check the parameters */
+    397            assert_param(IS_FLASH_PROGRAM_ADDRESS(Address));
+    398          
+    399            /* Wait for last operation to be completed */
+    400            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    401            
+    402            if(status == FLASH_COMPLETE)
+    403            {
+    404              /* If the previous operation is completed, proceed to program the new data */
+    405              FLASH->CR |= FLASH_CR_PG;
+    406            
+    407              *(__IO uint16_t*)Address = Data;
+    408          
+    409              /* Wait for last operation to be completed */
+    410              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    411              
+    412              /* Disable the PG Bit */
+    413              FLASH->CR &= ~FLASH_CR_PG;
+    414            } 
+    415            
+    416            /* Return the Program Status */
+    417            return status;
+    418          }
+    419          
+    420          /**
+    421            * @}
+    422            */
+    423            
+    424          /** @defgroup FLASH_Group3 Option Bytes Programming functions
+    425           *  @brief   Option Bytes Programming functions 
+    426           *
+    427          @verbatim   
+    428           ===============================================================================
+    429                          ##### Option Bytes Programming functions #####
+    430           ===============================================================================
+    431          
+    432              [..] The FLASH_Option Bytes Programming_functions, includes the following functions:
+    433                 (+) void FLASH_OB_Unlock(void);
+    434                 (+) void FLASH_OB_Lock(void);
+    435                 (+) void FLASH_OB_Launch(void);
+    436                 (+) FLASH_Status FLASH_OB_Erase(void);
+    437                 (+) FLASH_Status FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState);
+    438                 (+) FLASH_Status FLASH_OB_RDPConfig(uint8_t OB_RDP);
+    439                 (+) FLASH_Status FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY);
+    440                 (+) FLASH_Status FLASH_OB_BOOTConfig(uint8_t OB_BOOT1);
+    441                 (+) FLASH_Status FLASH_OB_VDDAConfig(uint8_t OB_VDDA_ANALOG);
+    442                 (+) FLASH_Status FLASH_OB_WriteUser(uint8_t OB_USER);
+    443                 (+) FLASH_OB_ProgramData(uint32_t Address, uint8_t Data);
+    444                 (+) uint8_t FLASH_OB_GetUser(void);
+    445                 (+) uint32_t FLASH_OB_GetWRP(void);
+    446                 (+) FlagStatus FLASH_OB_GetRDP(void);
+    447          
+    448              [..] Any operation of erase or program should follow these steps:
+    449          
+    450             (#) Call the FLASH_OB_Unlock() function to enable the Option Bytes registers access
+    451          
+    452             (#) Call one or several functions to program the desired option bytes 
+    453                (++) FLASH_Status FLASH_OB_RDPConfig(uint8_t OB_RDP) => to set the desired read Protection Level
+    454                (++) FLASH_Status FLASH_OB_WRPConfig(uint32_t OB_WRP, FunctionalState NewState) 
+    455                     => to Enable/Disable the desired sector write protection
+    456                (++) FLASH_Status FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY) 
+    457                     => to configure the user option Bytes: IWDG, STOP and the Standby.
+    458                (++) FLASH_Status FLASH_OB_BOOTConfig(uint8_t OB_BOOT1)
+    459                     => to set or reset BOOT1 
+    460                (++) FLASH_Status FLASH_OB_VDDAConfig(uint8_t OB_VDDA_ANALOG) 
+    461                     => to enable or disable the VDDA Analog Monitoring 			 
+    462                (++) You can write all User Options bytes at once using a single function
+    463                     by calling FLASH_Status FLASH_OB_WriteUser(uint8_t OB_USER)
+    464                (++) FLASH_OB_ProgramData(uint32_t Address, uint8_t Data) to program the 
+    465                     two half word in the option bytes
+    466          
+    467             (#) Once all needed option bytes to be programmed are correctly written, call the
+    468                FLASH_OB_Launch(void) function to launch the Option Bytes programming process.
+    469          
+    470             (#) Call the FLASH_OB_Lock() to disable the Option Bytes registers access (recommended
+    471                to protect the option Bytes against possible unwanted operations)
+    472          
+    473          @endverbatim
+    474            * @{
+    475            */
+    476          
+    477          /**
+    478            * @brief  Unlocks the option bytes block access.
+    479            * @param  None
+    480            * @retval None
+    481            */
+    482          void FLASH_OB_Unlock(void)
+    483          {
+    484            if((FLASH->CR & FLASH_CR_OPTWRE) == RESET)
+    485            { 
+    486              /* Unlocking the option bytes block access */
+    487              FLASH->OPTKEYR = FLASH_OPTKEY1;
+    488              FLASH->OPTKEYR = FLASH_OPTKEY2;
+    489            }
+    490          }
+    491          
+    492          /**
+    493            * @brief  Locks the option bytes block access.
+    494            * @param  None
+    495            * @retval None
+    496            */
+    497          void FLASH_OB_Lock(void)
+    498          {
+    499            /* Set the OPTWREN Bit to lock the option bytes block access */
+    500            FLASH->CR &= ~FLASH_CR_OPTWRE;
+    501          }
+    502          
+    503          /**
+    504            * @brief  Launch the option byte loading.
+    505            * @param  None
+    506            * @retval None
+    507            */
+    508          void FLASH_OB_Launch(void)
+    509          {
+    510            /* Set the OBL_Launch bit to launch the option byte loading */
+    511            FLASH->CR |= FLASH_CR_OBL_LAUNCH;
+    512          }
+    513          
+    514          /**
+    515            * @brief  Erases the FLASH option bytes.
+    516            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+    517            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+    518            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+    519            * @note   This functions erases all option bytes except the Read protection (RDP).
+    520            * @param  None
+    521            * @retval FLASH Status: The returned value can be: FLASH_ERROR_PG,
+    522            *         FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    523            */
+    524          FLASH_Status FLASH_OB_Erase(void)
+    525          {
+    526            uint16_t rdptmp = OB_RDP_Level_0;
+    527          
+    528            FLASH_Status status = FLASH_COMPLETE;
+    529          
+    530            /* Get the actual read protection Option Byte value */ 
+    531            if(FLASH_OB_GetRDP() != RESET)
+    532            {
+    533              rdptmp = 0x00;  
+    534            }
+    535          
+    536            /* Wait for last operation to be completed */
+    537            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    538          
+    539            if(status == FLASH_COMPLETE)
+    540            {   
+    541              /* If the previous operation is completed, proceed to erase the option bytes */
+    542              FLASH->CR |= FLASH_CR_OPTER;
+    543              FLASH->CR |= FLASH_CR_STRT;
+    544          
+    545              /* Wait for last operation to be completed */
+    546              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    547              
+    548              if(status == FLASH_COMPLETE)
+    549              {
+    550                /* If the erase operation is completed, disable the OPTER Bit */
+    551                FLASH->CR &= ~FLASH_CR_OPTER;
+    552                 
+    553                /* Enable the Option Bytes Programming operation */
+    554                FLASH->CR |= FLASH_CR_OPTPG;
+    555          
+    556                /* Restore the last read protection Option Byte value */
+    557                OB->RDP = (uint16_t)rdptmp; 
+    558          
+    559                /* Wait for last operation to be completed */
+    560                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    561           
+    562                if(status != FLASH_TIMEOUT)
+    563                {
+    564                  /* if the program operation is completed, disable the OPTPG Bit */
+    565                  FLASH->CR &= ~FLASH_CR_OPTPG;
+    566                }
+    567              }
+    568              else
+    569              {
+    570                if (status != FLASH_TIMEOUT)
+    571                {
+    572                  /* Disable the OPTPG Bit */
+    573                  FLASH->CR &= ~FLASH_CR_OPTPG;
+    574                }
+    575              }  
+    576            }
+    577            /* Return the erase status */
+    578            return status;
+    579          }
+    580          
+    581          /**
+    582            * @brief  Write protects the desired pages
+    583            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+    584            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+    585            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+    586            * @param  OB_WRP: specifies the address of the pages to be write protected.
+    587            *          This parameter can be:
+    588            *             @arg OB_WRP_Pages0to3..OB_WRP_Pages60to63
+    589            *             @arg OB_WRP_AllPages
+    590            * @retval FLASH Status: The returned value can be: 
+    591            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    592            */
+    593          FLASH_Status FLASH_OB_EnableWRP(uint32_t OB_WRP)
+    594          {
+    595           uint16_t WRP0_Data = 0xFFFF, WRP1_Data = 0xFFFF, WRP2_Data = 0xFFFF, WRP3_Data = 0xFFFF;
+    596          
+    597            FLASH_Status status = FLASH_COMPLETE;
+    598          
+    599            /* Check the parameters */
+    600            assert_param(IS_OB_WRP(OB_WRP));
+    601          
+    602            OB_WRP = (uint32_t)(~OB_WRP);
+    603            WRP0_Data = (uint16_t)(OB_WRP & OB_WRP0_WRP0);
+    604            WRP1_Data = (uint16_t)((OB_WRP >> 8) & OB_WRP0_WRP0);
+    605            WRP2_Data = (uint16_t)((OB_WRP >> 16) & OB_WRP0_WRP0) ;
+    606            WRP3_Data = (uint16_t)((OB_WRP >> 24) & OB_WRP0_WRP0) ;
+    607              
+    608            /* Wait for last operation to be completed */
+    609            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    610          
+    611            if(status == FLASH_COMPLETE)
+    612            {
+    613              FLASH->CR |= FLASH_CR_OPTPG;
+    614          
+    615              if(WRP0_Data != 0xFF)
+    616              {
+    617                OB->WRP0 = WRP0_Data;
+    618                
+    619                /* Wait for last operation to be completed */
+    620                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    621              }
+    622              if((status == FLASH_COMPLETE) && (WRP1_Data != 0xFF))
+    623              {
+    624                OB->WRP1 = WRP1_Data;
+    625                
+    626                /* Wait for last operation to be completed */
+    627                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    628              }
+    629              if((status == FLASH_COMPLETE) && (WRP2_Data != 0xFF))
+    630              {
+    631                OB->WRP2 = WRP2_Data;
+    632                
+    633                /* Wait for last operation to be completed */
+    634                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    635              }    
+    636              if((status == FLASH_COMPLETE) && (WRP3_Data != 0xFF))
+    637              {
+    638                OB->WRP3 = WRP3_Data;
+    639                
+    640                /* Wait for last operation to be completed */
+    641                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    642              }  
+    643              if(status != FLASH_TIMEOUT)
+    644              {
+    645                /* if the program operation is completed, disable the OPTPG Bit */
+    646                FLASH->CR &= ~FLASH_CR_OPTPG;
+    647              }
+    648            } 
+    649            /* Return the write protection operation Status */
+    650            return status;
+    651          }
+    652          
+    653          /**
+    654            * @brief  Enables or disables the read out protection.
+    655            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+    656            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+    657            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+    658            * @param  FLASH_ReadProtection_Level: specifies the read protection level. 
+    659            *          This parameter can be:
+    660            *             @arg OB_RDP_Level_0: No protection
+    661            *             @arg OB_RDP_Level_1: Read protection of the memory
+    662            *             @arg OB_RDP_Level_2: Chip protection
+    663            * @note   When enabling OB_RDP level 2 it's no more possible to go back to level 1 or 0
+    664            * @retval FLASH Status: The returned value can be: 
+    665            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    666            */
+    667          FLASH_Status FLASH_OB_RDPConfig(uint8_t OB_RDP)
+    668          {
+    669            FLASH_Status status = FLASH_COMPLETE;
+    670            
+    671            /* Check the parameters */
+    672            assert_param(IS_OB_RDP(OB_RDP));
+    673            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    674            
+    675            if(status == FLASH_COMPLETE)
+    676            {
+    677              FLASH->CR |= FLASH_CR_OPTER;
+    678              FLASH->CR |= FLASH_CR_STRT;
+    679              
+    680              /* Wait for last operation to be completed */
+    681              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    682              
+    683              if(status == FLASH_COMPLETE)
+    684              {
+    685                /* If the erase operation is completed, disable the OPTER Bit */
+    686                FLASH->CR &= ~FLASH_CR_OPTER;
+    687                
+    688                /* Enable the Option Bytes Programming operation */
+    689                FLASH->CR |= FLASH_CR_OPTPG;
+    690                 
+    691                OB->RDP = OB_RDP;
+    692          
+    693                /* Wait for last operation to be completed */
+    694                status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT); 
+    695              
+    696                if(status != FLASH_TIMEOUT)
+    697                {
+    698                  /* if the program operation is completed, disable the OPTPG Bit */
+    699                  FLASH->CR &= ~FLASH_CR_OPTPG;
+    700                }
+    701              }
+    702              else 
+    703              {
+    704                if(status != FLASH_TIMEOUT)
+    705                {
+    706                  /* Disable the OPTER Bit */
+    707                  FLASH->CR &= ~FLASH_CR_OPTER;
+    708                }
+    709              }
+    710            }
+    711            /* Return the protection operation Status */
+    712            return status;
+    713          }
+    714          
+    715          /**
+    716            * @brief  Programs the FLASH User Option Byte: IWDG_SW / RST_STOP / RST_STDBY.
+    717            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+    718            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+    719            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+    720            * @param  OB_IWDG: Selects the WDG mode
+    721            *          This parameter can be one of the following values:
+    722            *             @arg OB_IWDG_SW: Software WDG selected
+    723            *             @arg OB_IWDG_HW: Hardware WDG selected
+    724            * @param  OB_STOP: Reset event when entering STOP mode.
+    725            *          This parameter can be one of the following values:
+    726            *             @arg OB_STOP_NoRST: No reset generated when entering in STOP
+    727            *             @arg OB_STOP_RST: Reset generated when entering in STOP
+    728            * @param  OB_STDBY: Reset event when entering Standby mode.
+    729            *          This parameter can be one of the following values:
+    730            *             @arg OB_STDBY_NoRST: No reset generated when entering in STANDBY
+    731            *             @arg OB_STDBY_RST: Reset generated when entering in STANDBY
+    732            * @retval FLASH Status: The returned value can be: 
+    733            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    734            */
+    735          FLASH_Status FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY)
+    736          {
+    737            FLASH_Status status = FLASH_COMPLETE; 
+    738          
+    739            /* Check the parameters */
+    740            assert_param(IS_OB_IWDG_SOURCE(OB_IWDG));
+    741            assert_param(IS_OB_STOP_SOURCE(OB_STOP));
+    742            assert_param(IS_OB_STDBY_SOURCE(OB_STDBY));
+    743          
+    744            /* Wait for last operation to be completed */
+    745            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    746            
+    747            if(status == FLASH_COMPLETE)
+    748            {
+    749              /* Enable the Option Bytes Programming operation */
+    750              FLASH->CR |= FLASH_CR_OPTPG; 
+    751          
+    752              OB->USER = (uint16_t)((uint16_t)(OB_IWDG | OB_STOP) | (uint16_t)(OB_STDBY | 0xF8));
+    753            
+    754              /* Wait for last operation to be completed */
+    755              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    756          
+    757              if(status != FLASH_TIMEOUT)
+    758              {
+    759                /* If the program operation is completed, disable the OPTPG Bit */
+    760                FLASH->CR &= ~FLASH_CR_OPTPG;
+    761              }
+    762            }    
+    763            /* Return the Option Byte program Status */
+    764            return status;
+    765          }
+    766          
+    767          /**
+    768            * @brief  Sets or resets the BOOT1 option bit.
+    769            * @param  OB_BOOT1: Set or Reset the BOOT1 option bit.
+    770            *          This parameter can be one of the following values:
+    771            *             @arg OB_BOOT1_RESET: BOOT1 option bit reset
+    772            *             @arg OB_BOOT1_SET: BOOT1 option bit set
+    773            * @retval None
+    774            */
+    775          FLASH_Status FLASH_OB_BOOTConfig(uint8_t OB_BOOT1)
+    776          {
+    777            FLASH_Status status = FLASH_COMPLETE; 
+    778          
+    779            /* Check the parameters */
+    780            assert_param(IS_OB_BOOT1(OB_BOOT1));
+    781          
+    782            /* Wait for last operation to be completed */
+    783            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    784            
+    785            if(status == FLASH_COMPLETE)
+    786            {  
+    787              /* Enable the Option Bytes Programming operation */
+    788              FLASH->CR |= FLASH_CR_OPTPG;
+    789          
+    790              OB->USER = OB_BOOT1 | 0xEF;
+    791            
+    792              /* Wait for last operation to be completed */
+    793              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    794          
+    795              if(status != FLASH_TIMEOUT)
+    796              {
+    797                /* If the program operation is completed, disable the OPTPG Bit */
+    798                FLASH->CR &= ~FLASH_CR_OPTPG;
+    799              }
+    800            }
+    801            /* Return the Option Byte program Status */
+    802            return status;
+    803          }
+    804          
+    805          /**
+    806            * @brief  Sets or resets the BOOT0 option bit.
+    807            * @note   This function is applicable only for the STM32F042 devices.
+    808            * @param  OB_BOOT0: Set or Reset the BOOT0 option bit.
+    809            *          This parameter can be one of the following values:
+    810            *             @arg OB_BOOT0_RESET: BOOT0 option bit reset
+    811            *             @arg OB_BOOT0_SET: BOOT0 option bit set
+    812            * @retval None
+    813            */
+    814          FLASH_Status FLASH_OB_BOOT0Config(uint8_t OB_BOOT0)
+    815          {
+    816            FLASH_Status status = FLASH_COMPLETE; 
+    817          
+    818            /* Check the parameters */
+    819            assert_param(IS_OB_BOOT0(OB_BOOT0));
+    820          
+    821            /* Wait for last operation to be completed */
+    822            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    823            
+    824            if(status == FLASH_COMPLETE)
+    825            {  
+    826              /* Enable the Option Bytes Programming operation */
+    827              FLASH->CR |= FLASH_CR_OPTPG;
+    828          
+    829              OB->USER = OB_BOOT0 | 0xF7;
+    830            
+    831              /* Wait for last operation to be completed */
+    832              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    833          
+    834              if(status != FLASH_TIMEOUT)
+    835              {
+    836                /* If the program operation is completed, disable the OPTPG Bit */
+    837                FLASH->CR &= ~FLASH_CR_OPTPG;
+    838              }
+    839            }
+    840            /* Return the Option Byte program Status */
+    841            return status;
+    842          }
+    843          
+    844          /**
+    845            * @brief  Sets or resets the BOOT0SW option bit.
+    846            * @note   This function is applicable only for the STM32F042 devices.   
+    847            * @param  OB_BOOT0SW: Set or Reset the BOOT0_SW option bit.
+    848            *          This parameter can be one of the following values:
+    849            *             @arg OB_BOOT0_SW: BOOT0_SW option bit reset
+    850            *             @arg OB_BOOT0_HW: BOOT0_SW option bit set
+    851            * @retval None
+    852            */
+    853          FLASH_Status FLASH_OB_BOOT0SWConfig(uint8_t OB_BOOT0SW)
+    854          {
+    855            FLASH_Status status = FLASH_COMPLETE; 
+    856          
+    857            /* Check the parameters */
+    858            assert_param(IS_OB_BOOT0SW(OB_BOOT0SW));
+    859          
+    860            /* Wait for last operation to be completed */
+    861            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    862            
+    863            if(status == FLASH_COMPLETE)
+    864            {  
+    865              /* Enable the Option Bytes Programming operation */
+    866              FLASH->CR |= FLASH_CR_OPTPG;
+    867          
+    868              OB->USER = OB_BOOT0SW | 0x7F;
+    869            
+    870              /* Wait for last operation to be completed */
+    871              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    872          
+    873              if(status != FLASH_TIMEOUT)
+    874              {
+    875                /* If the program operation is completed, disable the OPTPG Bit */
+    876                FLASH->CR &= ~FLASH_CR_OPTPG;
+    877              }
+    878            }
+    879            /* Return the Option Byte program Status */
+    880            return status;
+    881          }
+    882          
+    883          /**
+    884            * @brief  Sets or resets the analogue monitoring on VDDA Power source.
+    885            * @param  OB_VDDA_ANALOG: Selects the analog monitoring on VDDA Power source.
+    886            *          This parameter can be one of the following values:
+    887            *             @arg OB_VDDA_ANALOG_ON: Analog monitoring on VDDA Power source ON
+    888            *             @arg OB_VDDA_ANALOG_OFF: Analog monitoring on VDDA Power source OFF
+    889            * @retval None
+    890            */
+    891          FLASH_Status FLASH_OB_VDDAConfig(uint8_t OB_VDDA_ANALOG)
+    892          {
+    893            FLASH_Status status = FLASH_COMPLETE; 
+    894          
+    895            /* Check the parameters */
+    896            assert_param(IS_OB_VDDA_ANALOG(OB_VDDA_ANALOG));
+    897          
+    898            /* Wait for last operation to be completed */
+    899            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    900            
+    901            if(status == FLASH_COMPLETE)
+    902            {  
+    903              /* Enable the Option Bytes Programming operation */
+    904              FLASH->CR |= FLASH_CR_OPTPG; 
+    905          
+    906              OB->USER = OB_VDDA_ANALOG | 0xDF;
+    907            
+    908              /* Wait for last operation to be completed */
+    909              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    910          
+    911              if(status != FLASH_TIMEOUT)
+    912              {
+    913                /* if the program operation is completed, disable the OPTPG Bit */
+    914                FLASH->CR &= ~FLASH_CR_OPTPG;
+    915              }
+    916            }
+    917            /* Return the Option Byte program Status */
+    918            return status;
+    919          }
+    920          
+    921          /**
+    922            * @brief  Sets or resets the SRAM parity.
+    923            * @param  OB_SRAM_Parity: Set or Reset the SRAM parity enable bit.
+    924            *          This parameter can be one of the following values:
+    925            *             @arg OB_SRAM_PARITY_SET: Set SRAM parity.
+    926            *             @arg OB_SRAM_PARITY_RESET: Reset SRAM parity.
+    927            * @retval None
+    928            */
+    929          FLASH_Status FLASH_OB_SRAMParityConfig(uint8_t OB_SRAM_Parity)
+    930          {
+    931            FLASH_Status status = FLASH_COMPLETE; 
+    932          
+    933            /* Check the parameters */
+    934            assert_param(IS_OB_SRAM_PARITY(OB_SRAM_Parity));
+    935          
+    936            /* Wait for last operation to be completed */
+    937            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    938            
+    939            if(status == FLASH_COMPLETE)
+    940            {  
+    941              /* Enable the Option Bytes Programming operation */
+    942              FLASH->CR |= FLASH_CR_OPTPG; 
+    943          
+    944              OB->USER = OB_SRAM_Parity | 0xBF;
+    945            
+    946              /* Wait for last operation to be completed */
+    947              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    948          
+    949              if(status != FLASH_TIMEOUT)
+    950              {
+    951                /* if the program operation is completed, disable the OPTPG Bit */
+    952                FLASH->CR &= ~FLASH_CR_OPTPG;
+    953              }
+    954            }
+    955            /* Return the Option Byte program Status */
+    956            return status;
+    957          }
+    958          
+    959          /**
+    960            * @brief  Programs the FLASH User Option Byte: IWDG_SW, RST_STOP, RST_STDBY,
+    961            *         BOOT1 and VDDA ANALOG monitoring.
+    962            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+    963            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+    964            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+    965            * @param  OB_USER: Selects all user option bytes
+    966            *          This parameter is a combination of the following values:
+    967            *             @arg OB_IWDG_SW / OB_IWDG_HW: Software / Hardware WDG selected
+    968            *             @arg OB_STOP_NoRST / OB_STOP_RST: No reset / Reset generated when entering in STOP
+    969            *             @arg OB_STDBY_NoRST / OB_STDBY_RST: No reset / Reset generated when entering in STANDBY
+    970            *             @arg OB_BOOT1_RESET / OB_BOOT1_SET: BOOT1 Reset / Set
+    971            *             @arg OB_VDDA_ANALOG_ON / OB_VDDA_ANALOG_OFF: Analog monitoring on VDDA Power source ON / OFF 
+    972            *             @arg OB_SRAM_PARITY_SET / OB_SRAM_PARITY_RESET: SRAM Parity SET / RESET
+    973            *             @arg OB_BOOT0_RESET / OB_BOOT0_SET: BOOT0 Reset / Set
+    974            *             @arg OB_BOOT0_SW / OB_BOOT0_SW: BOOT0 pin disabled / BOOT0 pin bonded with GPIO      
+    975            * @retval FLASH Status: The returned value can be: 
+    976            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+    977            */
+    978          FLASH_Status FLASH_OB_WriteUser(uint8_t OB_USER)
+    979          {
+    980            FLASH_Status status = FLASH_COMPLETE; 
+    981          
+    982            /* Wait for last operation to be completed */
+    983            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    984            
+    985            if(status == FLASH_COMPLETE)
+    986            {
+    987              /* Enable the Option Bytes Programming operation */
+    988              FLASH->CR |= FLASH_CR_OPTPG; 
+    989          
+    990              OB->USER = OB_USER;
+    991            
+    992              /* Wait for last operation to be completed */
+    993              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    994          
+    995              if(status != FLASH_TIMEOUT)
+    996              {
+    997                /* If the program operation is completed, disable the OPTPG Bit */
+    998                FLASH->CR &= ~FLASH_CR_OPTPG;
+    999              }
+   1000            }    
+   1001            /* Return the Option Byte program Status */
+   1002            return status;
+   1003          
+   1004          }
+   1005          
+   1006          /**
+   1007            * @brief  Programs a half word at a specified Option Byte Data address.
+   1008            * @note   To correctly run this function, the FLASH_OB_Unlock() function must be called before.
+   1009            * @note   Call the FLASH_OB_Lock() to disable the flash control register access and the option
+   1010            *         bytes (recommended to protect the FLASH memory against possible unwanted operation)
+   1011            * @param  Address: specifies the address to be programmed.
+   1012            *          This parameter can be 0x1FFFF804 or 0x1FFFF806. 
+   1013            * @param  Data: specifies the data to be programmed.
+   1014            * @retval FLASH Status: The returned value can be: FLASH_ERROR_PG,
+   1015            *         FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+   1016            */
+   1017          FLASH_Status FLASH_OB_ProgramData(uint32_t Address, uint8_t Data)
+   1018          {
+   1019            FLASH_Status status = FLASH_COMPLETE;
+   1020            /* Check the parameters */
+   1021            assert_param(IS_OB_DATA_ADDRESS(Address));
+   1022            status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+   1023          
+   1024            if(status == FLASH_COMPLETE)
+   1025            {
+   1026              /* Enables the Option Bytes Programming operation */
+   1027              FLASH->CR |= FLASH_CR_OPTPG; 
+   1028              *(__IO uint16_t*)Address = Data;
+   1029              
+   1030              /* Wait for last operation to be completed */
+   1031              status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+   1032              
+   1033              if(status != FLASH_TIMEOUT)
+   1034              {
+   1035                /* If the program operation is completed, disable the OPTPG Bit */
+   1036                FLASH->CR &= ~FLASH_CR_OPTPG;
+   1037              }
+   1038            }
+   1039            /* Return the Option Byte Data Program Status */
+   1040            return status;
+   1041          }
+   1042          
+   1043          /**
+   1044            * @brief  Returns the FLASH User Option Bytes values.
+   1045            * @param  None
+   1046            * @retval The FLASH User Option Bytes .
+   1047            */
+   1048          uint8_t FLASH_OB_GetUser(void)
+   1049          {
+   1050            /* Return the User Option Byte */
+   1051            return (uint8_t)(FLASH->OBR >> 8);
+   1052          }
+   1053          
+   1054          /**
+   1055            * @brief  Returns the FLASH Write Protection Option Bytes value.
+   1056            * @param  None
+   1057            * @retval The FLASH Write Protection Option Bytes value
+   1058            */
+   1059          uint32_t FLASH_OB_GetWRP(void)
+   1060          {
+   1061            /* Return the FLASH write protection Register value */
+   1062            return (uint32_t)(FLASH->WRPR);
+   1063          }
+   1064          
+   1065          /**
+   1066            * @brief  Checks whether the FLASH Read out Protection Status is set or not.
+   1067            * @param  None
+   1068            * @retval FLASH ReadOut Protection Status(SET or RESET)
+   1069            */
+   1070          FlagStatus FLASH_OB_GetRDP(void)
+   1071          {
+   1072            FlagStatus readstatus = RESET;
+   1073            
+   1074            if ((uint8_t)(FLASH->OBR & (FLASH_OBR_RDPRT1 | FLASH_OBR_RDPRT2)) != RESET)
+   1075            {
+   1076              readstatus = SET;
+   1077            }
+   1078            else
+   1079            {
+   1080              readstatus = RESET;
+   1081            }
+   1082            return readstatus;
+   1083          }
+   1084          
+   1085          /**
+   1086            * @}
+   1087            */
+   1088          
+   1089          /** @defgroup FLASH_Group4 Interrupts and flags management functions
+   1090           *  @brief   Interrupts and flags management functions
+   1091           *
+   1092          @verbatim   
+   1093           ===============================================================================
+   1094                       ##### Interrupts and flags management functions #####
+   1095           ===============================================================================  
+   1096          
+   1097          @endverbatim
+   1098            * @{
+   1099            */
+   1100          
+   1101          /**
+   1102            * @brief  Enables or disables the specified FLASH interrupts.
+   1103            * @param  FLASH_IT: specifies the FLASH interrupt sources to be enabled or 
+   1104            *         disabled.
+   1105            *          This parameter can be any combination of the following values:
+   1106            *             @arg FLASH_IT_EOP: FLASH end of programming Interrupt
+   1107            *             @arg FLASH_IT_ERR: FLASH Error Interrupt
+   1108            * @retval None 
+   1109            */
+   1110          void FLASH_ITConfig(uint32_t FLASH_IT, FunctionalState NewState)
+   1111          {
+   1112            /* Check the parameters */
+   1113            assert_param(IS_FLASH_IT(FLASH_IT)); 
+   1114            assert_param(IS_FUNCTIONAL_STATE(NewState));
+   1115            
+   1116            if(NewState != DISABLE)
+   1117            {
+   1118              /* Enable the interrupt sources */
+   1119              FLASH->CR |= FLASH_IT;
+   1120            }
+   1121            else
+   1122            {
+   1123              /* Disable the interrupt sources */
+   1124              FLASH->CR &= ~(uint32_t)FLASH_IT;
+   1125            }
+   1126          }
+   1127          
+   1128          /**
+   1129            * @brief  Checks whether the specified FLASH flag is set or not.
+   1130            * @param  FLASH_FLAG: specifies the FLASH flag to check.
+   1131            *          This parameter can be one of the following values:
+   1132            *             @arg FLASH_FLAG_BSY: FLASH write/erase operations in progress flag 
+   1133            *             @arg FLASH_FLAG_PGERR: FLASH Programming error flag flag
+   1134            *             @arg FLASH_FLAG_WRPERR: FLASH Write protected error flag
+   1135            *             @arg FLASH_FLAG_EOP: FLASH End of Programming flag
+   1136            * @retval The new state of FLASH_FLAG (SET or RESET).
+   1137            */
+   1138          FlagStatus FLASH_GetFlagStatus(uint32_t FLASH_FLAG)
+   1139          {
+   1140            FlagStatus bitstatus = RESET;
+   1141          
+   1142            /* Check the parameters */
+   1143            assert_param(IS_FLASH_GET_FLAG(FLASH_FLAG));
+   1144          
+   1145            if((FLASH->SR & FLASH_FLAG) != (uint32_t)RESET)
+   1146            {
+   1147              bitstatus = SET;
+   1148            }
+   1149            else
+   1150            {
+   1151              bitstatus = RESET;
+   1152            }
+   1153            /* Return the new state of FLASH_FLAG (SET or RESET) */
+   1154            return bitstatus; 
+   1155          }
+   1156          
+   1157          /**
+   1158            * @brief  Clears the FLASH's pending flags.
+   1159            * @param  FLASH_FLAG: specifies the FLASH flags to clear.
+   1160            *          This parameter can be any combination of the following values:
+   1161            *             @arg FLASH_FLAG_PGERR: FLASH Programming error flag flag
+   1162            *             @arg FLASH_FLAG_WRPERR: FLASH Write protected error flag
+   1163            *             @arg FLASH_FLAG_EOP: FLASH End of Programming flag
+   1164            * @retval None
+   1165            */
+   1166          void FLASH_ClearFlag(uint32_t FLASH_FLAG)
+   1167          {
+   1168            /* Check the parameters */
+   1169            assert_param(IS_FLASH_CLEAR_FLAG(FLASH_FLAG));
+   1170            
+   1171            /* Clear the flags */
+   1172            FLASH->SR = FLASH_FLAG;
+   1173          }
+   1174          
+   1175          /**
+   1176            * @brief  Returns the FLASH Status.
+   1177            * @param  None
+   1178            * @retval FLASH Status: The returned value can be: 
+   1179            *         FLASH_BUSY, FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP or FLASH_COMPLETE.
+   1180            */
+   1181          FLASH_Status FLASH_GetStatus(void)
+   1182          {
+   1183            FLASH_Status FLASHstatus = FLASH_COMPLETE;
+   1184            
+   1185            if((FLASH->SR & FLASH_FLAG_BSY) == FLASH_FLAG_BSY) 
+   1186            {
+   1187              FLASHstatus = FLASH_BUSY;
+   1188            }
+   1189            else 
+   1190            {  
+   1191              if((FLASH->SR & (uint32_t)FLASH_FLAG_WRPERR)!= (uint32_t)0x00)
+   1192              { 
+   1193                FLASHstatus = FLASH_ERROR_WRP;
+   1194              }
+   1195              else 
+   1196              {
+   1197                if((FLASH->SR & (uint32_t)(FLASH_SR_PGERR)) != (uint32_t)0x00)
+   1198                {
+   1199                  FLASHstatus = FLASH_ERROR_PROGRAM; 
+   1200                }
+   1201                else
+   1202                {
+   1203                  FLASHstatus = FLASH_COMPLETE;
+   1204                }
+   1205              }
+   1206            }
+   1207            /* Return the FLASH Status */
+   1208            return FLASHstatus;
+   1209          }
+   1210          
+   1211          
+   1212          /**
+   1213            * @brief  Waits for a FLASH operation to complete or a TIMEOUT to occur.
+   1214            * @param  Timeout: FLASH programming Timeout
+   1215            * @retval FLASH Status: The returned value can be: FLASH_BUSY, 
+   1216            *         FLASH_ERROR_PROGRAM, FLASH_ERROR_WRP, FLASH_COMPLETE or FLASH_TIMEOUT.
+   1217            */
+   1218          FLASH_Status FLASH_WaitForLastOperation(uint32_t Timeout)
+   1219          { 
+   1220            FLASH_Status status = FLASH_COMPLETE;
+   1221             
+   1222            /* Check for the FLASH Status */
+   1223            status = FLASH_GetStatus();
+   1224            
+   1225            /* Wait for a FLASH operation to complete or a TIMEOUT to occur */
+   1226            while((status == FLASH_BUSY) && (Timeout != 0x00))
+   1227            {
+   1228              status = FLASH_GetStatus();
+   1229              Timeout--;
+   1230            }
+   1231            
+   1232            if(Timeout == 0x00 )
+   1233            {
+   1234              status = FLASH_TIMEOUT;
+   1235            }
+   1236            /* Return the operation status */
+   1237            return status;
+   1238          }
+   1239          
+   1240          /**
+   1241            * @}
+   1242            */
+   1243          
+   1244          /**
+   1245            * @}
+   1246            */
+   1247             
+   1248            /**
+   1249            * @}
+   1250            */ 
+   1251          
+   1252          /**
+   1253            * @}
+   1254            */ 
+   1255          
+   1256          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   FLASH_ClearFlag
+      16   FLASH_EraseAllPages
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_ErasePage
+        16   -> FLASH_WaitForLastOperation
+       0   FLASH_GetFlagStatus
+       0   FLASH_GetPrefetchBufferStatus
+       8   FLASH_GetStatus
+       0   FLASH_ITConfig
+       0   FLASH_Lock
+      16   FLASH_OB_BOOT0Config
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_BOOT0SWConfig
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_BOOTConfig
+        16   -> FLASH_WaitForLastOperation
+      32   FLASH_OB_EnableWRP
+        32   -> FLASH_WaitForLastOperation
+      24   FLASH_OB_Erase
+        24   -> FLASH_OB_GetRDP
+        24   -> FLASH_WaitForLastOperation
+       0   FLASH_OB_GetRDP
+       0   FLASH_OB_GetUser
+       0   FLASH_OB_GetWRP
+       0   FLASH_OB_Launch
+       0   FLASH_OB_Lock
+      16   FLASH_OB_ProgramData
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_RDPConfig
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_SRAMParityConfig
+        16   -> FLASH_WaitForLastOperation
+       0   FLASH_OB_Unlock
+      24   FLASH_OB_UserConfig
+        24   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_VDDAConfig
+        16   -> FLASH_WaitForLastOperation
+      16   FLASH_OB_WriteUser
+        16   -> FLASH_WaitForLastOperation
+       0   FLASH_PrefetchBufferCmd
+      16   FLASH_ProgramHalfWord
+        16   -> FLASH_WaitForLastOperation
+      32   FLASH_ProgramWord
+        32   -> FLASH_WaitForLastOperation
+       0   FLASH_SetLatency
+       0   FLASH_Unlock
+       8   FLASH_WaitForLastOperation
+         8   -> FLASH_GetStatus
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable15
+       4  ??DataTable15_1
+       4  ??DataTable15_2
+       4  ??DataTable16
+       4  ??DataTable16_1
+       4  ??DataTable19
+       4  ??DataTable19_1
+       4  ??DataTable20
+       4  ??DataTable24
+       4  ??DataTable27
+       4  ??DataTable29
+       4  ??DataTable29_1
+       4  ??DataTable29_2
+       4  ??DataTable29_3
+       4  ??DataTable29_4
+       6  FLASH_ClearFlag
+      50  FLASH_EraseAllPages
+      56  FLASH_ErasePage
+      16  FLASH_GetFlagStatus
+      10  FLASH_GetPrefetchBufferStatus
+      40  FLASH_GetStatus
+      20  FLASH_ITConfig
+      12  FLASH_Lock
+      58  FLASH_OB_BOOT0Config
+      58  FLASH_OB_BOOT0SWConfig
+      58  FLASH_OB_BOOTConfig
+     136  FLASH_OB_EnableWRP
+      98  FLASH_OB_Erase
+      16  FLASH_OB_GetRDP
+      10  FLASH_OB_GetUser
+       6  FLASH_OB_GetWRP
+      14  FLASH_OB_Launch
+      12  FLASH_OB_Lock
+      54  FLASH_OB_ProgramData
+      98  FLASH_OB_RDPConfig
+      58  FLASH_OB_SRAMParityConfig
+      18  FLASH_OB_Unlock
+      66  FLASH_OB_UserConfig
+      58  FLASH_OB_VDDAConfig
+      54  FLASH_OB_WriteUser
+      24  FLASH_PrefetchBufferCmd
+      50  FLASH_ProgramHalfWord
+      80  FLASH_ProgramWord
+      14  FLASH_SetLatency
+      18  FLASH_Unlock
+      32  FLASH_WaitForLastOperation
+
+ 
+ 1'360 bytes in section .text
+ 
+ 1'360 bytes of CODE memory
+
+Errors: none
+Warnings: none

@@ -1,0 +1,725 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:21
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_cec.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW40AB.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_cec.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\stm32f0xx_cec.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\stm32f0xx_cec.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32F0xx_StdPeriph_Driver\src\stm32f0xx_cec.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    stm32f0xx_cec.c
+      4            * @author  MCD Application Team
+      5            * @version V1.3.0
+      6            * @date    16-January-2014
+      7            * @brief   This file provides firmware functions to manage the following 
+      8            *          functionalities of the Consumer Electronics Control (CEC) peripheral
+      9            *          applicable only on STM32F051, STM32F042 and STM32F072 devices:
+     10            *            + Initialization and Configuration
+     11            *            + Data transfers functions
+     12            *            + Interrupts and flags management
+     13            *               
+     14            *  @verbatim
+     15            ==============================================================================
+     16                                      ##### CEC features #####
+     17            ==============================================================================
+     18                [..] This device provides some features:
+     19                     (#) Supports HDMI-CEC specification 1.4.
+     20                     (#) Supports two source clocks(HSI/244 or LSE).
+     21                     (#) Works in stop mode(without APB clock, but with CEC clock 32KHz).
+     22                         It can genarate an interrupt in the CEC clock domain that the CPU 
+     23                         wakes up from the low power mode.
+     24                     (#) Configurable Signal Free Time before of transmission start. The 
+     25                         number of nominal data bit periods waited before transmission can be
+     26                         ruled by Hardware or Software.
+     27                     (#) Configurable Peripheral Address (multi-addressing configuration).
+     28                     (#) Supports listen mode.The CEC Messages addressed to different destination
+     29                         can be received without interfering with CEC bus when Listen mode option is enabled.
+     30                     (#) Configurable Rx-Tolerance(Standard and Extended tolerance margin).
+     31                     (#) Error detection with configurable error bit generation.
+     32                     (#) Arbitration lost error in the case of two CEC devices starting at the same time.
+     33          
+     34                                      ##### How to use this driver ##### 
+     35            ==============================================================================
+     36                [..] This driver provides functions to configure and program the CEC device,
+     37                 follow steps below:
+     38                     (#) The source clock can be configured using:
+     39                         (++) RCC_CECCLKConfig(RCC_CECCLK_HSI_Div244) for HSI(Default) 
+     40                         (++) RCC_CECCLKConfig(RCC_CECCLK_LSE) for LSE.
+     41                     (#) Enable CEC peripheral clock using RCC_APBPeriphClockCmd(RCC_APBPeriph_CEC, ENABLE).
+     42                     (#) Peripherals alternate function.
+     43                         (++) Connect the pin to the desired peripherals' Alternate Function (AF) using 
+     44                         GPIO_PinAFConfig() function.
+     45                         (++) Configure the desired pin in alternate function by:
+     46                         GPIO_InitStruct->GPIO_Mode = GPIO_Mode_AF.
+     47                         (++) Select the type open-drain and output speed via GPIO_OType 
+     48                         and GPIO_Speed members.
+     49                         (++) Call GPIO_Init() function.
+     50                     (#) Configure the Signal Free Time, Rx Tolerance, Stop reception generation 
+     51                         and Bit error generation using the CEC_Init() function.
+     52                         The function CEC_Init() must be called when the CEC peripheral is disabled.
+     53                     (#) Configure the CEC own address by calling the fuction CEC_OwnAddressConfig().
+     54                     (#) Optionally, you can configure the Listen mode using the function CEC_ListenModeCmd().
+     55                     (#) Enable the NVIC and the corresponding interrupt using the function 
+     56                         CEC_ITConfig() if you need to use interrupt mode.
+     57                         CEC_ITConfig() must be called before enabling the CEC peripheral.
+     58                     (#) Enable the CEC using the CEC_Cmd() function.
+     59                     (#) Charge the first data byte in the TXDR register using CEC_SendDataByte().
+     60                     (#) Enable the transmission of the Byte of a CEC message using CEC_StartOfMessage() 
+     61                     (#) Transmit single data through the CEC peripheral using CEC_SendDataByte() 
+     62                         and Receive the last transmitted byte using CEC_ReceiveDataByte().
+     63                     (#) Enable the CEC_EndOfMessage() in order to indicate the last byte of the message.
+     64                [..]
+     65                     (@) If the listen mode is enabled, Stop reception generation and Bit error generation 
+     66                         must be in reset state.
+     67                     (@) If the CEC message consists of only 1 byte, the function CEC_EndOfMessage()
+     68                         must be called before CEC_StartOfMessage().
+     69            
+     70             @endverbatim
+     71            *
+     72            ******************************************************************************
+     73            * @attention
+     74            *
+     75            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     76            *
+     77            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     78            * You may not use this file except in compliance with the License.
+     79            * You may obtain a copy of the License at:
+     80            *
+     81            *        http://www.st.com/software_license_agreement_liberty_v2
+     82            *
+     83            * Unless required by applicable law or agreed to in writing, software 
+     84            * distributed under the License is distributed on an "AS IS" BASIS, 
+     85            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     86            * See the License for the specific language governing permissions and
+     87            * limitations under the License.
+     88            *
+     89            ******************************************************************************
+     90            */
+     91          
+     92          /* Includes ------------------------------------------------------------------*/
+     93          #include "stm32f0xx_cec.h"
+     94          #include "stm32f0xx_rcc.h"
+     95          
+     96          /** @addtogroup STM32F0xx_StdPeriph_Driver
+     97            * @{
+     98            */
+     99          
+    100          /** @defgroup CEC 
+    101            * @brief CEC driver modules
+    102            * @{
+    103            */
+    104          
+    105          /* Private typedef -----------------------------------------------------------*/
+    106          /* Private define ------------------------------------------------------------*/
+    107          #define BROADCAST_ADDRESS      ((uint32_t)0x0000F)
+    108          #define CFGR_CLEAR_MASK        ((uint32_t)0x7000FE00)   /* CFGR register Mask */
+    109          
+    110          /* Private macro -------------------------------------------------------------*/
+    111          /* Private variables ---------------------------------------------------------*/
+    112          /* Private function prototypes -----------------------------------------------*/
+    113          /* Private functions ---------------------------------------------------------*/
+    114          
+    115          /** @defgroup CEC_Private_Functions 
+    116            * @{
+    117            */
+    118          
+    119          /** @defgroup CEC_Group1 Initialization and Configuration functions
+    120           *  @brief   Initialization and Configuration functions
+    121           *
+    122          @verbatim  
+    123           ===============================================================================
+    124                                      ##### Initialization and Configuration functions #####
+    125           ===============================================================================
+    126                [..] This section provides functions allowing to initialize:
+    127                      (+) CEC own addresses
+    128                      (+) CEC Signal Free Time
+    129                      (+) CEC Rx Tolerance
+    130                      (+) CEC Stop Reception
+    131                      (+) CEC Bit Rising Error
+    132                      (+) CEC Long Bit Period Error
+    133                [..] This section provides also a function to configure the CEC peripheral in Listen Mode.
+    134                     Messages addressed to different destination can be received when Listen mode is 
+    135                     enabled without interfering with CEC bus.
+    136          @endverbatim
+    137            * @{
+    138            */
+    139          
+    140          /**
+    141            * @brief  Deinitializes the CEC peripheral registers to their default reset values.
+    142            * @param  None
+    143            * @retval None
+    144            */
+    145          void CEC_DeInit(void)
+    146          {
+    147            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CEC, ENABLE);
+    148            RCC_APB1PeriphResetCmd(RCC_APB1Periph_CEC, DISABLE);
+    149          }
+    150          
+    151          /**
+    152            * @brief  Initializes the CEC peripheral according to the specified parameters
+    153            *         in the CEC_InitStruct.
+    154            * @note   The CEC parameters must be configured before enabling the CEC peripheral.
+    155            * @param  CEC_InitStruct: pointer to an CEC_InitTypeDef structure that contains
+    156            *         the configuration information for the specified CEC peripheral.
+    157            * @retval None
+    158            */
+    159          void CEC_Init(CEC_InitTypeDef* CEC_InitStruct)
+    160          {
+    161            uint32_t tmpreg = 0;
+    162          
+    163            /* Check the parameters */
+    164            assert_param(IS_CEC_SIGNAL_FREE_TIME(CEC_InitStruct->CEC_SignalFreeTime));
+    165            assert_param(IS_CEC_RX_TOLERANCE(CEC_InitStruct->CEC_RxTolerance));
+    166            assert_param(IS_CEC_STOP_RECEPTION(CEC_InitStruct->CEC_StopReception));
+    167            assert_param(IS_CEC_BIT_RISING_ERROR(CEC_InitStruct->CEC_BitRisingError));
+    168            assert_param(IS_CEC_LONG_BIT_PERIOD_ERROR(CEC_InitStruct->CEC_LongBitPeriodError));
+    169            assert_param(IS_CEC_BDR_NO_GEN_ERROR(CEC_InitStruct->CEC_BRDNoGen));
+    170            assert_param(IS_CEC_SFT_OPTION(CEC_InitStruct->CEC_SFTOption));
+    171          
+    172            /* Get the CEC CFGR value */
+    173            tmpreg = CEC->CFGR;
+    174          
+    175            /* Clear CFGR bits */
+    176            tmpreg &= CFGR_CLEAR_MASK;
+    177          
+    178            /* Configure the CEC peripheral */
+    179            tmpreg |= (CEC_InitStruct->CEC_SignalFreeTime | CEC_InitStruct->CEC_RxTolerance |
+    180                       CEC_InitStruct->CEC_StopReception  | CEC_InitStruct->CEC_BitRisingError |
+    181                       CEC_InitStruct->CEC_LongBitPeriodError| CEC_InitStruct->CEC_BRDNoGen |
+    182                       CEC_InitStruct->CEC_SFTOption);
+    183          
+    184            /* Write to CEC CFGR  register */
+    185            CEC->CFGR = tmpreg;
+    186          }
+    187          
+    188          /**
+    189            * @brief  Fills each CEC_InitStruct member with its default value.
+    190            * @param  CEC_InitStruct: pointer to a CEC_InitTypeDef structure which will 
+    191            *         be initialized.
+    192            * @retval None
+    193            */
+    194          void CEC_StructInit(CEC_InitTypeDef* CEC_InitStruct)
+    195          {
+    196            CEC_InitStruct->CEC_SignalFreeTime = CEC_SignalFreeTime_Standard;
+    197            CEC_InitStruct->CEC_RxTolerance = CEC_RxTolerance_Standard;
+    198            CEC_InitStruct->CEC_StopReception = CEC_StopReception_Off;
+    199            CEC_InitStruct->CEC_BitRisingError = CEC_BitRisingError_Off;
+    200            CEC_InitStruct->CEC_LongBitPeriodError = CEC_LongBitPeriodError_Off;
+    201            CEC_InitStruct->CEC_BRDNoGen = CEC_BRDNoGen_Off;
+    202            CEC_InitStruct->CEC_SFTOption = CEC_SFTOption_Off;
+    203          }
+    204          
+    205          /**
+    206            * @brief  Enables or disables the CEC peripheral.
+    207            * @param  NewState: new state of the CEC peripheral.
+    208            *          This parameter can be: ENABLE or DISABLE.
+    209            * @retval None
+    210            */
+    211          void CEC_Cmd(FunctionalState NewState)
+    212          {
+    213            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    214          
+    215            if (NewState != DISABLE)
+    216            {
+    217              /* Enable the CEC peripheral */
+    218              CEC->CR |= CEC_CR_CECEN;
+    219            }
+    220            else
+    221            {
+    222              /* Disable the CEC peripheral */
+    223              CEC->CR &= ~CEC_CR_CECEN;
+    224            }
+    225          }
+    226          
+    227          /**
+    228            * @brief  Enables or disables the CEC Listen Mode.
+    229            * @param  NewState: new state of the Listen Mode.
+    230            *          This parameter can be: ENABLE or DISABLE.
+    231            * @retval None
+    232            */
+    233          void CEC_ListenModeCmd(FunctionalState NewState)
+    234          {
+    235            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    236          
+    237            if (NewState != DISABLE)
+    238            {
+    239              /* Enable the Listen Mode */
+    240              CEC->CFGR |= CEC_CFGR_LSTN;
+    241            }
+    242            else
+    243            {
+    244              /* Disable the Listen Mode */
+    245              CEC->CFGR &= ~CEC_CFGR_LSTN;
+    246            }
+    247          }
+    248          
+    249          /**
+    250            * @brief  Defines the Own Address of the CEC device.
+    251            * @param  CEC_OwnAddress: The CEC own address.
+    252            * @retval None
+    253            */
+    254          void CEC_OwnAddressConfig(uint8_t CEC_OwnAddress)
+    255          {
+    256            uint32_t tmp =0x00;
+    257            /* Check the parameters */
+    258            assert_param(IS_CEC_ADDRESS(CEC_OwnAddress));
+    259            tmp = 1 <<(CEC_OwnAddress + 16);
+    260            /* Set the CEC own address */
+    261            CEC->CFGR |= tmp;
+    262          }
+    263          
+    264          /**
+    265            * @brief  Clears the Own Address of the CEC device.
+    266            * @param  CEC_OwnAddress: The CEC own address.
+    267            * @retval None
+    268            */
+    269          void CEC_OwnAddressClear(void)
+    270          {
+    271            /* Set the CEC own address */
+    272            CEC->CFGR = 0x0;
+    273          }
+    274          
+    275          /**
+    276            * @}
+    277            */
+    278          
+    279          /** @defgroup CEC_Group2 Data transfers functions
+    280           *  @brief    Data transfers functions
+    281           *
+    282          @verbatim
+    283           ===============================================================================
+    284                                      ##### Data transfers functions #####
+    285           ===============================================================================
+    286              [..] This section provides functions allowing the CEC data transfers.The read 
+    287                   access of the CEC_RXDR register can be done using the CEC_ReceiveData()function 
+    288                   and returns the Rx buffered value. Whereas a write access to the CEC_TXDR can be 
+    289                   done using CEC_SendData() function.
+    290          @endverbatim
+    291            * @{
+    292            */
+    293          
+    294          /**
+    295            * @brief  Transmits single data through the CEC peripheral.
+    296            * @param  Data: the data to transmit.
+    297            * @retval None
+    298            */
+    299          void CEC_SendData(uint8_t Data)
+    300          {
+    301            /* Transmit Data */
+    302            CEC->TXDR = Data;
+    303          }
+    304          
+    305          /**
+    306            * @brief  Returns the most recent received data by the CEC peripheral.
+    307            * @param  None
+    308            * @retval The received data.
+    309            */
+    310          uint8_t CEC_ReceiveData(void)
+    311          {
+    312            /* Receive Data */
+    313            return (uint8_t)(CEC->RXDR);
+    314          }
+    315          
+    316          /**
+    317            * @brief  Starts a new message.
+    318            * @param  None
+    319            * @retval None
+    320            */
+    321          void CEC_StartOfMessage(void)
+    322          {
+    323            /* Starts of new message */
+    324            CEC->CR |= CEC_CR_TXSOM; 
+    325          }
+    326          
+    327          /**
+    328            * @brief  Transmits message with an EOM bit.
+    329            * @param  None
+    330            * @retval None
+    331            */
+    332          void CEC_EndOfMessage(void)
+    333          {
+    334            /* The data byte will be transmitted with an EOM bit */
+    335            CEC->CR |= CEC_CR_TXEOM;
+    336          }
+    337          
+    338          /**
+    339            * @}
+    340            */
+    341          
+    342          /** @defgroup CEC_Group3 Interrupts and flags management functions
+    343           *  @brief    Interrupts and flags management functions
+    344          *
+    345          @verbatim
+    346           ===============================================================================
+    347                                      ##### Interrupts and flags management functions ##### 
+    348           ===============================================================================
+    349              [..] This section provides functions allowing to configure the CEC Interrupts
+    350                   sources and check or clear the flags or pending bits status.
+    351              [..] The user should identify which mode will be used in his application to manage
+    352                   the communication: Polling mode or Interrupt mode.
+    353            
+    354              [..] In polling mode, the CEC can be managed by the following flags:
+    355                      (+) CEC_FLAG_TXACKE : to indicate a missing acknowledge in transmission mode.
+    356                      (+) CEC_FLAG_TXERR  : to indicate an error occurs during transmission mode.
+    357                                            The initiator detects low impedance in the CEC line.
+    358                      (+) CEC_FLAG_TXUDR  : to indicate if an underrun error occurs in transmission mode.
+    359                                            The transmission is enabled while the software has not yet 
+    360                                            loaded any value into the TXDR register.
+    361                      (+) CEC_FLAG_TXEND  : to indicate the end of successful transmission.
+    362                      (+) CEC_FLAG_TXBR   : to indicate the next transmission data has to be written to TXDR.
+    363                      (+) CEC_FLAG_ARBLST : to indicate arbitration lost in the case of two CEC devices
+    364                                            starting at the same time.
+    365                      (+) CEC_FLAG_RXACKE : to indicate a missing acknowledge in receive mode.
+    366                      (+) CEC_FLAG_LBPE   : to indicate a long bit period error generated during receive mode.
+    367                      (+) CEC_FLAG_SBPE   : to indicate a short bit period error generated during receive mode.
+    368                      (+) CEC_FLAG_BRE    : to indicate a bit rising error generated during receive mode.
+    369                      (+) CEC_FLAG_RXOVR  : to indicate if an overrun error occur while receiving a CEC message.
+    370                                            A byte is not yet received while a new byte is stored in the RXDR register.
+    371                      (+) CEC_FLAG_RXEND  : to indicate the end Of reception
+    372                      (+) CEC_FLAG_RXBR   : to indicate a new byte has been received from the CEC line and 
+    373                                            stored into the RXDR buffer.
+    374              [..]
+    375                     (@)In this Mode, it is advised to use the following functions:
+    376                        FlagStatus CEC_GetFlagStatus(uint16_t CEC_FLAG);
+    377                        void CEC_ClearFlag(uint16_t CEC_FLAG);
+    378          
+    379              [..] In Interrupt mode, the CEC can be managed by the following interrupt sources:
+    380                     (+) CEC_IT_TXACKE : to indicate a TX Missing acknowledge 
+    381                     (+) CEC_IT_TXACKE : to indicate a missing acknowledge in transmission mode.
+    382                     (+) CEC_IT_TXERR  : to indicate an error occurs during transmission mode.
+    383                                         The initiator detects low impedance in the CEC line.
+    384                     (+) CEC_IT_TXUDR  : to indicate if an underrun error occurs in transmission mode.
+    385                                         The transmission is enabled while the software has not yet 
+    386                                         loaded any value into the TXDR register.
+    387                     (+) CEC_IT_TXEND  : to indicate the end of successful transmission.
+    388                     (+) CEC_IT_TXBR   : to indicate the next transmission data has to be written to TXDR register.
+    389                     (+) CEC_IT_ARBLST : to indicate arbitration lost in the case of two CEC devices
+    390                                          starting at the same time.
+    391                     (+) CEC_IT_RXACKE : to indicate a missing acknowledge in receive mode.
+    392                     (+) CEC_IT_LBPE   : to indicate a long bit period error generated during receive mode.
+    393                     (+) CEC_IT_SBPE   : to indicate a short bit period error generated during receive mode.
+    394                     (+) CEC_IT_BRE    : to indicate a bit rising error generated during receive mode.
+    395                     (+) CEC_IT_RXOVR  : to indicate if an overrun error occur while receiving a CEC message.
+    396                                         A byte is not yet received while a new byte is stored in the RXDR register.
+    397                     (+) CEC_IT_RXEND  : to indicate the end Of reception
+    398                     (+) CEC_IT_RXBR   : to indicate a new byte has been received from the CEC line and 
+    399                                          stored into the RXDR buffer.
+    400              [..]
+    401                     (@)In this Mode it is advised to use the following functions:
+    402                        void CEC_ITConfig( uint16_t CEC_IT, FunctionalState NewState);
+    403                        ITStatus CEC_GetITStatus(uint16_t CEC_IT);
+    404                        void CEC_ClearITPendingBit(uint16_t CEC_IT);
+    405                        
+    406          
+    407          @endverbatim
+    408            * @{
+    409            */
+    410          
+    411          /**
+    412            * @brief  Enables or disables the selected CEC interrupts.
+    413            * @param  CEC_IT: specifies the CEC interrupt source to be enabled.
+    414            *          This parameter can be any combination of the following values:
+    415            *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+    416            *            @arg CEC_IT_TXERR: Tx Error.
+    417            *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
+    418            *            @arg CEC_IT_TXEND: End of Transmission (successful transmission of the last byte).
+    419            *            @arg CEC_IT_TXBR: Tx-Byte Request.
+    420            *            @arg CEC_IT_ARBLST: Arbitration Lost
+    421            *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
+    422            *            @arg CEC_IT_LBPE: Rx Long period Error
+    423            *            @arg CEC_IT_SBPE: Rx Short period Error
+    424            *            @arg CEC_IT_BRE: Rx Bit Rising Error
+    425            *            @arg CEC_IT_RXOVR: Rx Overrun.
+    426            *            @arg CEC_IT_RXEND: End Of Reception
+    427            *            @arg CEC_IT_RXBR: Rx-Byte Received
+    428            * @param  NewState: new state of the selected CEC interrupts.
+    429            *          This parameter can be: ENABLE or DISABLE.
+    430            * @retval None
+    431            */
+    432          void CEC_ITConfig(uint16_t CEC_IT, FunctionalState NewState)
+    433          {
+    434            assert_param(IS_FUNCTIONAL_STATE(NewState));
+    435            assert_param(IS_CEC_IT(CEC_IT));
+    436          
+    437            if (NewState != DISABLE)
+    438            {
+    439              /* Enable the selected CEC interrupt */
+    440              CEC->IER |= CEC_IT;
+    441            }
+    442            else
+    443            {
+    444              CEC_IT =~CEC_IT;
+    445              /* Disable the selected CEC interrupt */
+    446              CEC->IER &= CEC_IT;
+    447            }
+    448          }
+    449          
+    450          /**
+    451            * @brief  Gets the CEC flag status.
+    452            * @param  CEC_FLAG: specifies the CEC flag to check.
+    453            *     This parameter can be one of the following values:
+    454            *            @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
+    455            *            @arg CEC_FLAG_TXERR: Tx Error.
+    456            *            @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun.
+    457            *            @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
+    458            *            @arg CEC_FLAG_TXBR: Tx-Byte Request.
+    459            *            @arg CEC_FLAG_ARBLST: Arbitration Lost
+    460            *            @arg CEC_FLAG_RXACKE: Rx-Missing Acknowledge 
+    461            *            @arg CEC_FLAG_LBPE: Rx Long period Error
+    462            *            @arg CEC_FLAG_SBPE: Rx Short period Error
+    463            *            @arg CEC_FLAG_BRE: Rx Bit Rissing Error
+    464            *            @arg CEC_FLAG_RXOVR: Rx Overrun.
+    465            *            @arg CEC_FLAG_RXEND: End Of Reception.
+    466            *            @arg CEC_FLAG_RXBR: Rx-Byte Received.
+    467            * @retval The new state of CEC_FLAG (SET or RESET)
+    468            */
+    469          FlagStatus CEC_GetFlagStatus(uint16_t CEC_FLAG) 
+    470          {
+    471            FlagStatus bitstatus = RESET;
+    472            
+    473            assert_param(IS_CEC_GET_FLAG(CEC_FLAG));
+    474            
+    475            /* Check the status of the specified CEC flag */
+    476            if ((CEC->ISR & CEC_FLAG) != (uint16_t)RESET)
+    477            {
+    478              /* CEC flag is set */
+    479              bitstatus = SET;
+    480            }
+    481            else
+    482            {
+    483              /* CEC flag is reset */
+    484              bitstatus = RESET;
+    485            }
+    486          
+    487            /* Return the CEC flag status */
+    488            return  bitstatus;
+    489          }
+    490          
+    491          /**
+    492            * @brief  Clears the CEC's pending flags.
+    493            * @param  CEC_FLAG: specifies the flag to clear. 
+    494            *          This parameter can be any combination of the following values:
+    495            *            @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
+    496            *            @arg CEC_FLAG_TXERR: Tx Error
+    497            *            @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun
+    498            *            @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
+    499            *            @arg CEC_FLAG_TXBR: Tx-Byte Request
+    500            *            @arg CEC_FLAG_ARBLST: Arbitration Lost
+    501            *            @arg CEC_FLAG_RXACKE: Rx Missing Acknowledge 
+    502            *            @arg CEC_FLAG_LBPE: Rx Long period Error
+    503            *            @arg CEC_FLAG_SBPE: Rx Short period Error
+    504            *            @arg CEC_FLAG_BRE: Rx Bit Rising Error
+    505            *            @arg CEC_FLAG_RXOVR: Rx Overrun
+    506            *            @arg CEC_FLAG_RXEND: End Of Reception
+    507            *            @arg CEC_FLAG_RXBR: Rx-Byte Received
+    508            * @retval None
+    509            */
+    510          void CEC_ClearFlag(uint32_t CEC_FLAG)
+    511          {
+    512            assert_param(IS_CEC_CLEAR_FLAG(CEC_FLAG));
+    513          
+    514            /* Clear the selected CEC flag */
+    515            CEC->ISR = CEC_FLAG;
+    516          }
+    517          
+    518          /**
+    519            * @brief  Checks whether the specified CEC interrupt has occurred or not.
+    520            * @param  CEC_IT: specifies the CEC interrupt source to check. 
+    521            *          This parameter can be one of the following values:
+    522            *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+    523            *            @arg CEC_IT_TXERR: Tx Error.
+    524            *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
+    525            *            @arg CEC_IT_TXEND: End of transmission (successful transmission of the last byte).
+    526            *            @arg CEC_IT_TXBR: Tx-Byte Request.
+    527            *            @arg CEC_IT_ARBLST: Arbitration Lost.
+    528            *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge.
+    529            *            @arg CEC_IT_LBPE: Rx Long period Error.
+    530            *            @arg CEC_IT_SBPE: Rx Short period Error.
+    531            *            @arg CEC_IT_BRE: Rx Bit Rising Error.
+    532            *            @arg CEC_IT_RXOVR: Rx Overrun.
+    533            *            @arg CEC_IT_RXEND: End Of Reception.
+    534            *            @arg CEC_IT_RXBR: Rx-Byte Received 
+    535            * @retval The new state of CEC_IT (SET or RESET).
+    536            */
+    537          ITStatus CEC_GetITStatus(uint16_t CEC_IT)
+    538          {
+    539            ITStatus bitstatus = RESET;
+    540            uint32_t enablestatus = 0;
+    541          
+    542            /* Check the parameters */
+    543            assert_param(IS_CEC_GET_IT(CEC_IT));
+    544          
+    545            /* Get the CEC IT enable bit status */
+    546            enablestatus = (CEC->IER & CEC_IT);
+    547          
+    548            /* Check the status of the specified CEC interrupt */
+    549            if (((CEC->ISR & CEC_IT) != (uint32_t)RESET) && enablestatus)
+    550            {
+    551              /* CEC interrupt is set */
+    552              bitstatus = SET;
+    553            }
+    554            else
+    555            {
+    556              /* CEC interrupt is reset */
+    557              bitstatus = RESET;
+    558            }
+    559          
+    560            /* Return the CEC interrupt status */
+    561            return  bitstatus;
+    562          }
+    563          
+    564          /**
+    565            * @brief  Clears the CEC's interrupt pending bits.
+    566            * @param  CEC_IT: specifies the CEC interrupt pending bit to clear.
+    567            *          This parameter can be any combination of the following values:
+    568            *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+    569            *            @arg CEC_IT_TXERR: Tx Error
+    570            *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun
+    571            *            @arg CEC_IT_TXEND: End of Transmission
+    572            *            @arg CEC_IT_TXBR: Tx-Byte Request
+    573            *            @arg CEC_IT_ARBLST: Arbitration Lost
+    574            *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
+    575            *            @arg CEC_IT_LBPE: Rx Long period Error
+    576            *            @arg CEC_IT_SBPE: Rx Short period Error
+    577            *            @arg CEC_IT_BRE: Rx Bit Rising Error
+    578            *            @arg CEC_IT_RXOVR: Rx Overrun
+    579            *            @arg CEC_IT_RXEND: End Of Reception
+    580            *            @arg CEC_IT_RXBR: Rx-Byte Received
+    581            * @retval None
+    582            */
+    583          void CEC_ClearITPendingBit(uint16_t CEC_IT)
+    584          {
+    585            assert_param(IS_CEC_IT(CEC_IT));
+    586          
+    587            /* Clear the selected CEC interrupt pending bits */
+    588            CEC->ISR = CEC_IT;
+    589          }
+    590          
+    591          /**
+    592            * @}
+    593            */
+    594          
+    595          /**
+    596            * @}
+    597            */
+    598          
+    599          /**
+    600            * @}
+    601            */
+    602          
+    603          /**
+    604            * @}
+    605            */
+    606          
+    607          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   CEC_ClearFlag
+       0   CEC_ClearITPendingBit
+       0   CEC_Cmd
+       8   CEC_DeInit
+         8   -> RCC_APB1PeriphResetCmd
+       0   CEC_EndOfMessage
+       0   CEC_GetFlagStatus
+       0   CEC_GetITStatus
+       0   CEC_ITConfig
+       0   CEC_Init
+       0   CEC_ListenModeCmd
+       0   CEC_OwnAddressClear
+       0   CEC_OwnAddressConfig
+       0   CEC_ReceiveData
+       0   CEC_SendData
+       0   CEC_StartOfMessage
+       0   CEC_StructInit
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable14
+       4  ??DataTable14_1
+       4  ??DataTable14_2
+       4  ??DataTable14_3
+       4  ??DataTable14_4
+       4  ??DataTable14_5
+       4  ??DataTable14_6
+       6  CEC_ClearFlag
+       6  CEC_ClearITPendingBit
+      24  CEC_Cmd
+      24  CEC_DeInit
+      12  CEC_EndOfMessage
+      16  CEC_GetFlagStatus
+      24  CEC_GetITStatus
+      22  CEC_ITConfig
+      40  CEC_Init
+      26  CEC_ListenModeCmd
+       8  CEC_OwnAddressClear
+      16  CEC_OwnAddressConfig
+       8  CEC_ReceiveData
+       6  CEC_SendData
+      12  CEC_StartOfMessage
+      18  CEC_StructInit
+
+ 
+ 296 bytes in section .text
+ 
+ 296 bytes of CODE memory
+
+Errors: none
+Warnings: none

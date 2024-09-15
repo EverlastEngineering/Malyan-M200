@@ -1,0 +1,848 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:24
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_req.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4B21.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_req.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_req.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_req.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Libraries\STM32_USB_Device_Library\Core\src\usbd_req.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_req.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.1
+      6            * @date    31-January-2014
+      7            * @brief   This file provides the standard USB requests following chapter 9.
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_req.h"
+     30          
+     31          /* Private typedef -----------------------------------------------------------*/
+     32          /* Private define ------------------------------------------------------------*/
+     33          /* Private macro -------------------------------------------------------------*/
+     34          /* Private variables ---------------------------------------------------------*/
+     35          uint32_t ADDRESS=0;
+     36          uint8_t USBD_StrDesc[USB_MAX_STR_DESC_SIZ] ;
+     37          
+     38          /* Private function prototypes -----------------------------------------------*/
+     39          static void USBD_GetDescriptor(USB_CORE_HANDLE  *pdev, 
+     40                                         USB_SETUP_REQ *req);
+     41          
+     42          static void USBD_SetAddress(USB_CORE_HANDLE  *pdev, 
+     43                                      USB_SETUP_REQ *req);
+     44          
+     45          static void USBD_SetConfig(USB_CORE_HANDLE  *pdev, 
+     46                                     USB_SETUP_REQ *req);
+     47          
+     48          static void USBD_GetConfig(USB_CORE_HANDLE  *pdev, 
+     49                                     USB_SETUP_REQ *req);
+     50          
+     51          static void USBD_GetStatus(USB_CORE_HANDLE  *pdev, 
+     52                                     USB_SETUP_REQ *req);
+     53          
+     54          static void USBD_SetFeature(USB_CORE_HANDLE  *pdev, 
+     55                                      USB_SETUP_REQ *req);
+     56          
+     57          static void USBD_ClrFeature(USB_CORE_HANDLE  *pdev, 
+     58                                      USB_SETUP_REQ *req);
+     59          
+     60          static uint8_t USBD_GetLen(uint8_t *buf);
+     61          
+     62          /* Private functions ---------------------------------------------------------*/
+     63          /**
+     64            * @brief  USBD_StdDevReq
+     65            *         Handle standard usb device requests
+     66            * @param  pdev: device instance
+     67            * @param  req: usb request
+     68            * @retval status
+     69            */
+     70          USBD_Status  USBD_StdDevReq (USB_CORE_HANDLE  *pdev, USB_SETUP_REQ  *req)
+     71          {
+     72            USBD_Status ret = USBD_OK;  
+     73            switch (req->bRequest) 
+     74            {
+     75            case USB_REQ_GET_DESCRIPTOR: 
+     76              
+     77              USBD_GetDescriptor (pdev, req) ;
+     78              break;
+     79              
+     80            case USB_REQ_SET_ADDRESS:                      
+     81              USBD_SetAddress(pdev, req);
+     82              break;
+     83              
+     84            case USB_REQ_SET_CONFIGURATION:                    
+     85              USBD_SetConfig (pdev , req);
+     86              break;
+     87              
+     88            case USB_REQ_GET_CONFIGURATION:                 
+     89              USBD_GetConfig (pdev , req);
+     90              break;
+     91              
+     92            case USB_REQ_GET_STATUS:                                  
+     93              USBD_GetStatus (pdev , req);
+     94              break;
+     95              
+     96              
+     97            case USB_REQ_SET_FEATURE:   
+     98              USBD_SetFeature (pdev , req);    
+     99              break;
+    100              
+    101            case USB_REQ_CLEAR_FEATURE:                                   
+    102              USBD_ClrFeature (pdev , req);
+    103              break;
+    104              
+    105            default:  
+    106              USBD_CtlError(pdev , req);
+    107              break;
+    108            }
+    109            
+    110            return ret;
+    111          }
+    112          
+    113          /**
+    114          * @brief  USBD_VendDevReq
+    115          *         Handle vendor specific usb interface requests
+    116          * @param  pdev: USB OTG device instance
+    117          * @param  req: usb request
+    118          * @retval status
+    119          */
+    120          USBD_Status  USBD_VendDevReq (USB_CORE_HANDLE  *pdev, USB_SETUP_REQ  *req)
+    121          {
+    122             uint16_t len;
+    123            uint8_t *pbuf;
+    124            
+    125             
+    126            USBD_Status ret = USBD_OK;  
+    127            
+    128            switch (req->wIndex) 
+    129            {
+    130             	case USB_DESC_TYPE_OS_FEATURE_EXT_PROPERTIES:
+    131          		pbuf = pdev->dev.usr_device->GetExtCompatIDFeatureDescriptor(pdev->dev.speed, &len);
+    132          	break;
+    133          	case USB_DESC_TYPE_OS_FEATURE_EXT_COMPAT_ID:
+    134          		pbuf = pdev->dev.usr_device->GetExtPropertiesFeatureDescriptor(pdev->dev.speed, &len);
+    135          	break;
+    136            	
+    137            }
+    138            if((len != 0)&& (req->wLength != 0))
+    139            {
+    140              
+    141              len = MIN(len , req->wLength);
+    142              
+    143              USBD_CtlSendData (pdev, 
+    144                                pbuf,
+    145                                len);
+    146            }
+    147          }
+    148          
+    149          /**
+    150            * @brief  USBD_StdItfReq
+    151            *         Handle standard usb interface requests
+    152            * @param  pdev: USB device instance
+    153            * @param  req: usb request
+    154            * @retval status
+    155            */
+    156          USBD_Status  USBD_StdItfReq (USB_CORE_HANDLE  *pdev, USB_SETUP_REQ  *req)
+    157          {
+    158            USBD_Status ret = USBD_OK; 
+    159            
+    160            switch (pdev->dev.device_status) 
+    161            {
+    162            case USB_CONFIGURED:
+    163              
+    164              if (LOBYTE(req->wIndex) <= USBD_ITF_MAX_NUM) 
+    165              {
+    166                ret = (USBD_Status) (pdev->dev.class_cb->Setup (pdev, req)); 
+    167                
+    168                if((req->wLength == 0)&& (ret == USBD_OK))
+    169                {
+    170                   USBD_CtlSendStatus(pdev);
+    171                }
+    172              } 
+    173              else 
+    174              {                                               
+    175                 USBD_CtlError(pdev , req);
+    176              }
+    177              break;
+    178              
+    179            default:
+    180               USBD_CtlError(pdev , req);
+    181              break;
+    182            }
+    183            return ret;
+    184          }
+    185          
+    186          /**
+    187            * @brief  USBD_StdEPReq
+    188            *         Handle standard usb endpoint requests
+    189            * @param  pdev: USB device instance
+    190            * @param  req: usb request
+    191            * @retval status
+    192            */
+    193          USBD_Status  USBD_StdEPReq (USB_CORE_HANDLE  *pdev, USB_SETUP_REQ  *req)
+    194          {
+    195            
+    196            uint8_t   ep_addr;
+    197            uint32_t USBD_ep_status  = 0; 
+    198            USBD_Status ret = USBD_OK; 
+    199            
+    200            ep_addr  = LOBYTE(req->wIndex);   
+    201            
+    202            switch (req->bRequest) 
+    203            {  
+    204            case USB_REQ_SET_FEATURE :
+    205              
+    206              switch (pdev->dev.device_status) 
+    207              {
+    208              case USB_ADDRESSED:          
+    209                if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+    210                {
+    211                  DCD_EP_Stall(pdev , ep_addr);
+    212                }
+    213                break;	
+    214                
+    215              case USB_CONFIGURED:   
+    216                if (req->wValue == USB_FEATURE_EP_HALT)
+    217                {
+    218                  if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+    219                  { 
+    220                    DCD_EP_Stall(pdev , ep_addr);
+    221                    
+    222                  }
+    223                }
+    224                pdev->dev.class_cb->Setup (pdev, req);   
+    225                USBD_CtlSendStatus(pdev);
+    226                
+    227                break;
+    228                
+    229              default:                         
+    230                USBD_CtlError(pdev , req);
+    231                break;    
+    232              }
+    233              break;
+    234              
+    235            case USB_REQ_CLEAR_FEATURE :
+    236              
+    237              switch (pdev->dev.device_status) 
+    238              {
+    239              case USB_ADDRESSED:          
+    240                if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+    241                {
+    242                  DCD_EP_Stall(pdev , ep_addr);
+    243                }
+    244                break;	
+    245                
+    246              case USB_CONFIGURED:   
+    247                if (req->wValue == USB_FEATURE_EP_HALT)
+    248                {
+    249                  if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+    250                  {        
+    251                    DCD_EP_ClrStall(pdev , ep_addr);
+    252                  }
+    253                }
+    254                pdev->dev.class_cb->Setup (pdev, req);
+    255                USBD_CtlSendStatus(pdev);
+    256                break;
+    257                
+    258              default:                         
+    259                 USBD_CtlError(pdev , req);
+    260                break;    
+    261              }
+    262              break;
+    263              
+    264            case USB_REQ_GET_STATUS:                  
+    265              switch (pdev->dev.device_status) 
+    266              {
+    267              case USB_ADDRESSED:          
+    268                if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+    269                {
+    270                  DCD_EP_Stall(pdev , ep_addr);
+    271                }
+    272                break;	
+    273                
+    274              case USB_CONFIGURED:         
+    275                
+    276                if ((ep_addr & 0x80)== 0x80)
+    277                {
+    278                  if(pdev->dev.in_ep[ep_addr & 0x7F].is_stall)
+    279                  {
+    280                    USBD_ep_status = 0x0001;     
+    281                  }
+    282                  else
+    283                  {
+    284                    USBD_ep_status = 0x0000;  
+    285                  }
+    286                }
+    287                else if ((ep_addr & 0x80)== 0x00)
+    288                {
+    289                  if(pdev->dev.out_ep[ep_addr].is_stall)
+    290                  {
+    291                    USBD_ep_status = 0x0001;     
+    292                  }
+    293                  
+    294                  else 
+    295                  {
+    296                    USBD_ep_status = 0x0000;     
+    297                  }      
+    298                }
+    299                USBD_CtlSendData (pdev,
+    300                                  (uint8_t *)&USBD_ep_status,
+    301                                  2);
+    302                break;
+    303                
+    304              default:                         
+    305                 USBD_CtlError(pdev , req);
+    306                break;
+    307              }
+    308              break;
+    309              
+    310            default:
+    311              break;
+    312            }
+    313            return ret;
+    314          }
+    315          /**
+    316            * @brief  USBD_GetDescriptor
+    317            *         Handle Get Descriptor requests
+    318            * @param  pdev: device instance
+    319            * @param  req: usb request
+    320            * @retval status
+    321            */
+    322          static void USBD_GetDescriptor(USB_CORE_HANDLE  *pdev, 
+    323                                         USB_SETUP_REQ *req)
+    324          {
+    325            uint16_t len;
+    326            uint8_t *pbuf;
+    327            
+    328            switch (req->wValue >> 8)
+    329            {
+    330          #ifdef LPM_ENABLED    
+    331            case USB_DESC_TYPE_BOS:
+    332              pbuf = pdev->dev.usr_device->GetBOSDescriptor(pdev->dev.speed, &len);
+    333              break;
+    334          #endif    
+    335            case USB_DESC_TYPE_DEVICE:
+    336              pbuf = pdev->dev.usr_device->GetDeviceDescriptor(pdev->dev.speed, &len);
+    337              if (req->wLength == 64)   
+    338              {                  
+    339                len = 8;
+    340              }
+    341              break;
+    342              
+    343            case USB_DESC_TYPE_CONFIGURATION:
+    344                pbuf   = (uint8_t *)pdev->dev.class_cb->GetConfigDescriptor(pdev->dev.speed, &len);  
+    345                pdev->dev.pConfig_descriptor = pbuf;
+    346              break;
+    347              
+    348            case USB_DESC_TYPE_STRING:
+    349              switch ((uint8_t)(req->wValue))
+    350              {
+    351              case USBD_IDX_LANGID_STR:
+    352               pbuf = pdev->dev.usr_device->GetLangIDStrDescriptor(pdev->dev.speed, &len);        
+    353                break;
+    354                
+    355              case USBD_IDX_MFC_STR:
+    356                pbuf = pdev->dev.usr_device->GetManufacturerStrDescriptor(pdev->dev.speed, &len);
+    357                break;
+    358                
+    359              case USBD_IDX_PRODUCT_STR:
+    360                pbuf = pdev->dev.usr_device->GetProductStrDescriptor(pdev->dev.speed, &len);
+    361                break;
+    362                
+    363              case USBD_IDX_SERIAL_STR:
+    364                pbuf = pdev->dev.usr_device->GetSerialStrDescriptor(pdev->dev.speed, &len);
+    365                break;
+    366                
+    367              case USBD_IDX_CONFIG_STR:
+    368                pbuf = pdev->dev.usr_device->GetConfigurationStrDescriptor(pdev->dev.speed, &len);
+    369                break;
+    370                
+    371              case USBD_IDX_INTERFACE_STR:
+    372                pbuf = pdev->dev.usr_device->GetInterfaceStrDescriptor(pdev->dev.speed, &len);
+    373                break;
+    374                
+    375              case USBD_IDX_OS_STR:
+    376                        pbuf = pdev->dev.usr_device->GetOSStrDescriptor(pdev->dev.speed, &len);
+    377                        break;
+    378              
+    379              default:
+    380          #ifdef USB_SUPPORT_USER_STRING_DESC
+    381                pbuf = pdev->dev.class_cb->GetUsrStrDescriptor(pdev->dev.speed, (req->wValue) , &len);
+    382                break;
+    383          #else      
+    384                 USBD_CtlError(pdev , req);
+    385                return;
+    386          #endif /* USBD_CtlError(pdev , req); */      
+    387              }
+    388              break;
+    389            case USB_DESC_TYPE_DEVICE_QUALIFIER:                   
+    390                 USBD_CtlError(pdev , req);
+    391                return;  
+    392          
+    393            case USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION:
+    394                USBD_CtlError(pdev , req);
+    395                return;  
+    396            default: 
+    397               USBD_CtlError(pdev , req);
+    398              return;
+    399            }
+    400            
+    401            if((len != 0)&& (req->wLength != 0))
+    402            {
+    403              
+    404              len = MIN(len , req->wLength);
+    405              
+    406              USBD_CtlSendData (pdev, 
+    407                                pbuf,
+    408                                len);
+    409            }
+    410            
+    411          }
+    412          
+    413          /**
+    414            * @brief  USBD_SetAddress
+    415            *         Set device address
+    416            * @param  pdev: device instance
+    417            * @param  req: usb request
+    418            * @retval status
+    419            */
+    420          static void USBD_SetAddress(USB_CORE_HANDLE  *pdev, 
+    421                                      USB_SETUP_REQ *req)
+    422          {
+    423            uint8_t  dev_addr; 
+    424            
+    425            if ((req->wIndex == 0) && (req->wLength == 0)) 
+    426            {
+    427              dev_addr = (uint8_t)(req->wValue) & 0x7F;     
+    428              
+    429              if (pdev->dev.device_status == USB_CONFIGURED) 
+    430              {
+    431                USBD_CtlError(pdev , req);
+    432              } 
+    433              else 
+    434              {
+    435                pdev->dev.device_address = dev_addr;              
+    436                ADDRESS = dev_addr;
+    437                USBD_CtlSendStatus(pdev);                         
+    438                
+    439                if (dev_addr != 0) 
+    440                {
+    441                  pdev->dev.device_status  = USB_ADDRESSED;
+    442                } 
+    443                else 
+    444                {
+    445                  pdev->dev.device_status  = USB_DEFAULT; 
+    446                }
+    447              }
+    448            } 
+    449            else 
+    450            {
+    451               USBD_CtlError(pdev , req);                        
+    452            } 
+    453          }
+    454          
+    455          /**
+    456            * @brief  USBD_SetConfig
+    457            *         Handle Set device configuration request
+    458            * @param  pdev: device instance
+    459            * @param  req: usb request
+    460            * @retval status
+    461            */
+    462          static void USBD_SetConfig(USB_CORE_HANDLE  *pdev, 
+    463                                     USB_SETUP_REQ *req)
+    464          {
+    465            
+    466            static uint8_t  cfgidx;
+    467            
+    468            cfgidx = (uint8_t)(req->wValue);                 
+    469            
+    470            if (cfgidx > USBD_CFG_MAX_NUM ) 
+    471            {            
+    472               USBD_CtlError(pdev , req);                              
+    473            } 
+    474            else 
+    475            {
+    476              switch (pdev->dev.device_status) 
+    477              {
+    478              case USB_ADDRESSED:
+    479                if (cfgidx) 
+    480                {                                			   							   							   				
+    481                  pdev->dev.device_config = cfgidx;
+    482                  pdev->dev.device_status = USB_CONFIGURED;
+    483                  USBD_SetCfg(pdev , cfgidx);
+    484                  USBD_CtlSendStatus(pdev);
+    485                }
+    486                else 
+    487                {
+    488                   USBD_CtlSendStatus(pdev);
+    489                }
+    490                break;
+    491                
+    492              case USB_CONFIGURED:
+    493                if (cfgidx == 0) 
+    494                {                           
+    495                  pdev->dev.device_status = USB_ADDRESSED;
+    496                  pdev->dev.device_config = cfgidx;          
+    497                  USBD_ClrCfg(pdev , cfgidx);
+    498                  USBD_CtlSendStatus(pdev);
+    499                } 
+    500                else  if (cfgidx != pdev->dev.device_config) 
+    501                {
+    502                  /* Clear old configuration */
+    503                  USBD_ClrCfg(pdev , pdev->dev.device_config);
+    504                  
+    505                  /* set new configuration */
+    506                  pdev->dev.device_config = cfgidx;
+    507                  USBD_SetCfg(pdev , cfgidx);
+    508                  USBD_CtlSendStatus(pdev);
+    509                }
+    510                else
+    511                {
+    512                  USBD_CtlSendStatus(pdev);
+    513                }
+    514                break;
+    515                
+    516              default:					
+    517                 USBD_CtlError(pdev , req);                     
+    518                break;
+    519              }
+    520            }
+    521          }
+    522          
+    523          /**
+    524            * @brief  USBD_GetConfig
+    525            *         Handle Get device configuration request
+    526            * @param  pdev: device instance
+    527            * @param  req: usb request
+    528            * @retval status
+    529            */
+    530          static void USBD_GetConfig(USB_CORE_HANDLE  *pdev, 
+    531                                     USB_SETUP_REQ *req)
+    532          {
+    533            uint32_t  USBD_default_cfg  = 0;
+    534           
+    535            if (req->wLength != 1) 
+    536            {                   
+    537               USBD_CtlError(pdev , req);
+    538            }
+    539            else 
+    540            {
+    541              switch (pdev->dev.device_status )  
+    542              {
+    543              case USB_ADDRESSED:                     
+    544                
+    545                USBD_CtlSendData (pdev, 
+    546                                  (uint8_t *)&USBD_default_cfg,
+    547                                  1);
+    548                break;
+    549                
+    550              case USB_CONFIGURED:                   
+    551                
+    552                USBD_CtlSendData (pdev, 
+    553                                  &pdev->dev.device_config,
+    554                                  1);
+    555                break;
+    556                
+    557              default:
+    558                 USBD_CtlError(pdev , req);
+    559                break;
+    560              }
+    561            }
+    562          }
+    563          
+    564          /**
+    565            * @brief  USBD_GetStatus
+    566            *         Handle Get Status request
+    567            * @param  pdev: device instance
+    568            * @param  req: usb request
+    569            * @retval status
+    570            */
+    571          static void USBD_GetStatus(USB_CORE_HANDLE  *pdev, 
+    572                                     USB_SETUP_REQ *req)
+    573          {
+    574            uint32_t  USBD_cfg_status = 0;  
+    575            switch (pdev->dev.device_status) 
+    576            {
+    577            case USB_ADDRESSED:
+    578            case USB_CONFIGURED:
+    579              
+    580          #ifdef USBD_SELF_POWERED
+    581              USBD_cfg_status = USB_CONFIG_SELF_POWERED;                                    
+    582          #else
+    583              USBD_cfg_status = 0x00;                                    
+    584          #endif
+    585                                
+    586              if (pdev->dev.DevRemoteWakeup) 
+    587              {
+    588                USBD_cfg_status |= USB_CONFIG_REMOTE_WAKEUP;                                
+    589              }
+    590              
+    591              USBD_CtlSendData (pdev, 
+    592                                (uint8_t *)&USBD_cfg_status,
+    593                                2);
+    594              break;
+    595              
+    596            default :
+    597              USBD_CtlError(pdev , req);                        
+    598              break;
+    599            }
+    600          }
+    601          
+    602          
+    603          /**
+    604            * @brief  USBD_SetFeature
+    605            *         Handle Set device feature request
+    606            * @param  pdev: device instance
+    607            * @param  req: usb request
+    608            * @retval status
+    609            */
+    610          static void USBD_SetFeature(USB_CORE_HANDLE  *pdev, 
+    611                                      USB_SETUP_REQ *req)
+    612          {
+    613           
+    614            if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
+    615            {
+    616              pdev->dev.DevRemoteWakeup = 1;  
+    617              pdev->dev.class_cb->Setup (pdev, req);   
+    618              USBD_CtlSendStatus(pdev);
+    619            }
+    620          }
+    621          
+    622          
+    623          /**
+    624            * @brief  USBD_ClrFeature
+    625            *         Handle clear device feature request
+    626            * @param  pdev: device instance
+    627            * @param  req: usb request
+    628            * @retval status
+    629            */
+    630          static void USBD_ClrFeature(USB_CORE_HANDLE  *pdev, 
+    631                                      USB_SETUP_REQ *req)
+    632          {
+    633            switch (pdev->dev.device_status)
+    634            {
+    635            case USB_ADDRESSED:
+    636            case USB_CONFIGURED:
+    637              if (req->wValue == USB_FEATURE_REMOTE_WAKEUP) 
+    638              {
+    639                pdev->dev.DevRemoteWakeup = 0; 
+    640                pdev->dev.class_cb->Setup (pdev, req);   
+    641                USBD_CtlSendStatus(pdev);
+    642              }
+    643              break;
+    644              
+    645            default :
+    646               USBD_CtlError(pdev , req);
+    647              break;
+    648            }
+    649          }
+    650          
+    651          /**
+    652            * @brief  USBD_ParseSetupRequest 
+    653            *         Copy buffer into setup structure
+    654            * @param  pdev: device instance
+    655            * @param  req: usb request
+    656            * @retval None
+    657            */
+    658          
+    659          void USBD_ParseSetupRequest( USB_CORE_HANDLE  *pdev,
+    660                                      USB_SETUP_REQ *req)
+    661          {
+    662            req->bmRequest     = *(uint8_t *)  (pdev->dev.setup_packet);
+    663            req->bRequest      = *(uint8_t *)  (pdev->dev.setup_packet +  1);
+    664            req->wValue        = SWAPBYTE      (pdev->dev.setup_packet +  2);
+    665            req->wIndex        = SWAPBYTE      (pdev->dev.setup_packet +  4);
+    666            req->wLength       = SWAPBYTE      (pdev->dev.setup_packet +  6);
+    667            
+    668            pdev->dev.in_ep[0].ctl_data_len = req->wLength  ;
+    669            pdev->dev.device_state = USB_EP0_SETUP;
+    670          }
+    671          
+    672          /**
+    673            * @brief  USBD_CtlError 
+    674            *         Handle USB low level Error
+    675            * @param  pdev: device instance
+    676            * @param  req: usb request
+    677            * @retval None
+    678            */
+    679          
+    680          void USBD_CtlError( USB_CORE_HANDLE  *pdev,
+    681                                      USB_SETUP_REQ *req)
+    682          {
+    683            DCD_EP_Stall(pdev , 0);
+    684          }
+    685          
+    686          
+    687          /**
+    688            * @brief  USBD_GetString
+    689            *         Convert Ascii string into unicode one
+    690            * @param  desc : descriptor buffer
+    691            * @param  unicode : Formatted string buffer (unicode)
+    692            * @param  len : descriptor length
+    693            * @retval None
+    694            */
+    695          void USBD_GetString(uint8_t *desc, uint8_t *unicode, uint16_t *len)
+    696          {
+    697            uint8_t idx = 0;
+    698            
+    699            if (desc != NULL) 
+    700            {
+    701              *len =  USBD_GetLen(desc) * 2 + 2;    
+    702              unicode[idx++] = *len;
+    703              unicode[idx++] =  USB_DESC_TYPE_STRING;
+    704              
+    705              while (*desc != NULL) 
+    706              {
+    707                unicode[idx++] = *desc++;
+    708                unicode[idx++] =  0x00;
+    709              }
+    710            } 
+    711          }
+    712          
+    713          /**
+    714            * @brief  USBD_GetLen
+    715            *         return the string length
+    716             * @param  buf : pointer to the ascii string buffer
+    717            * @retval string length
+    718            */
+    719          static uint8_t USBD_GetLen(uint8_t *buf)
+    720          {
+    721              uint8_t  len = 0;
+    722          
+    723              while (*buf != NULL) 
+    724              {
+    725                  len++;
+    726                  buf++;
+    727              }
+    728          
+    729              return len;
+    730          }
+    731          
+    732          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   USBD_CtlError
+         8   -> DCD_EP_Stall
+      16   USBD_GetString
+       0   USBD_ParseSetupRequest
+      32   USBD_StdDevReq
+        32   -- Indirect call
+        32   -> USBD_ClrCfg
+        32   -> USBD_CtlError
+        32   -> USBD_CtlSendData
+        32   -> USBD_CtlSendStatus
+        32   -> USBD_SetCfg
+      16   USBD_StdEPReq
+        16   -- Indirect call
+        16   -> DCD_EP_ClrStall
+        16   -> DCD_EP_Stall
+        16   -> USBD_CtlError
+        16   -> USBD_CtlSendData
+        16   -> USBD_CtlSendStatus
+      16   USBD_StdItfReq
+        16   -- Indirect call
+        16   -> USBD_CtlError
+        16   -> USBD_CtlSendStatus
+      16   USBD_VendDevReq
+        16   -- Indirect call
+        16   -> USBD_CtlSendData
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable0
+      10  USBD_CtlError
+      68  USBD_GetString
+      48  USBD_ParseSetupRequest
+     514  USBD_StdDevReq
+     206  USBD_StdEPReq
+      64  USBD_StdItfReq
+      64  USBD_StrDesc
+      96  USBD_VendDevReq
+       8  cfgidx
+          ADDRESS
+
+ 
+    72 bytes in section .bss
+ 1'010 bytes in section .text
+ 
+ 1'010 bytes of CODE memory
+    72 bytes of DATA memory
+
+Errors: none
+Warnings: 2

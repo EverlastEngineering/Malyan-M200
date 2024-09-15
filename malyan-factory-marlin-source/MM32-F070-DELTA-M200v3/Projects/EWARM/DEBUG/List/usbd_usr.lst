@@ -1,0 +1,250 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:24
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_usr.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW4B62.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_usr.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\usbd_usr.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\usbd_usr.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\usb\usbd_usr.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    usbd_usr.c
+      4            * @author  MCD Application Team
+      5            * @version V1.0.0
+      6            * @date    31-January-2014
+      7            * @brief   This file contains user callback structure for USB events Management
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */ 
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "usbd_cdc_core.h"
+     30          #include "usbd_usr.h"
+     31          #include "port.h"
+     32          
+     33          /* Private typedef -----------------------------------------------------------*/
+     34          /* Private define ------------------------------------------------------------*/
+     35          /* Private macro -------------------------------------------------------------*/
+     36          /* Private variables ---------------------------------------------------------*/
+     37          extern USBD_Class_cb_TypeDef  USBD_CDC_MSC_cb;
+     38          USB_CORE_HANDLE  USB_Device_dev ;
+     39          USBD_Usr_cb_TypeDef USR_cb =
+     40          {
+     41            USBD_USR_Init,
+     42            USBD_USR_DeviceReset,
+     43            USBD_USR_DeviceConfigured,
+     44            USBD_USR_DeviceSuspended,
+     45            USBD_USR_DeviceResumed,  
+     46          };
+     47          
+     48          /* Private function prototypes -----------------------------------------------*/
+     49          /* Private functions ---------------------------------------------------------*/
+     50          
+     51          void PowerOn(){DCD_DevConnect(&USB_Device_dev);}
+     52          void PowerOff(){DCD_DevDisconnect(&USB_Device_dev);}
+     53          extern uint8_t bDeviceState;
+     54          #define CONFIGURED      5
+     55          extern uint8_t com_opened;
+     56          
+     57          void USB_main()
+     58          {
+     59            com_opened=0;
+     60            if (composite)
+     61            {
+     62                USBD_Init(&USB_Device_dev,
+     63                      (USBD_DEVICE*)&USR_desc, 
+     64                      &USBD_CDC_MSC_cb,
+     65                      &USR_cb);
+     66            }
+     67            else USBD_Init(&USB_Device_dev,
+     68                      (USBD_DEVICE*)&USR_desc, 
+     69                      &USBD_CDC_cb, 
+     70                      &USR_cb);
+     71          return;
+     72          }
+     73          /**
+     74            * @brief  Device lib initialization
+     75            * @param  None
+     76            * @retval None
+     77            */
+     78          void USBD_USR_Init(void)
+     79          {   
+     80            bDeviceState=0;
+     81            com_opened=0;
+     82            LED_LINK_OFF;
+     83          }
+     84          
+     85          /**
+     86            * @brief  Reset Event
+     87            * @param  speed : device speed
+     88            * @retval None
+     89            */
+     90          void USBD_USR_DeviceReset(uint8_t speed )
+     91          {
+     92            bDeviceState=0;
+     93            com_opened=0;
+     94            LED_LINK_OFF;
+     95          }
+     96          
+     97          
+     98          /**
+     99            * @brief  Configuration Event
+    100            * @param  None
+    101            * @retval Status
+    102          */
+    103          void USBD_USR_DeviceConfigured (void)
+    104          {
+    105            extern uint32_t APP_Rx_ptr_in,APP_Rx_ptr_out;
+    106          
+    107            bDeviceState=CONFIGURED;
+    108            com_opened=0;
+    109            LED_LINK_ON;
+    110            APP_Rx_ptr_in = 0;
+    111            APP_Rx_ptr_out = 0;
+    112          }
+    113          
+    114          /**
+    115            * @brief  Device suspend Event
+    116            * @param  None
+    117            * @retval None
+    118            */
+    119          void USBD_USR_DeviceSuspended(void)
+    120          {
+    121            bDeviceState=0;
+    122            com_opened=0;
+    123            LED_LINK_OFF;
+    124          }
+    125          
+    126          
+    127          /**
+    128            * @brief  Device resume Event
+    129            * @param  None
+    130            * @retval None
+    131            */
+    132          void USBD_USR_DeviceResumed(void)
+    133          {
+    134          }
+    135          
+    136          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   PowerOff
+         8   -> DCD_DevDisconnect
+       8   PowerOn
+         8   -> DCD_DevConnect
+       8   USBD_USR_DeviceConfigured
+         8   -> GPIO_ResetBits
+       0   USBD_USR_DeviceReset
+         8   -> GPIO_SetBits
+       0   USBD_USR_DeviceResumed
+       8   USBD_USR_DeviceSuspended
+         8   -> GPIO_SetBits
+       8   USBD_USR_Init
+         8   -> GPIO_SetBits
+       8   USB_main
+         8   -> USBD_Init
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+       4  ??DataTable4_3
+       4  ??DataTable4_4
+       4  ??DataTable4_5
+       4  ??DataTable4_6
+       4  ??DataTable4_7
+      22  ?Subroutine0
+      10  PowerOff
+      10  PowerOn
+      34  USBD_USR_DeviceConfigured
+       2  USBD_USR_DeviceReset
+       2  USBD_USR_DeviceResumed
+       4  USBD_USR_DeviceSuspended
+       4  USBD_USR_Init
+     380  USB_Device_dev
+          USR_cb
+      26  USB_main
+
+ 
+ 380 bytes in section .data
+ 146 bytes in section .text
+ 
+ 146 bytes of CODE memory
+ 380 bytes of DATA memory
+
+Errors: none
+Warnings: none

@@ -1,0 +1,1141 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:00:21
+# Copyright 1999-2019 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\sd.c
+#    Command line =
+#        -f C:\Users\yongzong\AppData\Local\Temp\EW3DF3.tmp
+#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\sd.c
+#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
+#        -o
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
+#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
+#        -I
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        -Ohz --use_c++_inline -I "C:\Program Files (x86)\IAR Systems\Embedded
+#        Workbench 8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
+#    Locale       =  C
+#    List file    =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\sd.lst
+#    Object file  =
+#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\sd.o
+#
+###############################################################################
+
+D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\fs\sd.c
+      1          
+      2          /* Includes ------------------------------------------------------------------*/
+      3          #include "sd.h"
+      4          
+      5          /** @addtogroup Utilities
+      6            * @{
+      7            */
+      8            
+      9          /** @addtogroup STM32_EVAL
+     10            * @{
+     11            */
+     12          
+     13          /** @addtogroup STM32072B_EVAL
+     14            * @{
+     15            */
+     16          
+     17          /** @addtogroup STM32072B_EVAL_SPI_SD
+     18            * @brief      This file includes the SD card driver of STM32072B-EVAL boards.
+     19            * @{
+     20            */ 
+     21          
+     22          /* Private typedef -----------------------------------------------------------*/
+     23          /* Private define ------------------------------------------------------------*/
+     24          /* Private macro -------------------------------------------------------------*/
+     25          /* Private variables ---------------------------------------------------------*/
+     26          /* Private function prototypes -----------------------------------------------*/
+     27          /* Private functions ---------------------------------------------------------*/
+     28          
+     29          void DMA1_SPI_RX(uint8_t *buffer,uint16_t len)
+     30          {
+     31              uint8_t temp=0xff;
+     32              
+     33              DMA1_Channel2->CNDTR=len;
+     34              DMA1_Channel2->CMAR=(uint32_t)buffer;
+     35              
+     36              DMA1_Channel3->CNDTR=len;
+     37              DMA1_Channel3->CMAR=(uint32_t)&temp;
+     38              DMA1_Channel3->CCR&=~DMA_MemoryInc_Enable;
+     39              
+     40              DMA_Cmd(DMA1_Channel2,ENABLE);
+     41              DMA_Cmd(DMA1_Channel3,ENABLE);
+     42              
+     43              while(!DMA_GetFlagStatus(DMA1_FLAG_TC2));
+     44              DMA_ClearFlag(DMA1_FLAG_TC2);
+     45              DMA_ClearFlag(DMA1_FLAG_TC3);
+     46              DMA_Cmd(DMA1_Channel2,DISABLE);
+     47              DMA_Cmd(DMA1_Channel3,DISABLE);
+     48              
+     49              DMA1_Channel3->CCR|=DMA_MemoryInc_Enable;
+     50          }
+     51          
+     52          void DMA1_SPI_TX(uint8_t *buffer, uint16_t len)
+     53          {
+     54              DMA1_Channel3->CNDTR=len;
+     55              DMA1_Channel3->CMAR=(uint32_t)buffer;
+     56              
+     57              DMA_Cmd(DMA1_Channel3,ENABLE);
+     58              while(!DMA_GetFlagStatus(DMA1_FLAG_TC3));
+     59              DMA_ClearFlag(DMA1_FLAG_TC3);
+     60              DMA_Cmd(DMA1_Channel3,DISABLE);
+     61          }
+     62          
+     63          void SD_LowLevel_Init(void)
+     64          {
+     65            GPIO_InitTypeDef  GPIO_InitStructure;
+     66            SPI_InitTypeDef   SPI_InitStructure;
+     67          
+     68            /* SD_SPI_CS_GPIO, SD_SPI_MOSI_GPIO, SD_SPI_MISO_GPIO, SD_SPI_DETECT_GPIO 
+     69                 and SD_SPI_SCK_GPIO Periph clock enable */
+     70            RCC_AHBPeriphClockCmd(SD_CS_GPIO_CLK | SD_SPI_MOSI_GPIO_CLK | SD_SPI_MISO_GPIO_CLK |
+     71                                  SD_SPI_SCK_GPIO_CLK | SD_DETECT_GPIO_CLK, ENABLE);
+     72          
+     73            /* SD_SPI Periph clock enable */
+     74            RCC_APB2PeriphClockCmd(SD_SPI_CLK, ENABLE); 
+     75          
+     76            /* Configure SD_SPI pins: SCK */
+     77            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+     78            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+     79            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     80            GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+     81            GPIO_Init(GPIOB, &GPIO_InitStructure);
+     82          
+     83            /* Configure SD_SPI pins: MISO */
+     84            GPIO_InitStructure.GPIO_Pin = SD_SPI_MISO_PIN;
+     85            GPIO_Init(SD_SPI_MISO_GPIO_PORT, &GPIO_InitStructure);
+     86          
+     87            /* Configure SD_SPI pins: MOSI */
+     88            GPIO_InitStructure.GPIO_Pin = SD_SPI_MOSI_PIN;
+     89            GPIO_Init(SD_SPI_MOSI_GPIO_PORT, &GPIO_InitStructure);
+     90          
+     91            /* Configure SD_SPI_CS_PIN pin: SD Card CS pin */
+     92            GPIO_InitStructure.GPIO_Pin = SD_CS_PIN;
+     93            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+     94            GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+     95            GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+     96            GPIO_Init(SD_CS_GPIO_PORT, &GPIO_InitStructure);
+     97          
+     98            /* Configure SD_SPI_DETECT_PIN pin: SD Card detect pin */
+     99            GPIO_InitStructure.GPIO_Pin = SD_DETECT_PIN;
+    100            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+    101            GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+    102            GPIO_Init(SD_DETECT_GPIO_PORT, &GPIO_InitStructure);
+    103          
+    104            /* Connect PXx to SD_SPI_SCK */
+    105            GPIO_PinAFConfig(SD_SPI_SCK_GPIO_PORT, SD_SPI_SCK_SOURCE, SD_SPI_SCK_AF);
+    106          
+    107            /* Connect PXx to SD_SPI_MISO */
+    108            GPIO_PinAFConfig(SD_SPI_MISO_GPIO_PORT, SD_SPI_MISO_SOURCE, SD_SPI_MISO_AF); 
+    109          
+    110            /* Connect PXx to SD_SPI_MOSI */
+    111            GPIO_PinAFConfig(SD_SPI_MOSI_GPIO_PORT, SD_SPI_MOSI_SOURCE, SD_SPI_MOSI_AF);  
+    112            
+    113            /* SPI configuration -------------------------------------------------------*/
+    114            SPI_I2S_DeInit(SD_SPI);
+    115          
+    116            SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
+    117            SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+    118            SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+    119            SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
+    120            SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
+    121            SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+    122            /*      - SPI baudrate is derived from PCLK clock and defined this way: PCLK/SPI_BaudRatePrescaler
+    123                    - HX8347 LCD SPI interface max baudrate is 50MHz for write and 6.66MHz for read
+    124                      Since the provided driver doesn't use read capability from LCD, only constraint 
+    125                      on write baudrate is considered.
+    126                    - SD card SPI interface max baudrate is 25MHz for write/read
+    127                 */
+    128               SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;
+    129          
+    130               SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+    131               SPI_InitStructure.SPI_CRCPolynomial = 7;
+    132               SPI_Init(SD_SPI, &SPI_InitStructure);
+    133            
+    134               SPI_RxFIFOThresholdConfig(SD_SPI, SPI_RxFIFOThreshold_QF);
+    135            
+    136               SPI_Cmd(SD_SPI, ENABLE); /* SD_SPI enable */
+    137          
+    138          #define SPI1_DR_ADDRESS                  0x4001300C
+    139          
+    140              DMA_InitTypeDef DMA_InitStructure;
+    141              DMA_InitStructure.DMA_BufferSize = (uint16_t)512;
+    142              DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)SPI1_DR_ADDRESS;
+    143              DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    144              DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
+    145              DMA_InitStructure.DMA_PeripheralInc=DMA_PeripheralInc_Disable;
+    146              DMA_InitStructure.DMA_MemoryInc=DMA_MemoryInc_Enable;
+    147              DMA_InitStructure.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte;
+    148              DMA_InitStructure.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;
+    149              DMA_InitStructure.DMA_Mode=DMA_Mode_Normal;
+    150              DMA_InitStructure.DMA_M2M=DMA_M2M_Disable;
+    151              DMA_Init(DMA1_Channel2, &DMA_InitStructure);
+    152              
+    153              DMA_InitStructure.DMA_BufferSize = (uint16_t)512;
+    154              DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)SPI1_DR_ADDRESS;
+    155              DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+    156              DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
+    157              DMA_InitStructure.DMA_PeripheralInc=DMA_PeripheralInc_Disable;
+    158              DMA_InitStructure.DMA_MemoryInc=DMA_MemoryInc_Enable;
+    159              DMA_InitStructure.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte;
+    160              DMA_InitStructure.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;
+    161              DMA_InitStructure.DMA_Mode=DMA_Mode_Normal;
+    162              DMA_InitStructure.DMA_M2M=DMA_M2M_Disable;
+    163              DMA_Init(DMA1_Channel3, &DMA_InitStructure);
+    164              
+    165              SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Rx, ENABLE);
+    166              SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Tx, ENABLE);
+    167          }
+    168          /**
+    169            * @brief  DeInitializes the SD/SD communication.
+    170            * @param  None
+    171            * @retval None
+    172            */
+    173          void SD_DeInit(void)
+    174          {
+    175            SD_LowLevel_DeInit();
+    176          }
+    177          
+    178          /**
+    179            * @brief  Initializes the SD/SD communication.
+    180            * @param  None
+    181            * @retval The SD Response: 
+    182            *         - SD_RESPONSE_FAILURE: Sequence failed
+    183            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    184            */
+    185          SD_Error SD_Init(void)
+    186          {
+    187            uint32_t i = 0;
+    188          
+    189            //return (SD_GoIdleState());
+    190            /* Initialize SD_SPI */
+    191            //SD_LowLevel_Init(); 
+    192          
+    193            /* SD chip select high */
+    194            SD_CS_HIGH();
+    195          
+    196            /* Send dummy byte 0xFF, 10 times with CS high */
+    197            /* Rise CS and MOSI for 80 clocks cycles */
+    198            for (i = 0; i <= 9; i++)
+    199            {
+    200              /* Send dummy byte 0xFF */
+    201              SD_WriteByte(SD_DUMMY_BYTE);
+    202            }
+    203            
+    204            /*------------ Put SD in SPI mode --------------*/
+    205            /* SD initialized and set to SPI mode properly */
+    206            return (SD_GoIdleState());
+    207          }
+    208          
+    209          /**
+    210           * @brief  Detect if SD card is correctly plugged in the memory slot.
+    211           * @param  None
+    212           * @retval Return if SD is detected or not
+    213           */
+    214          uint8_t SD_Detect(void)
+    215          {
+    216            __IO uint8_t status = SD_PRESENT;
+    217          
+    218            return SD_PRESENT;
+    219            /* Check GPIO to detect SD */
+    220            if (GPIO_ReadInputData(SD_DETECT_GPIO_PORT) & SD_DETECT_PIN)
+    221            {
+    222              status = SD_NOT_PRESENT;
+    223            }
+    224            return status;
+    225          }
+    226          
+    227          /**
+    228            * @brief  Returns information about specific card.
+    229            * @param  cardinfo: pointer to a SD_CardInfo structure that contains all SD 
+    230            *         card information.
+    231            * @retval The SD Response:
+    232            *         - SD_RESPONSE_FAILURE: Sequence failed
+    233            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    234            */
+    235          SD_Error SD_GetCardInfo(SD_CardInfo *cardinfo)
+    236          {
+    237            SD_Error status = SD_RESPONSE_FAILURE;
+    238          
+    239            SD_GetCSDRegister(&(cardinfo->SD_csd));
+    240            status = SD_GetCIDRegister(&(cardinfo->SD_cid));
+    241            cardinfo->CardCapacity = (cardinfo->SD_csd.DeviceSize + 1) ;
+    242            cardinfo->CardCapacity *= (1 << (cardinfo->SD_csd.DeviceSizeMul + 2));
+    243            cardinfo->CardBlockSize = 1 << (cardinfo->SD_csd.RdBlockLen);
+    244            cardinfo->CardCapacity *= cardinfo->CardBlockSize;
+    245          
+    246            /* Returns the response */
+    247            return status;
+    248          }
+    249          
+    250          /**
+    251            * @brief  Reads a block of data from the SD.
+    252            * @param  pBuffer: pointer to the buffer that receives the data read from the SD card.
+    253            * @param  ReadAddr: SD's internal address to read from.
+    254            * @param  BlockSize: the SD card Data block size.
+    255            * @retval The SD Response:
+    256            *         - SD_RESPONSE_FAILURE: Sequence failed
+    257            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    258            */
+    259          SD_Error SD_ReadBlock(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t BlockSize)
+    260          {
+    261            uint32_t i = 0;
+    262            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    263            
+    264            /* SD chip select low */
+    265            SD_CS_LOW();
+    266            
+    267            /* Send CMD17 (SD_CMD_READ_SINGLE_BLOCK) to read one block */
+    268            SD_SendCmd(SD_CMD_READ_SINGLE_BLOCK, ReadAddr, 0xFF);
+    269            
+    270            /* Check if the SD acknowledged the read block command: R1 response (0x00: no errors) */
+    271            if (!SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    272            {
+    273              /* Now look for the data token to signify the start of the data */
+    274              if (!SD_GetResponse(SD_START_DATA_SINGLE_BLOCK_READ))
+    275              {
+    276                /* Read the SD block data : read NumByteToRead data */
+    277                for (i = 0; i < BlockSize; i++)
+    278                {
+    279                  /* Save the received data */
+    280                  *pBuffer = SD_ReadByte();
+    281                 
+    282                  /* Point to the next location where the byte read will be saved */
+    283                  pBuffer++;
+    284                }
+    285                /* Get CRC bytes (not really needed by us, but required by SD) */
+    286                SD_ReadByte();
+    287                SD_ReadByte();
+    288                /* Set response value to success */
+    289                rvalue = SD_RESPONSE_NO_ERROR;
+    290              }
+    291            }
+    292            /* SD chip select high */
+    293            SD_CS_HIGH();
+    294            
+    295            /* Send dummy byte: 8 Clock pulses of delay */
+    296            SD_WriteByte(SD_DUMMY_BYTE);
+    297            
+    298            /* Returns the response */
+    299            return rvalue;
+    300          }
+    301          
+    302          /**
+    303            * @brief  Reads multiple block of data from the SD.
+    304            * @param  pBuffer: pointer to the buffer that receives the data read from the SD card.
+    305            * @param  ReadAddr: SD's internal address to read from.
+    306            * @param  BlockSize: the SD card Data block size.
+    307            * @param  NumberOfBlocks: number of blocks to be read.
+    308            * @retval The SD Response:
+    309            *         - SD_RESPONSE_FAILURE: Sequence failed
+    310            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    311            */
+    312          SD_Error SD_ReadMultiBlocks(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t BlockSize, uint32_t NumberOfBlocks)
+    313          {
+    314            uint32_t i = 0, Offset = 0;
+    315            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    316            
+    317            /* SD chip select low */
+    318            SD_CS_LOW();
+    319            /*
+    320            SD_SendCmd (SD_CMD_READ_MULT_BLOCK, ReadAddr + Offset, 0xFF);
+    321            if (SD_GetResponse(SD_RESPONSE_NO_ERROR)) return  SD_RESPONSE_FAILURE;
+    322            DMA1_SPI_RX(pBuffer,BlockSize*NumberOfBlocks);
+    323            SD_SendCmd( SD_CMD_STOP_TRANSMISSION, 0x00000000, 0xFF);
+    324            SD_CS_HIGH();
+    325            SD_WriteByte(SD_DUMMY_BYTE);
+    326            return SD_RESPONSE_NO_ERROR;*/
+    327            /* Data transfer */
+    328            while (NumberOfBlocks--)
+    329            {
+    330              /* Send CMD17 (SD_CMD_READ_SINGLE_BLOCK) to read one block */
+    331              SD_SendCmd (SD_CMD_READ_SINGLE_BLOCK, ReadAddr + Offset, 0xFF);
+    332              /* Check if the SD acknowledged the read block command: R1 response (0x00: no errors) */
+    333              /*if (SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    334              {
+    335                return SD_RESPONSE_FAILURE;
+    336              }*/
+    337              /* Now look for the data token to signify the start of the data */
+    338              if (!SD_GetResponse(SD_START_DATA_SINGLE_BLOCK_READ))
+    339              {
+    340          #if 0
+    341                /* Read the SD block data : read NumByteToRead data */
+    342                for (i = 0; i < BlockSize; i++)
+    343                {
+    344                  /* Read the pointed data */
+    345                  *pBuffer = SD_ReadByte();
+    346                  /* Point to the next location where the byte read will be saved */
+    347                  pBuffer++;
+    348                }
+    349          #endif
+    350                
+    351                DMA1_SPI_RX(pBuffer,BlockSize);
+    352                pBuffer+=BlockSize;
+    353                /* Set next read address*/
+    354                Offset += 512;
+    355                /* get CRC bytes (not really needed by us, but required by SD) */
+    356                SD_ReadByte();
+    357                SD_ReadByte();
+    358                /* Set response value to success */
+    359                rvalue = SD_RESPONSE_NO_ERROR;
+    360              }
+    361              else
+    362              {
+    363                /* Set response value to failure */
+    364                rvalue = SD_RESPONSE_FAILURE;
+    365              }
+    366            }
+    367            /* SD chip select high */
+    368            SD_CS_HIGH();
+    369            /* Send dummy byte: 8 Clock pulses of delay */
+    370            SD_WriteByte(SD_DUMMY_BYTE);
+    371            /* Returns the response */
+    372            return rvalue;
+    373          }
+    374          
+    375          /**
+    376            * @brief  Writes a block on the SD
+    377            * @param  pBuffer: pointer to the buffer containing the data to be written on
+    378            *         the SD card.
+    379            * @param  WriteAddr: address to write on.
+    380            * @param  BlockSize: the SD card Data block size.
+    381            * @retval The SD Response: 
+    382            *         - SD_RESPONSE_FAILURE: Sequence failed
+    383            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    384            */
+    385          SD_Error SD_WriteBlock(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t BlockSize)
+    386          {
+    387            uint32_t i = 0;
+    388            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    389          
+    390            /* SD chip select low */
+    391            SD_CS_LOW();
+    392          
+    393            /* Send CMD24 (SD_CMD_WRITE_SINGLE_BLOCK) to write multiple block */
+    394            SD_SendCmd(SD_CMD_WRITE_SINGLE_BLOCK, WriteAddr, 0xFF);
+    395            
+    396            /* Check if the SD acknowledged the write block command: R1 response (0x00: no errors) */
+    397            if (!SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    398            {
+    399              /* Send a dummy byte */
+    400              SD_WriteByte(SD_DUMMY_BYTE);
+    401          
+    402              /* Send the data token to signify the start of the data */
+    403              SD_WriteByte(0xFE);
+    404          
+    405              /* Write the block data to SD : write count data by block */
+    406              for (i = 0; i < BlockSize; i++)
+    407              {
+    408                /* Send the pointed byte */
+    409                SD_WriteByte(*pBuffer);
+    410                /* Point to the next location where the byte read will be saved */
+    411                pBuffer++;
+    412              }
+    413              /* Put CRC bytes (not really needed by us, but required by SD) */
+    414              SD_ReadByte();
+    415              SD_ReadByte();
+    416              /* Read data response */
+    417              if (SD_GetDataResponse() == SD_DATA_OK)
+    418              {
+    419                rvalue = SD_RESPONSE_NO_ERROR;
+    420              }
+    421            }
+    422            /* SD chip select high */
+    423            SD_CS_HIGH();
+    424            /* Send dummy byte: 8 Clock pulses of delay */
+    425            SD_WriteByte(SD_DUMMY_BYTE);
+    426          
+    427            /* Returns the response */
+    428            return rvalue;
+    429          }
+    430          
+    431          /**
+    432            * @brief  Writes many blocks on the SD
+    433            * @param  pBuffer: pointer to the buffer containing the data to be written on 
+    434            *         the SD card.
+    435            * @param  WriteAddr: address to write on.
+    436            * @param  BlockSize: the SD card Data block size.
+    437            * @param  NumberOfBlocks: number of blocks to be written.
+    438            * @retval The SD Response: 
+    439            *         - SD_RESPONSE_FAILURE: Sequence failed
+    440            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    441            */
+    442          SD_Error SD_WriteMultiBlocks(uint8_t* pBuffer, uint32_t WriteAddr, uint16_t BlockSize, uint32_t NumberOfBlocks)
+    443          {
+    444            uint32_t i = 0, Offset = 0;
+    445            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    446          
+    447            /* SD chip select low */
+    448            SD_CS_LOW();
+    449            /* Data transfer */
+    450            while (NumberOfBlocks--)
+    451            {
+    452              /* Send CMD24 (SD_CMD_WRITE_SINGLE_BLOCK) to write blocks */
+    453              SD_SendCmd(SD_CMD_WRITE_SINGLE_BLOCK, WriteAddr + Offset, 0xFF);
+    454              /* Check if the SD acknowledged the write block command: R1 response (0x00: no errors) */
+    455              if (SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    456              {
+    457                return SD_RESPONSE_FAILURE;
+    458              }
+    459              /* Send dummy byte */
+    460              SD_WriteByte(SD_DUMMY_BYTE);
+    461              /* Send the data token to signify the start of the data */
+    462              SD_WriteByte(SD_START_DATA_SINGLE_BLOCK_WRITE);
+    463              /* Write the block data to SD : write count data by block */
+    464          #if 0
+    465              for (i = 0; i < BlockSize; i++)
+    466              {
+    467                /* Send the pointed byte */
+    468                SD_WriteByte(*pBuffer);
+    469                /* Point to the next location where the byte read will be saved */
+    470                pBuffer++;
+    471              }
+    472          #endif
+    473              DMA1_SPI_TX(pBuffer,BlockSize);
+    474              pBuffer+=BlockSize;
+    475              
+    476              /* Set next write address */
+    477              Offset += 512;
+    478              /* Put CRC bytes (not really needed by us, but required by SD) */
+    479              SD_ReadByte();
+    480              SD_ReadByte();
+    481              /* Read data response */
+    482              if (SD_GetDataResponse() == SD_DATA_OK)
+    483              {
+    484                /* Set response value to success */
+    485                rvalue = SD_RESPONSE_NO_ERROR;
+    486              }
+    487              else
+    488              {
+    489                /* Set response value to failure */
+    490                rvalue = SD_RESPONSE_FAILURE;
+    491              }
+    492            }
+    493            /* SD chip select high */
+    494            SD_CS_HIGH();
+    495            /* Send dummy byte: 8 Clock pulses of delay */
+    496            SD_WriteByte(SD_DUMMY_BYTE);
+    497            /* Returns the response */
+    498            return rvalue;
+    499          }
+    500          
+    501          /**
+    502            * @brief  Read the CSD card register.
+    503            * @note   Reading the contents of the CSD register in SPI mode is a simple 
+    504            *         read-block transaction.
+    505            * @param  SD_csd: pointer on an SCD register structure
+    506            * @retval The SD Response: 
+    507            *         - SD_RESPONSE_FAILURE: Sequence failed
+    508            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    509            */
+    510          SD_Error SD_GetCSDRegister(SD_CSD* SD_csd)
+    511          {
+    512            uint32_t i = 0;
+    513            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    514            uint8_t CSD_Tab[16];
+    515          
+    516            /* SD chip select low */
+    517            SD_CS_LOW();
+    518            /* Send CMD9 (CSD register) or CMD10(CSD register) */
+    519            SD_SendCmd(SD_CMD_SEND_CSD, 0, 0xFF);
+    520            /* Wait for response in the R1 format (0x00 is no errors) */
+    521            if (!SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    522            {
+    523              if (!SD_GetResponse(SD_START_DATA_SINGLE_BLOCK_READ))
+    524              {
+    525                for (i = 0; i < 16; i++)
+    526                {
+    527                  /* Store CSD register value on CSD_Tab */
+    528                  CSD_Tab[i] = SD_ReadByte();
+    529                }
+    530              }
+    531              /* Get CRC bytes (not really needed by us, but required by SD) */
+    532              SD_WriteByte(SD_DUMMY_BYTE);
+    533              SD_WriteByte(SD_DUMMY_BYTE);
+    534              /* Set response value to success */
+    535              rvalue = SD_RESPONSE_NO_ERROR;
+    536            }
+    537            /* SD chip select high */
+    538            SD_CS_HIGH();
+    539            /* Send dummy byte: 8 Clock pulses of delay */
+    540            SD_WriteByte(SD_DUMMY_BYTE);
+    541          
+    542            /* Byte 0 */
+    543            SD_csd->CSDStruct = (CSD_Tab[0] & 0xC0) >> 6;
+    544            SD_csd->SysSpecVersion = (CSD_Tab[0] & 0x3C) >> 2;
+    545            SD_csd->Reserved1 = CSD_Tab[0] & 0x03;
+    546          
+    547            /* Byte 1 */
+    548            SD_csd->TAAC = CSD_Tab[1];
+    549          
+    550            /* Byte 2 */
+    551            SD_csd->NSAC = CSD_Tab[2];
+    552          
+    553            /* Byte 3 */
+    554            SD_csd->MaxBusClkFrec = CSD_Tab[3];
+    555          
+    556            /* Byte 4 */
+    557            SD_csd->CardComdClasses = CSD_Tab[4] << 4;
+    558          
+    559            /* Byte 5 */
+    560            SD_csd->CardComdClasses |= (CSD_Tab[5] & 0xF0) >> 4;
+    561            SD_csd->RdBlockLen = CSD_Tab[5] & 0x0F;
+    562          
+    563            /* Byte 6 */
+    564            SD_csd->PartBlockRead = (CSD_Tab[6] & 0x80) >> 7;
+    565            SD_csd->WrBlockMisalign = (CSD_Tab[6] & 0x40) >> 6;
+    566            SD_csd->RdBlockMisalign = (CSD_Tab[6] & 0x20) >> 5;
+    567            SD_csd->DSRImpl = (CSD_Tab[6] & 0x10) >> 4;
+    568            SD_csd->Reserved2 = 0; /* Reserved */
+    569          
+    570            SD_csd->DeviceSize = (CSD_Tab[6] & 0x03) << 10;
+    571          
+    572            /* Byte 7 */
+    573            SD_csd->DeviceSize |= (CSD_Tab[7]) << 2;
+    574          
+    575            /* Byte 8 */
+    576            SD_csd->DeviceSize |= (CSD_Tab[8] & 0xC0) >> 6;
+    577          
+    578            SD_csd->MaxRdCurrentVDDMin = (CSD_Tab[8] & 0x38) >> 3;
+    579            SD_csd->MaxRdCurrentVDDMax = (CSD_Tab[8] & 0x07);
+    580          
+    581            /* Byte 9 */
+    582            SD_csd->MaxWrCurrentVDDMin = (CSD_Tab[9] & 0xE0) >> 5;
+    583            SD_csd->MaxWrCurrentVDDMax = (CSD_Tab[9] & 0x1C) >> 2;
+    584            SD_csd->DeviceSizeMul = (CSD_Tab[9] & 0x03) << 1;
+    585            /* Byte 10 */
+    586            SD_csd->DeviceSizeMul |= (CSD_Tab[10] & 0x80) >> 7;
+    587              
+    588            SD_csd->EraseGrSize = (CSD_Tab[10] & 0x40) >> 6;
+    589            SD_csd->EraseGrMul = (CSD_Tab[10] & 0x3F) << 1;
+    590          
+    591            /* Byte 11 */
+    592            SD_csd->EraseGrMul |= (CSD_Tab[11] & 0x80) >> 7;
+    593            SD_csd->WrProtectGrSize = (CSD_Tab[11] & 0x7F);
+    594          
+    595            /* Byte 12 */
+    596            SD_csd->WrProtectGrEnable = (CSD_Tab[12] & 0x80) >> 7;
+    597            SD_csd->ManDeflECC = (CSD_Tab[12] & 0x60) >> 5;
+    598            SD_csd->WrSpeedFact = (CSD_Tab[12] & 0x1C) >> 2;
+    599            SD_csd->MaxWrBlockLen = (CSD_Tab[12] & 0x03) << 2;
+    600          
+    601            /* Byte 13 */
+    602            SD_csd->MaxWrBlockLen |= (CSD_Tab[13] & 0xC0) >> 6;
+    603            SD_csd->WriteBlockPaPartial = (CSD_Tab[13] & 0x20) >> 5;
+    604            SD_csd->Reserved3 = 0;
+    605            SD_csd->ContentProtectAppli = (CSD_Tab[13] & 0x01);
+    606          
+    607            /* Byte 14 */
+    608            SD_csd->FileFormatGrouop = (CSD_Tab[14] & 0x80) >> 7;
+    609            SD_csd->CopyFlag = (CSD_Tab[14] & 0x40) >> 6;
+    610            SD_csd->PermWrProtect = (CSD_Tab[14] & 0x20) >> 5;
+    611            SD_csd->TempWrProtect = (CSD_Tab[14] & 0x10) >> 4;
+    612            SD_csd->FileFormat = (CSD_Tab[14] & 0x0C) >> 2;
+    613            SD_csd->ECC = (CSD_Tab[14] & 0x03);
+    614          
+    615            /* Byte 15 */
+    616            SD_csd->CSD_CRC = (CSD_Tab[15] & 0xFE) >> 1;
+    617            SD_csd->Reserved4 = 1;
+    618          
+    619            /* Return the response */
+    620            return rvalue;
+    621          }
+    622          
+    623          /**
+    624            * @brief  Read the CID card register.
+    625            * @note   Reading the contents of the CID register in SPI mode is a simple 
+    626            *         read-block transaction.
+    627            * @param  SD_cid: pointer on an CID register structure
+    628            * @retval The SD Response: 
+    629            *         - SD_RESPONSE_FAILURE: Sequence failed
+    630            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    631            */
+    632          SD_Error SD_GetCIDRegister(SD_CID* SD_cid)
+    633          {
+    634            uint32_t i = 0;
+    635            SD_Error rvalue = SD_RESPONSE_FAILURE;
+    636            uint8_t CID_Tab[16];
+    637            
+    638            /* SD chip select low */
+    639            SD_CS_LOW();
+    640            
+    641            /* Send CMD10 (CID register) */
+    642            SD_SendCmd(SD_CMD_SEND_CID, 0, 0xFF);
+    643            
+    644            /* Wait for response in the R1 format (0x00 is no errors) */
+    645            if (!SD_GetResponse(SD_RESPONSE_NO_ERROR))
+    646            {
+    647              if (!SD_GetResponse(SD_START_DATA_SINGLE_BLOCK_READ))
+    648              {
+    649                /* Store CID register value on CID_Tab */
+    650                for (i = 0; i < 16; i++)
+    651                {
+    652                  CID_Tab[i] = SD_ReadByte();
+    653                }
+    654              }
+    655              /* Get CRC bytes (not really needed by us, but required by SD) */
+    656              SD_WriteByte(SD_DUMMY_BYTE);
+    657              SD_WriteByte(SD_DUMMY_BYTE);
+    658              /* Set response value to success */
+    659              rvalue = SD_RESPONSE_NO_ERROR;
+    660            }
+    661            /* SD chip select high */
+    662            SD_CS_HIGH();
+    663            /* Send dummy byte: 8 Clock pulses of delay */
+    664            SD_WriteByte(SD_DUMMY_BYTE);
+    665          
+    666            /* Byte 0 */
+    667            SD_cid->ManufacturerID = CID_Tab[0];
+    668          
+    669            /* Byte 1 */
+    670            SD_cid->OEM_AppliID = CID_Tab[1] << 8;
+    671          
+    672            /* Byte 2 */
+    673            SD_cid->OEM_AppliID |= CID_Tab[2];
+    674          
+    675            /* Byte 3 */
+    676            SD_cid->ProdName1 = CID_Tab[3] << 24;
+    677          
+    678            /* Byte 4 */
+    679            SD_cid->ProdName1 |= CID_Tab[4] << 16;
+    680          
+    681            /* Byte 5 */
+    682            SD_cid->ProdName1 |= CID_Tab[5] << 8;
+    683          
+    684            /* Byte 6 */
+    685            SD_cid->ProdName1 |= CID_Tab[6];
+    686          
+    687            /* Byte 7 */
+    688            SD_cid->ProdName2 = CID_Tab[7];
+    689          
+    690            /* Byte 8 */
+    691            SD_cid->ProdRev = CID_Tab[8];
+    692          
+    693            /* Byte 9 */
+    694            SD_cid->ProdSN = CID_Tab[9] << 24;
+    695          
+    696            /* Byte 10 */
+    697            SD_cid->ProdSN |= CID_Tab[10] << 16;
+    698          
+    699            /* Byte 11 */
+    700            SD_cid->ProdSN |= CID_Tab[11] << 8;
+    701          
+    702            /* Byte 12 */
+    703            SD_cid->ProdSN |= CID_Tab[12];
+    704          
+    705            /* Byte 13 */
+    706            SD_cid->Reserved1 |= (CID_Tab[13] & 0xF0) >> 4;
+    707            SD_cid->ManufactDate = (CID_Tab[13] & 0x0F) << 8;
+    708          
+    709            /* Byte 14 */
+    710            SD_cid->ManufactDate |= CID_Tab[14];
+    711          
+    712            /* Byte 15 */
+    713            SD_cid->CID_CRC = (CID_Tab[15] & 0xFE) >> 1;
+    714            SD_cid->Reserved2 = 1;
+    715          
+    716            /* Return the response */
+    717            return rvalue;
+    718          }
+    719          
+    720          /**
+    721            * @brief  Send 5 bytes command to the SD card.
+    722            * @param  Cmd: The user expected command to send to SD card.
+    723            * @param  Arg: The command argument.
+    724            * @param  Crc: The CRC.
+    725            * @retval None
+    726            */
+    727          void SD_SendCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc)
+    728          {
+    729            uint8_t i = 0x00;
+    730            uint8_t Frame[6];
+    731            
+    732            Frame[0] = (Cmd | 0x40); /* Construct byte 1 */
+    733            Frame[1] = (uint8_t)(Arg >> 24); /* Construct byte 2 */
+    734            Frame[2] = (uint8_t)(Arg >> 16); /* Construct byte 3 */
+    735            Frame[3] = (uint8_t)(Arg >> 8); /* Construct byte 4 */
+    736            Frame[4] = (uint8_t)(Arg); /* Construct byte 5 */
+    737            Frame[5] = (Crc); /* Construct CRC: byte 6 */
+    738          #if 1
+    739            for (i = 0; i < 6; i++)
+    740            {
+    741              SD_WriteByte(Frame[i]); /* Send the Cmd bytes */
+    742            }
+    743            return;
+    744          #endif
+    745            DMA1_SPI_TX(Frame,6);
+    746          }
+    747          
+    748          /**
+    749            * @brief  Get SD card data response.
+    750            * @param  None
+    751            * @retval The SD status: Read data response xxx0<status>1
+    752            *         - status 010: Data accepted
+    753            *         - status 101: Data rejected due to a crc error
+    754            *         - status 110: Data rejected due to a Write error.
+    755            *         - status 111: Data rejected due to other error.
+    756            */
+    757          uint8_t SD_GetDataResponse(void)
+    758          {
+    759            uint32_t i = 0;
+    760            uint8_t response, rvalue;
+    761          
+    762            while (i <= 64)
+    763            {
+    764              /* Read response */
+    765              response = SD_ReadByte();
+    766              /* Mask unused bits */
+    767              response &= 0x1F;
+    768              switch (response)
+    769              {
+    770                case SD_DATA_OK:
+    771                {
+    772                  rvalue = SD_DATA_OK;
+    773                  break;
+    774                }
+    775                case SD_DATA_CRC_ERROR:
+    776                  return SD_DATA_CRC_ERROR;
+    777                case SD_DATA_WRITE_ERROR:
+    778                  return SD_DATA_WRITE_ERROR;
+    779                default:
+    780                {
+    781                  rvalue = SD_DATA_OTHER_ERROR;
+    782                  break;
+    783                }
+    784              }
+    785              /* Exit loop in case of data ok */
+    786              if (rvalue == SD_DATA_OK)
+    787                break;
+    788              /* Increment loop counter */
+    789              i++;
+    790            }
+    791          
+    792            /* Wait null data */
+    793            while (SD_ReadByte() == 0);
+    794          
+    795            /* Return response */
+    796            return response;
+    797          }
+    798          
+    799          /**
+    800            * @brief  Returns the SD response.
+    801            * @param  None
+    802            * @retval The SD Response: 
+    803            *         - SD_RESPONSE_FAILURE: Sequence failed
+    804            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    805            */
+    806          SD_Error SD_GetResponse(uint8_t Response)
+    807          {
+    808            uint32_t Count = 0x200;
+    809          
+    810            /* Check if response is got or a timeout is happen */
+    811            while ((SD_ReadByte() != Response) && Count)
+    812            {
+    813              Count--;
+    814            }
+    815          
+    816            if (Count == 0)
+    817            {
+    818              /* After time out */
+    819              return SD_RESPONSE_FAILURE;
+    820            }
+    821            else
+    822            {
+    823              /* Right response got */
+    824              return SD_RESPONSE_NO_ERROR;
+    825            }
+    826          }
+    827          
+    828          /**
+    829            * @brief  Returns the SD status.
+    830            * @param  None
+    831            * @retval The SD status.
+    832            */
+    833          uint16_t SD_GetStatus(void)
+    834          {
+    835            uint16_t Status = 0;
+    836          
+    837            /* SD chip select low */
+    838            SD_CS_LOW();
+    839          
+    840            /* Send CMD13 (SD_SEND_STATUS) to get SD status */
+    841            SD_SendCmd(SD_CMD_SEND_STATUS, 0, 0xFF);
+    842          
+    843            Status = SD_ReadByte();
+    844            Status |= (uint16_t)(SD_ReadByte() << 8);
+    845          
+    846            /* SD chip select high */
+    847            SD_CS_HIGH();
+    848          
+    849            /* Send dummy byte 0xFF */
+    850            SD_WriteByte(SD_DUMMY_BYTE);
+    851          
+    852            return Status;
+    853          }
+    854          
+    855          /**
+    856            * @brief  Put SD in Idle state.
+    857            * @param  None
+    858            * @retval The SD Response: 
+    859            *         - SD_RESPONSE_FAILURE: Sequence failed
+    860            *         - SD_RESPONSE_NO_ERROR: Sequence succeed
+    861            */
+    862          SD_Error SD_GoIdleState(void)
+    863          {
+    864            /* SD chip select low */
+    865            SD_CS_LOW();
+    866            
+    867            /* Send CMD0 (SD_CMD_GO_IDLE_STATE) to put SD in SPI mode */
+    868            SD_SendCmd(SD_CMD_GO_IDLE_STATE, 0, 0x95);
+    869            
+    870            /* Wait for In Idle State Response (R1 Format) equal to 0x01 */
+    871            if (SD_GetResponse(SD_IN_IDLE_STATE))
+    872            {
+    873              /* No Idle State Response: return response failure */
+    874              return SD_RESPONSE_FAILURE;
+    875            }
+    876            /*---------- Activates the card initialization process -----------*/
+    877            do
+    878            {
+    879              /* SD chip select high */
+    880              SD_CS_HIGH();
+    881              
+    882              /* Send Dummy byte 0xFF */
+    883              SD_WriteByte(SD_DUMMY_BYTE);
+    884              
+    885              /* SD chip select low */
+    886              SD_CS_LOW();
+    887              
+    888              /* Send CMD1 (Activates the card process) until response equal to 0x0 */
+    889              SD_SendCmd(SD_CMD_SEND_OP_COND, 0, 0xFF);
+    890              /* Wait for no error Response (R1 Format) equal to 0x00 */
+    891            }
+    892            while (SD_GetResponse(SD_RESPONSE_NO_ERROR));
+    893            
+    894            /* SD chip select high */
+    895            SD_CS_HIGH();
+    896            
+    897            /* Send dummy byte 0xFF */
+    898            SD_WriteByte(SD_DUMMY_BYTE);
+    899            
+    900            return SD_RESPONSE_NO_ERROR;
+    901          }
+    902          
+    903          /**
+    904            * @brief  Write a byte on the SD.
+    905            * @note   Transfer on SPI bus management ensured by the STM_SPI_WriteRead() function,
+    906            *         exported by stm32072b_eval.h/.c files 
+    907            * @param  Data: byte to send.
+    908            * @retval None
+    909            */
+    910          inline uint8_t SD_WriteByte(uint8_t Data)
+    911          {
+    912            return MSD0_spi_read_write(Data);
+    913          }
+    914          
+    915          /**
+    916            * @brief  Read a byte from the SD.
+    917            * @note   Transfer on SPI bus management ensured by the STM_SPI_WriteRead() function,
+    918            *         exported by stm32072b_eval.h/.c files 
+    919            * @param  None
+    920            * @retval The received byte.
+    921            */
+    922          inline uint8_t SD_ReadByte(void)
+    923          {
+    924           return MSD0_spi_read_write(SD_DUMMY_BYTE);
+    925          }
+    926          
+    927          /**
+    928            * @}
+    929            */
+    930          
+    931          
+    932          /**
+    933            * @}
+    934            */
+    935          
+    936          
+    937          /**
+    938            * @}
+    939            */
+    940          
+    941          /**
+    942            * @}
+    943            */
+    944          
+    945          /**
+    946            * @}
+    947            */
+    948          
+    949          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+      16   DMA1_SPI_RX
+        16   -> DMA_ClearFlag
+        16   -> DMA_Cmd
+        16   -> DMA_GetFlagStatus
+      16   DMA1_SPI_TX
+        16   -> DMA_ClearFlag
+        16   -> DMA_Cmd
+        16   -> DMA_GetFlagStatus
+       8   SD_DeInit
+         8   -> SD_LowLevel_DeInit
+       4   SD_Detect
+      40   SD_GetCIDRegister
+        40   -> GPIO_ResetBits
+        40   -> SD_GetResponse
+        40   -> SD_ReadByte
+        40   -> SD_SendCmd
+        40   -> SD_WriteByte
+      40   SD_GetCSDRegister
+        40   -> GPIO_ResetBits
+        40   -> SD_GetResponse
+        40   -> SD_ReadByte
+        40   -> SD_SendCmd
+        40   -> SD_WriteByte
+      16   SD_GetCardInfo
+        16   -> SD_GetCIDRegister
+        16   -> SD_GetCSDRegister
+      16   SD_GetDataResponse
+        16   -> SD_ReadByte
+      16   SD_GetResponse
+        16   -> SD_ReadByte
+      16   SD_GetStatus
+        16   -> GPIO_ResetBits
+        16   -> SD_ReadByte
+        16   -> SD_SendCmd
+        16   -> SD_WriteByte
+       8   SD_GoIdleState
+         8   -> GPIO_ResetBits
+         8   -> SD_GetResponse
+         8   -> SD_SendCmd
+         8   -> SD_WriteByte
+       8   SD_Init
+         8   -> SD_GoIdleState
+         8   -> SD_WriteByte
+      96   SD_LowLevel_Init
+        96   -> DMA_Init
+        96   -> GPIO_Init
+        96   -> GPIO_PinAFConfig
+        96   -> RCC_AHBPeriphClockCmd
+        96   -> RCC_APB2PeriphClockCmd
+        96   -> SPI_Cmd
+        96   -> SPI_I2S_DMACmd
+        96   -> SPI_I2S_DeInit
+        96   -> SPI_Init
+        96   -> SPI_RxFIFOThresholdConfig
+      32   SD_ReadBlock
+        32   -> GPIO_ResetBits
+        32   -> SD_GetResponse
+        32   -> SD_ReadByte
+        32   -> SD_SendCmd
+        32   -> SD_WriteByte
+       8   SD_ReadByte
+         8   -> MSD0_spi_read_write
+      32   SD_ReadMultiBlocks
+        32   -> DMA1_SPI_RX
+        32   -> GPIO_ResetBits
+        32   -> SD_GetResponse
+        32   -> SD_ReadByte
+        32   -> SD_SendCmd
+        32   -> SD_WriteByte
+      24   SD_SendCmd
+        24   -> SD_WriteByte
+      32   SD_WriteBlock
+        32   -> GPIO_ResetBits
+        32   -> SD_GetDataResponse
+        32   -> SD_GetResponse
+        32   -> SD_ReadByte
+        32   -> SD_SendCmd
+        32   -> SD_WriteByte
+       8   SD_WriteByte
+         8   -> MSD0_spi_read_write
+      32   SD_WriteMultiBlocks
+        32   -> DMA1_SPI_TX
+        32   -> GPIO_ResetBits
+        32   -> SD_GetDataResponse
+        32   -> SD_GetResponse
+        32   -> SD_ReadByte
+        32   -> SD_SendCmd
+        32   -> SD_WriteByte
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable2
+       4  ??DataTable2_1
+       4  ??DataTable2_2
+       4  ??DataTable2_3
+       4  ??DataTable2_4
+      10  ?Subroutine0
+      94  DMA1_SPI_RX
+      44  DMA1_SPI_TX
+       8  SD_DeInit
+      12  SD_Detect
+     226  SD_GetCIDRegister
+     416  SD_GetCSDRegister
+      50  SD_GetCardInfo
+      42  SD_GetDataResponse
+      36  SD_GetResponse
+      46  SD_GetStatus
+      82  SD_GoIdleState
+      20  SD_Init
+     304  SD_LowLevel_Init
+      90  SD_ReadBlock
+      12  SD_ReadByte
+     112  SD_ReadMultiBlocks
+      46  SD_SendCmd
+     116  SD_WriteBlock
+      10  SD_WriteByte
+     132  SD_WriteMultiBlocks
+
+ 
+ 1'928 bytes in section .text
+ 
+ 1'906 bytes of CODE memory (+ 22 bytes shared)
+
+Errors: none
+Warnings: 7
