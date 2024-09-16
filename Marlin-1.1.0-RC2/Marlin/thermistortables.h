@@ -170,7 +170,7 @@ const short temptable_4[][2] PROGMEM = {
 };
 #endif
 
-#if (THERMISTORHEATER_0 == 5) || (THERMISTORHEATER_1 == 5) || (THERMISTORHEATER_2 == 5) || (THERMISTORHEATER_3 == 5) || (THERMISTORBED == 5) //100k ParCan thermistor (104GT-2)
+//#if (THERMISTORHEATER_0 == 5) || (THERMISTORHEATER_1 == 5) || (THERMISTORHEATER_2 == 5) || (THERMISTORHEATER_3 == 5) || (THERMISTORBED == 5) //100k ParCan thermistor (104GT-2)
 const short temptable_5[][2] PROGMEM = {
   // ATC Semitec 104GT-2 (Used in ParCan)
   // Verified by linagee. Source: http://shop.arcol.hu/static/datasheets/thermistors.pdf
@@ -208,7 +208,7 @@ const short temptable_5[][2] PROGMEM = {
   {1000 * OVERSAMPLENR, 10},
   {1010 * OVERSAMPLENR, 0}
 };
-#endif
+//#endif
 
 #if (THERMISTORHEATER_0 == 6) || (THERMISTORHEATER_1 == 6) || (THERMISTORHEATER_2 == 6) || (THERMISTORHEATER_3 == 6) || (THERMISTORBED == 6) // 100k Epcos thermistor
 const short temptable_6[][2] PROGMEM = {
@@ -957,7 +957,7 @@ const short temptable_60[][2] PROGMEM = {
   {1008 * OVERSAMPLENR, 0},
 };
 #endif
-#if (THERMISTORBED == 12)
+#if (THERMISTORHEATER_0 == 12) || (THERMISTORHEATER_1 == 12) || (THERMISTORHEATER_2 == 12) || (THERMISTORHEATER_3 == 12) || (THERMISTORBED == 12)
 //100k 0603 SMD Vishay NTCS0603E3104FXT (4.7k pullup) (calibrated for Makibox hot bed)
 const short temptable_12[][2] PROGMEM = {
   {35 * OVERSAMPLENR, 180}, //top rating 180C

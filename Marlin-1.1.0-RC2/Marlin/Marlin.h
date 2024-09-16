@@ -4,7 +4,38 @@
 #ifndef MARLIN_H
 #define MARLIN_H
 
-#define  FORCE_INLINE __attribute__((always_inline)) inline
+#define B01 1
+#define B10 2
+
+#define PGM_P   char*
+#define pgm_read_byte   *
+#define FORCE_INLINE inline
+#define PROGMEM
+#define PSTR
+#define boolean bool
+#define byte unsigned char
+#define cli() __disable_irq()
+#define sei() __enable_irq()
+extern void delay(unsigned long ms);
+#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
+#define square(x) (x*x)
+#define stepper_timer_set(t)    TIM_SetAutoreload(TIM1,t)
+#define LOW     Bit_RESET
+#define HIGH    Bit_SET
+/*#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
+
+#define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a < _b ? _a : _b; })*/
+#define min(a,b) (((a)<(b))?(a):(b))
+#define max(a,b) (((a)>(b))?(a):(b))
+
+#define F_CPU   48000000
+
 /**
  * Compiler warning on unused varable.
  */
@@ -16,11 +47,13 @@
 #include <string.h>
 #include <inttypes.h>
 
+/*
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <avr/eeprom.h>
 #include <avr/interrupt.h>
-
+*/
+#include "SEGGER_RTT.h"
 
 #include "fastio.h"
 #include "Configuration.h"
@@ -30,7 +63,7 @@
   #error Your Configuration.h and Configuration_adv.h files are outdated!
 #endif
 
-#include "Arduino.h"
+//#include "Arduino.h"
 
 typedef unsigned long millis_t;
 
@@ -44,15 +77,16 @@ typedef unsigned long millis_t;
 #endif
 
 #include "MarlinSerial.h"
-
+/*
 #ifndef cbi
   #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
 #endif
 #ifndef sbi
   #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 #endif
-
-#include "WString.h"
+*/
+//#include "WString.h"
+#include "string.h"
 
 #ifdef USBCON
   #if ENABLED(BLUETOOTH)
@@ -65,7 +99,8 @@ typedef unsigned long millis_t;
 #endif
 
 #define SERIAL_CHAR(x) MYSERIAL.write(x)
-#define SERIAL_EOL SERIAL_CHAR('\n')
+#define SERIAL_EOL MYSERIAL.write((uint8_t *)"\n",1);//MYSERIAL.write((uint8_t *)"\r\n",2);//SERIAL_CHAR('\r');SERIAL_CHAR('\n')      //yongzong: change EOL
+//#define SERIAL_EOL MYSERIAL.write((uint8_t *)"\r\n",2);
 
 #define SERIAL_PROTOCOLCHAR(x) SERIAL_CHAR(x)
 #define SERIAL_PROTOCOL(x) MYSERIAL.print(x)
@@ -101,11 +136,12 @@ void serial_echopair_P(const char* s_P, unsigned long v);
 
 // Things to write to serial from Program memory. Saves 400 to 2k of RAM.
 FORCE_INLINE void serialprintPGM(const char* str) {
-  char ch;
-  while ((ch = pgm_read_byte(str))) {
+  MYSERIAL.write(str);
+  /*char ch;
+  while ((ch = *(str))) {
     MYSERIAL.write(ch);
     str++;
-  }
+  }*/
 }
 
 void get_command();
@@ -138,18 +174,8 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define disable_y() ;
 #endif
 
-#if HAS_Z_ENABLE
-  #if ENABLED(Z_DUAL_STEPPER_DRIVERS)
-    #define  enable_z() { Z_ENABLE_WRITE( Z_ENABLE_ON); Z2_ENABLE_WRITE(Z_ENABLE_ON); }
-    #define disable_z() { Z_ENABLE_WRITE(!Z_ENABLE_ON); Z2_ENABLE_WRITE(!Z_ENABLE_ON); axis_known_position[Z_AXIS] = false; }
-  #else
-    #define  enable_z() Z_ENABLE_WRITE( Z_ENABLE_ON)
-    #define disable_z() { Z_ENABLE_WRITE(!Z_ENABLE_ON); axis_known_position[Z_AXIS] = false; }
-  #endif
-#else
-  #define enable_z() ;
-  #define disable_z() ;
-#endif
+    extern void enable_z();
+    extern void disable_z();
 
 #if HAS_E0_ENABLE
   #define enable_e0()  E0_ENABLE_WRITE( E_ENABLE_ON)
@@ -159,7 +185,8 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define disable_e0() /* nothing */
 #endif
 
-#if (EXTRUDERS > 1) && HAS_E1_ENABLE
+//#if (EXTRUDERS > 1) && HAS_E1_ENABLE
+#if 1
   #define enable_e1()  E1_ENABLE_WRITE( E_ENABLE_ON)
   #define disable_e1() E1_ENABLE_WRITE(!E_ENABLE_ON)
 #else
@@ -237,6 +264,7 @@ void prepare_arc_move(char isclockwise);
 void clamp_to_software_endstops(float target[3]);
 
 extern millis_t previous_cmd_ms;
+extern millis_t millis();
 inline void refresh_cmd_timeout() { previous_cmd_ms = millis(); }
 
 #if ENABLED(FAST_PWM_FAN)
@@ -244,16 +272,16 @@ inline void refresh_cmd_timeout() { previous_cmd_ms = millis(); }
 #endif
 
 #ifndef CRITICAL_SECTION_START
-  #define CRITICAL_SECTION_START  unsigned char _sreg = SREG; cli();
-  #define CRITICAL_SECTION_END    SREG = _sreg;
+  #define CRITICAL_SECTION_START  __disable_irq();//unsigned char _sreg = SREG; cli();
+  #define CRITICAL_SECTION_END    __enable_irq();//SREG = _sreg;
 #endif
 
 extern bool axis_relative_modes[];
 extern int feedrate_multiplier;
 extern bool volumetric_enabled;
-extern int extruder_multiplier[EXTRUDERS]; // sets extrude multiply factor (in percent) for each extruder individually
-extern float filament_size[EXTRUDERS]; // cross-sectional area of filament (in millimeters), typically around 1.75 or 2.85, 0 disables the volumetric calculations for the extruder.
-extern float volumetric_multiplier[EXTRUDERS]; // reciprocal of cross-sectional area of filament (in square millimeters), stored this way to reduce computational burden in planner
+extern int extruder_multiplier[MAX_EXTRUDERS]; // sets extrude multiply factor (in percent) for each extruder individually
+extern float filament_size[MAX_EXTRUDERS]; // cross-sectional area of filament (in millimeters), typically around 1.75 or 2.85, 0 disables the volumetric calculations for the extruder.
+extern float volumetric_multiplier[MAX_EXTRUDERS]; // reciprocal of cross-sectional area of filament (in square millimeters), stored this way to reduce computational burden in planner
 extern float current_position[NUM_AXIS];
 extern float home_offset[3]; // axis[n].home_offset
 extern float min_pos[3]; // axis[n].min_pos
@@ -300,9 +328,9 @@ extern bool axis_known_position[3]; // axis[n].is_known
   extern float z_endstop_adj;
 #endif
 
-#if ENABLED(AUTO_BED_LEVELING_FEATURE)
+//#if ENABLED(AUTO_BED_LEVELING_FEATURE)
   extern float zprobe_zoffset;
-#endif
+//#endif
 
 #if ENABLED(PREVENT_DANGEROUS_EXTRUDE)
   extern float extrude_min_temp;

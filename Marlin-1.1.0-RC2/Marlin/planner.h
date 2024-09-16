@@ -65,6 +65,7 @@ typedef struct {
     unsigned long e_to_p_pressure;
   #endif
   volatile char busy;
+  unsigned int cmdpos;
 } block_t;
 
 #define BLOCK_MOD(n) ((n)&(BLOCK_BUFFER_SIZE-1))

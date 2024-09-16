@@ -22,15 +22,26 @@
 #ifndef MarlinSerial_h
 #define MarlinSerial_h
 #include "Marlin.h"
+#include "stm32f0xx_gpio.h"
+#include "stm32f0xx_usart.h"
+
+extern "C" uint32_t CDC_Send_DATA (uint8_t *ptrBuffer, uint8_t Send_length);
+extern "C" uint32_t CDC_Send_DATA_str (uint8_t *ptrBuffer);
+extern "C" uint8_t bDeviceState;
+
+#define CONFIGURED      5
 
 #ifndef SERIAL_PORT
   #define SERIAL_PORT 0
 #endif
 
 // The presence of the UBRRH register is used to detect a UART.
+#define UART_PRESENT(port) (port == 0)
+/*
 #define UART_PRESENT(port) ((port == 0 && (defined(UBRRH) || defined(UBRR0H))) || \
                             (port == 1 && defined(UBRR1H)) || (port == 2 && defined(UBRR2H)) || \
                             (port == 3 && defined(UBRR3H)))
+*/
 
 // These are macros to build serial port register names for the selected SERIAL_PORT (C preprocessor
 // requires two levels of indirection to expand macro values properly)
@@ -61,7 +72,7 @@
 #define HEX 16
 #define OCT 8
 #define BIN 2
-#define BYTE 0
+#define BYT 0
 
 
 #ifndef USBCON
@@ -69,7 +80,7 @@
 // using a ring buffer (I think), in which rx_buffer_head is the index of the
 // location to which to write the next incoming character and rx_buffer_tail
 // is the index of the location from which to read.
-#define RX_BUFFER_SIZE 128
+#define RX_BUFFER_SIZE 256
 
 
 struct ring_buffer {
@@ -81,6 +92,8 @@ struct ring_buffer {
 #if UART_PRESENT(SERIAL_PORT)
   extern ring_buffer rx_buffer;
 #endif
+
+extern uint8_t com_opened;
 
 class MarlinSerial { //: public Stream
 
@@ -95,16 +108,78 @@ class MarlinSerial { //: public Stream
     FORCE_INLINE int available(void) {
       return (unsigned int)(RX_BUFFER_SIZE + rx_buffer.head - rx_buffer.tail) % RX_BUFFER_SIZE;
     }
-
-    FORCE_INLINE void write(uint8_t c) {
-      while (!TEST(M_UCSRxA, M_UDREx))
-        ;
-      M_UDRx = c;
+#define CONFIGURED      5
+    FORCE_INLINE void write(uint8_t c) {//yongzong
+      uint32_t timeout=0;
+      /*while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+      USART_SendData(USART1, c);*/
+      if (com_opened==0)
+      /*extern char USB_Connected;
+      if (USB_Connected==0 && bDeviceState != CONFIGURED)*/
+      {
+          while(USART_GetFlagStatus(WIFI_UART, USART_FLAG_TXE) == RESET);
+          USART_SendData(WIFI_UART,c);
+          return;
+      }
+      //while (packet_sent == 0) if (timeout++>10000) return;
+      CDC_Send_DATA((unsigned char*)&c,1);
     }
-
+    
+    FORCE_INLINE void write(const char* s)
+    {
+      uint32_t timeout=0;
+      if (com_opened==0)
+      {
+          while (*s!=0)
+          {
+              while(USART_GetFlagStatus(WIFI_UART, USART_FLAG_TXE) == RESET);
+              USART_SendData(WIFI_UART,*s);
+              s++;
+          }
+          return;
+      }
+      //while (packet_sent == 0) if (timeout++>10000) return;
+      CDC_Send_DATA_str((uint8_t*)s);
+    }
+    FORCE_INLINE void write(uint8_t* s) {//yongzong
+      uint32_t timeout=0;
+      if (com_opened==0)
+      {
+          while (*s!=0)
+          {
+              while(USART_GetFlagStatus(WIFI_UART, USART_FLAG_TXE) == RESET);
+              USART_SendData(WIFI_UART,*s);
+              s++;
+          }
+          return;
+      }
+      //while (packet_sent == 0) if (timeout++>10000) return;
+      CDC_Send_DATA_str(s);
+    }
+    
+    FORCE_INLINE void write(uint8_t* s, uint8_t len) {//yongzong
+      uint32_t timeout=0;
+      if (com_opened==0)
+      {
+          uint8_t i;
+          for (i=0;i<len;i++)
+          {
+              while(USART_GetFlagStatus(WIFI_UART, USART_FLAG_TXE) == RESET);
+              USART_SendData(WIFI_UART,*s);
+              s++;
+          }
+          return;
+      }
+      //while (packet_sent == 0) if (timeout++>10000) return;
+      
+      CDC_Send_DATA(s,len);
+    }
+/*
     FORCE_INLINE void checkRx(void) {
-      if (TEST(M_UCSRxA, M_RXCx)) {
-        unsigned char c  =  M_UDRx;
+      if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET) {
+      //if (TEST(M_UCSRxA, M_RXCx)) {
+        unsigned char c;//  =  M_UDRx;
+        c = USART_ReceiveData(USART1);
         int i = (unsigned int)(rx_buffer.head + 1) % RX_BUFFER_SIZE;
 
         // if we should be storing the received character into the location
@@ -117,29 +192,29 @@ class MarlinSerial { //: public Stream
         }
       }
     }
-
+*/
   private:
     void printNumber(unsigned long, uint8_t);
     void printFloat(double, uint8_t);
 
   public:
-    FORCE_INLINE void write(const char* str) { while (*str) write(*str++); }
-    FORCE_INLINE void write(const uint8_t* buffer, size_t size) { while (size--) write(*buffer++); }
-    FORCE_INLINE void print(const String& s) { for (int i = 0; i < (int)s.length(); i++) write(s[i]); }
-    FORCE_INLINE void print(const char* str) { write(str); }
+    //FORCE_INLINE void write(const char* str) { write(str);}//CDC_Send_DATA_str((uint8_t*)str); }//{ while (*str) write(*str++); }
+    //FORCE_INLINE void write(const uint8_t* buffer, size_t size) { CDC_Send_DATA((uint8_t*)buffer,size); }//{ while (size--) write(*buffer++); }
+    //FORCE_INLINE void print(const String& s) { for (int i = 0; i < (int)s.length(); i++) write(s[i]); }
+    FORCE_INLINE void print(const char* str) {write(str);}//{ CDC_Send_DATA_str((uint8_t*)str); }
 
-    void print(char, int = BYTE);
-    void print(unsigned char, int = BYTE);
+    void print(char, int = BYT);
+    void print(unsigned char, int = BYT);
     void print(int, int = DEC);
     void print(unsigned int, int = DEC);
     void print(long, int = DEC);
     void print(unsigned long, int = DEC);
     void print(double, int = 2);
 
-    void println(const String& s);
+    //void println(const String& s);
     void println(const char[]);
-    void println(char, int = BYTE);
-    void println(unsigned char, int = BYTE);
+    void println(char, int = BYT);
+    void println(unsigned char, int = BYT);
     void println(int, int = DEC);
     void println(unsigned int, int = DEC);
     void println(long, int = DEC);

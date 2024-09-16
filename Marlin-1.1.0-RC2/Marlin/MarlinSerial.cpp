@@ -26,13 +26,41 @@
 #ifndef USBCON
 // this next line disables the entire HardwareSerial.cpp,
 // this is so I can support Attiny series and any other chip without a UART
-#if defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(UBRR2H) || defined(UBRR3H)
+#if 1//yongzong//defined(UBRRH) || defined(UBRR0H) || defined(UBRR1H) || defined(UBRR2H) || defined(UBRR3H)
 
 #if UART_PRESENT(SERIAL_PORT)
   ring_buffer rx_buffer  =  { { 0 }, 0, 0 };
 #endif
 
-FORCE_INLINE void store_char(unsigned char c) {
+extern "C" void store_char(unsigned char c) {
+  extern bool sdprinting;
+  if (sdprinting==false ||
+          c=='\r' || c=='\n' || 
+          c==';' || c==' ' || c=='*' || c=='/' ||
+          (c>='0' && c<='9') ||
+          (c>='a' && c<='z') ||
+          (c>='A' && c<='Z') ||
+          (c>='+' && c<='.'))
+  {
+      //putchar(c);
+      //if (c<0x20 || c>0x7E) return;
+      int i = (unsigned int)(rx_buffer.head + 1) % RX_BUFFER_SIZE;
+
+      // if we should be storing the received character into the location
+      // just before the tail (meaning that the head would advance to the
+      // current location of the tail), we're about to overflow the buffer
+      // and so we don't write the character or advance the head.
+      if (i != rx_buffer.tail) {
+        rx_buffer.buffer[rx_buffer.head] = c;
+        rx_buffer.head = i;
+      }
+  }
+  //putchar(c);
+}
+
+extern "C" void store_char_usb(unsigned char c) {
+  //putchar(c);
+  //if (c<0x20 || c>0x7E) return;
   int i = (unsigned int)(rx_buffer.head + 1) % RX_BUFFER_SIZE;
 
   // if we should be storing the received character into the location
@@ -43,22 +71,27 @@ FORCE_INLINE void store_char(unsigned char c) {
     rx_buffer.buffer[rx_buffer.head] = c;
     rx_buffer.head = i;
   }
+  //putchar(c);
 }
 
-
+//yongzong Moved to platform.cpp
+/*
 //#elif defined(SIG_USART_RECV)
 #if defined(M_USARTx_RX_vect)
   // fixed by Mark Sproul this is on the 644/644p
   //SIGNAL(SIG_USART_RECV)
+  //yongzong
   SIGNAL(M_USARTx_RX_vect) {
     unsigned char c  =  M_UDRx;
     store_char(c);
   }
 #endif
+*/
 
 // Constructors ////////////////////////////////////////////////////////////////
+extern void serial_init(int);
 
-MarlinSerial::MarlinSerial() { }
+MarlinSerial::MarlinSerial() {}
 
 // Public Methods //////////////////////////////////////////////////////////////
 
@@ -74,31 +107,17 @@ void MarlinSerial::begin(long baud) {
       useU2X = false;
     }
   #endif
-  
-  if (useU2X) {
-    M_UCSRxA = BIT(M_U2Xx);
-    baud_setting = (F_CPU / 4 / baud - 1) / 2;
-  } else {
-    M_UCSRxA = 0;
-    baud_setting = (F_CPU / 8 / baud - 1) / 2;
-  }
 
-  // assign the baud_setting, a.k.a. ubbr (USART Baud Rate Register)
-  M_UBRRxH = baud_setting >> 8;
-  M_UBRRxL = baud_setting;
-
-  sbi(M_UCSRxB, M_RXENx);
-  sbi(M_UCSRxB, M_TXENx);
-  sbi(M_UCSRxB, M_RXCIEx);
+  //serial_init(WIFI_UART,512000);//yongzong
 }
 
 void MarlinSerial::end() {
-  cbi(M_UCSRxB, M_RXENx);
+  /*cbi(M_UCSRxB, M_RXENx);
   cbi(M_UCSRxB, M_TXENx);
-  cbi(M_UCSRxB, M_RXCIEx);
+  cbi(M_UCSRxB, M_RXCIEx);*/
 }
 
-
+/*
 int MarlinSerial::peek(void) {
   if (rx_buffer.head == rx_buffer.tail) {
     return -1;
@@ -106,7 +125,7 @@ int MarlinSerial::peek(void) {
   else {
     return rx_buffer.buffer[rx_buffer.tail];
   }
-}
+}*/
 
 int MarlinSerial::read(void) {
   // if the head isn't ahead of the tail, we don't have any characters
@@ -179,14 +198,15 @@ void MarlinSerial::print(double n, int digits) {
 }
 
 void MarlinSerial::println(void) {
-  print('\r');
-  print('\n');
+  //print('\r');
+  //print('\n');
+  write((uint8_t *)"\r\n",2);
 }
 
-void MarlinSerial::println(const String& s) {
+/*void MarlinSerial::println(const String& s) {
   print(s);
   println();
-}
+}*/
 
 void MarlinSerial::println(const char c[]) {
   print(c);
@@ -261,7 +281,7 @@ void MarlinSerial::printFloat(double number, uint8_t digits) {
   double rounding = 0.5;
   for (uint8_t i = 0; i < digits; ++i)
     rounding /= 10.0;
-  
+
   number += rounding;
 
   // Extract the integer part of the number and print it

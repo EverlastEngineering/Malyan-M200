@@ -6,7 +6,7 @@
 #ifndef _FASTIO_ARDUINO_H
 #define _FASTIO_ARDUINO_H
 
-#include <avr/io.h>
+//#include <avr/io.h>
 
 /*
   utility functions
@@ -20,9 +20,31 @@
   magic I/O routines
   now you can simply SET_OUTPUT(STEP); WRITE(STEP, 1); WRITE(STEP, 0);
 */
+#define _SET_INPUT(IO) do{	\
+						GPIO_InitTypeDef GPIO_InitStructure;	\
+						GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;    \
+                                                GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;  \
+                                                GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;    \
+                                                GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; \
+						GPIO_InitStructure.GPIO_Pin = DIO ##  IO ## _PIN;	\
+						GPIO_Init(DIO ##  IO ## _PORT, &GPIO_InitStructure);	\
+						} while (0)//do { GPIO_SetBits(DIO ##  IO ## _PORT, DIO ##  IO ## _PIN);} while (0)
+
+#define _SET_OUTPUT(IO) do{	\
+						GPIO_InitTypeDef GPIO_InitStructure;	\
+						GPIO_InitStructure.GPIO_Pin = DIO ##  IO ## _PIN;	\
+                                                GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT; \
+                                                GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; \
+                                                GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL; \
+                                                GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; \
+						GPIO_Init(DIO ##  IO ## _PORT, &GPIO_InitStructure);	\
+						} while (0)//do { GPIO_SetBits(DIO ##  IO ## _PORT, DIO ##  IO ## _PIN);} while (0)
+
+#define _WRITE(IO, v)  do {  GPIO_WriteBit(DIO ##  IO ## _PORT, DIO ##  IO ## _PIN, (BitAction)v); } while (0)
+#define _READ(IO) GPIO_ReadInputDataBit_filtered(DIO ##  IO ## _PORT, DIO ##  IO ## _PIN)//((bool)( GPIO_ReadInputDataBit(DIO ##  IO ## _PORT, DIO ##  IO ## _PIN)==SET))
 
 /// Read a pin
-#define _READ(IO) ((bool)(DIO ## IO ## _RPORT & MASK(DIO ## IO ## _PIN)))
+//#define _READ(IO) ((bool)(DIO ## IO ## _RPORT & MASK(DIO ## IO ## _PIN)))
 /// write to a pin
 // On some boards pins > 0x100 are used. These are not converted to atomic actions. An critical section is needed.
 
@@ -30,26 +52,26 @@
 
 #define _WRITE_C(IO, v)   do { if (v) { \
                                          CRITICAL_SECTION_START; \
-                                         {DIO ##  IO ## _WPORT |= MASK(DIO ## IO ## _PIN); }\
+                                         {DIO ##  IO ## _WPORT |= MASK(DIO ## IO ## _PIN); } \
                                          CRITICAL_SECTION_END; \
-                                       }\
-                                       else {\
+                                       } \
+                                       else { \
                                          CRITICAL_SECTION_START; \
-                                         {DIO ##  IO ## _WPORT &= ~MASK(DIO ## IO ## _PIN); }\
+                                         {DIO ##  IO ## _WPORT &= ~MASK(DIO ## IO ## _PIN); } \
                                          CRITICAL_SECTION_END; \
-                                       }\
-                                     }\
+                                       } \
+                                     } \
                                      while (0)
 
-#define _WRITE(IO, v)  do {  if (&(DIO ##  IO ## _RPORT) >= (uint8_t *)0x100) {_WRITE_C(IO, v); } else {_WRITE_NC(IO, v); }; } while (0)
+//#define _WRITE(IO, v)  do {  if (&(DIO ##  IO ## _RPORT) >= (uint8_t *)0x100) {_WRITE_C(IO, v); } else {_WRITE_NC(IO, v); }; } while (0)
 
 /// toggle a pin
 #define _TOGGLE(IO)  do {DIO ##  IO ## _RPORT = MASK(DIO ## IO ## _PIN); } while (0)
 
 /// set pin as input
-#define _SET_INPUT(IO) do {DIO ##  IO ## _DDR &= ~MASK(DIO ## IO ## _PIN); } while (0)
+//#define _SET_INPUT(IO) do {DIO ##  IO ## _DDR &= ~MASK(DIO ## IO ## _PIN); } while (0)
 /// set pin as output
-#define _SET_OUTPUT(IO) do {DIO ##  IO ## _DDR |=  MASK(DIO ## IO ## _PIN); } while (0)
+//#define _SET_OUTPUT(IO) do {DIO ##  IO ## _DDR |=  MASK(DIO ## IO ## _PIN); } while (0)
 
 /// check if pin is an input
 #define _GET_INPUT(IO)  ((DIO ## IO ## _DDR & MASK(DIO ## IO ## _PIN)) == 0)
@@ -90,6 +112,112 @@
 
   added as necessary or if I feel like it- not a comprehensive list!
 */
+
+/*
+  pins
+*/
+
+#define DIO0_PORT GPIOA
+#define DIO1_PORT GPIOA
+#define DIO2_PORT GPIOA
+#define DIO3_PORT GPIOA
+#define DIO4_PORT GPIOA
+#define DIO5_PORT GPIOA
+#define DIO6_PORT GPIOA
+#define DIO7_PORT GPIOA
+#define DIO8_PORT GPIOA
+#define DIO9_PORT GPIOA
+#define DIO10_PORT GPIOA
+#define DIO11_PORT GPIOA
+#define DIO12_PORT GPIOA
+#define DIO13_PORT GPIOA
+#define DIO14_PORT GPIOA
+#define DIO15_PORT GPIOA
+#define DIO16_PORT GPIOB
+#define DIO17_PORT GPIOB
+#define DIO18_PORT GPIOB
+#define DIO19_PORT GPIOB
+#define DIO20_PORT GPIOB
+#define DIO21_PORT GPIOB
+#define DIO22_PORT GPIOB
+#define DIO23_PORT GPIOB
+#define DIO24_PORT GPIOB
+#define DIO25_PORT GPIOB
+#define DIO26_PORT GPIOB
+#define DIO27_PORT GPIOB
+#define DIO28_PORT GPIOB
+#define DIO29_PORT GPIOB
+#define DIO30_PORT GPIOB
+#define DIO31_PORT GPIOB
+#define DIO32_PORT GPIOC
+#define DIO33_PORT GPIOC
+#define DIO34_PORT GPIOC
+#define DIO35_PORT GPIOC
+#define DIO36_PORT GPIOC
+#define DIO37_PORT GPIOC
+#define DIO38_PORT GPIOC
+#define DIO39_PORT GPIOC
+#define DIO40_PORT GPIOC
+#define DIO41_PORT GPIOC
+#define DIO42_PORT GPIOC
+#define DIO43_PORT GPIOC
+#define DIO44_PORT GPIOC
+#define DIO45_PORT GPIOC
+#define DIO46_PORT GPIOC
+#define DIO47_PORT GPIOC
+#define DIO48_PORT GPIOD
+#define DIO49_PORT GPIOD
+
+#define DIO0_PIN GPIO_Pin_0
+#define DIO1_PIN GPIO_Pin_1
+#define DIO2_PIN GPIO_Pin_2
+#define DIO3_PIN GPIO_Pin_3
+#define DIO4_PIN GPIO_Pin_4
+#define DIO5_PIN GPIO_Pin_5
+#define DIO6_PIN GPIO_Pin_6
+#define DIO7_PIN GPIO_Pin_7
+#define DIO8_PIN GPIO_Pin_8
+#define DIO9_PIN GPIO_Pin_9
+#define DIO10_PIN GPIO_Pin_10
+#define DIO11_PIN GPIO_Pin_11
+#define DIO12_PIN GPIO_Pin_12
+#define DIO13_PIN GPIO_Pin_13
+#define DIO14_PIN GPIO_Pin_14
+#define DIO15_PIN GPIO_Pin_15
+#define DIO16_PIN GPIO_Pin_0
+#define DIO17_PIN GPIO_Pin_1
+#define DIO18_PIN GPIO_Pin_2
+#define DIO19_PIN GPIO_Pin_3
+#define DIO20_PIN GPIO_Pin_4
+#define DIO21_PIN GPIO_Pin_5
+#define DIO22_PIN GPIO_Pin_6
+#define DIO23_PIN GPIO_Pin_7
+#define DIO24_PIN GPIO_Pin_8
+#define DIO25_PIN GPIO_Pin_9
+#define DIO26_PIN GPIO_Pin_10
+#define DIO27_PIN GPIO_Pin_11
+#define DIO28_PIN GPIO_Pin_12
+#define DIO29_PIN GPIO_Pin_13
+#define DIO30_PIN GPIO_Pin_14
+#define DIO31_PIN GPIO_Pin_15
+#define DIO32_PIN GPIO_Pin_0
+#define DIO33_PIN GPIO_Pin_1
+#define DIO34_PIN GPIO_Pin_2
+#define DIO35_PIN GPIO_Pin_3
+#define DIO36_PIN GPIO_Pin_4
+#define DIO37_PIN GPIO_Pin_5
+#define DIO38_PIN GPIO_Pin_6
+#define DIO39_PIN GPIO_Pin_7
+#define DIO40_PIN GPIO_Pin_8
+#define DIO41_PIN GPIO_Pin_9
+#define DIO42_PIN GPIO_Pin_10
+#define DIO43_PIN GPIO_Pin_11
+#define DIO44_PIN GPIO_Pin_12
+#define DIO45_PIN GPIO_Pin_13
+#define DIO46_PIN GPIO_Pin_14
+#define DIO47_PIN GPIO_Pin_15
+#define DIO48_PIN GPIO_Pin_0
+#define DIO49_PIN GPIO_Pin_1
 
 #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega328__) || defined(__AVR_ATmega328P__)
   // UART
@@ -4016,7 +4144,7 @@
 #endif
 
 #ifndef DIO0_PIN
-  #error pins for this chip not defined in arduino.h! If you write an appropriate pin definition and have this firmware work on your chip, please submit a pull request
+  //#error pins for this chip not defined in arduino.h! If you write an appropriate pin definition and have this firmware work on your chip, please submit a pull request
 #endif
 
 #endif /* _FASTIO_ARDUINO_H */

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Bulgarian
  *
  * LCD Menu Messages

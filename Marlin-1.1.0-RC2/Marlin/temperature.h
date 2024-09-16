@@ -108,8 +108,8 @@ FORCE_INLINE void setTargetHotend(const float& celsius, uint8_t extruder) {
 }
 FORCE_INLINE void setTargetBed(const float& celsius) { target_temperature_bed = celsius; }
 
-FORCE_INLINE bool isHeatingHotend(uint8_t extruder) { return target_temperature[extruder] > current_temperature[extruder]; }
-FORCE_INLINE bool isHeatingBed() { return target_temperature_bed > current_temperature_bed; }
+FORCE_INLINE bool isHeatingHotend(uint8_t extruder) { return target_temperature[extruder]-2 > current_temperature[extruder]; }
+FORCE_INLINE bool isHeatingBed() { return target_temperature_bed-2 > current_temperature_bed; }
 
 FORCE_INLINE bool isCoolingHotend(uint8_t extruder) { return target_temperature[extruder] < current_temperature[extruder]; }
 FORCE_INLINE bool isCoolingBed() { return target_temperature_bed < current_temperature_bed; }
@@ -121,11 +121,11 @@ FORCE_INLINE bool isCoolingBed() { return target_temperature_bed < current_tempe
   FORCE_INLINE bool isHeatingHotend##NR() { return isHeatingHotend(NR); } \
   FORCE_INLINE bool isCoolingHotend##NR() { return isCoolingHotend(NR); }
 HOTEND_ROUTINES(0);
-#if EXTRUDERS > 1
+//#if EXTRUDERS > 1
   HOTEND_ROUTINES(1);
-#else
+/*#else
   #define setTargetHotend1(c) do{}while(0)
-#endif
+#endif*/
 #if EXTRUDERS > 2
   HOTEND_ROUTINES(2);
 #else

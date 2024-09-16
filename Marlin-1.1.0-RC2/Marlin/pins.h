@@ -1,6 +1,7 @@
 /**
  * pins.h
  */
+#include "configuration.h"
 
 #ifndef PINS_H
 #define PINS_H
@@ -20,7 +21,9 @@
 #define HEATER_3_PIN -1
 #define TEMP_3_PIN -1
 
-#if MB(GEN7_CUSTOM)
+#if MB(MALYAN32)
+     #include "pins_MALYAN32.h"
+#elif MB(GEN7_CUSTOM)
   #include "pins_GEN7_CUSTOM.h"
 #elif MB(GEN7_12)
   #include "pins_GEN7_12.h"
@@ -148,6 +151,7 @@
   #define _E1_PINS E1_STEP_PIN, E1_DIR_PIN, E1_ENABLE_PIN,
 #endif
 
+#if ENABLED(DELTA)
 #ifdef X_STOP_PIN
   #if X_HOME_DIR < 0
     #define X_MIN_PIN X_STOP_PIN
@@ -167,13 +171,24 @@
     #define Y_MAX_PIN Y_STOP_PIN
   #endif
 #endif
+#else
+#define X_MIN_PIN ((invert_byte & 0x20) ? -1 : X_STOP_PIN)
+#define X_MAX_PIN ((invert_byte & 0x20) ? X_STOP_PIN : -1)
+#define Y_MIN_PIN ((invert_byte & 0x40) ? -1 : Y_STOP_PIN)
+#define Y_MAX_PIN ((invert_byte & 0x40) ? Y_STOP_PIN : -1)
+#endif
 
 #ifdef Z_STOP_PIN
   #if Z_HOME_DIR < 0
     #define Z_MIN_PIN Z_STOP_PIN
     #define Z_MAX_PIN -1
-  #else
+#ifndef Z_MIN_PIN
     #define Z_MIN_PIN -1
+#endif
+  #else
+#ifndef Z_MIN_PIN
+    #define Z_MIN_PIN -1
+#endif
     #define Z_MAX_PIN Z_STOP_PIN
   #endif
 #endif
@@ -241,7 +256,7 @@
   #define Z2_DIR_PIN       E1_DIR_PIN
   #define Z2_ENABLE_PIN    E1_ENABLE_PIN
 #endif
-
+/*
 #define SENSITIVE_PINS { 0, 1, \
     X_STEP_PIN, X_DIR_PIN, X_ENABLE_PIN, X_MIN_PIN, X_MAX_PIN, \
     Y_STEP_PIN, Y_DIR_PIN, Y_ENABLE_PIN, Y_MIN_PIN, Y_MAX_PIN, \
@@ -250,7 +265,7 @@
     _E0_PINS _E1_PINS _E2_PINS _E3_PINS \
     analogInputToDigitalPin(TEMP_BED_PIN) \
   }
-
+*/
 #define HAS_DIGIPOTSS (DIGIPOTSS_PIN >= 0)
 
 #endif //__PINS_H

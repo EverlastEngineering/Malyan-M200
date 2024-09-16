@@ -13,10 +13,10 @@ void Config_ResetDefault();
 
 #if ENABLED(EEPROM_SETTINGS)
   void Config_StoreSettings();
-  void Config_RetrieveSettings();
+  void Config_RetrieveSettings(bool);
 #else
   FORCE_INLINE void Config_StoreSettings() {}
-  FORCE_INLINE void Config_RetrieveSettings() { Config_ResetDefault(); Config_PrintSettings(); }
+  FORCE_INLINE void Config_RetrieveSettings() { Config_ResetDefault(bool); Config_PrintSettings(); }
 #endif
 
 #endif //CONFIGURATION_STORE_H

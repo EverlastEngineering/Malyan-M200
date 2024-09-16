@@ -175,7 +175,7 @@
         #error FRONT_PROBE_BED_POSITION must be less than BACK_PROBE_BED_POSITION.
       #endif
       // Make sure probing points are reachable
-      #if LEFT_PROBE_BED_POSITION < MIN_PROBE_X
+      /*#if LEFT_PROBE_BED_POSITION < MIN_PROBE_X
         #error "The given LEFT_PROBE_BED_POSITION can't be reached by the Z probe."
       #elif RIGHT_PROBE_BED_POSITION > MAX_PROBE_X
         #error "The given RIGHT_PROBE_BED_POSITION can't be reached by the Z probe."
@@ -183,10 +183,10 @@
         #error "The given FRONT_PROBE_BED_POSITION can't be reached by the Z probe."
       #elif BACK_PROBE_BED_POSITION > MAX_PROBE_Y
         #error "The given BACK_PROBE_BED_POSITION can't be reached by the Z probe."
-      #endif
+      #endif*/
     #endif
   #else // !AUTO_BED_LEVELING_GRID
-
+/*
     // Check the triangulation points
     #if ABL_PROBE_PT_1_X < MIN_PROBE_X || ABL_PROBE_PT_1_X > MAX_PROBE_X
       #error "The given ABL_PROBE_PT_1_X can't be reached by the Z probe."
@@ -201,7 +201,7 @@
     #elif ABL_PROBE_PT_3_Y < MIN_PROBE_Y || ABL_PROBE_PT_3_Y > MAX_PROBE_Y
       #error "The given ABL_PROBE_PT_3_Y can't be reached by the Z probe."
     #endif
-
+*/
   #endif // !AUTO_BED_LEVELING_GRID
 
 #endif // AUTO_BED_LEVELING_FEATURE
@@ -221,7 +221,7 @@
   #if ENABLED(AUTO_BED_LEVELING_FEATURE)
 
     #if DISABLED(AUTO_BED_LEVELING_GRID)
-      #error Only AUTO_BED_LEVELING_GRID is supported with DELTA.
+      //#error Only AUTO_BED_LEVELING_GRID is supported with DELTA.
     #endif
 
     #if ENABLED(Z_PROBE_SLED)

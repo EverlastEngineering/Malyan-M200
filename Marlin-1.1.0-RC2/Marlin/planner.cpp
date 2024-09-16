@@ -52,7 +52,6 @@
 #include "planner.h"
 #include "stepper.h"
 #include "temperature.h"
-#include "ultralcd.h"
 #include "language.h"
 
 #if ENABLED(MESH_BED_LEVELING)
@@ -110,7 +109,7 @@ long position[NUM_AXIS];               // Rescaled from extern when axis_steps_p
 static float previous_speed[NUM_AXIS]; // Speed of previous path line segment
 static float previous_nominal_speed;   // Nominal speed of previous path line segment
 
-unsigned char g_uc_extruder_last_move[4] = { 0 };
+uint8_t g_uc_extruder_last_move[MAX_EXTRUDERS] = { 0 };
 
 #ifdef XY_FREQUENCY_LIMIT
   // Used for the frequency limit
@@ -123,6 +122,10 @@ unsigned char g_uc_extruder_last_move[4] = { 0 };
 
 #if ENABLED(FILAMENT_SENSOR)
   static char meas_sample; //temporary variable to hold filament measurement sample
+#endif
+
+#if ENABLED(DUAL_X_CARRIAGE)
+  extern bool extruder_duplication_enabled;
 #endif
 
 //===========================================================================
@@ -435,10 +438,12 @@ void check_axes_activity() {
           // Just starting up fan - run at full power.
           fan_kick_end = ms + FAN_KICKSTART_TIME;
           tail_fan_speed = 255;
-        } else if (fan_kick_end > ms)
+        }
+        else if (fan_kick_end > ms)
           // Fan still spinning up.
           tail_fan_speed = 255;
-        } else {
+        }
+        else {
           fan_kick_end = 0;
         }
     #endif //FAN_KICKSTART_TIME
@@ -484,7 +489,12 @@ float junction_deviation = 0.1;
 
   // If the buffer is full: good! That means we are well ahead of the robot.
   // Rest here until there is room in the buffer.
-  while (block_buffer_tail == next_buffer_head) idle();
+  while (block_buffer_tail == next_buffer_head)
+  {
+      extern bool sdprint_cancel;
+      if (sdprint_cancel) return;
+      idle();
+  }
 
   #if ENABLED(MESH_BED_LEVELING)
     if (mbl.active) z += mbl.get_z(x, y);
@@ -532,6 +542,10 @@ float junction_deviation = 0.1;
 
   // Prepare to set up new block
   block_t* block = &block_buffer[block_buffer_head];
+
+  // Record sdpos
+  extern unsigned int procpos;
+  block->cmdpos = procpos;
 
   // Mark block as not busy (Not executed by the stepper interrupt)
   block->busy = false;
@@ -627,6 +641,12 @@ float junction_deviation = 0.1;
       switch(extruder) {
         case 0:
           enable_e0();
+          #if ENABLED(DUAL_X_CARRIAGE)
+            if (extruder_duplication_enabled) {
+              enable_e1();
+              g_uc_extruder_last_move[1] = BLOCK_BUFFER_SIZE * 2;
+            }
+          #endif
           g_uc_extruder_last_move[0] = BLOCK_BUFFER_SIZE * 2;
           #if EXTRUDERS > 1
             if (g_uc_extruder_last_move[1] == 0) disable_e1();
@@ -638,7 +658,7 @@ float junction_deviation = 0.1;
             #endif
           #endif
         break;
-        #if EXTRUDERS > 1
+        //#if EXTRUDERS > 1
           case 1:
             enable_e1();
             g_uc_extruder_last_move[1] = BLOCK_BUFFER_SIZE * 2;
@@ -670,7 +690,7 @@ float junction_deviation = 0.1;
               break;
             #endif // EXTRUDERS > 3
           #endif // EXTRUDERS > 2
-        #endif // EXTRUDERS > 1
+        //#endif // EXTRUDERS > 1
       }
     }
     else { // enable all
@@ -749,7 +769,7 @@ float junction_deviation = 0.1;
       if (mq) {
         if (segment_time < minsegmenttime) {
           // buffer is draining, add extra time.  The amount of time added increases if the buffer is still emptied more.
-          inverse_second = 1000000.0 / (segment_time + lround(2 * (minsegmenttime - segment_time) / moves_queued));
+          inverse_second = 1000000.0 / (segment_time + lround((float)(2 * (minsegmenttime - segment_time) / moves_queued)));
           #ifdef XY_FREQUENCY_LIMIT
             segment_time = lround(1000000.0 / inverse_second);
           #endif
@@ -990,7 +1010,9 @@ float junction_deviation = 0.1;
 
 } // plan_buffer_line()
 
-#if ENABLED(AUTO_BED_LEVELING_FEATURE) && DISABLED(DELTA)
+//#if ENABLED(DELTA)
+//#if ENABLED(AUTO_BED_LEVELING_FEATURE) && DISABLED(DELTA)
+#if ENABLED(AUTO_BED_LEVELING_FEATURE)
   vector_3 plan_get_position() {
     vector_3 position = vector_3(st_get_position_mm(X_AXIS), st_get_position_mm(Y_AXIS), st_get_position_mm(Z_AXIS));
 
@@ -1003,7 +1025,8 @@ float junction_deviation = 0.1;
 
     return position;
   }
-#endif // AUTO_BED_LEVELING_FEATURE && !DELTA
+#endif
+//#endif // AUTO_BED_LEVELING_FEATURE && !DELTA
 
 #if ENABLED(AUTO_BED_LEVELING_FEATURE) || ENABLED(MESH_BED_LEVELING)
   void plan_set_position(float x, float y, float z, const float& e)

@@ -218,7 +218,7 @@
     #define HardwareSerial_h // trick to disable the standard HWserial
   #endif
 
-  #include "Arduino.h"
+//  #include "Arduino.h"
 
   /**
    * ENDSTOPPULLUPS
@@ -261,7 +261,7 @@
     #define X_HOME_POS MANUAL_X_HOME_POS
     #define Y_HOME_POS MANUAL_Y_HOME_POS
     #define Z_HOME_POS MANUAL_Z_HOME_POS
-  #else //!MANUAL_HOME_POSITIONS â€“ Use home switch positions based on homing direction and travel limits
+  #else //!MANUAL_HOME_POSITIONS â€?Use home switch positions based on homing direction and travel limits
     #if ENABLED(BED_CENTER_AT_0_0)
       #define X_HOME_POS X_MAX_LENGTH * X_HOME_DIR * 0.5
       #define Y_HOME_POS Y_MAX_LENGTH * Y_HOME_DIR * 0.5
@@ -392,7 +392,7 @@
   /**
    * ARRAY_BY_EXTRUDERS based on EXTRUDERS
    */
-  #if EXTRUDERS > 3
+  /*#if EXTRUDERS > 3
     #define ARRAY_BY_EXTRUDERS(v1, v2, v3, v4) { v1, v2, v3, v4 }
   #elif EXTRUDERS > 2
     #define ARRAY_BY_EXTRUDERS(v1, v2, v3, v4) { v1, v2, v3 }
@@ -400,9 +400,10 @@
     #define ARRAY_BY_EXTRUDERS(v1, v2, v3, v4) { v1, v2 }
   #else
     #define ARRAY_BY_EXTRUDERS(v1, v2, v3, v4) { v1 }
-  #endif
+  #endif*/
 
-  #define ARRAY_BY_EXTRUDERS1(v1) ARRAY_BY_EXTRUDERS(v1, v1, v1, v1)
+  #define ARRAY_BY_EXTRUDERS(v1, v2) { v1, v2 }
+  #define ARRAY_BY_EXTRUDERS1(v1) ARRAY_BY_EXTRUDERS(v1, v1)
 
   /**
    * Shorthand for pin tests, used wherever needed
@@ -421,7 +422,7 @@
   #define HAS_AUTO_FAN_1 (PIN_EXISTS(EXTRUDER_1_AUTO_FAN))
   #define HAS_AUTO_FAN_2 (PIN_EXISTS(EXTRUDER_2_AUTO_FAN))
   #define HAS_AUTO_FAN_3 (PIN_EXISTS(EXTRUDER_3_AUTO_FAN))
-  #define HAS_AUTO_FAN (HAS_AUTO_FAN_0 || HAS_AUTO_FAN_1 || HAS_AUTO_FAN_2 || HAS_AUTO_FAN_3)
+  #define HAS_AUTO_FAN true//yongzong//(HAS_AUTO_FAN_0 || HAS_AUTO_FAN_1 || HAS_AUTO_FAN_2 || HAS_AUTO_FAN_3)
   #define HAS_FAN (PIN_EXISTS(FAN))
   #define HAS_CONTROLLERFAN (PIN_EXISTS(CONTROLLERFAN))
   #define HAS_SERVOS (defined(NUM_SERVOS) && NUM_SERVOS > 0)
@@ -487,15 +488,15 @@
    * Helper Macros for heaters and extruder fan
    */
   #define WRITE_HEATER_0P(v) WRITE(HEATER_0_PIN, v)
-  #if EXTRUDERS > 1 || ENABLED(HEATERS_PARALLEL)
+  //#if EXTRUDERS > 1 || ENABLED(HEATERS_PARALLEL)
     #define WRITE_HEATER_1(v) WRITE(HEATER_1_PIN, v)
-    #if EXTRUDERS > 2
+    /*#if EXTRUDERS > 2
       #define WRITE_HEATER_2(v) WRITE(HEATER_2_PIN, v)
       #if EXTRUDERS > 3
         #define WRITE_HEATER_3(v) WRITE(HEATER_3_PIN, v)
       #endif
-    #endif
-  #endif
+    #endif*/
+  //#endif
   #if ENABLED(HEATERS_PARALLEL)
     #define WRITE_HEATER_0(v) { WRITE_HEATER_0P(v); WRITE_HEATER_1(v); }
   #else
