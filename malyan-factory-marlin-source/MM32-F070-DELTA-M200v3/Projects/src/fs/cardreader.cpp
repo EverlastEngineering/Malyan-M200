@@ -55,6 +55,10 @@ retry:
       }
   }
 
+  
+  if (abspath[0]!=0 && abspath[1]!=0) SERIAL_PROTOCOLLN("..");
+  else SERIAL_PROTOCOLLN(".");
+
   for (i=0;i<100;i++)
   {
       ret=f_readdir(&dp,&fileinfo);
@@ -68,8 +72,12 @@ retry:
       /*if (strstr(fileinfo.fname, ".G")!=NULL)
         SERIAL_PROTOCOLLN(fileinfo.fname);
       else if (strstr(fileinfo.fname, ".g")!=NULL)*/
-        SERIAL_PROTOCOLLN(fileinfo.fname);
+        delay(10);
+        SERIAL_PROTOCOL(fileinfo.fname);
+        if (fileinfo.fattrib & AM_DIR) SERIAL_PROTOCOL("/");
+        SERIAL_EOL;
   }
+  
 }
 /*
 void CardReader::swd_ls()  {

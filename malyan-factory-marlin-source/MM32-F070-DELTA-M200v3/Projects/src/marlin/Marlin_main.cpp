@@ -4120,6 +4120,29 @@ inline void gcode_M17() {
    * M23: Select a file
    */
   inline void gcode_M23() {
+    uint16_t i;
+    char last[1];
+    if (current_command_args[0]=='.' 
+      && current_command_args[1]=='.'
+      && current_command_args[2]==0) {
+        SERIAL_PROTOCOLLN("Going Up One Directory");
+        card.updir();
+        gcode_M20();
+        return;
+    } 
+    for (i=0; i<64;i++) {
+      if (current_command_args[i]==0) break;
+      last[0] = current_command_args[i];
+    }
+    if (last[0] == '/') {
+      current_command_args[i-1]=0;
+      SERIAL_PROTOCOL("Change directory ");
+      SERIAL_PROTOCOL(current_command_args);
+      SERIAL_EOL;
+      card.chdir(current_command_args);
+      gcode_M20();
+      return;
+    }
     card.openFile(current_command_args, true);
   }
 

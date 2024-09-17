@@ -282,15 +282,20 @@ function feedback(output) {
 	}
 
 	console.log(output);
-
-	if (output.match(/Begin file list/g) || output.match(/End file list/g) || sdListing == true) {
-		sdListing = true;
-		
+	
+	
+	
+	if (sdListing) {
 		if (output.match(/End file list/g)) {
 			sdListing = false;
 		}
-
 		buildFilnames(output);
+		return;
+	}
+	
+	if (output.match(/Begin file list/g)) {
+		sdListing = true;
+		window.sdFilenames = [];
 		return;
 	}
 
@@ -566,6 +571,10 @@ function printFile(filename) {
 	$("#gCodeSend").addClass('btn-disable');
 }
 
+function changeDirectory(filename) {
+	sendCmd('M23 ' + filename, 'Change directory');
+}
+
 function deleteFile(item) {
 	sendCmd('M30 ' + $(item).parent().text(), 'Delete file');
 	
@@ -578,10 +587,8 @@ function buildFilnames(output) {
 	filenames = output.split(/\n/g);
 
 	filenames.forEach(function(name) {
-		if (name.match(/.gc/gi)) {
-			if (!(name.substring(0, 15) == 'Now fresh file:' || name.substring(0, 12) == 'File opened:')) {
-				window.sdFilenames.push(name);
-			}
+		if (!(name.substring(0, 15) == 'Now fresh file:' || name.substring(0, 12) == 'File opened:' || name.substring(0, 15) == '' || name.substring(0, 15) == '.')) {
+			window.sdFilenames.push(name);
 		}
 	});
 
@@ -589,12 +596,25 @@ function buildFilnames(output) {
 
 	if (output.match(/End file list/g)) {
 		sdFilenames.forEach(function(name) {
-			itemHTML = '<li>';
-			itemHTML += '<span class="glyphicon glyphicon-print" aria-hidden="true" onclick="printFile(\'' + name + '\')"></span>';
-			itemHTML += '<span class="glyphicon glyphicon-trash" aria-hidden="true" onclick="deleteFile(this)"></span>' + name;
-			itemHTML += '</li>';
-
-			$('.sd-files ul').append(itemHTML);
+			if (name.contains("End file list") || name.contains("ok")) {
+				
+			} 
+			else if (name.contains("/") || name.contains("..")) {
+				itemHTML = '<li>';
+				itemHTML += '<span style="visibility:hidden" class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
+				itemHTML += '<span class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
+				itemHTML += name;
+				itemHTML += '</li>';
+				$('.sd-files ul').append(itemHTML);
+			}
+			else {
+				itemHTML = '<li>';
+				itemHTML += '<span class="glyphicon glyphicon-print" aria-hidden="true" onclick="printFile(\'' + name + '\')"></span>';
+				itemHTML += '<span class="glyphicon glyphicon-trash" aria-hidden="true" onclick="deleteFile(this)"></span>' + name;
+				itemHTML += '</li>';
+				$('.sd-files ul').append(itemHTML);
+			}
+			
 		});
 	}
 }
