@@ -1491,19 +1491,11 @@ void extruder_timer_exec() {//yongzong
     }
     else WRITE_HEATER_BED(LOW);
 #else
-    //No current limit
-    if (soft_pwm_0 < pwm_count) 
-    {
-        WRITE_HEATER_0(LOW);
-    }
-        //avoid bed and extruder pwm overlap
     if (soft_pwm_BED >= (0x80-pwm_count)) {
-        //WRITE_HEATER_BED(soft_pwm_BED > 0 ? HIGH : LOW);
         //yongzong: power output limit for M300 heat bed
         if (model==6) WRITE_HEATER_BED((soft_pwm_BED>0 && (pwm_count%3!=0)) ? HIGH : LOW);
         else WRITE_HEATER_BED(soft_pwm_BED > 0 ? HIGH : LOW);
     }
-    else WRITE_HEATER_BED(LOW);
 #endif
     
     //#if EXTRUDERS > 1

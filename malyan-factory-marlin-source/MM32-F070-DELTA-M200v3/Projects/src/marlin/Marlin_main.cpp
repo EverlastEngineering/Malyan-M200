@@ -651,16 +651,16 @@ void servo_init() {
  *  - Print startup messages and diagnostics
  *  - Get EEPROM or default settings
  *  - Initialize managers for:
- *    â€?temperature
- *    â€?planner
- *    â€?watchdog
- *    â€?stepper
- *    â€?photo pin
- *    â€?servos
- *    â€?LCD controller
- *    â€?Digipot I2C
- *    â€?Z probe sled
- *    â€?status LEDs
+ *    ï¿½?temperature
+ *    ï¿½?planner
+ *    ï¿½?watchdog
+ *    ï¿½?stepper
+ *    ï¿½?photo pin
+ *    ï¿½?servos
+ *    ï¿½?LCD controller
+ *    ï¿½?Digipot I2C
+ *    ï¿½?Z probe sled
+ *    ï¿½?status LEDs
  */
 void setup() {
   setup_killpin();
@@ -3084,8 +3084,8 @@ if (axis_known_position[X_AXIS] && axis_known_position[Y_AXIS] && (home_all_axis
   current_position[Z_AXIS] = 0;
   sync_plan_position();
   
-  destination[X_AXIS]=10;
-  destination[Y_AXIS]=25;
+  destination[X_AXIS]=0;
+  destination[Y_AXIS]=0;
   destination[Z_AXIS] = Z_RAISE_BEFORE_HOMING;
   feedrate = max_feedrate[X_AXIS] * 60;
   line_to_destination();
@@ -5272,24 +5272,36 @@ inline void gcode_M203() {
  *  Also sets minimum segment time in ms (B20000) to prevent buffer under-runs and M20 minimum feedrate
  */
 inline void gcode_M204() {
+  bool was_code_seen = false;
   if (code_seen('S')) {  // Kept for legacy compatibility. Should NOT BE USED for new developments.
     travel_acceleration = acceleration = code_value();
     SERIAL_ECHOPAIR("Setting Print and Travel Acceleration: ", acceleration);
     SERIAL_EOL;
+    was_code_seen = true;
   }
   if (code_seen('P')) {
     acceleration = code_value();
     SERIAL_ECHOPAIR("Setting Print Acceleration: ", acceleration);
     SERIAL_EOL;
+    was_code_seen = true;
   }
   if (code_seen('R')) {
     retract_acceleration = code_value();
     SERIAL_ECHOPAIR("Setting Retract Acceleration: ", retract_acceleration);
     SERIAL_EOL;
+    was_code_seen = true;
   }
   if (code_seen('T')) {
     travel_acceleration = code_value();
     SERIAL_ECHOPAIR("Setting Travel Acceleration: ", travel_acceleration);
+    was_code_seen = true;
+  }
+  if (!was_code_seen) {
+    SERIAL_ECHOPAIR("Print Acceleration: ", acceleration);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Retract Acceleration: ", retract_acceleration);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Travel Acceleration: ", travel_acceleration);
     SERIAL_EOL;
   }
 }
@@ -5305,12 +5317,46 @@ inline void gcode_M204() {
  *    E = Max E Jerk (mm/s/s)
  */
 inline void gcode_M205() {
-  if (code_seen('S')) minimumfeedrate = code_value();
-  if (code_seen('T')) mintravelfeedrate = code_value();
-  if (code_seen('B')) minsegmenttime = code_value();
-  if (code_seen('X')) max_xy_jerk = code_value();
-  if (code_seen('Z')) max_z_jerk = code_value();
-  if (code_seen('E')) max_e_jerk = code_value();
+  bool was_code_seen = false;
+  if (code_seen('S')) {
+    was_code_seen = true;
+    minimumfeedrate = code_value();
+  }
+  if (code_seen('T')) {
+    was_code_seen = true;
+    mintravelfeedrate = code_value();
+  }
+  if (code_seen('B')) {
+    was_code_seen = true;
+    minsegmenttime = code_value();
+  }
+  if (code_seen('X')) {
+    was_code_seen = true;
+    max_xy_jerk = code_value();
+  }
+  if (code_seen('Z')) {
+    was_code_seen = true;
+    max_z_jerk = code_value();
+  }
+  if (code_seen('E')) {
+    was_code_seen = true;
+    max_e_jerk = code_value();
+  }
+  if (!was_code_seen) {
+    SERIAL_ECHOPAIR("Min Feed Rate (mm/s): ", minimumfeedrate);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Min Travel Feed Rate (mm/s): ", mintravelfeedrate);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Min Segment Time (Âµs): ", minsegmenttime);
+    SERIAL_EOL;
+    delay(10); // sometimes the whole data isn't outputted, and I see this used elsewhere, so giverago
+    SERIAL_ECHOPAIR("Max XY Jerk (mm/s/s): ", max_xy_jerk);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Max Z Jerk (mm/s/s): ", max_z_jerk);
+    SERIAL_EOL;
+    SERIAL_ECHOPAIR("Max E Jerk (mm/s/s): ", max_e_jerk);
+    SERIAL_EOL;
+  }
 }
 
 /**
@@ -5483,6 +5529,8 @@ inline void gcode_M206() {
  */
 inline void gcode_M220() {
   if (code_seen('S')) feedrate_multiplier = code_value();
+  SERIAL_ECHOPAIR("Feedrate Percentage: ", feedrate_multiplier);
+  SERIAL_EOL;
 }
 
 /**
@@ -5494,6 +5542,9 @@ inline void gcode_M221() {
     if (setTargetedHotend(221)) return;
     extruder_multiplier[target_extruder] = sval;
   }
+  if (setTargetedHotend(221)) return;
+  SERIAL_ECHOPAIR("Flow Percentage: ", extruder_multiplier[target_extruder]);
+  SERIAL_EOL;
 }
 
 /**
@@ -7048,9 +7099,9 @@ void process_next_command() {
   //YONGZONG: ADDED MACRO PROCESSING
   if (current_command[0]=='#')
   {
-    //SERIAL_ECHO("found #: ");
+    SERIAL_ECHO("found #: ");
     current_command++;
-    //SERIAL_ECHOLN(current_command);
+    SERIAL_ECHOLN(current_command);
     
     switch (current_command[0])
     {

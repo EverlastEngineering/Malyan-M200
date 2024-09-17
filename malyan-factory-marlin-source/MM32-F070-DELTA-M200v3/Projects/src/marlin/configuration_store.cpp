@@ -652,7 +652,13 @@ void Config_ResetDefault() {
 
 void Config_PrintSettings(bool forReplay) {
   // Always have this function, even with EEPROM_SETTINGS disabled, the current values will be shown
+  /* 
+  // this check failed when only connected via wifi, so m503 output was silent
+  // given the USB connection issues on these machines, that's not great, so we'll bypass it for now
+  // for safety, I don't recommend running this while the machine is printing, though, I've tested
+  // it and it seems ok. calling M503 S0 is even better - jason@everlastengineering.com
   if (com_opened==0) return;
+  */
   CONFIG_ECHO_START;
 
   if (!forReplay) {
