@@ -159,7 +159,7 @@ $(document).ready(function() {
 		sendCmd('M106 S102',' ; Set fan speed to 40%');
 		displayTemperatures(215,65)
 		clearTimeout(printerStatusTimer)
-		printerStatusTimer = setTimeout(printerStatus,2000);
+		printerStatusTimer = setTimeout(printerStatus,3000);
 	})
 
 	$("#heatoff").click(() => {
@@ -337,6 +337,7 @@ function sendCmd(code, comment, type) {
 function startup() {
 	if ($("#stat").text() != 'Printing') {
 		sendCmd('M563 S5', 'Enable faster Wi-Fi file uploads');
+		setTimeout(refreshSD,500);
 	}
 }
 
@@ -425,7 +426,7 @@ Dropzone.options.mydz = {
 
 			//New filename of 21 characters + .gc
 			fileParts = file.name.split('.');
-			name = fileParts[0].substring(0, 21);
+			let name = fileParts[0].substring(0, 55);
 
 			if (window.sdFilenames == undefined) {
 				refreshSD();
@@ -572,7 +573,10 @@ function printFile(filename) {
 }
 
 function changeDirectory(filename) {
+	filename = filename.replace('./', '');
+	filename = filename + '/';
 	sendCmd('M23 ' + filename, 'Change directory');
+	setTimeout(refreshSD,200);
 }
 
 function deleteFile(item) {
@@ -592,25 +596,23 @@ function buildFilnames(output) {
 		}
 	});
 
-	window.sdFilenames.sort();
-
 	if (output.match(/End file list/g)) {
+		window.sdFilenames.sort();
 		sdFilenames.forEach(function(name) {
 			if (name.contains("End file list") || name.contains("ok")) {
 				
 			} 
 			else if (name.contains("/") || name.contains("..")) {
 				itemHTML = '<li>';
-				itemHTML += '<span style="visibility:hidden" class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
-				itemHTML += '<span class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
-				itemHTML += name;
+				itemHTML += '<span style="cursor: pointer;" onclick="changeDirectory(\'' + name + '\')"><span class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
+				itemHTML += name + '</span>';
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
 			}
 			else {
 				itemHTML = '<li>';
-				itemHTML += '<span class="glyphicon glyphicon-print" aria-hidden="true" onclick="printFile(\'' + name + '\')"></span>';
-				itemHTML += '<span class="glyphicon glyphicon-trash" aria-hidden="true" onclick="deleteFile(this)"></span>' + name;
+				itemHTML += '<span class="glyphicon glyphicon-print" aria-hidden="true" style="cursor: pointer;" onclick="printFile(\'' + name + '\')"></span>';
+				itemHTML += `<span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer;" onclick="deleteFile(this)"></span><span style="cursor: pointer;" onclick="printFile('${name}')">${name}</span>`
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
 			}

@@ -96,6 +96,13 @@ footer {
     margin: 0;
 }
 
+.dropzone .dz-preview .dz-details .dz-size {
+    margin-top: 1em;
+    margin-bottom: 0em;
+    font-size: 16px;
+}
+
+
 .dropzone .dz-preview .dz-image { display: none; }
 
 .dropzone .dz-preview .dz-details {
@@ -118,9 +125,10 @@ footer {
 
 .sd-files {
     position: relative;
-    height: 15.95rem;
+    /* height: 15.95rem; */
     overflow-y: auto;
     overflow-x: hidden;
+    padding: 10px;
 }
 
 .sd-files .refresh {
@@ -131,15 +139,33 @@ footer {
 
 .sd-files li {
     list-style: none;
-    font-weight: 300;
+    /* font-weight: 300; */
     color: #00619a;
+}
+
+.filemanager {
+    background-color: #cacaca;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 215px;
+    min-height: 215px;
+    margin: 0px 23px 0px 14px;
 }
 
 .sd-files li .glyphicon {
     display: inline-block;
     top: 2px;
     padding-right: 15px;
-    color: #bebebe;
+}
+
+.glyphicon-trash {
+    float: right;
+    padding-right: 0px !important;
+    color: red;
+}
+
+.glyphicon-folder-open {
+    color: #efd87c
 }
 
 .movement .row { margin-bottom: 14px; }
@@ -148,13 +174,15 @@ footer {
 
 .rate .center-block { width: 196px; }
 
+
+
 #console {
     top: -100px;
     min-height: 301px;
     max-height: 301px;
     padding: 0 8px;
-    /* overflow-y: auto; */
-    /* overflow-x: hidden; */
+    overflow-y: auto;
+    overflow-x: hidden;
     font-family: monospace, monospace;
     font-size: 0.875rem;
 }
