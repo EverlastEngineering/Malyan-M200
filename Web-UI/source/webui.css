@@ -11,11 +11,12 @@ body {
     font-weight: 400;
     line-height: 1.5rem;
     color: #646C7F;
+    background-color: #b2b2b2;
 }
 
 h3,
 h4 {
-    color: #00619a;
+    color: #0d3f5d;
     font-weight: 300;
 }
 
@@ -61,6 +62,7 @@ footer {
 .webcam img {
     width: auto;
     height: 255px;
+    mix-blend-mode:hard-light
  }
 
 .print-actions button {
@@ -69,7 +71,7 @@ footer {
 }
 
 .dropzone {
-    min-height: 201px;
+    min-height: 80px;
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff;
@@ -122,7 +124,7 @@ footer {
 }
 
 .sd-files .refresh {
-    color: #bebebe;
+    color: #0d3f5d;
     text-align: center;
     width: 100%;
 }
@@ -147,13 +149,21 @@ footer {
 .rate .center-block { width: 196px; }
 
 #console {
-    min-height: 201px;
-    max-height: 201px;
+    top: -100px;
+    min-height: 301px;
+    max-height: 301px;
     padding: 0 8px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    /* overflow-y: auto; */
+    /* overflow-x: hidden; */
     font-family: monospace, monospace;
     font-size: 0.875rem;
+}
+
+#eelogo {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    margin: 22px 0px 0px 16px;
 }
 
 #console p { margin: 0 0 4px; }
