@@ -560,21 +560,16 @@ function refreshSD() {
 }
 
 function printFile(filename) {
-	sendCmd('M23 ' + filename, 'Select file');
-	setTimeout(function() {
-		sendCmd('M24', 'Print file');
-	}, 1000);
-	$("#stat").text('Printing');
-	$("#pgs").css('width', '0%');
-	$("#pgs").html('0% Complete');
-	$("#start_print").addClass('btn-disable');
-	$(".movement button").addClass('btn-disable');
-	$("#gCodeSend").addClass('btn-disable');
+	sendCmd('{P:X}', 'Close existing file', 'cmd');
+	setTimeout(function () {
+		sendCmd('M23 ' + filename, 'Select file');
+	},500)
 }
 
 function changeDirectory(filename) {
 	filename = filename.replace('./', '');
-	filename = filename + '/';
+	if (!filename.contains('/'))
+		filename = filename + '/';
 	sendCmd('M23 ' + filename, 'Change directory');
 	setTimeout(refreshSD,200);
 }
