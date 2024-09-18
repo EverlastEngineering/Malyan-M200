@@ -71,7 +71,7 @@ footer {
 }
 
 .dropzone {
-    min-height: 80px;
+    min-height: 201px;
     padding: 10px;
     margin-bottom: 20px;
     background-color: #fff;
@@ -95,13 +95,6 @@ footer {
     width: 100%;
     margin: 0;
 }
-
-.dropzone .dz-preview .dz-details .dz-size {
-    margin-top: 1em;
-    margin-bottom: 0em;
-    font-size: 16px;
-}
-
 
 .dropzone .dz-preview .dz-image { display: none; }
 
@@ -177,9 +170,8 @@ footer {
 
 
 #console {
-    top: -100px;
-    min-height: 301px;
-    max-height: 301px;
+    min-height: 201px;
+    max-height: 201px;
     padding: 0 8px;
     overflow-y: auto;
     overflow-x: hidden;
