@@ -156,6 +156,12 @@ footer {
     float: right;
     padding-right: 0px !important;
     color: red;
+    cursor: pointer;
+}
+
+#cleargcode {
+    top: 10px;
+    color:grey;
 }
 
 .glyphicon-folder-open {
@@ -230,6 +236,8 @@ footer {
 
 #wre,
 #wrp { text-align: center; }
+
+
 
 @font-face {
   font-family: 'Glass TTY VT200';

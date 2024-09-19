@@ -13,6 +13,10 @@ $(document).ready(function() {
 	// 	console.log(window.sdFilenames);
 	// });
 
+	$("#cleargcode").click(function () {
+		$("#gCodeLog").html('');
+	});
+
 	$(".sd-files .refresh").click(function() {
 		if ($("#start_print").hasClass('btn-disable')) {
 			return;
@@ -275,16 +279,21 @@ function feedback(output) {
 	output = output.replace(/N0 P15 B15/g, '');
 	output = output.replace(/N0 P15 B1 /g, '');
 	output = output.replace(/echo:/g, '');
-	output = output.replace(/ Size: /g, '<br />Size: ');
+	// output = output.replace(/ Size: /g, '<br />Size: ');
 
 	if (output.substring(0, 2) == 'T:' || output.substring(0, 5) == 'ok T:') {
 		//Hide temperature reporting
 		return;
 	}
 
-	console.log(output);
-	
-	
+	console.debug(output);
+
+	// this is a result of printing a file; we safely wait for the file to be opened before calling M24
+	if (output.match(/File opened:/g) && output.match(/ Size:/g)) {
+		setTimeout(function () {
+			sendCmd('M24', `Begin Print`);
+		},500)
+	}
 	
 	if (sdListing) {
 		if (output.match(/End file list/g)) {
@@ -446,11 +455,12 @@ Dropzone.options.mydz = {
 };
 
 function start_p() {
-	$("#stat").text('Printing');
-	sendCmd('M565', 'Start printing cache.gc');
+	// deprecated
 }
 
 function cancel_p() {
+	$("#start_print").removeClass('btn-disable');
+	$("#cancel_print").addClass('btn-disable');
 	$("#stat").text('Canceling');
 	sendCmd('{P:X}', 'Cancel print', 'cmd');
 }
@@ -481,14 +491,14 @@ function printerStatus() {
 		if (c == 'I') {
 			$("#stat").text('Idle');
 			$("#pgs").css('width', '0%');
-			$("#start_print").removeClass('btn-disable');
+			$("#cancel_print").addClass('btn-disable');
 			$(".movement button").removeClass('btn-disable');
 
 		} else if (c == 'P') {
 			$("#stat").text('Printing');
 			$("#pgs").css('width', data.match(/\d+/g )[4] + '%');
 			$("#pgs").html(data.match(/\d+/g )[4] + '% Complete');
-			$("#start_print").addClass('btn-disable');
+			$("#cancel_print").removeClass('btn-disable');
 			$(".movement button").addClass('btn-disable');
 			setPositioning = false;
 		} else {
@@ -497,6 +507,8 @@ function printerStatus() {
 		queuePrinterStatus()
 	});
 }
+
+var currentFile = {};
 
 var printerStatusTimer;
 
@@ -556,10 +568,8 @@ function refreshSD() {
 }
 
 function printFile(filename) {
-	sendCmd('{P:X}', 'Close existing file', 'cmd');
-	setTimeout(function () {
-		sendCmd('M23 ' + filename, 'Select file');
-	},500)
+	if (!confirm(`Print ${filename} now?`)) return;
+	sendCmd('M23 ' + filename, `Select file ${filename}`);
 }
 
 function changeDirectory(filename) {
