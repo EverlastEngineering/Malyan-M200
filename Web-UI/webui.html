@@ -12,17 +12,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/css/bootstrap-slider.min.css" />
         <!-- -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@e1b2143c31ea332e236dcd55890e8149a67d05ca/Web-UI/source/webui.css" />
-        <!-- 
-        <link rel="stylesheet" href="source/webui.css" />
-         -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.css" />
+        <!-- <link rel="stylesheet" href="source/webui.css" />         -->
         <link rel="icon" type="image/png" sizes="32x32" href="https://everlastengineering.com/favicon.ico" />
 		<meta name="msapplication-TileColor" content="#2d89ef">
 		<meta name="theme-color" content="#a8a8a8">
     </head>
     <body>
 <div id="page" class="container-fluid">
-    <img id="eelogo" src="https://everlastengineering.com/assets/img/large_logo_only_white_transbg_animated.svg?h=1971d1705a21273aa829320e8e3eb6a0">
+    <a href="https://everlastengineering.com" target="_blank"><img id="eelogo" src="https://everlastengineering.com/assets/img/large_logo_only_white_transbg_animated.svg?h=1971d1705a21273aa829320e8e3eb6a0"></a>
     <h3 class="text-center" title="Printer Status">Printer Status: <span id="stat" title="Not Available">N/A</span></h3>
 
     <div class="progress" title="Printing Progress">
@@ -35,9 +33,6 @@
         </div>
         <div class="col-xs-12 col-md-4 print-actions">
             <div class="row">
-                <div class="col-xs-6">
-                    <button class="btn btn-success" id="start_print" type="button" onclick="start_p()" title="Start Print">Start Print</button>
-                </div>
                 <div class="col-xs-6">
                     <button class="btn btn-danger" id="cancel_print" type="button" onclick="cancel_p()" title="Cancel Print">Cancel Print</button>
                 </div>
@@ -170,8 +165,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-4" style="position: relative; top: -100px;">
+        <div class="col-xs-12 col-md-4">
             <div class="well" id="console" title="Printer Console">
+                <div id="cleargcode" class="glyphicon glyphicon-trash" aria-hidden="true"></div>
                 <div id="gCodeLog"></div>
             </div>
             <div id="gCodeInput" class="input-group">
@@ -225,10 +221,10 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/bootstrap-slider.min.js"></script>
     <!-- -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@latest/Web-UI/source/web_socket.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/web_socket.js"></script>
     <!-- -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@latest/Web-UI/source/webui.js"></script>
-    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.js"></script>
+    <!-- <script type="text/javascript" src="source/webui.js"></script> -->
     <!-- <script type="text/javascript" src="http://192.168.1.180:8000/source/webui.js"></script> -->
      
     </body>
