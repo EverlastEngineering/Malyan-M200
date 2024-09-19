@@ -256,6 +256,7 @@ var sdListing = false;
 var connected = false;
 var connecting = false;
 var uploading = false;
+var sdFilenames = [];
 
 function pad(num, size) {
 	s = '000' + num;
@@ -289,13 +290,14 @@ function feedback(output) {
 		if (output.match(/End file list/g)) {
 			sdListing = false;
 		}
-		buildFilnames(output);
+		buildFilenames(output);
 		return;
 	}
 	
 	if (output.match(/Begin file list/g)) {
 		sdListing = true;
-		window.sdFilenames = [];
+		sdFilenames = [];
+		buildFilenames(output);
 		return;
 	}
 
@@ -428,11 +430,7 @@ Dropzone.options.mydz = {
 			fileParts = file.name.split('.');
 			let name = fileParts[0].substring(0, 55);
 
-			if (window.sdFilenames == undefined) {
-				refreshSD();
-			}
-
-			if (window.sdFilenames.indexOf(file.name)) {
+			if (sdFilenames.indexOf(file.name)) {
 				sendCmd('M30 ' + name + '.gc', 'Delete old file');
 			}
 
@@ -555,8 +553,6 @@ function refreshSD() {
 		initSDCard = true;
 	}
 	sendCmd('M20', 'List SD card files');
-	window.sdFilenames = [];
-	$(".sd-files ul").html('');
 }
 
 function printFile(filename) {
@@ -582,24 +578,29 @@ function deleteFile(item) {
 	});
 }
 
-function buildFilnames(output) {
-	filenames = output.split(/\n/g);
+function buildFilenames(output) {
+	let filenames = output.split(/\n/g);
 
 	filenames.forEach(function(name) {
-		if (!(name.substring(0, 15) == 'Now fresh file:' || name.substring(0, 12) == 'File opened:' || name.substring(0, 15) == '' || name.substring(0, 15) == '.')) {
-			window.sdFilenames.push(name);
+		if (!(name.includes('Now fresh file:')
+			 || name.includes('File opened:')
+			 || name == ''
+			 || name == '.'
+			 || name.includes('Begin file list'))) {
+			sdFilenames.push(name);
 		}
 	});
 
 	if (output.match(/End file list/g)) {
-		window.sdFilenames.sort();
+		$(".sd-files ul").html('');
+		sdFilenames.sort();
 		sdFilenames.forEach(function(name) {
 			if (name.contains("End file list") || name.contains("ok")) {
 				
 			} 
 			else if (name.contains("/") || name.contains("..")) {
 				itemHTML = '<li>';
-				itemHTML += '<span style="cursor: pointer;" onclick="changeDirectory(\'' + name + '\')"><span class="glyphicon glyphicon-folder-open" aria-hidden="true" onclick="changeDirectory(\'' + name + '\')"></span>';
+				itemHTML += '<span style="cursor: pointer;" onclick="changeDirectory(\'' + name + '\')"><span class="glyphicon glyphicon-folder-open" aria-hidden="true""></span>';
 				itemHTML += name + '</span>';
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
@@ -611,7 +612,6 @@ function buildFilnames(output) {
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
 			}
-			
 		});
 	}
 }
