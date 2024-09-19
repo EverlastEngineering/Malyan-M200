@@ -95,6 +95,7 @@ $(document).ready(function() {
 	}
 
 	$(document).on("input", "#gcode", function() {
+		if ($('#gcode').val().contains('M23')) return;
 		$('#gcode').val($('#gcode').val().toUpperCase());
 	})
 
