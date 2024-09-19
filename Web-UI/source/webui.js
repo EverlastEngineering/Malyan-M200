@@ -86,7 +86,8 @@ $(document).ready(function() {
 		gCode2Send = $('#gcode').val();
 		if (gCode2Send == '') { return; }
 		$('#gcode').val('');
-		sendCmd(gCode2Send, '');
+		let type = gCode2Send.startsWith('{') ? 'cmd' : 'code';
+		sendCmd(gCode2Send, '',type);
 		if (gCode2Send != commandHistory[commandHistory.length-1]) {
 			commandHistory.push(gCode2Send);
 		}
@@ -121,7 +122,6 @@ $(document).ready(function() {
 			clearAndReadyPrompt() 
 			return false;
 		}
-		console.log(event)
 	})		
 
 	var commandHistory=[]
