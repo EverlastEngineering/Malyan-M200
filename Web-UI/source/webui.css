@@ -128,6 +128,7 @@ footer {
     color: #0d3f5d;
     text-align: center;
     width: 100%;
+    padding-bottom: 10px;
 }
 
 .sd-files li {
@@ -140,8 +141,8 @@ footer {
     background-color: #cacaca;
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 215px;
-    min-height: 215px;
+    max-height: 201px;
+    min-height: 201px;
     margin: 0px 23px 0px 14px;
 }
 
@@ -175,8 +176,17 @@ footer {
     padding: 0 8px;
     overflow-y: auto;
     overflow-x: hidden;
-    font-family: monospace, monospace;
+    font-family: "Glass TTY VT200";
     font-size: 0.875rem;
+    background-color:black
+}
+
+#console .text-warning {
+    color:#ff8800
+}
+
+#console .text-primary {
+    color:white
 }
 
 #eelogo {
@@ -220,3 +230,10 @@ footer {
 
 #wre,
 #wrp { text-align: center; }
+
+@font-face {
+  font-family: 'Glass TTY VT200';
+  font-style: normal;
+  src: url(https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/Glass_TTY_VT220.woff2) format('woff2');
+  unicode-range: U+0000-00FF;
+}
