@@ -565,11 +565,11 @@ function refreshSD() {
 		sendCmd('M21', 'Initialize SD card');
 		initSDCard = true;
 	}
-	sendCmd('M20', 'List SD card files');
+	sendCmd('M20 L', 'List SD card files');
 }
 
-function printFile(filename) {
-	if (!confirm(`Print ${filename} now?`)) return;
+function printFile(filename, lfn) {
+	if (!confirm(`Print ${lfn} now?`)) return;
 	sendCmd('M23 ' + filename, `Select file ${filename}`);
 }
 
@@ -578,7 +578,6 @@ function changeDirectory(filename) {
 	if (!filename.contains('/'))
 		filename = filename + '/';
 	sendCmd('M23 ' + filename, 'Change directory');
-	setTimeout(refreshSD,200);
 }
 
 function deleteFile(item) {
@@ -590,8 +589,9 @@ function deleteFile(item) {
 }
 
 function buildFilenames(output) {
+	//TODO refactor this to be concurrent safe
 	let filenames = output.split(/\n/g);
-
+	
 	filenames.forEach(function(name) {
 		if (!(name.includes('Now fresh file:')
 			 || name.includes('File opened:')
@@ -601,25 +601,56 @@ function buildFilenames(output) {
 			sdFilenames.push(name);
 		}
 	});
-
+	
 	if (output.match(/End file list/g)) {
+		
+			function compare( a, b ) {
+				var i = a.indexOf(' ');
+				var shortlonga = [a.slice(0,i), a.slice(i+1)];
+				let sfn = shortlonga[1]
+				if (a == '..') {
+					sfn = a;
+				}
+				a = sfn
+				var i = b.indexOf(' ');
+				var shortlongb = [b.slice(0,i), b.slice(i+1)];
+				let sfnb = shortlongb[1]
+				if (b == '..') {
+					sfnb = b;
+				}
+				b=sfnb
+				if ( a < b ){
+					return -1;
+				}
+				if ( a > b){
+					return 1;
+				}
+				return 0;
+			}
 		$(".sd-files ul").html('');
-		sdFilenames.sort();
+		sdFilenames.sort(compare);
 		sdFilenames.forEach(function(name) {
+			var i = name.indexOf(' ');
+			var shortlong = [name.slice(0,i), name.slice(i+1)];
+			let sfn = shortlong[0]
+			let lfn = shortlong[1]
+			if (name == '..') {
+				sfn = lfn = name;
+			}
 			if (name.contains("End file list") || name.contains("ok")) {
 				
-			} 
+			}
 			else if (name.contains("/") || name.contains("..")) {
 				itemHTML = '<li>';
-				itemHTML += '<span style="cursor: pointer;" onclick="changeDirectory(\'' + name + '\')"><span class="glyphicon glyphicon-folder-open" aria-hidden="true""></span>';
-				itemHTML += name + '</span>';
+				itemHTML += '<span style="cursor: pointer;" onclick="changeDirectory(\'' + sfn + '\')"><span class="glyphicon glyphicon-folder-open" aria-hidden="true""></span>';
+				itemHTML += lfn + '</span>';
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
 			}
 			else {
 				itemHTML = '<li>';
-				itemHTML += '<span class="glyphicon glyphicon-print" aria-hidden="true" style="cursor: pointer;" onclick="printFile(\'' + name + '\')"></span>';
-				itemHTML += `<span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer;" onclick="deleteFile(this)"></span><span style="cursor: pointer;" onclick="printFile('${name}')">${name}</span>`
+				itemHTML += `<span class="glyphicon glyphicon-print" aria-hidden="true" style="cursor: pointer;" onclick="printFile('${sfn}','${lfn}')"></span>`;
+				itemHTML += `<span class="glyphicon glyphicon-trash" aria-hidden="true" style="cursor: pointer;" onclick="deleteFile(this)"></span><span style="cursor: pointer;" onclick="printFile('${sfn}','${lfn}')">${lfn}</span>`
 				itemHTML += '</li>';
 				$('.sd-files ul').append(itemHTML);
 			}
