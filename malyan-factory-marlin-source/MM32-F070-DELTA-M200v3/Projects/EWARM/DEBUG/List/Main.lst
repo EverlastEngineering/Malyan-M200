@@ -1,63 +1,65 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V8.40.1.212/W32 for ARM         10/Oct/2019  17:32:53
-# Copyright 1999-2019 IAR Systems AB.
+# IAR ANSI C/C++ Compiler V9.30.1.335/W64 for ARM         26/Sep/2024  21:33:55
+# Copyright 1999-2022 IAR Systems AB.
 #
-#    Cpu mode     =  
-#    Endian       =  little
-#    Source file  =
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
-#    Command line =
-#        -f C:\Users\yongzong\AppData\Local\Temp\EW87C.tmp
-#        (D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
-#        -D USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List
-#        -o
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj
-#        --debug --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
-#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
-#        8.3\arm\inc\c\DLib_Config_Normal.h" -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\
+#    Cpu mode                     =  thumb
+#    Endian                       =  little
+#    Source file                  =
+#        S:\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
+#    Command line                 =
+#        -f S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Main.o.rsp
+#        (S:\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp -D
+#        USE_STDPERIPH_DRIVER -D USE_STM32072B_EVAL -D STM32F072 -lcN
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\ -o
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\ --debug
+#        --endian=little --cpu=Cortex-M0 -e --fpu=None --dlib_config
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.1\arm\inc\c\DLib_Config_Normal.h" -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\inc\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\ -I
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\fs\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\js\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\marlin\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\rtt\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\src\usb\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\CMSIS\Device\ST\STM32F0xx\Include\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
 #        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32F0xx_StdPeriph_Driver\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Driver\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Core\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\hid\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\cdc_msc_wrapper\inc\
-#        -I
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\..\..\Libraries\STM32_USB_Device_Library\Class\msc\inc\
 #        -Ohz --c++ --no_exceptions --no_rtti --no_static_destruction -I
-#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
-#        8.3\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
-#        Systems\Embedded Workbench 8.3\arm\CMSIS\DSP\Include\" --relaxed_fp)
-#    Locale       =  C
-#    List file    =
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\Main.lst
-#    Object file  =
-#        D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Main.o
+#        "C:\Program Files\IAR Systems\Embedded Workbench
+#        9.1\arm\CMSIS\Core\Include\\" --relaxed_fp) --dependencies=n
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Main.o.d
+#    Locale                       =  C
+#    List file                    =
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\List\Main.lst
+#    Object file                  =
+#        S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Obj\Main.o
+#    Runtime model:                  
+#      __CPP_Exceptions           =  Disabled
+#      __CPP_Language             =  C++14
+#      __CPP_Library              =  DLib
+#      __CPP_Runtime              =  1
+#      __SystemLibrary            =  DLib
+#      __dlib_file_descriptor     =  0
+#      __dlib_full_locale_support =  0
+#      __dlib_version             =  6
 #
 ###############################################################################
 
-D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
+S:\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
       1          /**
       2           * Marlin Firmware
       3           *
@@ -353,7 +355,7 @@ D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
       20  ?_9
        4  MAGIC
      130  get_endstop()
-     532  main
+     526  main
       52  print_endstop(uint8_t)
        1  unlocked
       38  writeString(char *)
@@ -362,9 +364,9 @@ D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\src\marlin\Main.cpp
      1 byte  in section .bss
      4 bytes in section .noinit  (abs)
      2 bytes in section .rodata
- 1'044 bytes in section .text
+ 1'038 bytes in section .text
  
- 1'044 bytes of CODE  memory
+ 1'038 bytes of CODE  memory
      2 bytes of CONST memory
      1 byte  of DATA  memory (+ 4 bytes shared)
 

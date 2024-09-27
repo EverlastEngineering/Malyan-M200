@@ -56,6 +56,7 @@ public:
 
   void getAbsFilename(char *t);
 
+  void ls(bool withLongFileNames);
   void ls();
   void swd_ls();
   void chdir(const char *relpath);

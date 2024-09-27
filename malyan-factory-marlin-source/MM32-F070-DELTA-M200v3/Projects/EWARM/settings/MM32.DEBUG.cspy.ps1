@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.general.xcl" --backend -f "D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.1\common\bin\cspybat" -f "S:\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.general.xcl" --backend -f "S:\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.general.xcl" --debug_file=$debugfile --backend -f "D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.1\common\bin\cspybat" -f "S:\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.general.xcl" --debug_file=$debugfile --backend -f "S:\MM32-F070-DELTA-M200v3\Projects\EWARM\settings\MM32.DEBUG.driver.xcl" 
 }

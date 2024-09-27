@@ -1,3 +1,5 @@
 
 .DS_Store
 /.vscode
+/malyan-factory-marlin-source/MM32-F070-DELTA-M200v3/Projects/EWARM/DEBUG/**
+/malyan-factory-marlin-source/MM32-F070-DELTA-M200v3/Projects/EWARM/DEBUG/Exe

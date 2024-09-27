@@ -4097,7 +4097,10 @@ inline void gcode_M17() {
    */
   inline void gcode_M20() {
     SERIAL_PROTOCOLLNPGM(MSG_BEGIN_FILE_LIST);
-    card.ls();
+    if (current_command_args[0]=='L') 
+      card.ls(true);
+    else 
+      card.ls(false);
     SERIAL_PROTOCOLLNPGM(MSG_END_FILE_LIST);
   }
 
@@ -4125,9 +4128,8 @@ inline void gcode_M17() {
     if (current_command_args[0]=='.' 
       && current_command_args[1]=='.'
       && current_command_args[2]==0) {
-        SERIAL_PROTOCOLLN("Going Up One Directory");
+        SERIAL_PROTOCOLLN("Change directory ");
         card.updir();
-        gcode_M20();
         return;
     } 
     for (i=0; i<64;i++) {
@@ -4140,7 +4142,6 @@ inline void gcode_M17() {
       SERIAL_PROTOCOL(current_command_args);
       SERIAL_EOL;
       card.chdir(current_command_args);
-      gcode_M20();
       return;
     }
     card.openFile(current_command_args, true);

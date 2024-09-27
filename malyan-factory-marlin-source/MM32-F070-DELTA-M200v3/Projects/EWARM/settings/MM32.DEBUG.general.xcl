@@ -1,12 +1,12 @@
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\bin\armproc.dll" 
+"C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm\bin\armPROC.dll" 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\bin\armjlink2.dll" 
+"C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm\bin\armJLINK.dll" 
 
-"D:\Projects\3DPrint\SRC\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Exe\MM32.out" 
+"S:\MM32-F070-DELTA-M200v3\Projects\EWARM\DEBUG\Exe\MM32.out" 
 
---plugin="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\bin\armbat.dll" 
+--plugin="C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm\bin\armbat.dll" 
 
---device_macro="C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\arm\config\debugger\ST\STM32F0xx.dmac" 
+--device_macro="C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm/config/debugger/ST/STM32F0xx.dmac" 
 
 
 
