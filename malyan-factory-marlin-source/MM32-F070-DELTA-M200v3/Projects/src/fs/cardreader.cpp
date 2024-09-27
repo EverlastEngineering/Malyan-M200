@@ -28,7 +28,11 @@ CardReader::CardReader() {
     //LcdListFile();
 }
 
-void CardReader::ls()  {
+void CardReader::ls() {
+  ls(false);
+}
+
+void CardReader::ls(bool withLongFileNames)  {
   uint16_t i;
   uint8_t retry_cnt=0;
   FRESULT ret;
@@ -72,10 +76,15 @@ retry:
       /*if (strstr(fileinfo.fname, ".G")!=NULL)
         SERIAL_PROTOCOLLN(fileinfo.fname);
       else if (strstr(fileinfo.fname, ".g")!=NULL)*/
-        delay(10);
-        SERIAL_PROTOCOL(fileinfo.fname);
+        SERIAL_PROTOCOL(fileinfo.altname);
         if (fileinfo.fattrib & AM_DIR) SERIAL_PROTOCOL("/");
+        if (withLongFileNames) {
+          SERIAL_PROTOCOL(" ");
+          SERIAL_PROTOCOL(fileinfo.fname);
+          if (fileinfo.fattrib & AM_DIR) SERIAL_PROTOCOL("/");
+        }
         SERIAL_EOL;
+        delay(50);
   }
   
 }

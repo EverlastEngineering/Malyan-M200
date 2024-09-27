@@ -417,8 +417,8 @@ const unsigned int dropsegments=5; //everything with less than this number of st
 // @section more
 
 //The ASCII buffer for receiving from the serial:
-#define MAX_CMD_SIZE 192
-#define BUFSIZE 32//4
+#define MAX_CMD_SIZE 96
+#define BUFSIZE 16//4
 
 // Bad Serial-connections can miss a received command by sending an 'ok'
 // Therefore some clients abort after 30 seconds in a timeout.
