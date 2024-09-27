@@ -311,6 +311,10 @@ function feedback(output) {
 		return;
 	}
 
+	if (output.match(/Change directory /g)) {
+		refreshSD()
+	}
+
 	output.trim();
 
 	output = output.replace(/\n/g, '<br />');
@@ -578,6 +582,7 @@ function changeDirectory(filename) {
 	if (!filename.contains('/'))
 		filename = filename + '/';
 	sendCmd('M23 ' + filename, 'Change directory');
+	$(".sd-files ul").html('');
 }
 
 function deleteFile(item) {
