@@ -84,7 +84,7 @@ retry:
           if (fileinfo.fattrib & AM_DIR) SERIAL_PROTOCOL("/");
         }
         SERIAL_EOL;
-        delay(50);
+        delay(75);
   }
   
 }

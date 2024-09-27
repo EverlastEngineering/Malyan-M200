@@ -158,6 +158,13 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
+    <PlDriver>
+        <MemConfigValue>C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm\CONFIG\debugger\ST\STM32F072CB.ddf</MemConfigValue>
+    </PlDriver>
+    <ArmDriver>
+        <EnableCache>0</EnableCache>
+        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
+    </ArmDriver>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -175,11 +182,4 @@
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
-    <PlDriver>
-        <MemConfigValue>C:\Program Files\IAR Systems\Embedded Workbench 9.1\arm\CONFIG\debugger\ST\STM32F072CB.ddf</MemConfigValue>
-    </PlDriver>
-    <ArmDriver>
-        <EnableCache>0</EnableCache>
-        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
-    </ArmDriver>
 </settings>

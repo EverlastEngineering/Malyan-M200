@@ -134,6 +134,8 @@ static unsigned char soft_pwm[MAX_EXTRUDERS];
 #if HAS_AUTO_FAN
   static millis_t next_auto_fan_check_ms;
 #endif
+static millis_t next_auto_temp_report_ms;
+static millis_t next_auto_position_report_ms;
 
 #if ENABLED(PIDTEMP)
   #if ENABLED(PID_PARAMS_PER_EXTRUDER)
@@ -674,9 +676,23 @@ void manage_heater() {
     if (ct < max(HEATER_0_MINTEMP, 0.01)) min_temp_error(0);
   #endif
 
-  #if ENABLED(THERMAL_PROTECTION_HOTENDS) || DISABLED(PIDTEMPBED) || HAS_AUTO_FAN
-    millis_t ms = millis();
-  #endif
+  millis_t ms = millis();
+
+  if (auto_send_position_interval>0) {
+    // set by M154
+    if (ms > next_auto_position_report_ms) {
+      gcode_M114();
+      next_auto_position_report_ms = ms + auto_send_position_interval;
+    }
+  }
+  
+  if (auto_send_temp_interval>0) {
+    // set by M155
+    if (ms > next_auto_temp_report_ms) {
+      gcode_M105();
+      next_auto_temp_report_ms = ms + auto_send_temp_interval;
+    }
+  }
 
   // Loop through all extruders
   for (int e = 0; e < EXTRUDERS; e++) {

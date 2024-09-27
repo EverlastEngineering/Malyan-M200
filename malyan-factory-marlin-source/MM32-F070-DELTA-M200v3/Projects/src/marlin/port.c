@@ -87,7 +87,7 @@ const char machine_list[][MAX_MACHINE_TYPE_NUM+1]=
     "M000", "M200", "M100", "M160", "M450", "M180", "M300", "MA10","M203"
 };
 
-const char VERSION[]="4.7";
+const char VERSION[]="5.8";
 __no_init char HWVER[8] @ 0x20000410;
 __no_init const char MACHINE_TYPE[4] @ 0x08001000;
 __no_init const char HW_VER[4] @ 0x08001008;
@@ -95,8 +95,8 @@ __no_init const char HW_VER[4] @ 0x08001008;
 void get_firmware_info()
 {
     //char n[1];
-    if (FLASH_OB_GetWRP()==0xFFFFFFFF) strcpy(MSG_M115_REPORT, "NAME. Malyan\tVER: ");
-    else strcpy(MSG_M115_REPORT, "NAME: Malyan\tVER: ");
+    if (FLASH_OB_GetWRP()==0xFFFFFFFF) strcpy(MSG_M115_REPORT, "EverlastEngineering");
+    else strcpy(MSG_M115_REPORT, "EverlastEngineering");
     strcat(MSG_M115_REPORT, VERSION);
     strcat(MSG_M115_REPORT, "\tMODEL: ");
     strcat(MSG_M115_REPORT, machine_list[model]);

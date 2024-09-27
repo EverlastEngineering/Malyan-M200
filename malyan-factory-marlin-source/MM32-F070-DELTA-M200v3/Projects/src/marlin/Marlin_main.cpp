@@ -298,6 +298,8 @@ millis_t print_job_stop_ms = 0;  ///< Print job stop time
 static uint8_t target_extruder;
 bool no_wait_for_cooling = true;
 bool target_direction;
+millis_t auto_send_temp_interval = 0;
+millis_t auto_send_position_interval = 0;
 
 #if ENABLED(AUTO_BED_LEVELING_FEATURE)
   int xy_travel_speed = XY_TRAVEL_SPEED;
@@ -5224,6 +5226,37 @@ inline void gcode_M121() { enable_endstops(false); }
 #endif // BLINKM
 
 /**
+ * M154: Position Auto-Report
+ *
+ *    Some host software and serial controllers use M114 to get the current position, 
+ *    but polling with M114 is less than optimal, and in older versions of Marlin it would 
+ *    cause print stuttering. With M154 hosts can simply set an interval and Marlin will 
+ *    keep sending reports automatically. This method is preferred over polling with M114.
+ * 
+ *    This is polled in the temperature monitor, similar to auto_send_temp_interval thanks
+ *    to it already having a safe place to monitor at intervals.
+ */
+inline void gcode_M154() {
+   
+  if (code_seen('S')) {
+    auto_send_position_interval = code_value_short() * 1000;
+  }
+}
+
+/**
+ * M155: M155 - Temperature Auto-Report
+ *
+ *    It can be useful for host software to track temperatures, display and graph them over time, 
+ *    but polling with M105 is less than optimal. With M155 hosts simply set an interval and Marlin 
+ *    will keep sending data automatically. This method is preferred over polling with M105.
+ */
+inline void gcode_M155() {
+  if (code_seen('S')) {
+    auto_send_temp_interval = code_value_short() * 1000;
+  }
+}
+
+/**
  * M200: Set filament diameter and set E axis units to cubic millimeters
  *
  *    T<extruder> - Optional extruder number. Current extruder if omitted.
@@ -7120,6 +7153,25 @@ void process_next_command() {
   char* starpos = strchr(current_command, '*');  // * should always be the last parameter
   if (starpos) while (*starpos == ' ' || *starpos == '*') *starpos-- = '\0'; // nullify '*' and ' '
   
+  //jason@everlastengineering: added comment echo handling
+  if (current_command[0]==';')
+  {
+    if (current_command[1]=='L' && 
+        current_command[2]=='A' &&
+        current_command[3]=='Y' &&
+        current_command[4]=='E' &&
+        current_command[5]=='R')
+    {
+      SERIAL_ECHOLN(current_command);
+    }
+    if (current_command[1]=='Z' && 
+        current_command[2]==':')
+    {
+      SERIAL_ECHOLN(current_command);
+    }
+    return;
+  }
+
   //YONGZONG: ADDED MACRO PROCESSING
   if (current_command[0]=='#')
   {
@@ -7546,6 +7598,9 @@ void process_next_command() {
           break;
 
       #endif //BLINKM
+      case 155: // M155 - Temperature Auto-Report
+        gcode_M155();
+        break;
 
       case 200: // M200 D<millimeters> set filament diameter and set E axis units to cubic millimeters (use S0 to set back to millimeters).
         gcode_M200();

@@ -337,6 +337,10 @@ extern bool axis_known_position[3]; // axis[n].is_known
 #endif
 
 extern int fanSpeed;
+extern millis_t auto_send_temp_interval;
+extern millis_t auto_send_position_interval;
+extern void gcode_M105();
+extern void gcode_M114();
 
 #if ENABLED(BARICUDA)
   extern int ValvePressure;

@@ -648,7 +648,7 @@ void Config_ResetDefault() {
  * Print Configuration Settings - M503
  */
 
-#define CONFIG_ECHO_START do{ delay(10);if (!forReplay) SERIAL_ECHO_START; }while(0)
+#define CONFIG_ECHO_START do{ delay(50);if (!forReplay) SERIAL_ECHO_START; }while(0)
 
 void Config_PrintSettings(bool forReplay) {
   // Always have this function, even with EEPROM_SETTINGS disabled, the current values will be shown
