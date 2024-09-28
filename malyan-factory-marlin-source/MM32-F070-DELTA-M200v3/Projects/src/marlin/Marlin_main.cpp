@@ -4867,6 +4867,14 @@ inline void gcode_M112() { kill(PSTR(MSG_KILLED)); }
 #endif //BARICUDA
 
 /**
+ * M118: Serial print
+ */
+inline void gcode_M118() {
+  SERIAL_ECHO_START;
+  SERIAL_ECHOLN(current_command_args);
+}
+
+/**
  * M140: Set bed temperature
  */
 inline void gcode_M140() {
@@ -5114,17 +5122,18 @@ inline void gcode_M115() {
   SERIAL_PROTOCOLPGM(" ");
   SERIAL_PROTOCOLPGM(__TIME__);
   SERIAL_PROTOCOLPGM("\n");
+  SERIAL_PROTOCOLPGM("https://everlastengineering.com/m200\n ");
   
-  if (code_seen('P'))
-  {
-    __disable_irq();
-    SYSCFG_MemoryRemapConfig(SYSCFG_MemoryRemap_SystemMemory);
-    __set_MSP(0x20002250);// 0x1fffC800 is "System Memory" start address for STM32 F0xx
-    void (*SysMemBootJump)(void);
-    SysMemBootJump = (void (*)(void)) (*((uint32_t *) 0x1fffC804)); // Point the PC to the System Memory reset vector (+4)
-    SysMemBootJump();
-    while (1);
-  }
+  // if (code_seen('P'))
+  // {
+  //   __disable_irq();
+  //   SYSCFG_MemoryRemapConfig(SYSCFG_MemoryRemap_SystemMemory);
+  //   __set_MSP(0x20002250);// 0x1fffC800 is "System Memory" start address for STM32 F0xx
+  //   void (*SysMemBootJump)(void);
+  //   SysMemBootJump = (void (*)(void)) (*((uint32_t *) 0x1fffC804)); // Point the PC to the System Memory reset vector (+4)
+  //   SysMemBootJump();
+  //   while (1);
+  // }
 }
 
 /**
@@ -5237,7 +5246,6 @@ inline void gcode_M121() { enable_endstops(false); }
  *    to it already having a safe place to monitor at intervals.
  */
 inline void gcode_M154() {
-   
   if (code_seen('S')) {
     auto_send_position_interval = code_value_short() * 1000;
   }
@@ -7153,31 +7161,12 @@ void process_next_command() {
   char* starpos = strchr(current_command, '*');  // * should always be the last parameter
   if (starpos) while (*starpos == ' ' || *starpos == '*') *starpos-- = '\0'; // nullify '*' and ' '
   
-  //jason@everlastengineering: added comment echo handling
-  if (current_command[0]==';')
-  {
-    if (current_command[1]=='L' && 
-        current_command[2]=='A' &&
-        current_command[3]=='Y' &&
-        current_command[4]=='E' &&
-        current_command[5]=='R')
-    {
-      SERIAL_ECHOLN(current_command);
-    }
-    if (current_command[1]=='Z' && 
-        current_command[2]==':')
-    {
-      SERIAL_ECHOLN(current_command);
-    }
-    return;
-  }
-
   //YONGZONG: ADDED MACRO PROCESSING
   if (current_command[0]=='#')
   {
-    SERIAL_ECHO("found #: ");
+    // SERIAL_ECHO("found #: ");
     current_command++;
-    SERIAL_ECHOLN(current_command);
+    // SERIAL_ECHOLN(current_command);
     
     switch (current_command[0])
     {
@@ -7487,6 +7476,10 @@ void process_next_command() {
         gcode_M112();
         break;
 
+      case 118: // M1182: Serial print
+        gcode_M118();
+        break;
+
       case 140: // M140: Set bed temp
         gcode_M140();
         break;
@@ -7598,6 +7591,11 @@ void process_next_command() {
           break;
 
       #endif //BLINKM
+
+      case 154: // M155 - Temperature Auto-Report
+        gcode_M154();
+        break;
+
       case 155: // M155 - Temperature Auto-Report
         gcode_M155();
         break;

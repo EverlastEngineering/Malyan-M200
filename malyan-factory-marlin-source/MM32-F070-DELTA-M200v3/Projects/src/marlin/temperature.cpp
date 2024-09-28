@@ -134,8 +134,8 @@ static unsigned char soft_pwm[MAX_EXTRUDERS];
 #if HAS_AUTO_FAN
   static millis_t next_auto_fan_check_ms;
 #endif
-static millis_t next_auto_temp_report_ms;
-static millis_t next_auto_position_report_ms;
+static millis_t last_auto_temp_report_ms;
+static millis_t last_auto_position_report_ms;
 
 #if ENABLED(PIDTEMP)
   #if ENABLED(PID_PARAMS_PER_EXTRUDER)
@@ -680,17 +680,17 @@ void manage_heater() {
 
   if (auto_send_position_interval>0) {
     // set by M154
-    if (ms > next_auto_position_report_ms) {
+    if (ms > last_auto_position_report_ms + auto_send_position_interval) {
       gcode_M114();
-      next_auto_position_report_ms = ms + auto_send_position_interval;
+      last_auto_position_report_ms = ms;
     }
   }
   
   if (auto_send_temp_interval>0) {
     // set by M155
-    if (ms > next_auto_temp_report_ms) {
+    if (ms > last_auto_temp_report_ms + auto_send_temp_interval) {
       gcode_M105();
-      next_auto_temp_report_ms = ms + auto_send_temp_interval;
+      last_auto_temp_report_ms = ms;
     }
   }
 

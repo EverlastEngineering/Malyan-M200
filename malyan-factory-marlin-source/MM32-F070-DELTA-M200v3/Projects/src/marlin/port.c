@@ -95,8 +95,8 @@ __no_init const char HW_VER[4] @ 0x08001008;
 void get_firmware_info()
 {
     //char n[1];
-    if (FLASH_OB_GetWRP()==0xFFFFFFFF) strcpy(MSG_M115_REPORT, "EverlastEngineering");
-    else strcpy(MSG_M115_REPORT, "EverlastEngineering");
+    if (FLASH_OB_GetWRP()==0xFFFFFFFF) strcpy(MSG_M115_REPORT, "NAME. Malyan\tVER: ");
+    else strcpy(MSG_M115_REPORT, "NAME: Malyan\tVER: ");
     strcat(MSG_M115_REPORT, VERSION);
     strcat(MSG_M115_REPORT, "\tMODEL: ");
     strcat(MSG_M115_REPORT, machine_list[model]);

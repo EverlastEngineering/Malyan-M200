@@ -297,15 +297,11 @@ function feedback(output) {
 	}
 	
 	if (sdListing) {
-		if (output.match(/End file list/g)) {
-			sdListing = false;
-		}
 		buildFilenames(output);
 		return;
 	}
 	
 	if (output.match(/Begin file list/g)) {
-		sdListing = true;
 		sdFilenames = [];
 		buildFilenames(output);
 		return;
@@ -598,13 +594,20 @@ function buildFilenames(output) {
 	let filenames = output.split(/\n/g);
 	
 	filenames.forEach(function(name) {
-		if (!(name.includes('Now fresh file:')
+		if (name == 'Begin file list') {
+			sdListing = true;
+		}
+		else if (name == 'End file list') {
+			sdListing = false;
+		}
+		else if (sdListing && !(name.includes('Now fresh file:')
 			 || name.includes('File opened:')
 			 || name == ''
 			 || name == '.'
 			 || name.includes('Begin file list'))) {
 			sdFilenames.push(name);
 		}
+
 	});
 	
 	if (output.match(/End file list/g)) {
