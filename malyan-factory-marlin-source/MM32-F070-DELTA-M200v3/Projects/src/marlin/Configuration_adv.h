@@ -121,7 +121,7 @@
 
 // @section homing
 
-#define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
+// #define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
 
 // @section extras
 
@@ -222,7 +222,7 @@
 #define HOMING_BUMP_DIVISOR {2, 2, 2}  // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 #endif
 
-//#define QUICK_HOME  //if this is defined, if both x and y are to be homed, a diagonal move will be performed initially.
+#define QUICK_HOME  //if this is defined, if both x and y are to be homed, a diagonal move will be performed initially.
 
 // When G28 is called, this option will make Y home before X
 //#define HOME_Y_BEFORE_X

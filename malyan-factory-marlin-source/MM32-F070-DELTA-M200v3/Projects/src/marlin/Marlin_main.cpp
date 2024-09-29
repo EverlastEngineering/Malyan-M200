@@ -4146,7 +4146,7 @@ inline void gcode_M17() {
       card.chdir(current_command_args);
       return;
     }
-    card.openFile(current_command_args, true);
+    card.openFile(current_command_args, true, true);
   }
 
   /**
@@ -4156,6 +4156,8 @@ inline void gcode_M17() {
 
     card.startFileprint();
     print_job_start_ms = millis();
+    extern void StartBuild();
+    StartBuild();
   }
 
   /**
@@ -4589,13 +4591,13 @@ inline void gcode_M105() {
 
   #if HAS_TEMP_0 || HAS_TEMP_BED || ENABLED(HEATER_0_USES_MAX6675)
     //delay(10);
-    SERIAL_PROTOCOLPGM(MSG_OK);
+    // SERIAL_PROTOCOLPGM(MSG_OK);
 
-    #if ENABLED(ADVANCED_OK)
-    SERIAL_PROTOCOLPGM(" N"); SERIAL_PROTOCOL(gcode_LastN);
-    SERIAL_PROTOCOLPGM(" P"); SERIAL_PROTOCOL(int(BLOCK_BUFFER_SIZE - movesplanned() - 1));
-    SERIAL_PROTOCOLPGM(" B"); SERIAL_PROTOCOL(BUFSIZE - commands_in_queue);
-    #endif
+    // #if ENABLED(ADVANCED_OK)
+    // SERIAL_PROTOCOLPGM(" N"); SERIAL_PROTOCOL(gcode_LastN);
+    // SERIAL_PROTOCOLPGM(" P"); SERIAL_PROTOCOL(int(BLOCK_BUFFER_SIZE - movesplanned() - 1));
+    // SERIAL_PROTOCOLPGM(" B"); SERIAL_PROTOCOL(BUFSIZE - commands_in_queue);
+    // #endif
 
     #if HAS_TEMP_0 || ENABLED(HEATER_0_USES_MAX6675)
       SERIAL_PROTOCOLPGM(" T:");
@@ -5298,13 +5300,29 @@ inline void gcode_M200() {
  * M201: Set max acceleration in units/s^2 for print moves (M201 X1000 Y1000)
  */
 inline void gcode_M201() {
+  bool was_code_seen = false;
+  char* axis = "XYZE";
   for (int8_t i = 0; i < NUM_AXIS; i++) {
     if (code_seen(axis_codes[i])) {
       max_acceleration_units_per_sq_second[i] = code_value();
+      SERIAL_ECHO("Setting Max Acceleration ");
+      SERIAL_ECHO(axis[i]);
+      SERIAL_ECHOPAIR(": ", max_acceleration_units_per_sq_second[i]);
+      SERIAL_ECHO("\n");
+      was_code_seen = true;
     }
   }
   // steps per sq second need to be updated to agree with the units per sq second (as they are what is used in the planner)
   reset_acceleration_rates();
+  if (!was_code_seen) {
+    for (int8_t i = 0; i < NUM_AXIS; i++) {
+      SERIAL_ECHO("Max Acceleration ");
+      SERIAL_ECHO(axis[i]);
+      SERIAL_ECHOPAIR(": ", max_acceleration_units_per_sq_second[i]);
+      SERIAL_ECHO("\n");
+      delay(10);
+    }
+  }
 }
 
 #if 0 // Not used for Sprinter/grbl gen6
@@ -5320,9 +5338,25 @@ inline void gcode_M201() {
  * M203: Set maximum feedrate that your machine can sustain (M203 X200 Y200 Z300 E10000) in mm/sec
  */
 inline void gcode_M203() {
+  bool was_code_seen = false;
+  char* axis = "XYZE";
   for (int8_t i = 0; i < NUM_AXIS; i++) {
     if (code_seen(axis_codes[i])) {
       max_feedrate[i] = code_value();
+      SERIAL_ECHO("Setting Feedrate ");
+      SERIAL_ECHO(axis[i]);
+      SERIAL_ECHOPAIR(": ", max_feedrate[i]);
+      SERIAL_ECHO("\n");
+      was_code_seen = true;
+    }
+  }
+  if (!was_code_seen) {
+    for (int8_t i = 0; i < NUM_AXIS; i++) {
+      SERIAL_ECHO("Max Feedrate ");
+      SERIAL_ECHO(axis[i]);
+      SERIAL_ECHOPAIR(": ", max_feedrate[i]);
+      SERIAL_ECHO("\n");
+      delay(10);
     }
   }
 }
@@ -5414,7 +5448,7 @@ inline void gcode_M205() {
     SERIAL_EOL;
     SERIAL_ECHOPAIR("Min Segment Time (µs): ", minsegmenttime);
     SERIAL_EOL;
-    delay(10); // sometimes the whole data isn't outputted, and I see this used elsewhere, so giverago
+    delay(20); 
     SERIAL_ECHOPAIR("Max XY Jerk (mm/s/s): ", max_xy_jerk);
     SERIAL_EOL;
     SERIAL_ECHOPAIR("Max Z Jerk (mm/s/s): ", max_z_jerk);
@@ -5691,19 +5725,33 @@ inline void gcode_M226() {
 
 #endif // HAS_SERVOS
 
-#if HAS_BUZZER
+// #if HAS_BUZZER
 
   /**
    * M300: Play beep sound S<frequency Hz> P<duration ms>
    */
   inline void gcode_M300() {
-    uint16_t beepS = code_seen('S') ? code_value_short() : 110;
-    uint32_t beepP = code_seen('P') ? code_value_long() : 1000;
-    if (beepP > 5000) beepP = 5000; // limit to 5 seconds
-    buzz(beepP, beepS);
+    SERIAL_ECHOLN("        _");
+    SERIAL_ECHOLN("      ,´ `.");
+    SERIAL_ECHOLN("______|___|______________________________________________");
+    SERIAL_ECHOLN("      |  /                       _..-´|");
+    SERIAL_ECHOLN("      | /                  _..-´´_..-´|");
+    SERIAL_ECHOLN("______|/__________________|_..-´´_____|__________|\______");
+    SERIAL_ECHOLN("     ,|                   |           |          | \ ");
+    SERIAL_ECHOLN("    / |                   |           |          | ´");
+    SERIAL_ECHOLN("___/__|___________________|___________|__________|_______");
+    SERIAL_ECHOLN("  / ,´| `.                |      ,d88b|          |");
+    SERIAL_ECHOLN(" | .  |   \            __ |      88888|       __ |");
+    SERIAL_ECHOLN("_|_|__|____|_________,d88b|______`Y88P'_____,d88b|_______");
+    SERIAL_ECHOLN(" |  ` |    |         88888|                 88888|");
+    SERIAL_ECHOLN(" `.   |   /          `Y88P'                 `Y88P'");
+    SERIAL_ECHOLN("___`._|_.´_______________________________________________");
+    SERIAL_ECHOLN("      |");
+    SERIAL_ECHOLN("    , |                                  GP");
+    SERIAL_ECHOLN("    '.´");
   }
 
-#endif // HAS_BUZZER
+// #endif // HAS_BUZZER
 
 #if ENABLED(PIDTEMP)
 
@@ -7672,11 +7720,11 @@ void process_next_command() {
           break;
       #endif // HAS_SERVOS
 
-      #if HAS_BUZZER
+      // #if HAS_BUZZER
         case 300: // M300 - Play beep tone
           gcode_M300();
           break;
-      #endif // HAS_BUZZER
+      // #endif // HAS_BUZZER
 
       #if ENABLED(PIDTEMP)
         case 301: // M301

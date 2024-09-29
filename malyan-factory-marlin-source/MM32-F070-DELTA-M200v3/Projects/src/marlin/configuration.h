@@ -478,7 +478,7 @@ Here are some standard links for getting your machine calibrated:
 //===========================================================================
 
 #define MANUAL_BED_LEVELING  // Add display menu option for bed leveling.
-#define Z_RAISE_BEFORE_HOMING 2
+#define Z_RAISE_BEFORE_HOMING 0
 
 #if ENABLED(MANUAL_BED_LEVELING)
   #define MBL_Z_STEP 0.025  // Step size while manually probing Z axis.
