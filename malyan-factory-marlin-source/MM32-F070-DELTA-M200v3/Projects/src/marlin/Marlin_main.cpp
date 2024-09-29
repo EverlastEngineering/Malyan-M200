@@ -5125,7 +5125,9 @@ inline void gcode_M115() {
   SERIAL_PROTOCOLPGM(__TIME__);
   SERIAL_PROTOCOLPGM("\n");
   SERIAL_PROTOCOLPGM("\n");
+  delay(20); 
   SERIAL_PROTOCOLPGM("Improvements and Compliation by\n");
+  delay(20); 
   SERIAL_PROTOCOLPGM("https://everlastengineering.com\n");
   
   // if (code_seen('P'))
