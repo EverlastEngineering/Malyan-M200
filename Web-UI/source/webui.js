@@ -288,6 +288,10 @@ function feedback(output) {
 	}
 
 	console.debug(output);
+	if (output.match(/TUNEZ/g) || output.match(/Disconnected/g)) {
+		//M300 was called and logged, so play a tune
+		playSound();
+	}
 
 	// this is a result of printing a file; we safely wait for the file to be opened before calling M24
 	if (output.match(/File opened:/g) && output.match(/ Size:/g)) {
@@ -352,6 +356,12 @@ function startup() {
 		setTimeout(refreshSD,500);
 	}
 }
+
+function playSound() {
+	const audio = new Audio("source/tone.mp3");
+	audio.play();
+}
+
 
 function initWebSocket() {
 	url = window.location.hostname;

@@ -62,7 +62,7 @@ footer {
 .webcam img {
     width: auto;
     height: 250px;
-    mix-blend-mode:hard-light
+    mix-blend-mode:hard-light;
  }
 
 .print-actions button {
@@ -168,8 +168,8 @@ footer {
     color: #efd87c
 }
 
-.movement .row { margin-bottom: 14px; }
-.movement .row.rate { margin-bottom: 20px; }
+.movement .row {margin-bottom: 26px;}
+.movement .row.rate {}
 .movement .direction .text-center { line-height: 2rem; }
 
 .rate .center-block { width: 280px; }
@@ -180,8 +180,8 @@ footer {
 
 
 #console {
-    min-height: 201px;
-    max-height: 201px;
+    min-height: 300px;
+    max-height: 300px;
     padding: 0 8px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -211,7 +211,7 @@ footer {
     left: -6px;
 }
 
-#console p { margin: 0 0 4px; }
+#console p {margin: 0 0 0px;}
 
 #console .comment { color: #2C9040; }
 

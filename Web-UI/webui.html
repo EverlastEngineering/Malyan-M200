@@ -4,16 +4,15 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>MP Select Mini</title>
+        <title>Malyan M200</title>
         <link rel="profile" href="http://gmpg.org/xfn/11" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/css/bootstrap.min.css" />
         <!-- Dropzone 5+ does not work. -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/css/bootstrap-slider.min.css" />
-        <!-- -->
-        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.css" /> -->
-        <link rel="stylesheet" href="source/webui.css" />        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.css" />
+        <!-- <link rel="stylesheet" href="source/webui.css" />         -->
         <link rel="icon" type="image/png" sizes="32x32" href="https://everlastengineering.com/favicon.ico" />
 		<meta name="msapplication-TileColor" content="#2d89ef">
 		<meta name="theme-color" content="#a8a8a8">
@@ -28,30 +27,6 @@
 
     <div class="progress" title="Printing Progress">
         <div class="progress-bar active" id="pgs" role="progressbar"></div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-md-4 webcam text-center">
-            <img class="img-rounded" title="MP Select Mini" src="https://raw.githubusercontent.com/EverlastEngineering/Malyan-M200/main/Web-UI/images/render.webp">
-        </div>
-        <div class="col-xs-12 col-md-4 print-actions">
-            <div class="row">
-                <div class="col-xs-12">
-                    <button class="btn btn-danger" id="cancel_print" type="button" onclick="cancel_p()" title="Cancel Print">Cancel Print</button>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-            <div id="dropzone" title="Upload G-code Here">
-                <form action="/upload" class="dropzone" id="mydz"></form>
-            </div>
-        </div>
-        <div class="col-xs-12 col-md-4 sd-files">
-            <p class="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> SD Card Files</p>
-            <div class="img-rounded filemanager">
-                <ul class="sd-files"></ul>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -215,19 +190,40 @@
                 </div>
             </div>
         </div>
+    </div>  
+
+    <div class="row">
+        <div class="col-xs-12 col-md-4 sd-files">
+            <p class="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> SD Card Files</p>
+            <div class="img-rounded filemanager">
+                <ul class="sd-files"></ul>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 print-actions">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-danger" id="cancel_print" type="button" onclick="cancel_p()" title="Cancel Print">Cancel Print</button>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div id="dropzone" title="Upload G-code Here">
+                <form action="/upload" class="dropzone" id="mydz"></form>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 webcam text-center">
+            <img class="img-rounded" title="MP Select Mini" src="https://raw.githubusercontent.com/EverlastEngineering/Malyan-M200/main/Web-UI/images/render.webp">
+        </div>
     </div>
+
 </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <!-- Dropzone 5+ does not work. -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/bootstrap-slider.min.js"></script>
-    <!-- -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/web_socket.js"></script>
-    <!-- -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.js"></script>
     <!-- <script type="text/javascript" src="source/webui.js"></script> -->
-    <!-- <script type="text/javascript" src="http://192.168.1.180:8000/source/webui.js"></script> -->
-     
     </body>
 </html>
