@@ -5124,7 +5124,9 @@ inline void gcode_M115() {
   SERIAL_PROTOCOLPGM(" ");
   SERIAL_PROTOCOLPGM(__TIME__);
   SERIAL_PROTOCOLPGM("\n");
-  SERIAL_PROTOCOLPGM("https://everlastengineering.com/m200\n ");
+  SERIAL_PROTOCOLPGM("\n");
+  SERIAL_PROTOCOLPGM("Improvements and Compliation by\n");
+  SERIAL_PROTOCOLPGM("https://everlastengineering.com\n");
   
   // if (code_seen('P'))
   // {
@@ -5731,41 +5733,7 @@ inline void gcode_M226() {
    * M300: Play beep sound S<frequency Hz> P<duration ms>
    */
   inline void gcode_M300() {
-    SERIAL_ECHOLN("........_...........................TUNEZ!...............");
-    delay(10);
-    SERIAL_ECHOLN("......,´.`...............................................");
-    delay(10);
-    SERIAL_ECHOLN("______|___|______________________________________________");
-    delay(10);
-    SERIAL_ECHOLN("......|../......................._..-´|..................");
-    delay(10);
-    SERIAL_ECHOLN("......|./.................._..-´´_..-´|..................");
-    delay(10);
-    SERIAL_ECHOLN("______|/__________________|_..-´´_____|__________|\______");
-    delay(10);
-    SERIAL_ECHOLN(".....,|...................|...........|..........|.\.....");
-    delay(10);
-    SERIAL_ECHOLN("..../.|...................|...........|..........|.´.....");
-    delay(10);
-    SERIAL_ECHOLN("___/__|___________________|___________|__________|_______");
-    delay(10);
-    SERIAL_ECHOLN("../.,´|.`.................|......,d88b|..........|.......");
-    delay(10);
-    SERIAL_ECHOLN(".|....|...\............__.|......88888|.......__.|.......");
-    delay(10);
-    SERIAL_ECHOLN("_|_|__|____|_________,d88b|______`Y88P'_____,d88b|_______");
-    delay(10);
-    SERIAL_ECHOLN(".|..`.|....|.........88888|.................88888|.......");
-    delay(10);
-    SERIAL_ECHOLN(".`....|.../..........`Y88P'.................`Y88P'.......");
-    delay(10);
-    SERIAL_ECHOLN("___`._|_.´_______________________________________________");
-    delay(10);
-    SERIAL_ECHOLN("......|..................................................");
-    delay(10);
-    SERIAL_ECHOLN("....,.|..................................GP..............");
-    delay(10);
-    SERIAL_ECHOLN("....'.´..................................................");
+    SERIAL_ECHOLN("TUNEZ");
   }
 
 // #endif // HAS_BUZZER
