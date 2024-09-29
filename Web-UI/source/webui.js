@@ -358,7 +358,7 @@ function startup() {
 }
 
 function playSound() {
-	const audio = new Audio("source/tone.mp3");
+	const audio = new Audio("https://github.com/EverlastEngineering/Malyan-M200/raw/refs/heads/main/Web-UI/source/tone.mp3");
 	audio.play();
 }
 
