@@ -12,15 +12,18 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.0/css/bootstrap-slider.min.css" />
         <!-- -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.css" />
-        <!-- <link rel="stylesheet" href="source/webui.css" />         -->
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/EverlastEngineering/Malyan-M200@refs/heads/main/Web-UI/source/webui.css" /> -->
+        <link rel="stylesheet" href="source/webui.css" />        
         <link rel="icon" type="image/png" sizes="32x32" href="https://everlastengineering.com/favicon.ico" />
 		<meta name="msapplication-TileColor" content="#2d89ef">
 		<meta name="theme-color" content="#a8a8a8">
     </head>
     <body>
 <div id="page" class="container-fluid">
-    <a href="https://everlastengineering.com" target="_blank"><img id="eelogo" src="https://everlastengineering.com/assets/img/large_logo_only_white_transbg_animated.svg?h=1971d1705a21273aa829320e8e3eb6a0"></a>
+    <span class="versionheader">
+        <a href="https://everlastengineering.com" target="_blank"><img id="eelogo" src="https://everlastengineering.com/assets/img/large_logo_only_white_transbg_animated.svg?h=1971d1705a21273aa829320e8e3eb6a0"></a>
+        v58
+    </span>
     <h3 class="text-center" title="Printer Status">Printer Status: <span id="stat" title="Not Available">N/A</span></h3>
 
     <div class="progress" title="Printing Progress">
@@ -33,7 +36,7 @@
         </div>
         <div class="col-xs-12 col-md-4 print-actions">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-12">
                     <button class="btn btn-danger" id="cancel_print" type="button" onclick="cancel_p()" title="Cancel Print">Cancel Print</button>
                 </div>
             </div>
@@ -157,6 +160,8 @@
             </div>
             <div class="row rate">
                 <div class="btn-group center-block" title="Movement Interval" role="group">
+                  <button type="button" class="btn btn-default" data-rate="0.1">0.1</button>
+                  <button type="button" class="btn btn-default" data-rate="1">0.5</button>
                   <button type="button" class="btn btn-default" data-rate="1">1</button>
                   <button type="button" class="btn btn-default" data-rate="5">5</button>
                   <button type="button" class="btn btn-default active" data-rate="10">10</button>
@@ -212,9 +217,6 @@
         </div>
     </div>
 </div>
-    <footer class="container">
-        <span class="version">v1.0.0-rc1</span>
-    </footer>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <!-- Dropzone 5+ does not work. -->
