@@ -18,11 +18,7 @@ $(document).ready(function() {
 	});
 
 	$(".sd-files .refresh").click(function() {
-		if ($("#start_print").hasClass('btn-disable')) {
-			return;
-		} else {
-			refreshSD();
-		}
+		refreshSD();
 	});
 
 	$(".movement .home").click(function() {
@@ -571,6 +567,10 @@ function displayTemperatures(extruder, platform) {
 }
 
 function refreshSD() {
+	if ($("#stat").text() != 'Idle') {
+		feedback('SD Card refresh disabled; printer must be idle.');
+		return;
+	}
 	if (initSDCard == false) {
 		sendCmd('M21', 'Initialize SD card');
 		initSDCard = true;
